@@ -1,16 +1,31 @@
-import { useState } from "react";
+//Imports
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+// Pages
 import SignIn from "./pages/SignIn/SignIn";
-import SignOut from "./pages/SignOut/SignOut";
 import SignUp from "./pages/SignUp/SignUp";
 import Profile from "./pages/Profile/Profile";
 import JobSearch from "./pages/JobSearch/JobSearch";
 import JobInfo from "./pages/JobInfo/JobInfo";
-
+import Homepage from "./pages/Homepage";
+import Header from "./components/Header";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <h1 className="text-3xl font-bold underline">Hello ChasGPT!</h1>;
+  return (
+    <main>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="JobSearch" element={<JobSearch />} />
+          <Route path="jobinfo" element={<JobInfo />} />
+          <Route path="signin" element={<SignIn />} />
+        </Routes>
+      </BrowserRouter>
+    </main>
+  );
 }
 
 export default App;
