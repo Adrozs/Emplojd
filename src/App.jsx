@@ -1,4 +1,11 @@
 import { useState } from "react";
+import SignIn from "./pages/SignIn/SignIn";
+import SignOut from "./pages/SignOut/SignOut";
+import SignUp from "./pages/SignUp/SignUp";
+import Profile from "./pages/Profile/Profile";
+import JobSearch from "./pages/JobSearch/JobSearch";
+import JobInfo from "./pages/JobInfo/JobInfo";
+
 
 function App() {
   const [count, setCount] = useState(0);
