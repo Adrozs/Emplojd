@@ -2,12 +2,11 @@ const API_URL = "https://jobsearch.api.jobtechdev.se/search";
 
 export async function getJobs(query) {
   try {
-    const res = await fetch(`${API_URL}?q=${query}&limit=100`);
+    const res = await fetch(`${API_URL}?q=${query}&limit=40`);
     if (!res.ok) {
-      throw Error("Failed to get job");
+      throw Error("Failed to get job. 😢");
     }
     const { hits: jobs } = await res.json();
-    console.log(jobs);
     return jobs;
   } catch (error) {
     throw Error("Failed to fetch jobs data: " + error.message);
@@ -19,9 +18,10 @@ export async function getOneJob(id) {
   if (!res.ok) throw Error(`Couldn't find job #${id}`);
 
   const { hits: jobs } = await res.json();
-  return jobs;
-}
+  if (jobs.length === 0) throw Error(`No job found with ID ${id}`);
 
+  return jobs[0];
+}
 export async function createLetter(newOrder) {
   try {
     const res = await fetch(`${API_URL}/order`, {

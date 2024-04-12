@@ -4,10 +4,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Profile from "./pages/Profile/Profile";
-import JobSearch from "./pages/JobSearch/JobSearch";
-import { loader as menuLoader } from "./pages/JobSearch/JobSearchLoader";
+import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobList from "./pages/JobList/JobList";
-import JobInfo from "./pages/JobInfo/JobInfo";
+import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
 import Homepage from "./pages/Homepage";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
@@ -21,17 +20,17 @@ const router = createBrowserRouter([
       {
         path: "/jobsearch",
         element: <JobSearch />,
-        loader: menuLoader,
+        loader: searchLoader,
         errorElement: <Error />,
       },
-      { path: "/joblist", element: <JobList /> },
+      { path: "/joblist", element: <JobList />, errorElement: <Error /> },
       { path: "/signup", element: <SignUp /> },
       { path: "/signin", element: <SignIn /> },
       { path: "/profile", element: <Profile /> },
       {
         path: "/job/:jobId",
         element: <JobInfo />,
-        // loader: orderLoader,
+        loader: jobLoader,
         errorElement: <Error />,
       },
     ],

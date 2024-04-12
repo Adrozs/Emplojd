@@ -7,6 +7,10 @@ a {
 }
 
 .loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 45px;
   aspect-ratio: 0.75;
   --c: no-repeat linear-gradient(#333 0 0);
