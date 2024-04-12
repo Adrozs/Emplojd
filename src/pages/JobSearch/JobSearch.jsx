@@ -1,22 +1,24 @@
-import { useLoaderData } from "react-router-dom";
-import { getMenu } from "../../services/apiJobs";
+import { useState, useEffect } from "react";
 import JobItem from "./JobItem";
+import { useLocation } from "react-router-dom";
+
 function JobSearch() {
-  const menu = useLoaderData();
+  const { state } = useLocation();
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    if (state && state.jobsData) {
+      setJobs(state.jobsData);
+    }
+  }, [state]);
 
   return (
     <ul>
-      {menu.map((job) => (
+      {jobs.map((job) => (
         <JobItem job={job} key={job.id} />
       ))}
     </ul>
   );
-}
-
-export async function loader() {
-  const menu = await getMenu();
-  console.log(menu);
-  return menu;
 }
 
 export default JobSearch;

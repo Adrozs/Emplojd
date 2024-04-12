@@ -6,9 +6,9 @@ function NotFound() {
 
   return (
     <div>
-      <h1>Something went wrong 😢 Andy??</h1>
+      <h1>Something went wrong 😢 </h1>
       <p>{error.data || error.message}</p>
-      <button onClick={() => navigate(-1)}>&larr; Go back</button>
+      <button onClick={() => navigate(-1)}>&larr; Gå tillbaka</button>
     </div>
   );
 }

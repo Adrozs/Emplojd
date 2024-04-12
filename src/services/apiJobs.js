@@ -1,9 +1,6 @@
-// const API_URL = "https://react-fast-pizza-api.onrender.com/api";
-
-const query = "javascript";
 const API_URL = "https://jobsearch.api.jobtechdev.se/search";
 
-export async function getMenu() {
+export async function getJobs(query) {
   try {
     const res = await fetch(`${API_URL}?q=${query}&limit=100`);
     if (!res.ok) {
@@ -13,19 +10,19 @@ export async function getMenu() {
     console.log(jobs);
     return jobs;
   } catch (error) {
-    throw Error("Failed to fetch menu data: " + error.message);
+    throw Error("Failed to fetch jobs data: " + error.message);
   }
 }
 
-export async function getOrder(id) {
-  const res = await fetch(`${API_URL}/order/${id}`);
-  if (!res.ok) throw Error(`Couldn't find order #${id}`);
+export async function getOneJob(id) {
+  const res = await fetch(`${API_URL}?q=${id}`);
+  if (!res.ok) throw Error(`Couldn't find job #${id}`);
 
-  const { data } = await res.json();
-  return data;
+  const { hits: jobs } = await res.json();
+  return jobs;
 }
 
-export async function createOrder(newOrder) {
+export async function createLetter(newOrder) {
   try {
     const res = await fetch(`${API_URL}/order`, {
       method: "POST",
@@ -39,11 +36,11 @@ export async function createOrder(newOrder) {
     const { data } = await res.json();
     return data;
   } catch {
-    throw Error("Failed creating your order");
+    throw Error("Failed creating your cover letter");
   }
 }
 
-export async function updateOrder(id, updateObj) {
+export async function updateLetter(id, updateObj) {
   try {
     const res = await fetch(`${API_URL}/order/${id}`, {
       method: "PATCH",
@@ -54,8 +51,7 @@ export async function updateOrder(id, updateObj) {
     });
 
     if (!res.ok) throw Error();
-    // We don't need the data, so we don't return anything
   } catch (err) {
-    throw Error("Failed updating your order");
+    throw Error("Failed updating your cv");
   }
 }

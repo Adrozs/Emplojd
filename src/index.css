@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 a {
-  border: 1px solid green;
+  cursor: pointer;
 }
 
 .loader {
