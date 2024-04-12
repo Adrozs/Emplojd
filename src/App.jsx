@@ -1,31 +1,44 @@
 //Imports
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 // Pages
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Profile from "./pages/Profile/Profile";
-import JobSearch from "./pages/JobSearch/JobSearch";
+import JobSearch, { loader as menuLoader } from "./pages/JobSearch/JobSearch";
+import JobList from "./pages/JobList/JobList";
 import JobInfo from "./pages/JobInfo/JobInfo";
 import Homepage from "./pages/Homepage";
-import Header from "./components/Header";
+import AppLayout from "./ui/AppLayout";
+import Error from "./ui/Error";
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    errorElement: <Error />,
+    children: [
+      { path: "/", element: <Homepage /> },
+      {
+        path: "/jobsearch",
+        element: <JobSearch />,
+        loader: menuLoader,
+        errorElement: <Error />,
+      },
+      { path: "/joblist", element: <JobList /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/signin", element: <SignIn /> },
+      { path: "/profile", element: <Profile /> },
+      {
+        path: "/job/:jobId",
+        element: <JobInfo />,
+        // loader: orderLoader,
+        errorElement: <Error />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  return (
-    <main>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="Jobsearch" element={<JobSearch />} />
-          <Route path="jobinfo" element={<JobInfo />} />
-          <Route path="signin" element={<SignIn />} />
-        </Routes>
-      </BrowserRouter>
-    </main>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

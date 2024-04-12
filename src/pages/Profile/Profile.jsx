@@ -4,7 +4,7 @@ function Profle() {
     <div>
       Profle
       <div>
-        <Link to="/jobsearch">Hitta jobb</Link>
+        <Link to="/joblist">Hitta jobb</Link>
       </div>
     </div>
   );
