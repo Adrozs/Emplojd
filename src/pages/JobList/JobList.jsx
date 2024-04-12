@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getJobs } from "../../services/apiJobs";
 
@@ -8,6 +8,7 @@ function JobList() {
   const [jobsData, setJobsData] = useState(null);
   const [latest, setLatest] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (city === "" || job === "") return;
@@ -45,7 +46,9 @@ function JobList() {
         return;
       }
       setJobsData(data);
-      navigate("/jobsearch", { state: { jobsData: data } });
+      navigate("/jobsearch", {
+        state: { jobsData: data, query: { city, job } },
+      });
     } catch (error) {
       console.error("Error fetching jobs:", error);
     }
@@ -101,7 +104,7 @@ function JobList() {
             <p>Dina senaste sökningar:</p>
             <ul>
               {latest.reverse().map((search, index) => (
-                <Item search={search} key={index} />
+                <Items search={search} key={index} />
               ))}
             </ul>
           </div>
@@ -111,7 +114,7 @@ function JobList() {
   );
 }
 
-export function Item({ search }) {
+export function Items({ search }) {
   return (
     <li>
       {search.city && !search.job && <>Stad: {search.city}</>}
