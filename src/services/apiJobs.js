@@ -7,6 +7,7 @@ export async function getJobs(query) {
       throw Error("Failed to get job. 😢");
     }
     const { hits: jobs } = await res.json();
+    console.log(jobs);
     return jobs;
   } catch (error) {
     throw Error("Failed to fetch jobs data: " + error.message);

@@ -41,9 +41,15 @@ function JobItem({ job }) {
         </div>
       </div>
       <div className="flex gap-3 mt-2">
-        <span className="border-black border-2 px-2">Tillsvidare </span>
-        <span className="border-black border-2 px-2">Stockholm </span>
-        <span className="border-black border-2 px-2">Jadå </span>
+        <span className="border-black border-2 px-2">
+          {job.working_hours_type.label}{" "}
+        </span>
+        <span className="border-black border-2 px-2">
+          {job.employment_type.label}{" "}
+        </span>
+        <span className="border-black border-2 px-2">
+          {job.occupation.label}{" "}
+        </span>
       </div>
 
       <Link
