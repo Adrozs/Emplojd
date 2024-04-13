@@ -10,20 +10,20 @@ function JobList() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    if (city === "" || job === "") return;
-    else {
-      const fetchData = async () => {
-        try {
-          const data = await getJobs(city + "+" + job);
-          setJobsData(data);
-        } catch (error) {
-          console.error("Error fetching jobs:", error);
-        }
-      };
-      fetchData();
-    }
-  }, [city, job]);
+  // useEffect(() => {
+  //   if (city === "" || job === "") return;
+  //   else {
+  //     const fetchData = async () => {
+  //       try {
+  //         const data = await getJobs(city + "+" + job);
+  //         setJobsData(data);
+  //       } catch (error) {
+  //         console.error("Error fetching jobs:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, [city, job]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

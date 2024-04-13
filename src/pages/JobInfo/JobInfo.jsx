@@ -16,10 +16,14 @@ function JobInfo() {
     );
   };
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
     <main className="m-2">
       <div className="my-4 flex w-full justify-between items-center">
-        <Link>Tillbaka till resultaten</Link>
+        <a onClick={handleBack}>Tillbaka till resultaten</a>
         <img src="/like-heart.svg" alt="" />
       </div>
       {job && (
