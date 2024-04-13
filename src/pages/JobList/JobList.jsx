@@ -59,7 +59,6 @@ function JobList() {
   );
 
   //ta bort tidigare sökningar
-
   function handleDeleteHistory(id) {
     setLatest((latest) => latest.filter((search) => search.id !== id));
   }
@@ -87,14 +86,25 @@ function JobList() {
             <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
               Ange stad
             </label>
-            <input
-              type="text"
-              name="city"
+            <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="...."
-            />
+            >
+              <option value=" ">Hela landet</option>
+              <option value="Stockholm">Stockholm</option>
+              <option value="Göteborg">Göteborg</option>
+              <option value="Malmö">Malmö</option>
+              <option value="Uppsala">Uppsala</option>
+              <option value="Linköping">Linköping</option>
+              <option value="Västerås">Västerås</option>
+              <option value="Örebro">Örebro</option>
+              <option value="Norrköping">Norrköping</option>
+              <option value="Helsingborg">Helsingborg</option>
+              <option value="Jönköping">Jönköping</option>
+              <option value="Södertälje">Södertälje</option>
+            </select>
           </div>
 
           <button
@@ -131,7 +141,6 @@ function JobList() {
 }
 
 export function Items({ search, index, onDelete, setCity, setJob }) {
-  console.log(search.id);
   return (
     <li>
       {
@@ -169,7 +178,7 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
         {search.job && !search.city && <div>{search.job} </div>}
         {search.city && search.job && (
           <div>
-            {search.job} inom {search.city},
+            {search.job} inom {search.city}
           </div>
         )}
       </div>

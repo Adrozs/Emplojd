@@ -40,10 +40,12 @@ function JobItem({ job }) {
           </p>
         </div>
       </div>
-      <div className="flex gap-3 mt-2">
-        <span className="border-black border-2 px-2">
-          {job.working_hours_type.label}{" "}
-        </span>
+      <div className="flex gap-3 mt-2 text-[11px]">
+        {job.working_hours_type.label && (
+          <span className="border-black border-2 px-2">
+            {job.working_hours_type.label}
+          </span>
+        )}
         <span className="border-black border-2 px-2">
           {job.employment_type.label}{" "}
         </span>
