@@ -27,6 +27,19 @@ function JobSearch() {
     }
   }, [query]);
 
+  //uppdaterar title för sidan
+  useEffect(
+    function () {
+      if (!searchWord) return;
+      document.title = `Jobify - ${searchWord} `;
+
+      return function () {
+        document.title = "Jobify";
+      };
+    },
+    [searchWord]
+  );
+
   return (
     <main className="flex flex-col items-center">
       <div className="my-3 w-[90%] bg-stone-200 text-center text-lg py-4">

@@ -1,5 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
+import { useEffect } from "react";
 
 function JobInfo() {
   const job = useLoaderData();
@@ -19,6 +20,17 @@ function JobInfo() {
   const handleBack = () => {
     window.history.back();
   };
+
+  useEffect(
+    function () {
+      if (!job) return;
+      document.title = `${job.headline} `;
+      return function () {
+        document.title = "Jobify";
+      };
+    },
+    [job]
+  );
 
   return (
     <main className="m-2">
