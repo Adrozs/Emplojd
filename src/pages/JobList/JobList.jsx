@@ -2,28 +2,24 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getJobs } from "../../services/apiJobs";
 
+// uuid
+import { v4 as uuidv4 } from "uuid";
+
 function JobList() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [city, setCity] = useState("");
   const [job, setJob] = useState("");
   const [jobsData, setJobsData] = useState(null);
-  const [latest, setLatest] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  // useEffect(() => {
-  //   if (city === "" || job === "") return;
-  //   else {
-  //     const fetchData = async () => {
-  //       try {
-  //         const data = await getJobs(city + "+" + job);
-  //         setJobsData(data);
-  //       } catch (error) {
-  //         console.error("Error fetching jobs:", error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }
-  // }, [city, job]);
+  // Flytta initialiseringen av latest utanför useState
+  let initialLatest = [];
+  const storedValue = localStorage.getItem("searchHistory");
+  if (storedValue) {
+    initialLatest = JSON.parse(storedValue);
+  }
+
+  const [latest, setLatest] = useState(initialLatest);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,16 +27,16 @@ function JobList() {
       let data;
       if (city && job) {
         data = await getJobs(city + "+" + job);
-        setLatest((items) => [...items, { city, job }]);
+        setLatest((items) => [...items, { id: uuidv4(), city, job }]);
         setCity("");
         setJob("");
       } else if (city && !job) {
         data = await getJobs(city);
-        setLatest((items) => [...items, { city }]);
+        setLatest((items) => [...items, { id: uuidv4(), city }]);
         setCity("");
       } else if (!city && job) {
         data = await getJobs(job);
-        setLatest((items) => [...items, { job }]);
+        setLatest((items) => [...items, { id: uuidv4(), job }]);
         setJob("");
       } else {
         return;
@@ -54,8 +50,22 @@ function JobList() {
     }
   };
 
+  //spara tidigare sökningar
+  useEffect(
+    function () {
+      localStorage.setItem("searchHistory", JSON.stringify(latest));
+    },
+    [latest]
+  );
+
+  //ta bort tidigare sökningar
+
+  function handleDeleteHistory(id) {
+    setLatest((latest) => latest.filter((search) => search.id !== id));
+  }
+
   return (
-    <div className="p-5">
+    <main className="p-5">
       <div className="p-3 pb-10 bg-stone-200">
         <h2 className="m-3 text-center text-xl font-bold">
           Hitta rätt jobb för dig
@@ -102,29 +112,71 @@ function JobList() {
         {latest.length !== 0 && (
           <div className="mt-4 max-w-sm mx-auto text-sm">
             <p>Dina senaste sökningar:</p>
-            <ul>
+            <ul className="mt-2">
               {latest.reverse().map((search, index) => (
-                <Items search={search} key={index} />
+                <Items
+                  search={search}
+                  key={index}
+                  onDelete={handleDeleteHistory}
+                  setCity={setCity}
+                  setJob={setJob}
+                />
               ))}
             </ul>
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }
 
-export function Items({ search }) {
+export function Items({ search, index, onDelete, setCity, setJob }) {
+  console.log(search.id);
   return (
     <li>
-      {search.city && !search.job && <>Stad: {search.city}</>}
-      {search.job && !search.city && <>Jobb: {search.job}</>}
-      {search.city && search.job && (
-        <>
-          Stad: {search.city}, Jobb: {search.job}
-        </>
-      )}
+      {
+        <DisplaySearchHistory
+          setCity={setCity}
+          setJob={setJob}
+          search={search}
+          key={index}
+          onDelete={() => onDelete(search.id)}
+        />
+      }
     </li>
+  );
+}
+
+export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
+  const handleClickForSearchAgain = () => {
+    if (search.city && search.job) {
+      setCity(search.city);
+      setJob(search.job);
+    } else if (search.city && !search.job) {
+      setCity(search.city);
+    } else if (search.job && !search.city) {
+      setJob(search.job);
+    }
+  };
+
+  return (
+    <div className="flex gap-2 justify-between bg-stone-300 mb-3 p-1">
+      <div className="flex gap-5">
+        <button onClick={handleClickForSearchAgain}>Sök</button>
+        {search.city && !search.job && (
+          <div className="bg-stone-400">{search.city} </div>
+        )}
+        {search.job && !search.city && <div>{search.job} </div>}
+        {search.city && search.job && (
+          <div>
+            {search.job} inom {search.city},
+          </div>
+        )}
+      </div>
+      <button onClick={onDelete}>
+        <img src="/trash.png" alt="papperskorg" className="h-[14px]" />
+      </button>
+    </div>
   );
 }
 
