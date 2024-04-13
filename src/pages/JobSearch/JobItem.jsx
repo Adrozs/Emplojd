@@ -48,7 +48,7 @@ function JobItem({ job }) {
           {job.employment_type.label}{" "}
         </span>
         <span className="border-black border-2 px-2">
-          {job.occupation.label}{" "}
+          {job.occupation_field.label}{" "}
         </span>
       </div>
 

@@ -8,7 +8,6 @@ function JobSearch() {
   const [jobs, setJobs] = useState([]);
   const { query } = state || {};
   const [searchWord, setSearchWord] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (state && state.jobsData) {
