@@ -1,7 +1,9 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { getJobs } from "../../services/apiJobs";
-
+//icons
+import { PiClockCounterClockwiseBold } from "react-icons/pi";
+import { FaBullhorn } from "react-icons/fa";
 // uuid
 import { v4 as uuidv4 } from "uuid";
 
@@ -121,9 +123,12 @@ function JobList() {
           </button>
         </form>
         <div className="mt-3 max-w-sm mx-auto text-sm text-center border-0 mb-6">
-          <Link className="text-[12px] underline " to={"/profile"}>
-            Har du laddat upp ditt cv än?
-          </Link>
+          <div className="flex items-center justify-center gap-2">
+            <FaBullhorn className="mt-1" />
+            <Link className="text-[13px] underline " to={"/profile"}>
+              Har du laddat upp ditt cv än?
+            </Link>
+          </div>
         </div>
         {latest.length !== 0 && (
           <div className="mt-4 max-w-sm mx-auto text-sm">
@@ -177,10 +182,10 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   return (
     <div className="flex gap-2 justify-between bg-stone-300 mb-3 p-1">
       <div className="flex gap-5">
-        <button onClick={handleClickForSearchAgain}>Sök</button>
-        {search.city && !search.job && (
-          <div className="bg-stone-400">{search.city} </div>
-        )}
+        <button onClick={handleClickForSearchAgain}>
+          <PiClockCounterClockwiseBold />
+        </button>
+        {search.city && !search.job && <div>{search.city} </div>}
         {search.job && !search.city && <div>{search.job} </div>}
         {search.city && search.job && (
           <div>
