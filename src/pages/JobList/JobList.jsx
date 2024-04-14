@@ -9,7 +9,6 @@ import { v4 as uuidv4 } from "uuid";
 
 function JobList() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [city, setCity] = useState("");
   const [job, setJob] = useState("");
   const [jobsData, setJobsData] = useState(null);
