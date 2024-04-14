@@ -1,13 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 function Profle() {
-  return (
-    <div>
-      Profle
-      <div>
-        <Link to="/joblist">Hitta jobb</Link>
-      </div>
-    </div>
-  );
+	return (
+		<div>
+			Profile
+			<div>
+				<Link to="/joblist">Hitta jobb</Link>
+			</div>
+		</div>
+	);
 }
 
 export default Profle;
