@@ -42,18 +42,18 @@ function JobItem({ job }) {
           </p>
         </div>
       </div>
-      <div className="flex gap-3 text-[12px]">
-        {job.working_hours_type.label && (
+      <div className="flex gap-2 text-[12px]">
+        {job.working_hours_type.label ? (
           <span className="bg-stone-100 px-2 py-1">
             {job.working_hours_type.label}
           </span>
+        ) : (
+          <span className="bg-stone-100 px-2 py-1">
+            {job.employment_type.label}{" "}
+          </span>
         )}
-        <span className="bg-stone-100 px-2 py-1">
-          {job.employment_type.label}{" "}
-        </span>
-        <span className="bg-stone-100 px-2 py-1">
-          {job.occupation_field.label}{" "}
-        </span>
+
+        <span className="bg-stone-100 px-2 py-1">{job.occupation.label} </span>
       </div>
 
       <Link

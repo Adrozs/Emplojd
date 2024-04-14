@@ -45,7 +45,7 @@ function JobSearch() {
 
   return (
     <main className="flex flex-col items-center">
-      <div className="my-3 w-[90%] bg-stone-200 text-center text-2xl py-4">
+      <div className="mt-3 w-[90%] bg-stone-200 text-center text-2xl py-4">
         <p className="font-semibold text-stone-500">
           <span className="font-semibold text-stone-800">Sökresultat för</span>
           <br />

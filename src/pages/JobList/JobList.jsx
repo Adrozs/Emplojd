@@ -71,7 +71,7 @@ function JobList() {
   }
 
   return (
-    <main className="p-5">
+    <main className="mt-14 p-5">
       <div className="p-3 pb-10 bg-stone-200">
         <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
           Hitta rätt jobb för dig
