@@ -44,10 +44,10 @@ function JobInfo() {
             <h1 className="text-2xl">{job.headline}</h1>
             <p>{job.employer.name}</p>
             <Link
-              className="mt-2 w-full text-center bg-stone-200 border-gray-100 h-8"
+              className="mt-2 w-full bg-stone-200 border-gray-100 h-8 flex items-center justify-center text-lg gap-1"
               to="/"
             >
-              Ansök nu
+              Ansök nu <span className="text-xl"> &rarr;</span>
             </Link>
           </div>
           {isHTML(job.description.text_formatted) ? (

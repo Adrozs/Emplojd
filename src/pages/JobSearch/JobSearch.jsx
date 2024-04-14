@@ -3,6 +3,9 @@ import JobItem from "./JobItem";
 import { useLocation } from "react-router-dom";
 import { getJobs } from "../../services/apiJobs";
 
+//icons
+import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+
 function JobSearch() {
   const { state } = useLocation();
   const [jobs, setJobs] = useState([]);
@@ -42,20 +45,21 @@ function JobSearch() {
 
   return (
     <main className="flex flex-col items-center">
-      <div className="my-3 w-[90%] bg-stone-200 text-center text-lg py-4">
-        <p className="font-semibold text-stone-600">
-          <span className="font-extrabold text-stone-800">
-            Sökresultat för:{" "}
-          </span>
+      <div className="my-3 w-[90%] bg-stone-200 text-center text-2xl py-4">
+        <p className="font-semibold text-stone-500">
+          <span className="font-semibold text-stone-800">Sökresultat för</span>
           <br />
           {searchWord}
         </p>
       </div>
       <div className="w-[90%] flex justify-between my-3">
         <p>Alla resultat</p>
-        <div>Filter</div>
+        <div className="bg-white  px-2 flex items-center gap-1 justify-center cursor-pointer">
+          <HiAdjustmentsHorizontal />
+          <span className="text-[15px]">Filter</span>
+        </div>
       </div>
-      <ul className="w-full flex flex-col items-center gap-2">
+      <ul className="w-full flex flex-col items-center gap-5">
         {jobs.map((job) => (
           <JobItem job={job} key={job.id} />
         ))}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
+
 function JobItem({ job }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -18,13 +18,15 @@ function JobItem({ job }) {
   }, [job]);
 
   return (
-    <li className="h-[250px] w-[90%] bg-stone-200 p-2 flex flex-col justify-between">
+    <li className="h-[260px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
       <div className="flex justify-between">
-        <img
-          src={job.logo_url ? job.logo_url : "exempelbild1.png"}
-          alt="bild"
-          className="object-contain h-[55px] "
-        />
+        <div className="bg-stone-100 flex items-center rounded-full p-1 h-[55px]">
+          <img
+            src={job.logo_url ? job.logo_url : "exempelbild1.png"}
+            alt="bild"
+            className="object-contain w-[50px] h-[50px] p-1 rounded-full"
+          />
+        </div>
         <img
           src={isLiked ? "liked-heart.svg" : "/like-heart.svg"}
           alt="bild"
@@ -32,36 +34,36 @@ function JobItem({ job }) {
         />
       </div>
       <div>
-        <h3 className="font-bold text-lg">{job.headline}</h3>
-        <p>{job.employer.name}</p>
+        <h3 className="font-semibold text-xl">{job.headline}</h3>
+        <p className="text-lg">{job.employer.name}</p>
         <div>
-          <p>
+          <p className="text-sm my-2">
             {job.workplace_address.municipality} - {daySincePosted} dagar sen
           </p>
         </div>
       </div>
-      <div className="flex gap-3 mt-2 text-[11px]">
+      <div className="flex gap-3 text-[12px]">
         {job.working_hours_type.label && (
-          <span className="border-black border-2 px-2">
+          <span className="bg-stone-100 px-2 py-1">
             {job.working_hours_type.label}
           </span>
         )}
-        <span className="border-black border-2 px-2">
+        <span className="bg-stone-100 px-2 py-1">
           {job.employment_type.label}{" "}
         </span>
-        <span className="border-black border-2 px-2">
+        <span className="bg-stone-100 px-2 py-1">
           {job.occupation_field.label}{" "}
         </span>
       </div>
 
       <Link
-        className="mt-2 w-full bg-white  h-7 text-center"
+        className="items-center justify-center flex  mt-2 w-full py-1 bg-white h-7"
         to={{
           pathname: `/job/${job.id}`,
           state: { jobId: job.id },
         }}
       >
-        Läs mer
+        Läs mer <span className="text-lg"> &rarr;</span>
       </Link>
     </li>
   );

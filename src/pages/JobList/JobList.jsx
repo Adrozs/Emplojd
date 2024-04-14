@@ -73,7 +73,7 @@ function JobList() {
   return (
     <main className="p-5">
       <div className="p-3 pb-10 bg-stone-200">
-        <h2 className="m-3 text-center text-xl font-bold">
+        <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
           Hitta rätt jobb för dig
         </h2>
         <form className="max-w-sm mx-auto bg-white p-3" onSubmit={handleSubmit}>
