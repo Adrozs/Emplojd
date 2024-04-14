@@ -7,12 +7,12 @@ import Profile from "./pages/Profile/Profile";
 import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobList from "./pages/JobList/JobList";
 import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
-import Homepage from "./pages/Homepage";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ApplyNow from "./pages/ApplyNow/ApplyNow";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +22,23 @@ const router = createBrowserRouter([
       { path: "/", element: <LandingPage /> },
       {
         path: "/jobsearch",
-        element: <ProtectedRoute><JobSearch /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <JobSearch />
+          </ProtectedRoute>
+        ),
         loader: searchLoader,
         errorElement: <Error />,
       },
-      { path: "/joblist", element: <ProtectedRoute><JobList /></ProtectedRoute>, errorElement: <Error /> },
+      {
+        path: "/joblist",
+        element: (
+          <ProtectedRoute>
+            <JobList />
+          </ProtectedRoute>
+        ),
+        errorElement: <Error />,
+      },
       { path: "/signup", element: <SignUp /> },
       { path: "/signin", element: <SignIn /> },
       {
@@ -45,6 +57,15 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         loader: jobLoader,
+        errorElement: <Error />,
+      },
+      {
+        path: "/job/:jobId/apply",
+        element: (
+          <ProtectedRoute>
+            <ApplyNow />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
     ],
