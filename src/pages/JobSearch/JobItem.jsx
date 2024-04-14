@@ -34,7 +34,7 @@ function JobItem({ job }) {
         />
       </div>
       <div>
-        <h3 className="font-semibold text-xl">{job.headline}</h3>
+        <h3 className="font-semibold text-xl text-stone-900">{job.headline}</h3>
         <p className="text-lg">{job.employer.name}</p>
         <div>
           <p className="text-sm my-2">

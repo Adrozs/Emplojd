@@ -40,30 +40,45 @@ function JobInfo() {
       </div>
       {job && (
         <>
-          <div className="w-full flex flex-col my-6 text-center ">
-            <h1 className="text-2xl">{job.headline}</h1>
-            <p>{job.employer.name}</p>
-            <Link
-              className="mt-2 w-full bg-stone-200 border-gray-100 h-8 flex items-center justify-center text-lg gap-1"
-              to="/"
-            >
-              Ansök nu <span className="text-xl"> &rarr;</span>
-            </Link>
+          <div className="w-full flex flex-col my-6 text-center justify-center ">
+            <h1 className="text-2xl font-semibold text-stone-700">
+              {job.headline}
+            </h1>
+            <div className="w-[95%] flex items-center justify-center mx-auto">
+              <Link
+                className="mt-3 w-full bg-stone-200 border-gray-100 py-2 text-lg gap-1"
+                to="/"
+              >
+                Ansök nu <span className="text-xl"> &rarr;</span>
+              </Link>
+            </div>
           </div>
           {isHTML(job.description.text_formatted) ? (
             <div
+              className="bg-stone-200 p-3"
               dangerouslySetInnerHTML={{
                 __html: job.description.text_formatted,
               }}
             />
           ) : (
             <p
+              className="bg-stone-200 p-3"
               style={{ whiteSpace: "pre-line" }}
               dangerouslySetInnerHTML={{
                 __html: makeLinksClickable(job.description.text_formatted),
               }}
             />
           )}
+          <div className="w-full my-3 text-center ">
+            <div className="w-[95%] flex items-center justify-center mx-auto">
+              <Link
+                className="mt-3 w-full bg-stone-200 border-gray-100 py-2 text-lg gap-1"
+                to="/"
+              >
+                Ansök nu <span className="text-xl"> &rarr;</span>
+              </Link>
+            </div>
+          </div>
         </>
       )}
     </main>
