@@ -4,9 +4,7 @@ import AuthForm from "../../components/AuthForm";
 const LoginPage = () => <AuthForm type="login" />;
 
 function SignIn() {
-  return (
-    <LoginPage/>
-  );
+  return <LoginPage />;
 }
 
 export default SignIn;
