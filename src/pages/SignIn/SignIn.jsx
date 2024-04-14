@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
+import AuthForm from "../../components/AuthForm";
+
+const LoginPage = () => <AuthForm type="login" />;
+
 function SignIn() {
   return (
-    <div>
-      SignIn
-      <div>
-        <Link to="/signup">Bli medlem</Link>
-      </div>
-    </div>
+    <LoginPage/>
   );
 }
 
