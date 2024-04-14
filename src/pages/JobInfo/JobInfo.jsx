@@ -47,7 +47,7 @@ function JobInfo() {
             <div className="w-[95%] flex items-center justify-center mx-auto">
               <Link
                 className="mt-3 w-full bg-stone-200 border-gray-100 py-2 text-lg gap-1"
-                to="/"
+                to={`/job/${job.id}/apply`}
               >
                 Ansök nu <span className="text-xl"> &rarr;</span>
               </Link>
@@ -73,7 +73,7 @@ function JobInfo() {
             <div className="w-[95%] flex items-center justify-center mx-auto">
               <Link
                 className="mt-3 w-full bg-stone-200 border-gray-100 py-2 text-lg gap-1"
-                to="/"
+                to={`/job/${job.id}/apply`}
               >
                 Ansök nu <span className="text-xl"> &rarr;</span>
               </Link>
