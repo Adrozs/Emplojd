@@ -70,8 +70,8 @@ function JobList() {
   }
 
   return (
-    <main className="mt-14 p-5">
-      <div className="p-3 pb-10 bg-stone-200">
+    <main className="flex flex-col mt-14 p-5 h-screen">
+      <div className="p-3 pb-10 bg-stone-200 mb-12">
         <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
           Hitta rätt jobb för dig
         </h2>
@@ -146,6 +146,9 @@ function JobList() {
           </div>
         )}
       </div>
+      <footer className="h-full w-full flex items-center justify-center bg-stone-500">
+        <div className="text-xl">Footer</div>
+      </footer>
     </main>
   );
 }
