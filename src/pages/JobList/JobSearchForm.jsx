@@ -163,10 +163,14 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
         <button onClick={handleClickForSearchAgain}>
           <PiClockCounterClockwiseBold />
         </button>
-        {search.city && !search.job && <div>{search.city} </div>}
-        {search.job && !search.city && <div>{search.job} </div>}
+        {search.city && !search.job && (
+          <div onClick={handleClickForSearchAgain}>{search.city} </div>
+        )}
+        {search.job && !search.city && (
+          <div onClick={handleClickForSearchAgain}>{search.job} </div>
+        )}
         {search.city && search.job && (
-          <div>
+          <div onClick={handleClickForSearchAgain}>
             {search.job} inom {search.city}
           </div>
         )}
