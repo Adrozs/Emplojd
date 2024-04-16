@@ -9,13 +9,13 @@ const Header = () => {
     setMenu(!menu);
   }
   return (
-    <header className="flex justify-between w-full px-6 h-[50px] p-2 items-center">
+    <header className="flex justify-between w-full px-6 h-[65px] p-2 items-center">
       <nav className="flex justify-between w-full">
         <div className=" bg-stone-300  p-2 px-5">
-          <h1>LOGO</h1>
+          <h1 className="text-xl font-semibold">LOGO</h1>
         </div>
         <div className="flex items-center ">
-          <RxHamburgerMenu size={30} onClick={handleMenu} />
+          <RxHamburgerMenu size={46} onClick={handleMenu} />
           {menu && <Modal onClose={setMenu} menu={menu} />}
         </div>
       </nav>
