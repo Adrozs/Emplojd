@@ -72,7 +72,10 @@ function Modal({ onClose, menu }) {
               </div>
               <div className="justify-end">
                 {isLoggedIn && (
-                  <button className="flex items-end gap-4 text-lg">
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-end gap-4 text-lg"
+                  >
                     {" "}
                     <TbLogin2 size={30} />
                     Log out
