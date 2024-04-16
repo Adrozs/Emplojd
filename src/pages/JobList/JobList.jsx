@@ -70,7 +70,7 @@ function JobList() {
   }
 
   return (
-    <main className="flex flex-col mt-14 p-5 h-screen">
+    <main className="flex flex-col mt-4 p-5 h-screen">
       <div className="p-3 pb-10 bg-stone-200 mb-12">
         <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
           Hitta rätt jobb för dig
