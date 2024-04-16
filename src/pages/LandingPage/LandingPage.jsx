@@ -1,6 +1,7 @@
 import { BsArrowDownCircle } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import JobList from '../JobList/JobList';
+import JobSearchForm from '../JobList/JobSearchForm';
 
 export default function LandingPage() {
 	return (
@@ -35,14 +36,29 @@ export default function LandingPage() {
 					TEXT
 				</h6>
 			</div>
-			<JobList />
-			{/* <div className="min-h-96 mt-10">
+			<JobSearchForm />
+			<div className="min-h-96 mt-10">
 				<h6 className="mt-2 flex-col font-semi-bold items-center justify-center text-center text-2xl">
 					Såhär går det till
 				</h6>
-				<div>IKON</div>
-				<div>IKON</div>
-			</div> */}
+				<div>
+					<button className="p-5 px-6 pt-2 baseline">
+						<BsArrowDownCircle size="2rem" />
+					</button>
+					<h6 className="font-bold text-xl">1. lorem ipsum</h6>
+					<p>lorem ipsum lorem ipsum lorem </p>
+				</div>
+				<button className="p-5 px-6 pt-2 baseline">
+					<BsArrowDownCircle size="2rem" />
+				</button>
+				<h6 className="font-bold text-xl">1. lorem ipsum</h6>
+				<p>lorem ipsum lorem ipsum lorem </p>
+				<button className="p-5 px-6 pt-2 baseline">
+					<BsArrowDownCircle size="2rem" />
+				</button>
+				<h6 className="font-bold text-xl">1. lorem ipsum</h6>
+				<p>lorem ipsum lorem ipsum lorem </p>
+			</div>
 		</>
 	);
 }
