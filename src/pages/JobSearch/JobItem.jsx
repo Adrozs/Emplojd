@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
-function JobItem({ job }) {
+function JobItem({ job, children }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
 
@@ -56,15 +56,7 @@ function JobItem({ job }) {
         <span className="bg-stone-100 px-2 py-1">{job.occupation.label} </span>
       </div>
 
-      <Link
-        className="items-center justify-center flex  mt-2 w-full py-1 bg-white h-7"
-        to={{
-          pathname: `/job/${job.id}`,
-          state: { jobId: job.id },
-        }}
-      >
-        Läs mer <span className="text-lg"> &rarr;</span>
-      </Link>
+      {children}
     </li>
   );
 }

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import JobItem from "./JobItem";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getJobs } from "../../services/apiJobs";
-
 //icons
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 
@@ -61,7 +60,17 @@ function JobSearch() {
       </div>
       <ul className="w-full flex flex-col items-center gap-5">
         {jobs.map((job) => (
-          <JobItem job={job} key={job.id} />
+          <JobItem job={job} key={job.id}>
+            <Link
+              className="items-center justify-center flex  mt-2 w-full py-1 bg-white h-7"
+              to={{
+                pathname: `/job/${job.id}`,
+                state: { jobId: job.id },
+              }}
+            >
+              Läs mer <span className="text-lg"> &rarr;</span>
+            </Link>
+          </JobItem>
         ))}
       </ul>
     </main>
