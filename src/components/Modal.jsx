@@ -42,7 +42,7 @@ function Modal({ onClose, menu }) {
     <>
       {menu && (
         <nav className="fixed z-10 inset-0 overflow-y-auto bg-opacity-75 flex justify-end items-start">
-          <div className="bg-slate-400 max-w-lg w-[20rem] h-[40%] z-1 modal-content ">
+          <div className="bg-slate-400 max-w-lg w-[20rem] h-[25rem] z-1 modal-content ">
             <div className="p-4 flex flex-col text-stone-100 h-[100%]">
               <button onClick={() => onClose(!menu)} className="self-end">
                 <IoClose size={46} />
