@@ -5,10 +5,17 @@ const LoginPage = () => <AuthForm type="login" />;
 
 function SignIn() {
   return (
-  <>
-    <div className="w-full h-72 bg-stone-400 mb-8"></div>
-    <LoginPage />;
-  </>
-)}
+    <>
+      <div
+        className="flex flex-col"
+        style={{ minHeight: "calc(100vh - 50px)" }}
+      >
+        <div className="flex-grow bg-stone-400"></div>
+        <div className="my-8">
+          <LoginPage />
+        </div>
+      </div>
+    </>
+  );}
 
 export default SignIn;

@@ -31,7 +31,7 @@ const AuthForm = () => {
     <form className="m-5" onSubmit={handleSubmit}>
       {isSignUp && (
         <>
-          <div className="flex flex-col">
+          <div className="flex flex-col pb-6">
             <label htmlFor="name">Name:</label>
             <input
               type="text"
@@ -43,7 +43,7 @@ const AuthForm = () => {
               className="h-12 bg-stone-400 text-black placeholder-black pl-3"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col pb-6">
             <label htmlFor="lastname">Last Name:</label>
             <input
               type="text"
@@ -57,7 +57,7 @@ const AuthForm = () => {
           </div>
         </>
       )}
-      <div className="flex flex-col">
+      <div className="flex flex-col pb-6">
         <label htmlFor="username">Email:</label>
         <input
           type="text"
@@ -69,7 +69,7 @@ const AuthForm = () => {
           className="h-12 bg-stone-400 text-black placeholder-black pl-3"
         />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col pb-2">
         <label htmlFor="password">Password:</label>
         <input
           type="password"
@@ -81,15 +81,15 @@ const AuthForm = () => {
           className="h-12 bg-stone-400 text-black placeholder-black pl-3"
         />
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between pb-6">
         <div className="flex">
-          <input type="checkbox"/>
+          <input type="checkbox" />
           <h6 className="ml-1 text-xs">KOM IHÅG MIG</h6>
         </div>
         <p className="text-xs">GLÖMT LÖSENORD</p>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-6">
         <button className="w-full bg-stone-500 h-14" type="submit">
           {isSignUp ? "SKAPA DITT KONTO" : "LOGGA IN"}
         </button>
