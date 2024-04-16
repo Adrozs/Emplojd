@@ -1,20 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 import Modal from "./Modal";
 const Header = () => {
   const [menu, setMenu] = useState(false);
-
-  const { isLoggedIn, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = () => {
-    logout();
-    navigate("/signin");
-    console.log("User signed out.");
-  };
 
   function handleMenu() {
     setMenu(!menu);
@@ -28,11 +17,6 @@ const Header = () => {
         <div className="flex items-center ">
           <RxHamburgerMenu size={30} onClick={handleMenu} />
           {menu && <Modal onClose={setMenu} menu={menu} />}
-          {isLoggedIn && (
-            <button className="" onClick={handleSignOut}>
-              Sign Out
-            </button>
-          )}
         </div>
       </nav>
     </header>

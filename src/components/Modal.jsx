@@ -1,6 +1,21 @@
 import React, { useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { BsFillSuitcaseLgFill } from "react-icons/bs";
+import { FaUser } from "react-icons/fa";
+import { IoDocumentText, IoClose } from "react-icons/io5";
+import { FaHeart } from "react-icons/fa6";
+import { TbMailStar, TbLogin2 } from "react-icons/tb";
 function Modal({ onClose, menu }) {
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    logout();
+    navigate("/signin");
+    console.log("User signed out.");
+  };
+
   useEffect(() => {
     function handleEscape(event) {
       if (event.key === "Escape") {
@@ -26,19 +41,57 @@ function Modal({ onClose, menu }) {
   return (
     <>
       {menu && (
-        <div className="fixed z-10 inset-0 overflow-y-auto bg-opacity-75 flex justify-end items-start">
-          <div className="bg-stone-300  w-[30%] h-[40%] z-1 modal-content mt-12">
-            <ul className="p-4 flex flex-col">
-              <button>X</button>
-              <li>Meny</li>
-              <li>Meny</li>
-              <li>Meny</li>
-              <li>Meny</li>
-            </ul>
+        <nav className="fixed z-10 inset-0 overflow-y-auto bg-opacity-75 flex justify-end items-start">
+          <div className="bg-slate-400 max-w-lg w-[20rem] h-[40%] z-1 modal-content ">
+            <div className="p-4 flex flex-col text-stone-100 h-[100%]">
+              <button onClick={() => onClose(!menu)} className="self-end">
+                <IoClose size={46} />
+              </button>
+              <div className="flex-[75%]">
+                <NavItem>
+                  <BsFillSuitcaseLgFill size={30} /> HITTA JOBB
+                </NavItem>
+                <NavItem>
+                  <FaUser size={30} /> MIN PROFIL
+                </NavItem>
+                <div className="flex flex-col items-end">
+                  <div className="flex flex-col">
+                    <NavItem className="self-end">
+                      <IoDocumentText size={30} />
+                      MINA ANSÖKNINGAR
+                    </NavItem>
+                    <NavItem>
+                      <FaHeart size={30} />
+                      MINA SPARADE JOBB
+                    </NavItem>
+                    <NavItem>
+                      <TbMailStar size={30} /> PERSONLIGA BREV
+                    </NavItem>
+                  </div>
+                </div>
+              </div>
+              <div className="justify-end">
+                {isLoggedIn && (
+                  <button className="flex items-end gap-4 text-lg">
+                    {" "}
+                    <TbLogin2 size={30} />
+                    Log out
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        </nav>
       )}
     </>
+  );
+}
+
+function NavItem({ children }) {
+  return (
+    <div className="flex items-center gap-4 flex-grow mt-4 text-lg">
+      {children}
+    </div>
   );
 }
 
