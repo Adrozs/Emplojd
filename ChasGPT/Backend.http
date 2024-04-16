@@ -1,0 +1,6 @@
+@ChasGPT_HostAddress = http://localhost:5114
+
+GET {{ChasGPT_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
