@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import JobList from '../JobList/JobList';
 import JobSearchForm from '../JobList/JobSearchForm';
 import { LiaKissWinkHeartSolid } from 'react-icons/lia';
+import { AiFillTwitterCircle } from 'react-icons/ai';
+import { FaInstagramSquare } from 'react-icons/fa';
+import { FaFacebook } from 'react-icons/fa';
 
 export default function LandingPage() {
 	return (
@@ -93,7 +96,7 @@ export default function LandingPage() {
 			<div>
 				<div className="bg-stone-400">
 					<div className="flex justify-center">
-						<h2 className="inline bg-slate-100 p-3 font-bold mt-7 mb-10 text-3xl">
+						<h2 className="inline bg-slate-100 p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-3xl">
 							LOGO
 						</h2>
 					</div>
@@ -107,16 +110,16 @@ export default function LandingPage() {
 					</h2>
 					<div className="flex justify-center">
 						<button className="p-5 px-6 pt-2 baseline">
-							<LiaKissWinkHeartSolid size="2rem" />
+							<AiFillTwitterCircle size="2rem" />
 						</button>
 						<button className="p-5 px-6 pt-2 baseline">
-							<LiaKissWinkHeartSolid size="2rem" />
+							<FaInstagramSquare size="2rem" />
 						</button>
 						<button className="p-5 px-6 pt-2 baseline">
-							<LiaKissWinkHeartSolid size="2rem" />
+							<FaFacebook size="2rem" />
 						</button>
 					</div>
-					<h3 className="flex justify-center text-xl font-bold mb-7">
+					<h3 className="flex justify-center text-xl font-bold mb-7 mt-4">
 						Ladda ner vår app
 					</h3>
 					<div className="flex justify-center justify-evenly ">
