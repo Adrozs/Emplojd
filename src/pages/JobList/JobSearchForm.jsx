@@ -161,7 +161,7 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
     <div className="flex gap-2 justify-between bg-stone-300 mb-3 p-1">
       <div className="flex gap-5">
         <button onClick={handleClickForSearchAgain}>
-          <PiClockCounterClockwiseBold />
+          <PiClockCounterClockwiseBold size={18} />
         </button>
         {search.city && !search.job && (
           <div onClick={handleClickForSearchAgain}>{search.city} </div>
