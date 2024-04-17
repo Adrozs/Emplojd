@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useState } from "react";
 import Loader from "../../ui/Loader";
+import Footer from "../../components/Footer";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -124,6 +125,7 @@ function ApplyNow() {
       ) : (
         <ApplySideTwo job={job} page={page} setPage={setPage} />
       )}
+      <Footer />
     </main>
   );
 }
