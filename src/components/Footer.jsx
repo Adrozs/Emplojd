@@ -23,25 +23,25 @@ export default function Footer() {
 					</h2>
 					<div className="flex justify-center">
 						<button className="p-5 px-6 pt-2 baseline">
-							<AiFillTwitterCircle size="2rem" />
+							<AiFillTwitterCircle size="2.5rem" />
 						</button>
 						<button className="p-5 px-6 pt-2 baseline">
-							<FaInstagramSquare size="2rem" />
+							<FaInstagramSquare size="2.5rem" />
 						</button>
 						<button className="p-5 px-6 pt-2 baseline">
-							<FaFacebook size="2rem" />
+							<FaFacebook size="2.5rem" />
 						</button>
 					</div>
 					<h3 className="flex justify-center text-xl font-bold mb-7 mt-4">
 						Ladda ner vår app
 					</h3>
 					<div className="flex justify-center justify-evenly ">
-						<div className="">
+						<div className="ml-5">
 							<Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
 								App Store
 							</Link>
 						</div>
-						<div className="">
+						<div>
 							<Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
 								Google Play
 							</Link>
