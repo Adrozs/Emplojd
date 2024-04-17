@@ -90,33 +90,51 @@ export default function LandingPage() {
 				veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
 				commodo consequat.
 			</p>
-			<div className="bg-stone-400">
-				<h2>LOGO</h2>
-				<h3>TEXT</h3>
-				<p>Min sida</p>
-				<p>Sök jobb</p>
-				<h2>Följ oss på sociala medier</h2>
-				<button className="p-5 px-6 pt-2 baseline">
-					<LiaKissWinkHeartSolid size="2rem" />
-				</button>
-				<button className="p-5 px-6 pt-2 baseline">
-					<LiaKissWinkHeartSolid size="2rem" />
-				</button>
-				<button className="p-5 px-6 pt-2 baseline">
-					<LiaKissWinkHeartSolid size="2rem" />
-				</button>
-				<h3>Ladda ner vår app</h3>
-				<div className="flex justify-center md:justify-center">
-					<Link to="/signin" className="p-3 px-40 font-bold bg-stone-300">
-						CTA?
-					</Link>
+			<div>
+				<div className="bg-stone-400">
+					<div className="flex justify-center">
+						<h2 className="inline bg-slate-100 p-3 font-bold mt-7 mb-10 text-3xl">
+							LOGO
+						</h2>
+					</div>
+					<div className="text-center mb-10">
+						<h3 className="mb-5 font-bold text-xl">TEXT</h3>
+						<p className="mb-3">Min sida</p>
+						<p className="mb-3">Sök jobb</p>
+					</div>
+					<h2 className="flex justify-center font-bold mb-3 text-xl">
+						Följ oss på sociala medier
+					</h2>
+					<div className="flex justify-center">
+						<button className="p-5 px-6 pt-2 baseline">
+							<LiaKissWinkHeartSolid size="2rem" />
+						</button>
+						<button className="p-5 px-6 pt-2 baseline">
+							<LiaKissWinkHeartSolid size="2rem" />
+						</button>
+						<button className="p-5 px-6 pt-2 baseline">
+							<LiaKissWinkHeartSolid size="2rem" />
+						</button>
+					</div>
+					<h3 className="flex justify-center text-xl font-bold mb-7">
+						Ladda ner vår app
+					</h3>
+					<div className="flex justify-center justify-evenly ">
+						<div className="">
+							<Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
+								App Store
+							</Link>
+						</div>
+						<div className="">
+							<Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
+								Google Play
+							</Link>
+						</div>
+					</div>
+					<p className="flex justify-center pt-12 pb-7 text-xs ">
+						Copyright bla bla bla
+					</p>
 				</div>
-				<div className="flex justify-center md:justify-center">
-					<Link to="/signin" className="p-3 px-40 font-bold bg-stone-300">
-						CTA?
-					</Link>
-				</div>
-				<p>Copyright bla bla bla</p>
 			</div>
 		</>
 	);
