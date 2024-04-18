@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ChasGPT_Backend/FileContentIndex/f1cae4bc-53d8-40ab-8c97-8ea4b66413e7.vsidx
+*.vsidx
