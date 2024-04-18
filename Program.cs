@@ -28,6 +28,11 @@ namespace ChasGPT_Backend
             app.UseAuthorization();
 
 
+
+            // Endpoints 
+            //app.MapGet("/login", LoginRepo);
+
+
             app.Run();
         }
     }
