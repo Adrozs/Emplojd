@@ -1,4 +1,8 @@
 
+using ChasGPT_Backend.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace ChasGPT_Backend
 {
     public class Program
@@ -6,6 +10,16 @@ namespace ChasGPT_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Setup database context and connection string here
+            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+                //.AddEntityFrameworkStores<ApplicationDbContext>()
+                 .AddDefaultTokenProviders();
+
+
 
             // Add services to the container.
             builder.Services.AddAuthorization();
