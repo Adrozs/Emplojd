@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rRECEYeozUctz+lfT13RfUebWn4qnx03/ua8b5It7mws1kEfgd5ZZYJMpb5sN38HIOVro6S/TsVrlxs9dvxgcA==",
+  "dgSpecHash": "5uJ/cVjPjaEgEvJSq3xk4RmsEGTec+/w4nI2o5cM62Urm3vWIpjRt7nluwsPdW6Kd3D1JMSiH42ETztlHdypxg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Adrian\\Source\\Repos\\ChasGPT\\ChasGPT_Backend.csproj",
+  "projectFilePath": "C:\\Users\\Adrian\\source\\repos\\ChasGPT\\ChasGPT_Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Adrian\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Adrian\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
