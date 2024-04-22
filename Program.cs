@@ -1,5 +1,6 @@
 
 using ChasGPT_Backend.Models;
+using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,8 @@ namespace ChasGPT_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Database connections commented out until we decide on MySQL or MSSQL. 
 
             // Setup database context and connection string here
             //builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,9 +45,12 @@ namespace ChasGPT_Backend
             app.UseAuthorization();
 
 
-
             // Endpoints 
-            //app.MapGet("/login", LoginRepo);
+
+            // User account 
+            app.MapGet("/login", UserService.VerifyLogin);
+            app.MapGet("/create-account", UserService.CreateAccount);
+            app.MapGet("/change-password", UserService.ChangePassword);
 
 
             app.Run();
