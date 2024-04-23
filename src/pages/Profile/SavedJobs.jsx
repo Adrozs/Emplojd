@@ -72,7 +72,10 @@ function SavedJobs() {
 				</div>
 
 				<div className="flex mb-10">
-					<Link to="/signin" className=" ml-5 p-7 px-28 font-bold bg-stone-300">
+					<Link
+						to="/joblist"
+						className=" ml-5 p-7 px-28 font-bold bg-stone-300"
+					>
 						FORTSÄTT LETA
 					</Link>
 				</div>
