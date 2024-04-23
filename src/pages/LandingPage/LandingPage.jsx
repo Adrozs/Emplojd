@@ -84,7 +84,7 @@ export default function LandingPage() {
 						CTA?
 					</Link>
 				</div>
-				<h6 className="mt-2 font-bold mt-20 ms-10 text-2xl">TEXT</h6>
+				<h6 className="font-bold mt-20 ms-10 text-2xl">TEXT</h6>
 			</div>
 			<p className="ms-10 mr-10 mt-5 mb-10">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
