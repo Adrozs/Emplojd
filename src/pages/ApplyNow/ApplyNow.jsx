@@ -79,7 +79,9 @@ function ApplyNow() {
               <div>
                 <div className="grid grid-cols-2 w-[70%] items-center">
                   <h2 className="text-2xl font-semibold">{page}.</h2>
-                  <p className="self-center text-sm ">Jobb du söker</p>
+                  <div className="flex justify-center">
+                    <p className="text-sm ">Jobb du söker</p>
+                  </div>
                 </div>
               </div>
               <div>
