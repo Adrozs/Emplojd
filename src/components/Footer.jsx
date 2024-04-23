@@ -1,6 +1,5 @@
 import { AiFillTwitterCircle } from 'react-icons/ai';
-import { FaFacebook } from 'react-icons/fa';
-import { FaInstagramSquare } from 'react-icons/fa';
+import { FaFacebook, FaInstagramSquare } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
