@@ -34,7 +34,7 @@ export default function Footer() {
 					<h3 className="flex justify-center text-xl font-bold mb-7 mt-4">
 						Ladda ner vår app
 					</h3>
-					<div className="flex justify-center justify-evenly ">
+					<div className="flex justify-evenly ">
 						<div className="ml-5">
 							<Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
 								App Store
