@@ -32,9 +32,9 @@ function SavedJobs() {
 					<div className="flex items-center mr-12 ">
 						<MdWork className="text-6xl" />
 						<div className="ml-8">
-							<p className="bg-stone-300 p-1 mb-1">TITLE</p>
-							<p className="bg-stone-300 p-1 mb-1">SUBTITLE</p>
-							<p className="bg-stone-300 p-1 mb-1">TEXT</p>
+							<p className="bg-stone-300  pr-40 mb-1">TITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">TEXT</p>
 						</div>
 					</div>
 				</div>
