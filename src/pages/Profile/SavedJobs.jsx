@@ -39,6 +39,39 @@ function SavedJobs() {
 					</div>
 				</div>
 
+				<div className="flex ms-10 mb-20 ml-20">
+					<div className="flex items-center mr-12 ">
+						<MdWork className="text-6xl" />
+						<div className="ml-8">
+							<p className="bg-stone-300  pr-40 mb-1">TITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">TEXT</p>
+						</div>
+					</div>
+				</div>
+
+				<div className="flex ms-10 mb-20 ml-20">
+					<div className="flex items-center mr-12 ">
+						<MdWork className="text-6xl" />
+						<div className="ml-8">
+							<p className="bg-stone-300  pr-40 mb-1">TITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">TEXT</p>
+						</div>
+					</div>
+				</div>
+
+				<div className="flex ms-10 mb-20 ml-20">
+					<div className="flex items-center mr-12 ">
+						<MdWork className="text-6xl" />
+						<div className="ml-8">
+							<p className="bg-stone-300  pr-40 mb-1">TITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
+							<p className="bg-stone-300  pr-40 mb-1">TEXT</p>
+						</div>
+					</div>
+				</div>
+
 				<div className="flex">
 					<Link to="/signin" className=" ml-5 p-7 px-28 font-bold bg-stone-300">
 						FORTSÄTT LETA
