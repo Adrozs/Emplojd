@@ -69,23 +69,24 @@ function ApplyNow() {
                 }
               ></span>
             </div>
-            <h2 className="mt-4 text-2xl font-semibold">{page}.</h2>
           </div>
         )}
       </div>
-      {page === 1 ? (
+      {page === 1 && (
         <>
-          <ul className="flex justify-center">
-            <li className="h-[260px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
+          <ul className="flex justify-center my-14">
+            <li className="h-[300px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
               <div>
-                <div className=" flex items-center justify-center p-1 w-[100%]]">
-                  <p>Jobb du söker</p>
+                <div className="grid grid-cols-2 w-[70%] items-center">
+                  <h2 className="text-2xl font-semibold">{page}.</h2>
+                  <p className="self-center text-sm ">Jobb du söker</p>
                 </div>
               </div>
               <div>
                 <h3 className="font-semibold text-xl text-stone-900">
                   {job.headline}
                 </h3>
+
                 <p className="text-lg">{job.employer.name}</p>
                 <div>
                   <p className="text-sm my-2">
@@ -115,16 +116,19 @@ function ApplyNow() {
               </div>
               <div className="flex justify-between">
                 <button onClick={handleBack}>Avbryt</button>
-                <button className="bg-stone-100 p-1" onClick={() => setPage(2)}>
-                  Nästa
+                <button
+                  className="bg-stone-100 p-1 w-[70%]"
+                  onClick={() => setPage(2)}
+                >
+                  Nästa &rarr;
                 </button>
               </div>
             </li>
           </ul>
         </>
-      ) : (
-        <ApplySideTwo job={job} page={page} setPage={setPage} />
       )}
+      {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
+      {page === 3 && <ApplySideThree job={job} page={page} setPage={setPage} />}
       <Footer />
     </main>
   );
@@ -132,12 +136,18 @@ function ApplyNow() {
 
 function ApplySideTwo({ job, page, setPage }) {
   return (
-    <main className="flex justify-center">
-      <div className=" w-[90%] bg-stone-200 p-4 flex flex-col pb-10">
+    <ul className="flex justify-center my-14">
+      <div className=" w-[90%] bg-stone-200 p-4 flex flex-col ">
+        <div>
+          <div className="grid grid-cols-2 w-[70%] items-center">
+            <h2 className="text-2xl font-semibold">{page}.</h2>
+            <div className="flex justify-center">
+              <p className="text-sm ">Vad ska vara med i brevet?</p>
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col items-center text-center">
-          <p>Vad ska vara med i brevet?</p>
           <div className="flex gap-3 my-10">
-            <p>Jobb</p>
             <div className="w-[100px] bg-slate-300 h-5">
               <span className=" w-[20px] h-5 bg-slate-600"></span>
             </div>
@@ -180,7 +190,59 @@ function ApplySideTwo({ job, page, setPage }) {
           </button>
         </div>
       </div>
-    </main>
+    </ul>
+  );
+}
+
+function ApplySideThree({ job, page, setPage }) {
+  return (
+    <ul className="flex justify-center my-14">
+      <li className="h-[300px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
+        <div>
+          <div className="grid grid-cols-2 w-[70%] items-center">
+            <h2 className="text-2xl font-semibold">{page}.</h2>
+            <div className="flex justify-center">
+              <p className="text-sm ">Kontrollera brevet</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p>Ansökan för</p>
+          <h3 className="font-semibold text-xl text-stone-900">
+            {job.headline}
+          </h3>
+
+          <p className="text-lg">{job.employer.name}</p>
+        </div>
+        <div className="flex gap-2 text-[12px]">
+          {job.working_hours_type.label ? (
+            <span className="bg-stone-100 px-2 py-1">
+              {job.working_hours_type.label}
+            </span>
+          ) : (
+            <span className="bg-stone-100 px-2 py-1">
+              {job.employment_type.label}{" "}
+            </span>
+          )}
+
+          <span className="bg-stone-100 px-2 py-1">
+            {job.occupation.label}{" "}
+          </span>
+        </div>
+        <div>
+          {" "}
+          <button onClick={() => setPage(2)}>Avbryt</button>
+        </div>
+        <div className="flex justify-center">
+          <button
+            className="bg-stone-100 p-1 w-[90%]"
+            onClick={() => setPage(2)}
+          >
+            Skicka ansökan &rarr;
+          </button>
+        </div>
+      </li>
+    </ul>
   );
 }
 
