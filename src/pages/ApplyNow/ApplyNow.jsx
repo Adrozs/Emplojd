@@ -142,7 +142,7 @@ function ApplySideTwo({ job, page, setPage }) {
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="text-2xl font-semibold">{page}.</h2>
             <div className="flex justify-center">
-              <p className="text-sm ">Vad ska vara med i brevet?</p>
+              <p className="text-sm ">Fyll i ansökan</p>
             </div>
           </div>
         </div>
@@ -183,10 +183,10 @@ function ApplySideTwo({ job, page, setPage }) {
         <div className="flex justify-between">
           <button onClick={() => setPage(1)}>Tillbaka</button>
           <button
-            className="bg-stone-100 text-xl p-1 rounded-full"
+            className="bg-stone-100 p-1 w-[70%]"
             onClick={() => setPage(3)}
           >
-            &rarr;
+            Nästa &rarr;
           </button>
         </div>
       </div>
@@ -197,7 +197,7 @@ function ApplySideTwo({ job, page, setPage }) {
 function ApplySideThree({ job, page, setPage }) {
   return (
     <ul className="flex justify-center my-14">
-      <li className="h-[300px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
+      <li className="h-[340px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="text-2xl font-semibold">{page}.</h2>
@@ -230,8 +230,16 @@ function ApplySideThree({ job, page, setPage }) {
           </span>
         </div>
         <div>
-          {" "}
-          <button onClick={() => setPage(2)}>Avbryt</button>
+          <div className="flex justify-between">
+            <button className="underline text-sm" onClick={() => setPage(2)}>
+              &larr; Tillbaka till innehållet
+            </button>
+            <button className="underline text-sm">Ladda ner brev</button>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <button className="w-[40%] bg-stone-300 p-1">Redigera brev</button>
+          <button className="w-[40%] bg-stone-300 p-1">Generera brev</button>
         </div>
         <div className="flex justify-center">
           <button
