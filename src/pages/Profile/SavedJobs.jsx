@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { SiPokemon } from 'react-icons/si';
 import { MdWork } from 'react-icons/md';
 
 function SavedJobs() {
