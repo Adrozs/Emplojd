@@ -7,7 +7,8 @@ import Footer from "../../components/Footer";
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
-  const [daysUntilDeadline, setDaysUntilDeadline] = useState(null);
+  // const [daysUntilDeadline, setDaysUntilDeadline] = useState(null);
+  const [daySincePosted, setDaySincePosted] = useState(null);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -22,13 +23,23 @@ function ApplyNow() {
     fetchData();
   }, [jobId]);
 
+  // useEffect(() => {
+  //   if (job && job.application_deadline) {
+  //     const today = new Date();
+  //     const deadline = new Date(job.application_deadline);
+  //     const differenceInTime = deadline.getTime() - today.getTime();
+  //     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+  //     setDaysUntilDeadline(differenceInDays);
+  //   }
+  // }, [job]);
+
   useEffect(() => {
     if (job && job.application_deadline) {
-      const today = new Date();
-      const deadline = new Date(job.application_deadline);
-      const differenceInTime = deadline.getTime() - today.getTime();
+      const todaysDate = new Date();
+      const jobPosted = new Date(job.publication_date);
+      const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
       const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-      setDaysUntilDeadline(differenceInDays);
+      setDaySincePosted(differenceInDays);
     }
   }, [job]);
 
@@ -91,13 +102,17 @@ function ApplyNow() {
 
                 <p className="text-lg">{job.employer.name}</p>
                 <div>
-                  <p className="text-sm my-2">
+                  {/* <p className="text-sm my-2">
                     {job.workplace_address.municipality} -{" "}
                     {daysUntilDeadline > 0
                       ? daysUntilDeadline === 1
                         ? "1 dag kvar till sista ansökningsdagen"
                         : `${daysUntilDeadline} dagar kvar till sista ansökningsdagen`
                       : "Sista ansökningsdagen har passerat"}
+                  </p> */}
+                  <p className="text-sm my-2">
+                    {job.workplace_address.municipality} - {daySincePosted}{" "}
+                    dagar sen
                   </p>
                 </div>
               </div>
