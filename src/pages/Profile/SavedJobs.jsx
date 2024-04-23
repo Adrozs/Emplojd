@@ -5,7 +5,7 @@ import { MdWork } from 'react-icons/md';
 function SavedJobs() {
 	return (
 		<>
-			<div className="bg-stone-300 p-1 ml-5 mr-40 flex mb-6 ">
+			<div className="bg-stone-300 p-1 ml-5 mr-48 flex mb-6 mt-8">
 				<h6 className="mt-2  font-semi-bold text-xl">SPARADE JOBB</h6>
 			</div>
 
@@ -17,18 +17,18 @@ function SavedJobs() {
 			</div>
 
 			<div className=" justify-evenly flex flex-row p-1 text-xs mt-3 mr-6">
-				<p className="bg-stone-300 p-1 text-center">FÖRETAG</p>
-				<p className="bg-stone-300 p-1 text-center">FÖRETAG</p>
-				<p className="bg-stone-300 p-1 text-center">FÖRETAG</p>
-				<p className="bg-stone-300 p-1 text-center">FÖRETAG</p>
+				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
+				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
+				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
+				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
 			</div>
 
-			<div className="min-h-96 mt-10 flex-row">
-				<div className="bg-stone-300 p-1 ml-5 mr-40 flex mb-6 ">
-					<h6 className="mt-2  font-semi-bold text-xl">ANSÖKTA JOBB</h6>
+			<div className=" mt-10 flex-row">
+				<div className="bg-stone-300 ml-5 mr-40 flex mb-6 ">
+					<h6 className="mt-2  font-semi-bold text-xl ml-2">ANSÖKTA JOBB</h6>
 				</div>
 
-				<div className="flex ms-10 mb-20 ml-20">
+				<div className="flex ms-10 mb-10 ml-20">
 					<div className="flex items-center mr-12 ">
 						<MdWork className="text-6xl" />
 						<div className="ml-8">
@@ -39,7 +39,7 @@ function SavedJobs() {
 					</div>
 				</div>
 
-				<div className="flex ms-10 mb-20 ml-20">
+				<div className="flex ms-10 mb-10 ml-20">
 					<div className="flex items-center mr-12 ">
 						<MdWork className="text-6xl" />
 						<div className="ml-8">
@@ -50,7 +50,7 @@ function SavedJobs() {
 					</div>
 				</div>
 
-				<div className="flex ms-10 mb-20 ml-20">
+				<div className="flex ms-10 mb-10 ml-20">
 					<div className="flex items-center mr-12 ">
 						<MdWork className="text-6xl" />
 						<div className="ml-8">
@@ -61,7 +61,7 @@ function SavedJobs() {
 					</div>
 				</div>
 
-				<div className="flex ms-10 mb-20 ml-20">
+				<div className="flex ms-10 mb-5 ml-20">
 					<div className="flex items-center mr-12 ">
 						<MdWork className="text-6xl" />
 						<div className="ml-8">
@@ -72,7 +72,7 @@ function SavedJobs() {
 					</div>
 				</div>
 
-				<div className="flex">
+				<div className="flex mb-10">
 					<Link to="/signin" className=" ml-5 p-7 px-28 font-bold bg-stone-300">
 						FORTSÄTT LETA
 					</Link>
