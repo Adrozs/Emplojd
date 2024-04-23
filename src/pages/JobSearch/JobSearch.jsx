@@ -33,10 +33,10 @@ function JobSearch() {
   useEffect(
     function () {
       if (!searchWord) return;
-      document.title = `Jobify - ${searchWord} `;
+      document.title = `Emplojd - ${searchWord} `;
 
       return function () {
-        document.title = "Jobify";
+        document.title = "Emplojd";
       };
     },
     [searchWord]

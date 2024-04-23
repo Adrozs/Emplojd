@@ -26,7 +26,7 @@ function JobInfo() {
       if (!job) return;
       document.title = `${job.headline} `;
       return function () {
-        document.title = "Jobify";
+        document.title = "Emplojd";
       };
     },
     [job]
