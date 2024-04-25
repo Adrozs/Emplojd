@@ -28,7 +28,7 @@ function Profle() {
       <div className="flex-end">
         <Link
           className="flex bg-stone-500 w-full h-16 justify-center items-center mt-64"
-          to="/joblist"
+          to="/CreateProfile"
         >
           KOM IGÅNG
         </Link>

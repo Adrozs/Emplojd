@@ -14,67 +14,76 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import ApplyNow from './pages/ApplyNow/ApplyNow';
 import SavedJobs from './pages/Profile/SavedJobs';
+import CreateProfile from "./pages/Profile/CreateProfile";
 
 const router = createBrowserRouter([
-	{
-		element: <AppLayout />,
-		errorElement: <Error />,
-		children: [
-			{ path: '/', element: <LandingPage /> },
-			{
-				path: '/jobsearch',
-				element: (
-					<ProtectedRoute>
-						<JobSearch />
-					</ProtectedRoute>
-				),
-				loader: searchLoader,
-				errorElement: <Error />,
-			},
-			{
-				path: '/joblist',
-				element: (
-					<ProtectedRoute>
-						<JobList />
-					</ProtectedRoute>
-				),
-				errorElement: <Error />,
-			},
-			{ path: '/signup', element: <SignUp /> },
-			{ path: '/signin', element: <SignIn /> },
-			{
-				path: '/profile',
-				element: (
-					<ProtectedRoute>
-						<Profile />
-					</ProtectedRoute>
-				),
-			},
-			{
-				path: '/SavedJobs',
-				element: <SavedJobs />,
-			},
-			{
-				path: '/job/:jobId',
-				element: (
-					<ProtectedRoute>
-						<JobInfo />
-					</ProtectedRoute>
-				),
-				loader: jobLoader,
-				errorElement: <Error />,
-			},
-			{
-				path: '/job/:jobId/apply',
-				element: (
-					<ProtectedRoute>
-						<ApplyNow />
-					</ProtectedRoute>
-				),
-				errorElement: <Error />,
-			},
-		],
-	},
+  {
+    element: <AppLayout />,
+    errorElement: <Error />,
+    children: [
+      { path: "/", element: <LandingPage /> },
+      {
+        path: "/jobsearch",
+        element: (
+          <ProtectedRoute>
+            <JobSearch />
+          </ProtectedRoute>
+        ),
+        loader: searchLoader,
+        errorElement: <Error />,
+      },
+      {
+        path: "/joblist",
+        element: (
+          <ProtectedRoute>
+            <JobList />
+          </ProtectedRoute>
+        ),
+        errorElement: <Error />,
+      },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/signin", element: <SignIn /> },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/CreateProfile",
+        element: (
+          <ProtectedRoute>
+            <CreateProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/SavedJobs",
+        element: <SavedJobs />,
+      },
+      {
+        path: "/job/:jobId",
+        element: (
+          <ProtectedRoute>
+            <JobInfo />
+          </ProtectedRoute>
+        ),
+        loader: jobLoader,
+        errorElement: <Error />,
+      },
+      {
+        path: "/job/:jobId/apply",
+        element: (
+          <ProtectedRoute>
+            <ApplyNow />
+          </ProtectedRoute>
+        ),
+        errorElement: <Error />,
+      },
+    ],
+  },
 ]);
 
 function App() {
