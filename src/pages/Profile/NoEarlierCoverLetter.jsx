@@ -32,7 +32,7 @@ function NoEarlierCoverLetter() {
 						to="/joblist"
 						className=" ml-5 p-7 px-28 font-bold bg-stone-300 flex items-center"
 					>
-						HITTA JOBB <FaLongArrowAltRight className="ml-10" />
+						HITTA JOBB <FaLongArrowAltRight className="ml-10 text-3xl" />
 					</Link>
 				</div>
 			</div>
@@ -40,3 +40,8 @@ function NoEarlierCoverLetter() {
 	);
 }
 export default NoEarlierCoverLetter;
+
+// Still to do:
+// fix boxes centering
+// Center hitta jobb
+// fix Arrow icon size and position
