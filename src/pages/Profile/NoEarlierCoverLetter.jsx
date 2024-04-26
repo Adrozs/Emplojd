@@ -10,6 +10,12 @@ function NoEarlierCoverLetter() {
 				</h6>
 			</div>
 
+			<div className="bg-stone-300 flex justify-center items-center mb-6">
+				<h6 className="font-semi-bold text-xl text-center">
+					Här har du full åtkomst till dina tidigare skapade personliga brev.{' '}
+				</h6>
+			</div>
+
 			<div className="flex justify-around p-1 text-xs mt-3 mr-6">
 				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
 				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
