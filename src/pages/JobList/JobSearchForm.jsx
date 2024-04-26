@@ -12,10 +12,10 @@ function JobSearchForm() {
   const [job, setJob] = useState("");
   const [jobsData, setJobsData] = useState(null);
 
-  const inputEl = useRef(null);
-  useEffect(() => {
-    inputEl.current.focus();
-  }, []);
+  // const inputEl = useRef(null);
+  // useEffect(() => {
+  //   inputEl.current.focus();
+  // }, []);
 
   // Flytta initialiseringen av latest utanför useState
   let initialLatest = [];
@@ -72,52 +72,14 @@ function JobSearchForm() {
       <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
         Hitta rätt jobb för dig
       </h2>
-      <form className="max-w-sm mx-auto bg-white p-3" onSubmit={handleSubmit}>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
-            Ange title, företag, nyckelord
-          </label>
-          <input
-            type="text"
-            value={job}
-            ref={inputEl}
-            onChange={(e) => setJob(e.target.value)}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
-            placeholder="...."
-          />
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
-            Ange stad
-          </label>
-          <select
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
-            placeholder="...."
-          >
-            <option value=" ">Hela landet</option>
-            <option value="Stockholm">Stockholm</option>
-            <option value="Göteborg">Göteborg</option>
-            <option value="Malmö">Malmö</option>
-            <option value="Uppsala">Uppsala</option>
-            <option value="Linköping">Linköping</option>
-            <option value="Västerås">Västerås</option>
-            <option value="Örebro">Örebro</option>
-            <option value="Norrköping">Norrköping</option>
-            <option value="Helsingborg">Helsingborg</option>
-            <option value="Jönköping">Jönköping</option>
-            <option value="Södertälje">Södertälje</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          className="text-white bg-stone-400 hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full"
-        >
-          Sök
-        </button>
-      </form>
+      <SearchForm
+        handleSubmit={handleSubmit}
+        setCity={setCity}
+        setJob={setJob}
+        job={job}
+        city={city}
+        latest={latest}
+      />
       <div className="mt-3 max-w-sm mx-auto text-sm text-center border-0 mb-6">
         <div className="flex items-center justify-center gap-2">
           <FaBullhorn className="mt-1" />
@@ -145,6 +107,65 @@ function JobSearchForm() {
     </div>
   );
 }
+
+export function SearchForm({
+  handleSubmit,
+  setJob,
+  setCity,
+  job,
+  city,
+  latest,
+}) {
+  return (
+    <form className="max-w-sm mx-auto bg-white p-3" onSubmit={handleSubmit}>
+      <div className="mb-5">
+        <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
+          Ange title, företag, nyckelord
+        </label>
+        <input
+          type="text"
+          value={job}
+          // ref={inputEl}
+          onChange={(e) => setJob(e.target.value)}
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
+          placeholder="...."
+        />
+      </div>
+      <div className="mb-5">
+        <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
+          Ange stad
+        </label>
+        <select
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
+          placeholder="...."
+        >
+          <option value=" ">Hela landet</option>
+          <option value="Stockholm">Stockholm</option>
+          <option value="Göteborg">Göteborg</option>
+          <option value="Malmö">Malmö</option>
+          <option value="Uppsala">Uppsala</option>
+          <option value="Linköping">Linköping</option>
+          <option value="Västerås">Västerås</option>
+          <option value="Örebro">Örebro</option>
+          <option value="Norrköping">Norrköping</option>
+          <option value="Helsingborg">Helsingborg</option>
+          <option value="Jönköping">Jönköping</option>
+          <option value="Södertälje">Södertälje</option>
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        className="text-white bg-stone-400 hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full"
+      >
+        Sök
+      </button>
+    </form>
+  );
+}
+
 export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   const handleClickForSearchAgain = () => {
     if (search.city && search.job) {
