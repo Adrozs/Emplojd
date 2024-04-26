@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MdWork } from 'react-icons/md';
+
 import { FaLongArrowAltRight } from 'react-icons/fa';
 
 function NoEarlierCoverLetter() {
