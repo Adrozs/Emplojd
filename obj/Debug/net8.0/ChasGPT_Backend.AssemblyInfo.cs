@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChasGPT_Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+02588ad0cc0e95d101f6c274e257e12f6d8b258a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChasGPT_Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChasGPT_Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
