@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MdWork } from 'react-icons/md';
+import { FaLongArrowAltRight } from 'react-icons/fa';
 
 function NoEarlierCoverLetter() {
 	return (
@@ -11,7 +12,7 @@ function NoEarlierCoverLetter() {
 			</div>
 
 			<div className="bg-stone-300 flex  mb-6">
-				<p className="font-semi-bold text-xl">
+				<p className="text-l">
 					Här har du full åtkomst till dina tidigare skapade personliga brev.{' '}
 				</p>
 			</div>
@@ -26,13 +27,13 @@ function NoEarlierCoverLetter() {
 				<p className="bg-stone-300 p-1 text-center pl-3 pr-3">FÖRETAG</p>
 			</div>
 
-			<div className=" mt-10 flex-row">
+			<div className=" mt-10 flex">
 				<div className="flex mb-10">
 					<Link
 						to="/joblist"
-						className=" ml-5 p-7 px-28 font-bold bg-stone-300"
+						className=" ml-5 p-7 px-28 font-bold bg-stone-300 flex items-center"
 					>
-						HITTA JOBB
+						HITTA JOBB <FaLongArrowAltRight className="ml-10" />
 					</Link>
 				</div>
 			</div>
