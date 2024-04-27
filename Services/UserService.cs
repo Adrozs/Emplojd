@@ -1,10 +1,11 @@
 ﻿using ChasGPT_Backend.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChasGPT_Backend.Services
 {
     public class UserService
     {
-        public static async Task<IResult> CreateAccount(string email, string password, string passwordConfirm, IUserRepository userRepository)
+        public static async Task<IResult> CreateAccount(string email, string password, string passwordConfirm, [FromServices] IUserRepository userRepository)
         {
             try
             {
@@ -25,7 +26,7 @@ namespace ChasGPT_Backend.Services
             }
         }
 
-        public static async Task<IResult> VerifyLogin(string email, string password, IUserRepository userRepository)
+        public static async Task<IResult> VerifyLogin(string email, string password, [FromServices] IUserRepository userRepository)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace ChasGPT_Backend.Services
         }
 
 
-        public static async Task<IResult> ChangePassword(string email, string password, string newPassword, string newPasswordConfirm, IUserRepository userRepository)
+        public static async Task<IResult> ChangePassword(string email, string password, string newPassword, string newPasswordConfirm, [FromServices] IUserRepository userRepository)
         {
             try
             {

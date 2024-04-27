@@ -1,8 +1,10 @@
 
 using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Services;
+using ChasGPT_Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ChasGPT_Backend.Repositories;
 
 namespace ChasGPT_Backend
 {
@@ -12,15 +14,18 @@ namespace ChasGPT_Backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Database connections commented out until we decide on MySQL or MSSQL. 
-
             // Setup database context and connection string here
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<ApplicationContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Adding Microsoft identity
             builder.Services.AddIdentity<User, IdentityRole>()
-                //.AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<ApplicationContext>()
                  .AddDefaultTokenProviders();
+
+            // Add repositories to scope
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
 
 
 
@@ -48,9 +53,13 @@ namespace ChasGPT_Backend
             // Endpoints 
 
             // User account 
-            app.MapGet("/login", UserService.VerifyLogin);
-            app.MapGet("/create-account", UserService.CreateAccount);
-            app.MapGet("/change-password", UserService.ChangePassword);
+            app.MapGet("/login/{email}/{password}", UserService.VerifyLogin);
+            app.MapPost("/create-account/{email}/{password}/{passwordConfirm}", UserService.CreateAccount);
+            app.MapPost("/change-password/{email}/{password}/{newPassword}/{newPasswordConfirm}", UserService.ChangePassword);
+
+            // Job search
+            app.MapGet("/search/{search}/{region?}/{offset?}", JobAdService.SearchJob);
+            app.MapGet("/ad/{jobId}", JobAdService.GetJobFromId);
 
 
             app.Run();
