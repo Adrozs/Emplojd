@@ -1,4 +1,11 @@
 
+using ChasGPT_Backend.Models;
+using ChasGPT_Backend.Services;
+using ChasGPT_Backend.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ChasGPT_Backend.Repositories;
+
 namespace ChasGPT_Backend
 {
     public class Program
@@ -6,6 +13,21 @@ namespace ChasGPT_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Setup database context and connection string here
+            builder.Services.AddDbContext<ApplicationContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Adding Microsoft identity
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                 .AddDefaultTokenProviders();
+
+            // Add repositories to scope
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
+
+
 
             // Add services to the container.
             builder.Services.AddAuthorization();
@@ -27,25 +49,18 @@ namespace ChasGPT_Backend
 
             app.UseAuthorization();
 
-            var summaries = new[]
-            {
-                "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            };
 
-            app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                    new WeatherForecast
-                    {
-                        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                        TemperatureC = Random.Shared.Next(-20, 55),
-                        Summary = summaries[Random.Shared.Next(summaries.Length)]
-                    })
-                    .ToArray();
-                return forecast;
-            })
-            .WithName("GetWeatherForecast")
-            .WithOpenApi();
+            // Endpoints 
+
+            // User account 
+            app.MapGet("/login/{email}/{password}", UserService.VerifyLogin);
+            app.MapPost("/create-account/{email}/{password}/{passwordConfirm}", UserService.CreateAccount);
+            app.MapPost("/change-password/{email}/{password}/{newPassword}/{newPasswordConfirm}", UserService.ChangePassword);
+
+            // Job search
+            app.MapGet("/search/{search}/{region?}/{offset?}", JobAdService.SearchJob);
+            app.MapGet("/ad/{jobId}", JobAdService.GetJobFromId);
+
 
             app.Run();
         }
