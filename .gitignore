@@ -8,3 +8,38 @@
 /.vs/ChasGPT_Backend/DesignTimeBuild
 /obj/Debug/net8.0
 /obj
+
+[Bb]in/
+[Oo]bj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.futdcache.v2
+*.btncache.v2
+
+# .NET Core specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# Generated files
+*.csproj.nuget.g.props
+*.csproj.nuget.dgspec.json
+*.csproj.nuget.g.targets
+*.csproj.nuget.cache
+*.csproj.nuget.restore.lck
+*.generated.cs
+*.generatedmsbuildeditorconfig.editorconfig
+*.cache
+*.binlog
+*.v7.bin
+*.v8.bin
+*.assets.cache
+
+# Tooling
+.vs/
+.vscode/
+*.nupkg
