@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ChasGPT_Backend/v17
+/.vs/ProjectEvaluation
+/.vs/ChasGPT_Backend/FileContentIndex
+/.vs/ChasGPT_Backend/DesignTimeBuild
+/obj/Debug/net8.0
+/obj
