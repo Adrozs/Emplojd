@@ -30,7 +30,11 @@ namespace ChasGPT_Backend.Repositories
             // Check login details and throw exceptions if wrong
             await ValidateLoginDetailsAsync(email, password, passwordConfirm);
 
-            User user = new User { Email = email };
+            User user = new User 
+            { 
+                UserName = email,
+                Email = email 
+            };
 
             // Creates and hashes password for user in db
             IdentityResult result = await _userManager.CreateAsync(user, password);
