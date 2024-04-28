@@ -52,7 +52,7 @@ namespace ChasGPT_Backend.Services
         {
             try
             {
-                bool success = await userRepository.ChangePasswordAsync(email, password, newPasswordConfirm, newPasswordConfirm);
+                bool success = await userRepository.ChangePasswordAsync(email, password, newPassword, newPasswordConfirm);
 
                 if (success)
                 {
