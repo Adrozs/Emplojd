@@ -18,10 +18,17 @@ namespace ChasGPT_Backend
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Adding Microsoft identity
-            builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>()
-                 .AddDefaultTokenProviders();
+            // Adding Microsoft identity with config settings
+            builder.Services.AddIdentity<User, IdentityRole>(options => // IdentityUser instead??
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true; 
+                options.Password.RequireDigit = true; 
+                options.Password.RequireNonAlphanumeric = true; 
+            })
+            .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
+            .AddDefaultTokenProviders();
 
             // Add repositories to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
