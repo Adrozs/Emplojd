@@ -68,7 +68,7 @@ function JobSearchForm() {
     setLatest((latest) => latest.filter((search) => search.id !== id));
   }
   return (
-    <div className="p-3 pb-10 bg-stone-200 mb-12">
+    <div className="p-3 bg-white pb-12 rounded-[20px]">
       <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
         Hitta rätt jobb för dig
       </h2>
@@ -181,7 +181,7 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   };
 
   return (
-    <div className="flex gap-2 justify-between bg-stone-300 mb-3 p-1">
+    <div className="flex gap-2 justify-between bg-white mb-3 p-1 border-2">
       <div className="flex gap-5">
         <button onClick={handleClickForSearchAgain}>
           <PiClockCounterClockwiseBold size={18} className="text-customBlue" />

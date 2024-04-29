@@ -4,7 +4,7 @@ import { SearchForm } from "../JobList/JobSearchForm";
 
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
-import Header from "../../components/Header";
+import Header from "../../components/Header/HeaderLandingpage";
 
 export default function LandingPage() {
   return (
@@ -32,7 +32,8 @@ export default function LandingPage() {
                 to="/signin"
                 className="rounded-[4px] p-3 px-12 mb-20 bg-stone-800 text-stone-100"
               >
-                Kom igång helt kostnadsfritt &rarr;
+                Kom igång helt kostnadsfritt
+                <span className="text-2xl"> &rarr;</span>
               </Link>
               <div className="max-w-sm text-center md:text-center mt-[100px] md:mt-[-40px]">
                 <p>Hitta din nya tjänst</p>

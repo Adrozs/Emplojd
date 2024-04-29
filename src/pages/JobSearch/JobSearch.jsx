@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { getJobs } from "../../services/apiJobs";
 //icons
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import Header from "../../components/Header";
+import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 
 function JobSearch() {
   const { state } = useLocation();
@@ -45,12 +45,12 @@ function JobSearch() {
 
   return (
     <main className="flex flex-col items-center">
-      <Header />
-      <div className="mt-3 w-[90%] bg-stone-200 text-center text-2xl py-4">
+      <HeaderSearchJob />
+      <div className=" w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">
         <p className="font-semibold text-stone-500">
           <span className="font-semibold text-stone-800">Sökresultat för</span>
           <br />
-          {searchWord}
+          <span className="text-[#0783F6]">{searchWord}</span>
         </p>
       </div>
       <div className="w-[90%] flex justify-between my-3">
