@@ -5,8 +5,10 @@ import { SearchForm } from "../JobList/JobSearchForm";
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
+import { useRef } from "react";
 
 export default function LandingPage() {
+  const learnMore = useRef(null);
   return (
     <>
       <section
@@ -38,7 +40,14 @@ export default function LandingPage() {
               <div className="max-w-sm text-center md:text-center mt-[100px] md:mt-[-40px]">
                 <p>Hitta din nya tjänst</p>
                 <div className="flex justify-center md:justify-center">
-                  <button className="p-5 px-6 pt-2 baseline">
+                  <button
+                    className="p-5 px-6 pt-2 baseline"
+                    onClick={() => {
+                      learnMore.current?.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
                     <BsArrowDownCircle size="2rem" />
                   </button>
                 </div>
@@ -49,11 +58,13 @@ export default function LandingPage() {
       </section>
 
       <section>
+        <div ref={learnMore}></div>
         <div className=" flex justify-center  ">
-          <h6 className="my-4 flex-col font-semi-bold items-center justify-center text-center text-2xl font-bold">
+          <h6 className="my-4 flex-col font-semi-bold items-center justify-center text-center text-2xl font-bold ">
             Hitta <span className="text-customBlue">rätt</span> jobb för dig
           </h6>
         </div>
+
         <div className="w-full ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +78,9 @@ export default function LandingPage() {
             ></path>
           </svg>
         </div>
+
         <SearchForm />
+
         <ActiveSlider />
         <div className="flex justify-center md:justify-center">
           <Link
@@ -78,7 +91,7 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
-      <p className="ms-10 mr-10 mt-5 mb-10">
+      <p className="ms-10 mr-10 mt-5 mb-10 md:mb-16">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea

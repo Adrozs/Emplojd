@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -50,9 +50,11 @@ function Modal({ onClose, menu }) {
               <div className="flex-[75%]">
                 <NavItem>
                   <BsFillSuitcaseLgFill size={30} />{" "}
-                  <span className="text-stone-700 font-semibold">
-                    HITTA JOBB
-                  </span>
+                  <Link to="/joblist">
+                    <span className="text-stone-700 font-semibold">
+                      HITTA JOBB
+                    </span>
+                  </Link>
                 </NavItem>
                 <NavItem>
                   <FaUser size={30} />
@@ -70,15 +72,19 @@ function Modal({ onClose, menu }) {
                     </NavItem>
                     <NavItem>
                       <FaHeart size={30} />
-                      <span className="text-stone-700 font-semibold">
-                        MINA SPARADE JOBB
-                      </span>
+                      <Link to="/saved">
+                        <span className="text-stone-700 font-semibold">
+                          MINA SPARADE JOBB
+                        </span>
+                      </Link>
                     </NavItem>
                     <NavItem>
                       <TbMailStar size={30} />
-                      <span className="text-stone-700 font-semibold">
-                        PERSONLIGA BREV
-                      </span>
+                      <Link to="/NoEarlierCoverLetter">
+                        <span className="text-stone-700 font-semibold">
+                          PERSONLIGA BREV
+                        </span>
+                      </Link>
                     </NavItem>
                   </div>
                 </div>

@@ -9,7 +9,7 @@ export default function Footer() {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 130"
-          className="absolute top-[-30px] md:top-[-90px] w-full"
+          className="absolute top-[-30px] md:top-[-70px] w-full"
         >
           <path
             fill="#fff"

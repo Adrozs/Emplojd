@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 import Modal from "../Modal";
+import { Link } from "react-router-dom";
 
 const HeaderSearchJob = () => {
   const [menu, setMenu] = useState(false);
@@ -15,7 +16,11 @@ const HeaderSearchJob = () => {
       <div className="w-full relative">
         <nav className="flex justify-between w-full items-center">
           <div className="   p-2 ">
-            <h1 className="text-xl font-Glockenspiel">EMPLOJD</h1>
+            <Link to="/">
+              <h1 className="text-xl font-Glockenspiel cursor-pointer">
+                EMPLOJD
+              </h1>
+            </Link>
           </div>
           <div className="flex items-center cursor-pointer pr-5">
             <RxHamburgerMenu size={46} onClick={handleMenu} />

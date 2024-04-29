@@ -61,7 +61,7 @@ const router = createBrowserRouter([
 				),
 			},
 			{
-				path: '/SavedJobs',
+				path: '/saved',
 				element: <SavedJobs />,
 			},
 			{
