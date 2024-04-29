@@ -40,3 +40,8 @@ a {
     background-position: 0% 50%, 50% 50%, 100% 100%;
   }
 }
+
+.swiper-backface-hidden .swiper-slide {
+  display: flex;
+  justify-content: center;
+}

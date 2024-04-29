@@ -1,8 +1,9 @@
 import { BsArrowDownCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import JobSearchForm, { SearchForm } from "../JobList/JobSearchForm";
-import { SiPokemon } from "react-icons/si";
+import { SearchForm } from "../JobList/JobSearchForm";
+
 import Footer from "../../components/Footer";
+import ActiveSlider from "../../components/Carousel/ActiveSlider";
 
 export default function LandingPage() {
   return (
@@ -22,7 +23,7 @@ export default function LandingPage() {
             <div className="flex justify-center md:justify-center">
               <Link
                 to="/signin"
-                className="p-3 px-12 mb-20 bg-stone-800 text-stone-100"
+                className="rounded-[4px] p-3 px-12 mb-20 bg-stone-800 text-stone-100"
               >
                 Kom igång helt kostnadsfritt &rarr;
               </Link>
@@ -42,12 +43,21 @@ export default function LandingPage() {
       <section className="p-4">
         <div className=" min-h-4 flex justify-center  ">
           <h6 className="my-4 flex-col font-semi-bold items-center justify-center text-center text-2xl font-bold">
-            Hitta <span className="text-blue-600">rätt</span> jobb för dig
+            Hitta <span className="text-customBlue">rätt</span> jobb för dig
           </h6>
         </div>
         <SearchForm />
+        <ActiveSlider />
+        <div className="flex justify-center md:justify-center">
+          <Link
+            to="/signin"
+            className="rounded-[4px] p-3 px-12 mb-20 bg-customBlue text-stone-100"
+          >
+            Börja söka &rarr;
+          </Link>
+        </div>
       </section>
-      <div className="min-h-96 mt-10">
+      {/* <div className="min-h-96 mt-10">
         <h6 className="mt-2 flex-col font-bold items-center justify-center text-center text-2xl mb-10">
           Såhär går det till
         </h6>
@@ -94,7 +104,7 @@ export default function LandingPage() {
           </Link>
         </div>
         <h6 className="font-bold mt-20 ms-10 text-2xl">TEXT</h6>
-      </div>
+      </div> */}
       <p className="ms-10 mr-10 mt-5 mb-10">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim

@@ -6,7 +6,7 @@ function AppLayout() {
   const isLoading = navigation.state === "loading";
 
   return (
-    <div className="layout">
+    <div className="layout bg-[#ECEEF0]">
       <Header />
       {isLoading && <Loader />}
       <main>

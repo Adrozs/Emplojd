@@ -117,28 +117,30 @@ export function SearchForm({
   latest,
 }) {
   return (
-    <form className="max-w-sm mx-auto bg-white p-3" onSubmit={handleSubmit}>
+    <form
+      className="max-w-sm mx-auto bg-white p-3 rounded-[10px]"
+      onSubmit={handleSubmit}
+    >
       <div className="mb-5">
-        <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
+        <label className="block mb-2 font-medium text-stone-400 dark:text-white">
           Ange title, företag, nyckelord
         </label>
         <input
           type="text"
           value={job}
-          // ref={inputEl}
           onChange={(e) => setJob(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
           placeholder="...."
         />
       </div>
       <div className="mb-5">
-        <label className="block mb-2 text-sm font-medium text-stone-400 dark:text-white">
+        <label className="block mb-2  font-medium text-stone-400 dark:text-white">
           Ange stad
         </label>
         <select
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
+          className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 "
           placeholder="...."
         >
           <option value=" ">Hela landet</option>
@@ -158,7 +160,7 @@ export function SearchForm({
 
       <button
         type="submit"
-        className="text-white bg-stone-400 hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full"
+        className="text-white bg-customBlue hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-[4px] text-sm px-5 py-2.5 text-center w-full"
       >
         Sök
       </button>
