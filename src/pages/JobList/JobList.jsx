@@ -4,9 +4,11 @@ import Header from "../../components/Header";
 
 function JobList() {
   return (
-    <main className="flex flex-col  p-5 h-screen">
+    <main className="flex flex-col  h-screen">
       <Header />
-      <JobSearchForm />
+      <main className=" px-5">
+        <JobSearchForm />
+      </main>
       <Footer />
     </main>
   );
