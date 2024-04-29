@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import Header from "../../components/Header";
 
 function CreateProfile() {
-      const [expandedStep, setExpandedStep] = useState(null);
+  const [expandedStep, setExpandedStep] = useState(null);
 
-      const toggleExpansion = (stepNumber) => {
-        setExpandedStep(expandedStep === stepNumber ? null : stepNumber);
-      };
+  const toggleExpansion = (stepNumber) => {
+    setExpandedStep(expandedStep === stepNumber ? null : stepNumber);
+  };
 
   return (
     <div
       className="flex flex-col min-h-screen gap-2 m-4 relative"
       style={{ minHeight: "calc(100vh - 120px)" }}
     >
+      <Header />
       <div className="flex justify-center">
         <div className="flex justify-center items-center bg-stone-200 w-[75%] h-16 my-8">
           VÄLKOMMEN USER

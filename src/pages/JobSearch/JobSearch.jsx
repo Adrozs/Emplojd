@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { getJobs } from "../../services/apiJobs";
 //icons
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import Header from "../../components/Header";
 
 function JobSearch() {
   const { state } = useLocation();
@@ -44,6 +45,7 @@ function JobSearch() {
 
   return (
     <main className="flex flex-col items-center">
+      <Header />
       <div className="mt-3 w-[90%] bg-stone-200 text-center text-2xl py-4">
         <p className="font-semibold text-stone-500">
           <span className="font-semibold text-stone-800">Sökresultat för</span>
@@ -62,13 +64,13 @@ function JobSearch() {
         {jobs.map((job) => (
           <JobItem job={job} key={job.id}>
             <Link
-              className="items-center justify-center flex  mt-2 w-full py-1 bg-white h-7"
+              className="items-center justify-center flex  mt-2 w-full py-2  h-7 bg-customBlue rounded-[4px] text-white"
               to={{
                 pathname: `/job/${job.id}`,
                 state: { jobId: job.id },
               }}
             >
-              Läs mer <span className="text-lg"> &rarr;</span>
+              Läs mer <span className="text-lg "> &rarr;</span>
             </Link>
           </JobItem>
         ))}

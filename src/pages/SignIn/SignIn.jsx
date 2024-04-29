@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AuthForm from "../../components/AuthForm";
+import Header from "../../components/Header";
 
 const LoginPage = () => <AuthForm type="login" />;
 
@@ -10,12 +11,14 @@ function SignIn() {
         className="flex flex-col"
         style={{ minHeight: "calc(100vh - 50px)" }}
       >
+        <Header />
         <div className="flex-grow bg-stone-400"></div>
         <div className="my-8">
           <LoginPage />
         </div>
       </div>
     </>
-  );}
+  );
+}
 
 export default SignIn;

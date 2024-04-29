@@ -5,13 +5,6 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
-import SpaceCity1 from "../../assets/SpaceCity1.jpg";
-
-import SpaceCity6 from "../../assets/SpaceCity6.jpeg";
-import SpaceCity7 from "../../assets/SpaceCity7.jpeg";
-
-import SpaceCity9 from "../../assets/SpaceCity9.jpeg";
-
 export const ServiceData = [
   {
     icon: FaUserAlt,

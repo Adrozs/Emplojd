@@ -7,7 +7,6 @@ function AppLayout() {
 
   return (
     <div className="layout bg-[#ECEEF0]">
-      <Header />
       {isLoading && <Loader />}
       <main>
         <Outlet />

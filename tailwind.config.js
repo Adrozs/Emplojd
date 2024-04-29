@@ -6,6 +6,9 @@ export default {
       colors: {
         customBlue: "#0783F6",
       },
+      fontFamily: {
+        Glockenspiel: ["Glockenspiel", "Inter"],
+      },
     },
   },
   plugins: [],

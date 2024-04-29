@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
+import Header from "../../components/Header";
 
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
-  // const [daysUntilDeadline, setDaysUntilDeadline] = useState(null);
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [page, setPage] = useState(1);
 
@@ -23,16 +23,6 @@ function ApplyNow() {
     }
     fetchData();
   }, [jobId]);
-
-  // useEffect(() => {
-  //   if (job && job.application_deadline) {
-  //     const today = new Date();
-  //     const deadline = new Date(job.application_deadline);
-  //     const differenceInTime = deadline.getTime() - today.getTime();
-  //     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-  //     setDaysUntilDeadline(differenceInDays);
-  //   }
-  // }, [job]);
 
   useEffect(() => {
     if (job && job.application_deadline) {
@@ -49,11 +39,17 @@ function ApplyNow() {
   };
 
   if (!job) {
-    return <Loader />;
+    return (
+      <>
+        <Header />
+        <Loader />
+      </>
+    );
   }
 
   return (
-    <main className="m-2">
+    <main className="mb-2">
+      <Header />
       <div className="my-4">
         {job && (
           <div className="mt-4 text-center font-semibold">
@@ -87,7 +83,7 @@ function ApplyNow() {
       {page === 1 && (
         <>
           <ul className="flex justify-center my-14">
-            <li className="h-[300px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
+            <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between">
               <div>
                 <div className="grid grid-cols-2 w-[70%] items-center">
                   <h2 className="text-2xl font-semibold">{page}.</h2>
@@ -127,7 +123,7 @@ function ApplyNow() {
               <div className="flex justify-between">
                 <button onClick={handleBack}>Avbryt</button>
                 <button
-                  className="bg-stone-100 p-1 w-[70%]"
+                  className="bg-customBlue rounded-[4px] text-white p-1 w-[70%]"
                   onClick={() => setPage(2)}
                 >
                   Nästa &rarr;
@@ -147,7 +143,7 @@ function ApplyNow() {
 function ApplySideTwo({ job, page, setPage }) {
   return (
     <ul className="flex justify-center my-14">
-      <div className=" w-[90%] bg-stone-200 p-4 flex flex-col ">
+      <div className=" w-[90%] bg-white p-4 flex flex-col text-stone-800 ">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="text-2xl font-semibold">{page}.</h2>
@@ -171,26 +167,34 @@ function ApplySideTwo({ job, page, setPage }) {
           <label className="flex flex-col text-l mb-4">
             <span>Namn</span>
             <input
-              className="p-1"
+              className="p-1 bg-stone-100"
               type="text"
               placeholder="Namn Efternamnsson"
             />
           </label>
           <label className="flex flex-col text-l my-4">
             <span>Intressen</span>
-            <input className="p-1 mt-1" type="text" placeholder="..." />
+            <input
+              className="p-1 mt-1 bg-stone-100"
+              type="text"
+              placeholder="..."
+            />
           </label>
           <label className="flex flex-col text-l my-4">
             <span>Ditt cv</span>
             <input
-              className="p-1 mt-1 bg-white w-full"
+              className="p-1 mt-1 bg-stone-100 w-full"
               type="file"
               placeholder="CV-namn.pdf"
             />
           </label>
           <label className="flex flex-col text-l my-4">
             <span>Beskrivande ord (t.ex. snabblärd, per)</span>
-            <input className="p-1 mt-1 " type="text" placeholder="..." />
+            <input
+              className="p-1 mt-1 bg-stone-100 "
+              type="text"
+              placeholder="..."
+            />
           </label>
           <label className='text-l"'>
             <span>Hur självständig ska AI:n vara?</span>
@@ -204,7 +208,7 @@ function ApplySideTwo({ job, page, setPage }) {
         <div className="flex justify-between mt-4">
           <button onClick={() => setPage(1)}>Avbryt</button>
           <button
-            className="bg-stone-100 p-1 w-[70%]"
+            className="bg-customBlue rounded-[4px] text-white p-1 w-[70%]"
             onClick={() => setPage(3)}
           >
             Nästa &rarr;
@@ -218,7 +222,7 @@ function ApplySideTwo({ job, page, setPage }) {
 function ApplySideThree({ job, page, setPage }) {
   return (
     <div className="flex flex-col items-center justify-center my-14">
-      <div className="h-[340px] w-[90%] bg-stone-200 p-4 flex flex-col justify-between">
+      <div className="h-[340px] w-[90%] bg-white p-4 flex flex-col justify-between">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="text-2xl font-semibold">{page}.</h2>
@@ -259,19 +263,19 @@ function ApplySideThree({ job, page, setPage }) {
           </div>
         </div>
         <div className="flex justify-between">
-          <button className="w-[40%] bg-stone-300 p-1">Redigera brev</button>
-          <button className="w-[40%] bg-stone-300 p-1">Generera brev</button>
+          <button className="w-[40%] bg-stone-100 p-1">Redigera brev</button>
+          <button className="w-[40%] bg-stone-100 p-1">Generera brev</button>
         </div>
         <div className="flex justify-center">
           <button
-            className="bg-stone-100 p-1 w-[90%]"
+            className="bg-customBlue rounded-[4px] text-white p-1 w-[90%]"
             onClick={() => setPage(2)}
           >
             Skicka ansökan &rarr;
           </button>
         </div>
       </div>
-      <aside className="my-6 w-[90%] bg-stone-200 p-4">
+      <aside className="my-6 w-[90%] bg-white p-4">
         <div className="p-4">
           <h3>Hej ChasGPT</h3>
           <br />

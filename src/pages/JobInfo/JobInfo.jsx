@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
 import { useEffect } from "react";
+import Header from "../../components/Header";
 
 function JobInfo() {
   const job = useLoaderData();
@@ -34,6 +35,7 @@ function JobInfo() {
 
   return (
     <main className="m-2">
+      <Header />
       <div className="my-4 flex w-full justify-between items-center">
         <a onClick={handleBack}>Tillbaka till resultaten</a>
         <img src="/like-heart.svg" alt="" />
@@ -46,7 +48,7 @@ function JobInfo() {
             </h1>
             <div className="w-[95%] flex items-center justify-center mx-auto">
               <Link
-                className="mt-3 w-full bg-stone-200 border-gray-100 py-2 text-lg gap-1"
+                className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1"
                 to={`/job/${job.id}/apply`}
               >
                 Ansök nu <span className="text-xl"> &rarr;</span>
@@ -72,7 +74,7 @@ function JobInfo() {
           <div className="w-full my-3 text-center ">
             <div className="w-[95%] flex items-center justify-center mx-auto">
               <Link
-                className="mt-3 w-full bg-stone-200 border-gray-100 py-2 text-lg gap-1"
+                className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1"
                 to={`/job/${job.id}/apply`}
               >
                 Ansök nu <span className="text-xl"> &rarr;</span>
