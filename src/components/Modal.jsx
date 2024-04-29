@@ -42,30 +42,43 @@ function Modal({ onClose, menu }) {
     <>
       {menu && (
         <nav className="fixed z-10 inset-0 overflow-y-auto bg-opacity-75 flex justify-end items-start">
-          <div className="bg-slate-400 max-w-lg w-[20rem] h-[25rem] z-1 modal-content ">
-            <div className="p-4 flex flex-col text-stone-100 h-[100%]">
+          <div className="bg-white max-w-lg w-[20rem] h-[25rem] z-1 modal-content ">
+            <div className="p-4 flex flex-col text-stone-300 h-[100%]">
               <button onClick={() => onClose(!menu)} className="self-end">
                 <IoClose size={46} />
               </button>
               <div className="flex-[75%]">
                 <NavItem>
-                  <BsFillSuitcaseLgFill size={30} /> HITTA JOBB
+                  <BsFillSuitcaseLgFill size={30} />{" "}
+                  <span className="text-stone-700 font-semibold">
+                    HITTA JOBB
+                  </span>
                 </NavItem>
                 <NavItem>
-                  <FaUser size={30} /> MIN PROFIL
+                  <FaUser size={30} />
+                  <span className="text-stone-700 font-semibold">
+                    MIN PROFIL
+                  </span>
                 </NavItem>
                 <div className="flex flex-col items-end">
                   <div className="flex flex-col">
                     <NavItem className="self-end">
                       <IoDocumentText size={30} />
-                      MINA ANSÖKNINGAR
+                      <span className="text-stone-700 font-semibold">
+                        MINA ANSÖKNINGAR
+                      </span>
                     </NavItem>
                     <NavItem>
                       <FaHeart size={30} />
-                      MINA SPARADE JOBB
+                      <span className="text-stone-700 font-semibold">
+                        MINA SPARADE JOBB
+                      </span>
                     </NavItem>
                     <NavItem>
-                      <TbMailStar size={30} /> PERSONLIGA BREV
+                      <TbMailStar size={30} />
+                      <span className="text-stone-700 font-semibold">
+                        PERSONLIGA BREV
+                      </span>
                     </NavItem>
                   </div>
                 </div>
@@ -78,7 +91,10 @@ function Modal({ onClose, menu }) {
                   >
                     {" "}
                     <TbLogin2 size={30} />
-                    Log out
+                    <span className="text-stone-700 font-semibold">
+                      {" "}
+                      Log out
+                    </span>
                   </button>
                 )}
               </div>

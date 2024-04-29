@@ -14,7 +14,7 @@ const Header = () => {
         <div className="   p-2 px-5">
           <h1 className="text-xl font-Glockenspiel">EMPLOJD</h1>
         </div>
-        <div className="flex items-center ">
+        <div className="flex items-center cursor-pointer">
           <RxHamburgerMenu size={46} onClick={handleMenu} />
           {menu && <Modal onClose={setMenu} menu={menu} />}
         </div>
