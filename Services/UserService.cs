@@ -5,7 +5,7 @@ namespace ChasGPT_Backend.Services
 {
     public class UserService
     {
-        public async Task<IResult> CreateAccount(string email, string password, string passwordConfirm, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> CreateAccount([FromQuery] string email, [FromQuery] string password, [FromQuery] string passwordConfirm, [FromServices] IUserRepository userRepository)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace ChasGPT_Backend.Services
             }
         }
 
-        public async Task<IResult> VerifyLogin(string email, string password, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> VerifyLogin([FromQuery] string email, [FromQuery] string password, [FromServices] IUserRepository userRepository)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace ChasGPT_Backend.Services
         }
 
 
-        public async Task<IResult> ChangePassword(string email, string password, string newPassword, string newPasswordConfirm, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> ChangePassword(string email, [FromQuery] string password, string newPassword, [FromQuery] string newPasswordConfirm, [FromServices] IUserRepository userRepository)
         {
             try
             {
