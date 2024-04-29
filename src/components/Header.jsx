@@ -10,9 +10,9 @@ const Header = () => {
   }
   return (
     <header className="flex justify-between w-full px-6 h-[65px] p-2 items-center">
-      <nav className="flex justify-between w-full">
-        <div className=" bg-stone-300  p-2 px-5">
-          <h1 className="text-xl font-semibold">LOGO</h1>
+      <nav className="flex justify-between w-full items-center">
+        <div className="   p-2 px-5">
+          <h1 className="text-xl font-Glockenspiel">EMPLOJD</h1>
         </div>
         <div className="flex items-center ">
           <RxHamburgerMenu size={46} onClick={handleMenu} />

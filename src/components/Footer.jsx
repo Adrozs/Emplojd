@@ -20,8 +20,8 @@ export default function Footer() {
         <div>
           <div className="bg-white">
             <div className="flex justify-center">
-              <h2 className="inline bg-slate-100 p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-3xl">
-                LOGO
+              <h2 className="inline  p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
+                EMPLOJD
               </h2>
             </div>
             <div className="text-center mb-10">

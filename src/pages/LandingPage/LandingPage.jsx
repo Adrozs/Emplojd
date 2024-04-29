@@ -14,7 +14,7 @@ export default function LandingPage() {
         id="hero"
       >
         <Header />
-        <div className=" container flex flex-col-reverse items-center  px-6 mx-auto space-y-0 md:space-y-0 md:flex-grow md:mt-[-75px]">
+        <div className=" container flex flex-col-reverse items-center  px-6 mx-auto space-y-0 md:space-y-0 flex-grow  md:flex-grow  sm:mt-[-75px] md:mt-[-75px]">
           <div className="flex flex-col items-center justify-center mt-48 space-y-12 md:w-1/2 text-white">
             <h1 className="text-3xl">
               Välkommen till <br />
@@ -53,11 +53,11 @@ export default function LandingPage() {
             Hitta <span className="text-customBlue">rätt</span> jobb för dig
           </h6>
         </div>
-        <div className="w-full">
+        <div className="w-full ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1440 130"
-            className="absolute bottom-0 w-full"
+            className=" absolute bottom-0 w-full"
           >
             <path
               fill="#eceef0"
