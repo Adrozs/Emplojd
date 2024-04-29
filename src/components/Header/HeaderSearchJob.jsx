@@ -12,7 +12,7 @@ const HeaderSearchJob = () => {
   }
 
   return (
-    <header className="flex justify-between w-full  h-[65px] py-2 items-center flex-col relative bg-white mb-12">
+    <header className="flex justify-between w-full  h-[65px] py-2 items-center flex-col relative bg-white mb-12 lg:mb-[96px]">
       <div className="w-full relative">
         <nav className="flex justify-between w-full items-center">
           <div className="   p-2 ">
@@ -28,8 +28,8 @@ const HeaderSearchJob = () => {
           </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 100"
-            className="absolute bottom-[-30px] rotate-180 w-full sm:bottom-[-50px] md:bottom-[-70px] lg:md:bottom-[-100px]"
+            viewBox="0 0 1340 100"
+            className="absolute bottom-[-30px] rotate-180 w-full sm:bottom-[-50px] md:bottom-[-64px] lg:md:bottom-[-85px] xl:md:bottom-[-102px] "
           >
             <path
               fill="#fff"

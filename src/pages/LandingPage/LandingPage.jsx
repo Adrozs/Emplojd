@@ -16,7 +16,7 @@ export default function LandingPage() {
         id="hero"
       >
         <Header />
-        <div className=" container flex flex-col-reverse items-center  px-6 mx-auto space-y-0 md:space-y-0 flex-grow  md:flex-grow  sm:mt-[-75px] md:mt-[-75px]">
+        <div className=" container flex flex-col-reverse items-center  px-6 mx-auto space-y-0 mt-[-100px] md:space-y-0 flex-grow  md:flex-grow  sm:mt-[-75px] md:mt-[-75px]">
           <div className="flex flex-col items-center justify-center mt-48 space-y-12 md:w-1/2 text-white">
             <h1 className="text-3xl">
               Välkommen till <br />
