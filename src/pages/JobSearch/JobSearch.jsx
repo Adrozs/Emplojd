@@ -44,38 +44,42 @@ function JobSearch() {
   );
 
   return (
-    <main className="flex flex-col items-center">
+    <>
       <HeaderSearchJob />
-      <div className=" w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">
-        <p className="font-semibold text-stone-500">
-          <span className="font-semibold text-stone-800">Sökresultat för</span>
-          <br />
-          <span className="text-[#0783F6]">{searchWord}</span>
-        </p>
-      </div>
-      <div className="w-[90%] flex justify-between my-3">
-        <p>Alla resultat</p>
-        <div className="bg-white  px-2 flex items-center gap-1 justify-center cursor-pointer">
-          <HiAdjustmentsHorizontal />
-          <span className="text-[15px]">Filter</span>
+      <main className="flex flex-col items-center max-w-4xl mx-auto">
+        <div className=" w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">
+          <p className="font-semibold text-stone-500">
+            <span className="font-semibold text-stone-800">
+              Sökresultat för
+            </span>
+            <br />
+            <span className="text-[#0783F6]">{searchWord}</span>
+          </p>
         </div>
-      </div>
-      <ul className="w-full flex flex-col items-center gap-5">
-        {jobs.map((job) => (
-          <JobItem job={job} key={job.id}>
-            <Link
-              className="items-center justify-center flex  mt-2 w-full py-2  h-7 bg-customBlue rounded-[4px] text-white"
-              to={{
-                pathname: `/job/${job.id}`,
-                state: { jobId: job.id },
-              }}
-            >
-              Läs mer <span className="text-lg "> &rarr;</span>
-            </Link>
-          </JobItem>
-        ))}
-      </ul>
-    </main>
+        <div className="w-[90%] flex justify-between my-3">
+          <p>Alla resultat</p>
+          <div className="bg-white  px-2 flex items-center gap-1 justify-center cursor-pointer">
+            <HiAdjustmentsHorizontal />
+            <span className="text-[15px]">Filter</span>
+          </div>
+        </div>
+        <ul className="w-full flex flex-col items-center gap-5">
+          {jobs.map((job) => (
+            <JobItem job={job} key={job.id}>
+              <Link
+                className="items-center justify-center flex  mt-2 w-full py-2  h-7 bg-customBlue rounded-[4px] text-white text-lg"
+                to={{
+                  pathname: `/job/${job.id}`,
+                  state: { jobId: job.id },
+                }}
+              >
+                Läs mer <span className="text-xl"> &rarr;</span>
+              </Link>
+            </JobItem>
+          ))}
+        </ul>
+      </main>
+    </>
   );
 }
 

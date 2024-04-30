@@ -38,7 +38,7 @@ function JobInfo() {
     <>
       <HeaderOtherPages />
 
-      <main className="m-2">
+      <main className="m-2 max-w-7xl mx-auto">
         {job && (
           <>
             <div className="bg-white pb-4 pt-1 mt-8 px-1 rounded-[10px]">
@@ -52,7 +52,7 @@ function JobInfo() {
                 </h1>
                 <div className="w-full flex items-center justify-center mx-auto">
                   <Link
-                    className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1"
+                    className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1 max-w-lg"
                     to={`/job/${job.id}/apply`}
                   >
                     Ansök nu <span className="text-xl"> &rarr;</span>
@@ -61,7 +61,7 @@ function JobInfo() {
               </div>
             </div>
             {job.logo_url && (
-              <div className="w-full flex items-center justify-center py-2">
+              <div className="w-full flex items-center justify-center py-2 ">
                 <img
                   src={job.logo_url}
                   alt="logo"
@@ -71,14 +71,14 @@ function JobInfo() {
             )}
             {isHTML(job.description.text_formatted) ? (
               <div
-                className=" p-3"
+                className=" p-3 max-w-4xl mx-auto"
                 dangerouslySetInnerHTML={{
                   __html: job.description.text_formatted,
                 }}
               />
             ) : (
               <p
-                className=" p-3"
+                className=" p-3 max-w-4xl mx-auto"
                 style={{ whiteSpace: "pre-line" }}
                 dangerouslySetInnerHTML={{
                   __html: makeLinksClickable(job.description.text_formatted),

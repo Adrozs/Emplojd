@@ -68,7 +68,7 @@ function JobSearchForm() {
     setLatest((latest) => latest.filter((search) => search.id !== id));
   }
   return (
-    <div className="p-3 bg-white pb-12 rounded-[20px]">
+    <div className="p-3 bg-white pb-12 rounded-[20px] max-w-lg mx-auto">
       <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
         Hitta rätt jobb för dig
       </h2>
@@ -160,7 +160,7 @@ export function SearchForm({
 
       <button
         type="submit"
-        className="text-white bg-customBlue hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-[4px] text-sm px-5 py-2.5 text-center w-full"
+        className="text-white bg-customBlue hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-[4px]  px-5 py-2 text-center w-full text-lg"
       >
         Sök
       </button>

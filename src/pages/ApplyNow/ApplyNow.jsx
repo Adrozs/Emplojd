@@ -82,7 +82,7 @@ function ApplyNow() {
       </div>
       {page === 1 && (
         <>
-          <ul className="flex justify-center my-14">
+          <ul className="flex justify-center my-14  max-w-lg mx-auto">
             <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between">
               <div>
                 <div className="grid grid-cols-2 w-[70%] items-center">
@@ -142,7 +142,7 @@ function ApplyNow() {
 
 function ApplySideTwo({ job, page, setPage }) {
   return (
-    <ul className="flex justify-center my-14">
+    <ul className="flex justify-center my-14  max-w-lg mx-auto">
       <div className=" w-[90%] bg-white p-4 flex flex-col text-stone-800 ">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
@@ -198,7 +198,11 @@ function ApplySideTwo({ job, page, setPage }) {
           </label>
           <label className='text-l"'>
             <span>Hur självständig ska AI:n vara?</span>
-            <input type="range" className="w-full" value="10" />
+            <input
+              type="range"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+              value="10"
+            />
             <div className="flex justify-between">
               <span>Lite självständig</span>
               <span>Mycket självständig</span>
@@ -221,7 +225,7 @@ function ApplySideTwo({ job, page, setPage }) {
 
 function ApplySideThree({ job, page, setPage }) {
   return (
-    <div className="flex flex-col items-center justify-center my-14">
+    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
       <div className="h-[340px] w-[90%] bg-white p-4 flex flex-col justify-between">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
