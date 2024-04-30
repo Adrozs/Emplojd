@@ -15,7 +15,7 @@ const HeaderSearchJob = () => {
     <header className="flex justify-between w-full  h-[65px] py-2 items-center flex-col relative bg-white mb-12 lg:mb-[96px]">
       <div className="w-full relative">
         <nav className="flex justify-between w-full items-center ">
-          <div className=" z-10 p-2 ">
+          <div className=" p-2 ">
             <Link to="/">
               <h1 className="text-xl font-Glockenspiel cursor-pointer">
                 EMPLOJD
@@ -29,7 +29,8 @@ const HeaderSearchJob = () => {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1340 100"
-            className="z-[-10] absolute bottom-[-30px] rotate-180 w-full sm:bottom-[-50px] md:bottom-[-64px] lg:md:bottom-[-85px] xl:md:bottom-[-102px] "
+            className=" absolute bottom-[-30px] rotate-180 w-full sm:bottom-[-50px] md:bottom-[-74px] lg:md:bottom-[-75px] xl:md:bottom-[-102px] 
+            xxl:md:bottom-[-112px] "
           >
             <path
               fill="#fff"

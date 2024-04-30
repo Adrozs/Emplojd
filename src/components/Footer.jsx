@@ -9,7 +9,7 @@ export default function Footer() {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 130"
-          className="absolute top-[-30px] md:top-[-70px] w-full"
+          className="absolute top-[-30px] md:top-[-70px] w-full xl:top-[-100px]"
         >
           <path
             fill="#fff"
@@ -17,7 +17,7 @@ export default function Footer() {
             d="M0,80L80,72C160,64,320,48,480,48C640,48,800,64,960,72C1120,80,1280,80,1360,80L1440,80L1440,160L1360,160C1280,160,1120,160,960,160C800,160,640,160,480,160C320,160,160,160,80,160L0,160Z"
           ></path>
         </svg>
-        <div>
+        <div className="z-10">
           <div className="bg-white">
             <div className="flex justify-center">
               <h2 className="inline  p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
