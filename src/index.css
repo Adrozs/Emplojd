@@ -50,3 +50,8 @@ a {
   display: flex;
   justify-content: center;
 }
+
+
+.file-selected {
+  background-color: rgb(120 113 108);
+}
