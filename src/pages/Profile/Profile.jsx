@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
-function Profle() {
+function Profile() {
   return (
     <>
       <HeaderOtherPages />
@@ -43,4 +43,4 @@ function Profle() {
   );
 }
 
-export default Profle;
+export default Profile;

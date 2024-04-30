@@ -16,6 +16,7 @@ import ApplyNow from './pages/ApplyNow/ApplyNow';
 import SavedJobs from './pages/Profile/SavedJobs';
 import NoEarlierCoverLetter from './pages/Profile/NoEarlierCoverLetter';
 import CreateProfile from './pages/Profile/CreateProfile';
+import MyProfile from './pages/Profile/MyProfile';
 
 const router = createBrowserRouter([
 	{
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute>
 						<Profile />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/MyProfile',
+				element: (
+					<ProtectedRoute>
+						<MyProfile />
 					</ProtectedRoute>
 				),
 			},

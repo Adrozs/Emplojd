@@ -58,9 +58,11 @@ function Modal({ onClose, menu }) {
                 </NavItem>
                 <NavItem>
                   <FaUser size={30} />
+                  <Link to="/MyProfile">
                   <span className="text-stone-700 font-semibold">
                     MIN PROFIL
                   </span>
+                  </Link>
                 </NavItem>
                 <div className="flex flex-col items-end">
                   <div className="flex flex-col">
