@@ -56,7 +56,7 @@ namespace ChasGPT_Backend.Repositories
             if (user == null)
                 throw new InvalidOperationException("No matching user found.");
 
-            return await _userManager.CheckPasswordAsync(user, password);
+            return await _userManager.CheckPasswordAsync(user, password); // Checks so password is valid for this user
         }
 
         public async Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm)
