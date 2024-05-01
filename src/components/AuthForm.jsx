@@ -1,86 +1,88 @@
 import React, { useState } from "react";
+import FormRow from "./FormRow";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const initalState = {
+  name: "",
+  lastname: "",
+  email: "",
+  password: "",
+  isMember: true,
+};
+
 const AuthForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [values, setValues] = useState(initalState);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setValues({ ...values, [name]: value });
+  };
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (isSignUp) {
-      console.log("Signup attempt with:", name, lastname, username, password);
-      navigate("/profile");
-    } else {
-      console.log("Login attempt with:", username, password);
+    const { name, email, password, isMember } = values;
+    if (!email || !password || (!isMember && !name)) {
+      toast.error("Klart du får logga in <3");
       login();
       navigate("/profile");
+      return;
+    } else {
+      toast.success("Välkommen in " + email);
+      login();
+      navigate("/profile");
+
+      return;
     }
   };
 
   const toggleForm = () => {
-    setIsSignUp(!isSignUp);
+    setValues({ ...values, isMember: !values.isMember });
   };
 
   return (
-    <form className="m-5" onSubmit={handleSubmit}>
-      {isSignUp && (
+    <form className="m-5" onSubmit={onSubmit}>
+      {!values.isMember && (
         <>
-          <div className="flex flex-col pb-6">
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="First Name"
-              className="h-12 bg-stone-400 text-black placeholder-black pl-3"
-            />
-          </div>
-          <div className="flex flex-col pb-6">
-            <label htmlFor="lastname">Last Name:</label>
-            <input
-              type="text"
-              id="lastname"
-              name="lastname"
-              value={lastname}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Last Name"
-              className="h-12 bg-stone-400 text-black placeholder-black pl-3"
-            />
-          </div>
+          <FormRow
+            type="text"
+            name="name"
+            labelText="Förnamn"
+            value={values.name}
+            handleChange={handleChange}
+            placeholder="Förnamn"
+          />
+          <FormRow
+            type="text"
+            name="lastname"
+            labelText="Efternamn"
+            value={values.lastname}
+            handleChange={handleChange}
+            placeholder="Efternamn"
+          />
         </>
       )}
-      <div className="flex flex-col pb-6">
-        <label htmlFor="username">Email:</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="your@email.com"
-          className="h-12 bg-stone-400 text-black placeholder-black pl-3"
-        />
-      </div>
-      <div className="flex flex-col pb-2">
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="h-12 bg-stone-400 text-black placeholder-black pl-3"
-        />
-      </div>
+      <FormRow
+        type="email"
+        name="email"
+        labelText="Email"
+        value={values.email}
+        handleChange={handleChange}
+        placeholder="din@email.se"
+      />
+      <FormRow
+        type="password"
+        name="password"
+        labelText="Lösenord"
+        value={values.password}
+        handleChange={handleChange}
+        placeholder="Lösenord"
+      />
+
       <div className="flex justify-between pb-6">
         <div className="flex">
           <input type="checkbox" />
@@ -91,14 +93,14 @@ const AuthForm = () => {
 
       <div className="flex flex-col gap-6">
         <button className="w-full bg-stone-500 h-14" type="submit">
-          {isSignUp ? "SKAPA DITT KONTO" : "LOGGA IN"}
+          {!values.isMember ? "SKAPA DITT KONTO" : "LOGGA IN"}
         </button>
         <button
           className="w-full bg-stone-300 h-14"
           type="button"
           onClick={toggleForm}
         >
-          {isSignUp ? "LOGGA IN ISTÄLLET" : "SKAPA KONTO"}
+          {!values.isMember ? "LOGGA IN ISTÄLLET" : "SKAPA KONTO"}
         </button>
       </div>
     </form>
