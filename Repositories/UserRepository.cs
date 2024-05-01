@@ -8,7 +8,7 @@ namespace ChasGPT_Backend.Repositories
     public interface IUserRepository
     {
         public Task<bool> CreateAccountAsync(string email, string password, string passwordConfirm);
-        public Task<bool> VerifyLoginAsync(string email, string password);
+        public Task<bool> LoginAsync(string email, string password);
         public Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm);
     }
 
@@ -43,20 +43,26 @@ namespace ChasGPT_Backend.Repositories
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException("Failed to create account: " + string.Join(", ", result.Errors.Select(e => e.Description)));
-
             }
 
             return result.Succeeded;
         }
 
-        public async Task<bool> VerifyLoginAsync(string email, string password)
+        public async Task<bool> LoginAsync(string email, string password)
         {
             User user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
                 throw new InvalidOperationException("No matching user found.");
 
-            return await _userManager.CheckPasswordAsync(user, password); // Checks so password is valid for this user
+            // Checks so password is valid for this user
+            bool validLogin = await _userManager.CheckPasswordAsync(user, password);
+
+            if (!validLogin)
+                throw new InvalidOperationException("Invalid email or password.");
+
+            return true; // TEMP TO BE ABLE TO PUSH - SHOULD BE RETURING A JWT!!!
+
         }
 
         public async Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm)
