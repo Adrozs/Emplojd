@@ -11,7 +11,7 @@ function SignIn() {
         className="flex flex-col"
         style={{ minHeight: "calc(100vh - 65px)" }}
       >
-        <div class="flex-grow bg-gradient-to-r-custom"></div>
+        <div className="flex-grow bg-gradient-to-r-custom"></div>
         <div className="my-8 ">
           <LoginPage />
         </div>
