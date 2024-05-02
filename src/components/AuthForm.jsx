@@ -72,7 +72,7 @@ const AuthForm = () => {
         labelText="Email"
         value={values.email}
         handleChange={handleChange}
-        placeholder="din@email.se"
+        placeholder="@"
       />
       <FormRow
         type="password"
@@ -80,18 +80,20 @@ const AuthForm = () => {
         labelText="Lösenord"
         value={values.password}
         handleChange={handleChange}
-        placeholder="Lösenord"
+        placeholder="●●●●●●●●●●●●"
       />
 
       <div className="flex justify-between pb-6">
         <div className="flex">
-          <input type="checkbox" />
-          <h6 className="ml-1 text-xs">KOM IHÅG MIG</h6>
+          <input type="checkbox" className="accent-[#0783F6] size-6 mr-2" />
+          <h6 className="text-md">KOM IHÅG MIG</h6>
         </div>
-        <p className="text-xs">GLÖMT LÖSENORD</p>
+        <p className="text-md underline underline-offset-2 text-[#045199]">
+          GLÖMT LÖSENORD
+        </p>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
         <button
           className="w-full bg-[#0783F6] h-14 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC]"
           type="submit"

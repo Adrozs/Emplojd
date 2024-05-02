@@ -12,7 +12,7 @@ function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
 
   return (
     <div className="flex flex-col pb-6">
-      <label htmlFor={name} className="form-label text-lg mb-2 font-semibold">
+      <label htmlFor={name} className="form-label text-lg mb-2 font-semibold px-2">
         {labelText || name}
       </label>
       <div className="flex relative items-center">
@@ -51,7 +51,7 @@ function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
           name={name}
           onChange={stableHandleChange}
           placeholder={placeholder}
-          className="px-2 h-12 text-black rounded-xl bg-[#F0F0F0] border-[#B0B0B0] border-2 w-full outline-[#62AEF5]"
+          className="px-4 h-12 text-black rounded-xl bg-[#F0F0F0] border-[#B0B0B0] border-2 w-full outline-[#62AEF5]"
         />
       </div>
     </div>
