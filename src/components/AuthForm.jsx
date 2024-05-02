@@ -92,11 +92,15 @@ const AuthForm = () => {
       </div>
 
       <div className="flex flex-col gap-6">
-        <button className="w-full bg-stone-500 h-14" type="submit">
+        <button
+          className="w-full bg-[#0783F6] h-14 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC]"
+          type="submit"
+        >
           {!values.isMember ? "SKAPA DITT KONTO" : "LOGGA IN"}
         </button>
+        <div className="flex justify-center text-xl">eller</div>
         <button
-          className="w-full bg-stone-300 h-14"
+          className="w-full border-[#0783F6] text-[#0783F6] text-xl border-2 rounded-xl h-14 hover:border-[#045199] hover:text-[#045199] active:border-[#066DCC] active:text-[#066DCC]"
           type="button"
           onClick={toggleForm}
         >
