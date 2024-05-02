@@ -59,8 +59,8 @@ function MyProfile() {
         <div className="flex bg-stone-300 h-12 items-center p-4 w-64 mb-4">
           MIN JOBBPROFIL
         </div>
-        <div className="grid grid-cols-[auto_1fr] mb-8 gap-2">
-          <div className="bg-stone-300 size-36 rounded-full col-start-1 row-span-4 relative overflow-hidden">
+        <div className="grid grid-cols-[auto_1fr] mb-8 gap-5">
+          <div className="bg-stone-300 size-48 rounded-full col-start-1 row-span-4 relative overflow-hidden">
             <img
               src={profilePic || "path_to_default_image.jpg"}
               className="rounded-full w-full h-full object-cover"
@@ -91,7 +91,7 @@ function MyProfile() {
               className="bg-stone-300 h-8 w-full col-start-2 pl-2 items-center flex"
             >
               <input
-                className="bg-stone-300 outline-none w-full h-full placeholder-black"
+                className="bg-transparent autofill:shadow-[inset_0_0_0px_1000px_rgb(214,211,209)] outline-none w-full h-full placeholder-black"
                 type="text"
                 value={value}
                 onChange={(e) => updateProfile(field, e.target.value)}
