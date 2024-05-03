@@ -1,14 +1,14 @@
 ﻿using ChasGPT_Backend.Models;
+using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
-using System.Text.RegularExpressions;
 
 namespace ChasGPT_Backend.Repositories
 {
 
     public interface IUserRepository
     {
-        public Task<bool> CreateAccountAsync(string email, string password, string passwordConfirm);
-        public Task<bool> LoginAsync(string email, string password);
+        public Task<bool> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm);
+        public Task<string> LoginAsync(string email, string password);
         public Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm);
     }
 
@@ -18,17 +18,24 @@ namespace ChasGPT_Backend.Repositories
         // Might be needed to ad for other stuff not covered by UserManager - double check documentation before changing.
 
         private readonly UserManager<User> _userManager;
+        private readonly AuthenticationService _authService;
 
-        public UserRepository(UserManager<User> userManager)
+        public UserRepository(UserManager<User> userManager, AuthenticationService authService)
         {
             _userManager = userManager;
+            _authService = authService;
         }
 
 
-        public async Task<bool> CreateAccountAsync(string email, string password, string passwordConfirm)
+        public async Task<bool> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm)
         {
+            // Check so emails and passwords match
+            if (email != emailConfirm)
+                throw new InvalidOperationException("Emails do not match.");
+
             if (password != passwordConfirm)
-                throw new ArgumentException("Passwords do not match.");
+                throw new InvalidOperationException("Passwords do not match.");
+
 
             User user = new User
             {
@@ -48,7 +55,7 @@ namespace ChasGPT_Backend.Repositories
             return result.Succeeded;
         }
 
-        public async Task<bool> LoginAsync(string email, string password)
+        public async Task<string> LoginAsync(string email, string password)
         {
             User user = await _userManager.FindByEmailAsync(email);
 
@@ -61,8 +68,10 @@ namespace ChasGPT_Backend.Repositories
             if (!validLogin)
                 throw new InvalidOperationException("Invalid email or password.");
 
-            return true; // TEMP TO BE ABLE TO PUSH - SHOULD BE RETURING A JWT!!!
+            // Generate token for user
+            string token = _authService.GenerateToken(user);
 
+            return token;
         }
 
         public async Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm)
