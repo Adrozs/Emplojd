@@ -138,3 +138,4 @@ artifacts/
 /obj/ChasGPT_Backend.csproj.nuget.g.targets
 /obj/project.assets.json
 /obj/project.nuget.cache
+/appsettings.Development.json
