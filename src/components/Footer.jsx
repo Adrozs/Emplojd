@@ -2,7 +2,7 @@ import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaFacebook, FaInstagramSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-export default function Footer() {
+export default function Footer({ children }) {
   return (
     <>
       <div className="relative">
@@ -19,10 +19,15 @@ export default function Footer() {
         </svg>
         <div className="z-10">
           <div className="bg-white">
-            <div className="flex justify-center">
+            <div className="flex justify-center items-center">
               <h2 className="inline  p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
                 EMPLOJD
               </h2>
+              <img
+                src="/LogoEmplojd.png"
+                alt="logo"
+                className="w-[54px] h-[54px]"
+              />
             </div>
             <div className="text-center mb-10">
               <h3 className="mb-5 font-bold text-xl">TEXT</h3>

@@ -35,7 +35,7 @@ export default function LandingPage() {
             <div className="flex justify-center md:justify-center flex-col">
               <Link
                 to="/signin"
-                className="p-3 px-12 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl"
+                className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl"
               >
                 Kom igång helt kostnadsfritt
                 <span className="text-2xl"> &rarr;</span>
