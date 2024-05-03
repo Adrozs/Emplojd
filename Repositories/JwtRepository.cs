@@ -30,7 +30,7 @@ namespace ChasGPT_Backend.Repositories
 
             // Create JWT
             JwtSecurityToken jwt = new JwtSecurityToken(
-                issuer: _configuration["Jwt: Issuer"],
+                issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(3),
