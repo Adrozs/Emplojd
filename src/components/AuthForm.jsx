@@ -20,9 +20,12 @@ const AuthForm = () => {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setValues({ ...values, [name]: value });
+    setValues(prevValues => ({
+      ...prevValues,
+      [name]: value
+    }));
   };
-
+  
   const onSubmit = (e) => {
     e.preventDefault();
     const { name, email, password, isMember } = values;

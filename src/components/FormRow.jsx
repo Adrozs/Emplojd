@@ -1,22 +1,13 @@
-import React, {useState, useCallback} from "react";
+import React from "react";
 
 function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
-  const [inputValue, setInputValue] = useState(value);
-
-  const stableHandleChange = useCallback((event) => {
-    const newValue = event.target.value;
-    setInputValue(newValue);
-    handleChange(newValue, name);
-  }, [handleChange, name]);
-
-
   return (
     <div className="flex flex-col pb-6">
       <label htmlFor={name} className="form-label text-lg mb-2 font-semibold px-2">
         {labelText || name}
       </label>
       <div className="flex relative items-center">
-        {inputValue ? (
+        {value ? (
           <svg
             width="16"
             height="12"
@@ -47,9 +38,10 @@ function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
         )}
         <input
           type={type}
-          value={inputValue}
+          id={name}
           name={name}
-          onChange={stableHandleChange}
+          value={value}
+          onChange={handleChange}
           placeholder={placeholder}
           className="px-4 h-12 text-black rounded-xl bg-[#F0F0F0] border-[#B0B0B0] border-2 w-full outline-[#62AEF5]"
         />
