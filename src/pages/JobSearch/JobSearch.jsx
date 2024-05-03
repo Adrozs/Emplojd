@@ -45,7 +45,9 @@ function JobSearch() {
 
   return (
     <>
-      <HeaderSearchJob />
+      <HeaderSearchJob>
+        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+      </HeaderSearchJob>
       <main className="flex flex-col items-center max-w-4xl mx-auto">
         <div className=" w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">
           <p className="font-semibold text-stone-500">

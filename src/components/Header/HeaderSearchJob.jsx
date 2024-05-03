@@ -4,7 +4,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import Modal from "../Modal";
 import { Link } from "react-router-dom";
 
-const HeaderSearchJob = () => {
+const HeaderSearchJob = ({ children }) => {
   const [menu, setMenu] = useState(false);
 
   function handleMenu() {
@@ -17,9 +17,10 @@ const HeaderSearchJob = () => {
         <nav className="flex justify-between w-full items-center ">
           <div className=" p-2 ">
             <Link to="/">
-              <h1 className="text-xl font-Glockenspiel cursor-pointer">
+              {/* <h1 className="text-xl font-Glockenspiel cursor-pointer">
                 EMPLOJD
-              </h1>
+              </h1> */}
+              {children}
             </Link>
           </div>
           <div className="flex items-center cursor-pointer pr-5">

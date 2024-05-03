@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
-import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
+import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -41,7 +41,9 @@ function ApplyNow() {
   if (!job) {
     return (
       <>
-        <HeaderOtherPages />
+        <HeaderSearchJob>
+          <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+        </HeaderSearchJob>
         <Loader />
       </>
     );
@@ -49,7 +51,9 @@ function ApplyNow() {
 
   return (
     <main className="mb-2">
-      <HeaderOtherPages />
+      <HeaderSearchJob>
+        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+      </HeaderSearchJob>
       <div className="my-4">
         {job && (
           <div className="mt-4 text-center font-semibold">

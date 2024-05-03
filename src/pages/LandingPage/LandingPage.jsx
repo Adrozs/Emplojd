@@ -15,7 +15,10 @@ export default function LandingPage() {
         className="bg-gradient-to-b from-[#CA81ED] to-[#4086C6] bg-cover bg-no-repeat h-screen lg:pb-20"
         id="hero"
       >
-        <Header />
+        <Header>
+          {" "}
+          <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+        </Header>
         <div className=" container flex flex-col-reverse items-center  px-6 mx-auto space-y-0 mt-[-100px] md:space-y-0 flex-grow  md:flex-grow  sm:mt-[-75px] md:mt-[-75px]">
           <div className="flex flex-col items-center justify-center mt-48 space-y-12 md:w-1/2 text-white">
             <h1 className="text-3xl">

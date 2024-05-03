@@ -1,8 +1,7 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
 import { useEffect } from "react";
-
-import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
+import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 
 function JobInfo() {
   const job = useLoaderData();
@@ -36,7 +35,9 @@ function JobInfo() {
 
   return (
     <>
-      <HeaderOtherPages />
+      <HeaderSearchJob>
+        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+      </HeaderSearchJob>
 
       <main className="m-2 max-w-7xl mx-auto">
         {job && (
