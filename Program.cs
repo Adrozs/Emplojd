@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace ChasGPT_Backend
 {
@@ -17,6 +17,8 @@ namespace ChasGPT_Backend
         {
             var builder = WebApplication.CreateBuilder(args);
             ConfigurationManager configuration = builder.Configuration;
+
+            // Add services to the container.
 
             // Setup database context and connection string here
             builder.Services.AddDbContext<ApplicationContext>(options =>
@@ -34,15 +36,6 @@ namespace ChasGPT_Backend
             .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
             .AddDefaultTokenProviders();
 
-            // Add CORS services and define a very permissive policy (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!)
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("OpenCorsPolicy", builder =>
-                    builder.AllowAnyOrigin()  // Allows requests from any source
-                           .AllowAnyMethod()  // Allows all HTTP methods
-                           .AllowAnyHeader()); // Allows any header
-            });
-
             // Adding authentication
             builder.Services.AddAuthentication(options =>
             {
@@ -50,22 +43,24 @@ namespace ChasGPT_Backend
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            // Add JWT Bearer
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true; // Allows the server to save the token for the duration of the request
-                options.RequireHttpsMetadata = true; // Enforces HTTPS so tokens aren't transfered over unsecure connections
-                options.TokenValidationParameters = new TokenValidationParameters // The rules of which authorization will check
+                // Add JWT Bearer
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Secret"])) // Symetric key lets the system know the same secret is used for both signing and verifying the JWT. Then encodes it into bytes
-                };
-            });
+                    options.SaveToken = true; // Allows the server to save the token for the duration of the request
+                    options.RequireHttpsMetadata = true; // Enforces HTTPS so tokens aren't transfered over unsecure connections
+                    options.TokenValidationParameters = new TokenValidationParameters // The rules of which authorization will check
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Secret"])) // Symetric key lets the system know the same secret is used for both signing and verifying the JWT. Then encodes it into bytes
+                    };
+                });
 
+            // Add authorization
+            builder.Services.AddAuthorization();
 
 
             // Add to scope
@@ -76,13 +71,44 @@ namespace ChasGPT_Backend
             builder.Services.AddScoped<AuthenticationService>();
 
 
-
-            // Add services to the container.
-            builder.Services.AddAuthorization();
-
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Configure Swagger to include JWT authorization input
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+                // Define the Bearer Authentication scheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization", // Name of the header
+                    In = ParameterLocation.Header, // Location of the header
+                    Type = SecuritySchemeType.Http, // Type of the security
+                    Scheme = "bearer" // Scheme name
+                });
+
+                // Make sure Swagger UI requires a Bearer token to be specified
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer" // Must match the scheme name defined in AddSecurityDefinition
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
+                });
+            });
 
             var app = builder.Build();
 
@@ -95,22 +121,19 @@ namespace ChasGPT_Backend
 
             app.UseHttpsRedirection();
 
-            // Apply the CORS policy - REMOVE AFTER TESTING 
-            app.UseCors("OpenCorsPolicy");
-
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
             app.UseAuthentication();
             app.UseAuthorization();
 
 
 
-            // Endpoints
-            // Note: .AllowAnonymous means specified to allow access without token - use with caution.
+            // ENDPOINTS
+            // Note: Don't forget to add ".RequireAuthorization()" to your endpoints! Without it you can access them without the token.
 
             // User account 
-            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
-            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
-            app.MapPost("/change-password", UserService.ChangePasswordAsync);
+            app.MapPost("/login", UserService.LoginAsync);
+            app.MapPost("/create-account", UserService.CreateAccountAsync);
+            app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
             // Job search
@@ -119,9 +142,8 @@ namespace ChasGPT_Backend
             app.MapGet("/search", async (string query, int? region, int? page, IJobAdRepository jobAdRepository) =>
             {
                 return await JobAdService.SearchJob(query, region, page ?? 1, jobAdRepository);
-            });
-
-            app.MapGet("/ad/{adId}", JobAdService.GetJobFromId);
+            }).RequireAuthorization();
+            app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
 
 
             app.Run();
