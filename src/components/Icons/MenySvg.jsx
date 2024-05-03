@@ -1,5 +1,6 @@
 const SearchSVG = () => {
     return (
+        <>
         <svg
                     width="24"
                     height="24"
@@ -20,15 +21,17 @@ const SearchSVG = () => {
                         y2="24"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#A78BFA" />
-                        <stop offset="1" stop-color="#0EA5E9" />
+                        <stop stopColor="#A78BFA" />
+                        <stop offset="1" stopColor="#0EA5E9" />
                       </linearGradient>
                     </defs>
                   </svg>
+                  </>
     );
 }
 const ProfileSVG = () => {
     return (
+        <>
         <svg
                     width="24"
                     height="24"
@@ -49,15 +52,17 @@ const ProfileSVG = () => {
                         y2="24"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#A78BFA" />
-                        <stop offset="1" stop-color="#0EA5E9" />
+                        <stop stopColor="#A78BFA" />
+                        <stop offset="1" stopColor="#0EA5E9" />
                       </linearGradient>
                     </defs>
                   </svg>
+                  </>
     );
 }
 const HeartSVG = () => {
     return (
+        <>
         <svg
         width="24"
         height="22"
@@ -78,15 +83,17 @@ const HeartSVG = () => {
             y2="21.2621"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#A78BFA" />
-            <stop offset="1" stop-color="#0EA5E9" />
+            <stop stopColor="#A78BFA" />
+            <stop offset="1" stopColor="#0EA5E9" />
           </linearGradient>
         </defs>
       </svg>
+      </>
     );
 }
 const LetterSVG = () => {
     return (
+        <>
         <svg
                       width="24"
                       height="18"
@@ -107,15 +114,17 @@ const LetterSVG = () => {
                           y2="18"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#A78BFA" />
-                          <stop offset="1" stop-color="#0EA5E9" />
+                          <stop stopColor="#A78BFA" />
+                          <stop offset="1" stopColor="#0EA5E9" />
                         </linearGradient>
                       </defs>
                     </svg>
+                    </>
     );
 }
 const LogInSVG = () => {
     return (
+        <>
         <svg
                       width="24"
                       height="22"
@@ -136,15 +145,17 @@ const LogInSVG = () => {
                           y2="21.5"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#A78BFA" />
-                          <stop offset="1" stop-color="#0EA5E9" />
+                          <stop stopColor="#A78BFA" />
+                          <stop offset="1" stopColor="#0EA5E9" />
                         </linearGradient>
                       </defs>
                     </svg>
+                    </>
     );
 }
 const LogOutSVG = () => {
     return (
+        <>
         <svg
                       width="24"
                       height="22"
@@ -165,15 +176,17 @@ const LogOutSVG = () => {
                           y2="21.5005"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#A78BFA" />
-                          <stop offset="1" stop-color="#0EA5E9" />
+                          <stop stopColor="#A78BFA" />
+                          <stop offset="1" stopColor="#0EA5E9" />
                         </linearGradient>
                       </defs>
                     </svg>
+                    </>
     );
 }
 const CancelSVG = () => {
     return (
+        <>
         <svg
                     width="24"
                     height="24"
@@ -194,11 +207,12 @@ const CancelSVG = () => {
                         y2="24"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#A78BFA" />
-                        <stop offset="1" stop-color="#0EA5E9" />
+                        <stop stopColor="#A78BFA" />
+                        <stop offset="1" stopColor="#0EA5E9" />
                       </linearGradient>
                     </defs>
                   </svg>
+                  </>
     );
 }
 
