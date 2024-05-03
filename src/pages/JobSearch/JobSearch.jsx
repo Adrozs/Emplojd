@@ -11,12 +11,12 @@ function JobSearch() {
   const { query } = state || {};
   const [searchWord, setSearchWord] = useState("");
   const [sortedJobs, setSortedJobs] = useState([]);
-  const [sortBy, setSortBy] = useState("date"); // Default sorting by date
+  const [sortBy, setSortBy] = useState("date");
 
   useEffect(() => {
     if (state && state.jobsData) {
       setJobs(state.jobsData);
-      setSortedJobs(state.jobsData); // Initialize sorted jobs with initial data
+      setSortedJobs(state.jobsData);
     }
   }, [state]);
 
@@ -36,7 +36,6 @@ function JobSearch() {
   }, [searchWord]);
 
   useEffect(() => {
-    // Apply sorting whenever jobs or sortBy changes
     sortJobs();
   }, [jobs, sortBy]);
 
