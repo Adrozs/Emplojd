@@ -131,8 +131,8 @@ namespace ChasGPT_Backend
             // Note: Don't forget to add ".RequireAuthorization()" to your endpoints! Without it you can access them without the token.
 
             // User account 
-            app.MapPost("/login", UserService.LoginAsync);
-            app.MapPost("/create-account", UserService.CreateAccountAsync);
+            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
+            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
             app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
