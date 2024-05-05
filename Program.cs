@@ -1,4 +1,6 @@
 
+using ChasGPT_Backend.Services;
+using OpenAI_API;
 using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Services;
 using ChasGPT_Backend.Data;
@@ -20,6 +22,8 @@ namespace ChasGPT_Backend
 
             // Add services to the container.
 
+            DotNetEnv.Env.Load();
+          
             // Setup database context and connection string here
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -70,6 +74,11 @@ namespace ChasGPT_Backend
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
 
+
+            // Add services to the container.
+            builder.Services.AddAuthorization();
+            builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
+            
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -125,6 +134,7 @@ namespace ChasGPT_Backend
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
 
             // ENDPOINTS
@@ -144,7 +154,6 @@ namespace ChasGPT_Backend
                 return await JobAdService.SearchJob(query, region, page ?? 1, jobAdRepository);
             }).RequireAuthorization();
             app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
-
 
             app.Run();
         }
