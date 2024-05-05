@@ -3,12 +3,14 @@ import FormRow from "./FormRow";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, registerUser } from "../features/user/userSlice";
 
 const initalState = {
   email: "",
-  confirmEmail: "",
+  emailConfirmed: "",
   password: "",
-  confirmPassword: "",
+  passwordConfirmed: "",
   isMember: true,
 };
 
@@ -16,6 +18,10 @@ const AuthForm = () => {
   const [values, setValues] = useState(initalState);
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  /* Från userSlice och redux */
+  const { isLoading, user } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -28,20 +34,32 @@ const AuthForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword, isMember } = values;
+    const { email, emailConfirmed, password, passwordConfirmed, isMember } =
+      values;
     if (!email || !password) {
       toast.error("Email och lösenord är obligatoriska.");
       return;
     }
 
-    if (!isMember && (email !== confirmEmail || password !== confirmPassword)) {
+    if (
+      !isMember &&
+      (email !== emailConfirmed || password !== passwordConfirmed)
+    ) {
       toast.error("Bekräftelse av email eller lösenord matchar inte.");
       return;
     }
 
-    login(email, password);
-    toast.success(isMember ? "Inloggning lyckades!" : "Registrering lyckades!");
-    navigate("/profile");
+    if (isMember) {
+      dispatch(loginUser({ email: email, password }));
+      login(email, password);
+      toast.success("Inloggning lyckades!");
+      // navigate("/profile");
+    }
+    dispatch(
+      registerUser({ email, emailConfirmed, password, passwordConfirmed })
+    );
+    toast.success("Registrering lyckades!");
+    // navigate("/profile");
   };
 
   const toggleForm = () => {
@@ -61,9 +79,9 @@ const AuthForm = () => {
       {!values.isMember && (
         <FormRow
           type="email"
-          name="confirmEmail"
+          name="emailConfirmed"
           labelText="Bekräfta Email"
-          value={values.confirmEmail}
+          value={values.emailConfirmed}
           handleChange={handleChange}
           placeholder="confirm.email@email.com"
         />
@@ -79,9 +97,9 @@ const AuthForm = () => {
       {!values.isMember && (
         <FormRow
           type="password"
-          name="confirmPassword"
+          name="passwordConfirmed"
           labelText="Bekräfta Lösenord"
-          value={values.confirmPassword}
+          value={values.passwordConfirmed}
           handleChange={handleChange}
           placeholder="●●●●●●●●●●●●"
         />
