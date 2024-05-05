@@ -7,10 +7,9 @@ function SignIn() {
   return (
     <>
       <div
-        className="flex flex-col"
-        style={{ minHeight: "calc(100vh - 65px)" }}
+        className="flex flex-col h-screen"
       >
-        <div className="flex-grow bg-gradient-to-r-custom">
+        <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
           <Header>
             {" "}
             <h1 className="text-xl font-Glockenspiel cursor-pointer text-white">
@@ -18,9 +17,7 @@ function SignIn() {
             </h1>
           </Header>
         </div>
-        <div className="my-8 ">
           <LoginPage />
-        </div>
       </div>
     </>
   );

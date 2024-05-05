@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const initalState = {
-  name: "",
-  lastname: "",
   email: "",
+  confirmEmail: "",
   password: "",
+  confirmPassword: "",
   isMember: true,
 };
 
@@ -20,27 +20,28 @@ const AuthForm = () => {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setValues(prevValues => ({
+    setValues((prevValues) => ({
       ...prevValues,
-      [name]: value
+      [name]: value,
     }));
   };
-  
+
   const onSubmit = (e) => {
     e.preventDefault();
-    const { name, email, password, isMember } = values;
-    if (!email || !password || (!isMember && !name)) {
-      toast.error("Klart du får logga in <3");
-      login();
-      navigate("/profile");
-      return;
-    } else {
-      toast.success("Välkommen in " + email);
-      login();
-      navigate("/profile");
-
+    const { email, confirmEmail, password, confirmPassword, isMember } = values;
+    if (!email || !password) {
+      toast.error("Email och lösenord är obligatoriska.");
       return;
     }
+
+    if (!isMember && (email !== confirmEmail || password !== confirmPassword)) {
+      toast.error("Bekräftelse av email eller lösenord matchar inte.");
+      return;
+    }
+
+    login(email, password);
+    toast.success(isMember ? "Inloggning lyckades!" : "Registrering lyckades!");
+    navigate("/profile");
   };
 
   const toggleForm = () => {
@@ -48,35 +49,25 @@ const AuthForm = () => {
   };
 
   return (
-    <form className="m-5" onSubmit={onSubmit}>
-      {!values.isMember && (
-        <>
-          <FormRow
-            type="text"
-            name="name"
-            labelText="Förnamn"
-            value={values.name}
-            handleChange={handleChange}
-            placeholder="Förnamn"
-          />
-          <FormRow
-            type="text"
-            name="lastname"
-            labelText="Efternamn"
-            value={values.lastname}
-            handleChange={handleChange}
-            placeholder="Efternamn"
-          />
-        </>
-      )}
+    <form className="m-5 my-12" onSubmit={onSubmit}>
       <FormRow
         type="email"
         name="email"
         labelText="Email"
         value={values.email}
         handleChange={handleChange}
-        placeholder="@"
+        placeholder="your.email@email.com"
       />
+      {!values.isMember && (
+        <FormRow
+          type="email"
+          name="confirmEmail"
+          labelText="Bekräfta Email"
+          value={values.confirmEmail}
+          handleChange={handleChange}
+          placeholder="confirm.email@email.com"
+        />
+      )}
       <FormRow
         type="password"
         name="password"
@@ -85,32 +76,42 @@ const AuthForm = () => {
         handleChange={handleChange}
         placeholder="●●●●●●●●●●●●"
       />
-
-      <div className="flex justify-between pb-6">
-        <div className="flex">
-          <input type="checkbox" className="accent-[#0783F6] size-6 mr-2" />
-          <h6 className="text-md">KOM IHÅG MIG</h6>
+      {!values.isMember && (
+        <FormRow
+          type="password"
+          name="confirmPassword"
+          labelText="Bekräfta Lösenord"
+          value={values.confirmPassword}
+          handleChange={handleChange}
+          placeholder="●●●●●●●●●●●●"
+        />
+      )}
+      <div className="flex justify-end pb-6">
+        <div className="underline underline-offset-2 text-[#045199]">
+          Glömt ditt konto?
         </div>
-        <p className="text-md underline underline-offset-2 text-[#045199]">
-          GLÖMT LÖSENORD
-        </p>
       </div>
-
       <div className="flex flex-col gap-4">
         <button
-          className="w-full bg-[#0783F6] h-14 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC]"
+          className="w-full bg-[#0783F6] h-14 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-2"
           type="submit"
         >
           {!values.isMember ? "SKAPA DITT KONTO" : "LOGGA IN"}
         </button>
-        <div className="flex justify-center text-xl">eller</div>
-        <button
-          className="w-full border-[#0783F6] text-[#0783F6] text-xl border-2 rounded-xl h-14 hover:border-[#045199] hover:text-[#045199] active:border-[#066DCC] active:text-[#066DCC]"
-          type="button"
-          onClick={toggleForm}
-        >
-          {!values.isMember ? "LOGGA IN ISTÄLLET" : "SKAPA KONTO"}
-        </button>
+        <div className="flex justify-center gap-4">
+          <div>
+            {!values.isMember
+              ? "Har du redan ett konto?"
+              : "Har du inget konto?"}
+          </div>
+          <button
+            className="text-[#066DCC] underline underline-offset-2"
+            type="button"
+            onClick={toggleForm}
+          >
+            {!values.isMember ? "Logga In" : "Skapa konto"}
+          </button>
+        </div>
       </div>
     </form>
   );
