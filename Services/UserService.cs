@@ -1,4 +1,4 @@
-﻿using ChasGPT_Backend.Repositories;
+﻿using ChasGPT_Backend.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChasGPT_Backend.Services
