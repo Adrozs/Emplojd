@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
 
-namespace ChasGPT_Backend.Repositories
+namespace ChasGPT_Backend.Repository
 {
 
     public interface IUserRepository
@@ -15,7 +15,7 @@ namespace ChasGPT_Backend.Repositories
     public class UserRepository : IUserRepository
     {
         // No dbContext needed atm as UserManager interacts with db for user management purposes
-        // Might be needed to ad for other stuff not covered by UserManager - double check documentation before changing.
+        // Might be needed to ad for other stuff not covered by UserManager - float check documentation before changing.
 
         private readonly UserManager<User> _userManager;
 
@@ -30,10 +30,10 @@ namespace ChasGPT_Backend.Repositories
             // Check login details and throw exceptions if wrong
             await ValidateLoginDetailsAsync(email, password, passwordConfirm);
 
-            User user = new User 
-            { 
+            User user = new User
+            {
                 UserName = email,
-                Email = email 
+                Email = email
             };
 
             // Creates and hashes password for user in db
