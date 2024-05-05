@@ -59,6 +59,18 @@ namespace ChasGPT_Backend
                     };
                 });
 
+
+            // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("OpenCorsPolicy", builder =>
+                    builder.AllowAnyOrigin()  // Allows requests from any source
+                           .AllowAnyMethod()  // Allows all HTTP methods
+                           .AllowAnyHeader()); // Allows any header
+            });
+
+
+
             // Add authorization
             builder.Services.AddAuthorization();
 
@@ -120,6 +132,11 @@ namespace ChasGPT_Backend
             }
 
             app.UseHttpsRedirection();
+
+
+            // Apply the CORS policy
+            app.UseCors("OpenCorsPolicy");
+
 
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
             app.UseAuthentication();
