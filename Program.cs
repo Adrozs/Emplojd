@@ -33,7 +33,7 @@ namespace ChasGPT_Backend
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("OpenCorsPolicy", builder =>
-                    builder.WithOrigins("http://localhost:5173", "http://localhost:54687")
+                    builder.WithOrigins("http://localhost:5173", "http://localhost:54687", "https://localhost:5173", "https://localhost:54687")
                            .AllowAnyMethod()  // Allows all HTTP methods
                            .AllowAnyHeader() // Allows any header
                            .AllowCredentials()); // Allows for credentials (body, header, token etc) to be sent in
@@ -140,7 +140,7 @@ namespace ChasGPT_Backend
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
 
             // Apply the CORS policy
@@ -151,7 +151,6 @@ namespace ChasGPT_Backend
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
 
             // ENDPOINTS
@@ -163,8 +162,11 @@ namespace ChasGPT_Backend
             app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
-            // Job search
+            // Cover letter
+            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
+
+            // Job search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
             app.MapGet("/search", async (string query, int? region, int? page, IJobAdRepository jobAdRepository) =>
             {
