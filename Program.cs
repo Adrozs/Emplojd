@@ -6,6 +6,7 @@ using ChasGPT_Backend.Services;
 using ChasGPT_Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ChasGPT_Backend.Repository;
 using ChasGPT_Backend.Repositories;
 
 namespace ChasGPT_Backend
