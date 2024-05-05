@@ -88,7 +88,6 @@ namespace ChasGPT_Backend
 
 
             // Add services to the container.
-            builder.Services.AddAuthorization();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
             
 
