@@ -28,6 +28,19 @@ namespace ChasGPT_Backend
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+            // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("OpenCorsPolicy", builder =>
+                    builder.WithOrigins("http://localhost:5173", "http://localhost:54687")
+                           .AllowAnyMethod()  // Allows all HTTP methods
+                           .AllowAnyHeader() // Allows any header
+                           .AllowCredentials()); // Allows for credentials (body, header, token etc) to be sent in
+                           
+            });
+
+
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
@@ -51,7 +64,7 @@ namespace ChasGPT_Backend
                 .AddJwtBearer(options =>
                 {
                     options.SaveToken = true; // Allows the server to save the token for the duration of the request
-                    options.RequireHttpsMetadata = true; // Enforces HTTPS so tokens aren't transfered over unsecure connections
+                    options.RequireHttpsMetadata = false; // Enforces HTTPS so tokens aren't transfered over unsecure connections (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
                     options.TokenValidationParameters = new TokenValidationParameters // The rules of which authorization will check
                     {
                         ValidateIssuer = true,
@@ -62,18 +75,6 @@ namespace ChasGPT_Backend
                         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Secret"])) // Symetric key lets the system know the same secret is used for both signing and verifying the JWT. Then encodes it into bytes
                     };
                 });
-
-
-            // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("OpenCorsPolicy", builder =>
-                    builder.AllowAnyOrigin()  // Allows requests from any source
-                           .AllowAnyMethod()  // Allows all HTTP methods
-                           .AllowAnyHeader()); // Allows any header
-            });
-
-
 
             // Add authorization
             builder.Services.AddAuthorization();
