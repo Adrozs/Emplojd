@@ -16,7 +16,13 @@ function JobItem({ job, children }) {
   function handleLike() {
     setIsLiked((like) => !like);
     if (!isLiked) {
-      sendLikeData(job.id, job.headline);
+      sendLikeData(
+        job.id,
+        job.headline,
+        job.employer.name,
+        job.occupation.label,
+        job.logo_url
+      );
     }
   }
 

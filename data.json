@@ -19,12 +19,19 @@
   ],
   "likes": [
     {
-      "id": "28778869",
-      "headline": "Web Senior Software Development Engineer"
+      "id": "28780522",
+      "headline": "Application Security Engineer",
+      "employer": "Schibsted Sverige AB",
+      "occupation": "Säkerhetsanalytiker, IT",
+      "logo": null
     },
     {
       "id": "28779686",
-      "headline": "SW TEST LEAD TO INCOAX NETWORKS"
+      "headline": "SW TEST LEAD TO INCOAX NETWORKS",
+      "employer": "Nexer Recruit AB",
+      "occupation": "Testledare/QA lead",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5569754970/logotyper/logo.png"
     }
-  ]
+  ],
+  "profile": []
 }

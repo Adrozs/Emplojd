@@ -10,7 +10,6 @@ function SavedJobs() {
   useEffect(() => {
     getLikeData().then((data) => {
       setLikes(data);
-      console.log(likes);
     });
   }, []);
   return (
@@ -42,13 +41,19 @@ function SavedJobs() {
         {likes &&
           likes.map((data) => {
             return (
-              <div className="flex ms-10 mb-10 ml-20">
+              <div className="flex ms-10 mb-10 ml-20" key={data.id}>
                 <div className="flex items-center mr-12 ">
                   <MdWork className="text-6xl" />
                   <div className="ml-8">
-                    <p className="bg-stone-300 pr-40 mb-1">TITLE</p>
-                    <p className="bg-stone-300 pr-40 mb-1">{data.headline}</p>
-                    <p className="bg-stone-300 pr-40 mb-1">TEXT</p>
+                    <p className="bg-stone-300  mb-1 w-[250px]">
+                      {data.employer}
+                    </p>
+                    <p className="bg-stone-300  mb-1 w-[250px]">
+                      {data.headline}
+                    </p>
+                    <p className="bg-stone-300  mb-1 w-[250px]">
+                      {data.occupation}
+                    </p>
                   </div>
                 </div>
               </div>
