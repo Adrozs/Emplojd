@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { sendLikeData } from "../../utils/jsonserver";
+import { sendLikeData, getLikeData } from "../../utils/jsonserver";
 
 function JobItem({ job, children }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
@@ -11,6 +11,11 @@ function JobItem({ job, children }) {
     const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     setDaySincePosted(differenceInDays);
+
+    getLikeData().then((likedJobs) => {
+      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
+      setIsLiked(liked);
+    });
   }, [job]);
 
   function handleLike() {

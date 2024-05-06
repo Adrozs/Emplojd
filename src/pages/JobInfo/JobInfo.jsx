@@ -1,10 +1,23 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
+
+import { sendLikeData, getLikeData } from "../../utils/jsonserver";
 
 function JobInfo() {
   const job = useLoaderData();
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    // Hämta gillade annonser när komponenten monteras
+    const fetchLikedJobs = async () => {
+      const likedJobs = await getLikeData();
+      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
+      setIsLiked(liked);
+    };
+    fetchLikedJobs();
+  }, [job]);
 
   const isHTML = (str) => {
     const doc = new DOMParser().parseFromString(str, "text/html");
@@ -33,6 +46,19 @@ function JobInfo() {
     [job]
   );
 
+  const handleLike = () => {
+    setIsLiked((like) => !like);
+    if (!isLiked) {
+      sendLikeData(
+        job.id,
+        job.headline,
+        job.employer.name,
+        job.occupation.label,
+        job.logo_url
+      );
+    }
+  };
+
   return (
     <>
       <HeaderSearchJob>
@@ -45,7 +71,11 @@ function JobInfo() {
             <div className="bg-white pb-4 pt-1 mt-8 px-1 rounded-[10px]">
               <div className="flex w-full justify-between items-center">
                 <a onClick={handleBack}>Tillbaka till resultaten</a>
-                <img src="/like-heart.svg" alt="" />
+                <img
+                  src={isLiked ? "/liked-heart.svg" : "/like-heart.svg"}
+                  alt="gilla knapp"
+                  onClick={handleLike}
+                />
               </div>
               <div className="w-full flex flex-col  text-center justify-center ">
                 <h1 className="text-2xl font-semibold text-stone-700">
