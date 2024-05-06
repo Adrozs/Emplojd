@@ -21,7 +21,6 @@ function getLikeData() {
   return axios
     .get("http://localhost:3001/likes")
     .then((response) => {
-      console.log("Hämtade gillade annonser", response.data);
       return response.data;
     })
     .catch((error) => {
@@ -30,4 +29,17 @@ function getLikeData() {
     });
 }
 
-export { sendLikeData, getLikeData };
+function deleteLikeData(id) {
+  return axios
+    .delete(`http://localhost:3001/likes/${id}`)
+    .then((response) => {
+      console.log("Annonsen har tagits bort", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error", error);
+      return null;
+    });
+}
+
+export { sendLikeData, getLikeData, deleteLikeData };

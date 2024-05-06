@@ -3,14 +3,17 @@ import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useState } from "react";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 
-import { sendLikeData, getLikeData } from "../../utils/jsonserver";
+import {
+  sendLikeData,
+  getLikeData,
+  deleteLikeData,
+} from "../../utils/jsonserver";
 
 function JobInfo() {
   const job = useLoaderData();
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    // Hämta gillade annonser när komponenten monteras
     const fetchLikedJobs = async () => {
       const likedJobs = await getLikeData();
       const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
@@ -56,6 +59,8 @@ function JobInfo() {
         job.occupation.label,
         job.logo_url
       );
+    } else if (isLiked) {
+      deleteLikeData(job.id);
     }
   };
 

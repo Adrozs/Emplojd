@@ -19,11 +19,11 @@
   ],
   "likes": [
     {
-      "id": "28780522",
-      "headline": "Application Security Engineer",
-      "employer": "Schibsted Sverige AB",
-      "occupation": "Säkerhetsanalytiker, IT",
-      "logo": null
+      "id": "28777627",
+      "headline": "Systemutvecklare till AFRY i Linköping",
+      "employer": "AFRY AB",
+      "occupation": "Systemutvecklare/Programmerare",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/87584865/logotyper/logo.png"
     },
     {
       "id": "28779686",
@@ -31,20 +31,6 @@
       "employer": "Nexer Recruit AB",
       "occupation": "Testledare/QA lead",
       "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5569754970/logotyper/logo.png"
-    },
-    {
-      "id": "28779502",
-      "headline": "Seniora utvecklare till Venture Consulting bolag",
-      "employer": "Pinetree AB",
-      "occupation": "Systemutvecklare/Programmerare",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5590167044/logotyper/logo.png"
-    },
-    {
-      "id": "28777627",
-      "headline": "Systemutvecklare till AFRY i Linköping",
-      "employer": "AFRY AB",
-      "occupation": "Systemutvecklare/Programmerare",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/87584865/logotyper/logo.png"
     }
   ],
   "profile": []

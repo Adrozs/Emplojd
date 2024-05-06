@@ -1,9 +1,22 @@
 import { useEffect, useState } from "react";
-import { sendLikeData, getLikeData } from "../../utils/jsonserver";
+import {
+  sendLikeData,
+  getLikeData,
+  deleteLikeData,
+} from "../../utils/jsonserver";
 
 function JobItem({ job, children }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    const fetchLikedJobs = async () => {
+      const likedJobs = await getLikeData();
+      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
+      setIsLiked(liked);
+    };
+    fetchLikedJobs();
+  }, [job, getLikeData]);
 
   useEffect(() => {
     const todaysDate = new Date();
@@ -11,11 +24,6 @@ function JobItem({ job, children }) {
     const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     setDaySincePosted(differenceInDays);
-
-    getLikeData().then((likedJobs) => {
-      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
-      setIsLiked(liked);
-    });
   }, [job]);
 
   function handleLike() {
@@ -28,6 +36,8 @@ function JobItem({ job, children }) {
         job.occupation.label,
         job.logo_url
       );
+    } else if (isLiked) {
+      deleteLikeData(job.id);
     }
   }
 
