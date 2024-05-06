@@ -1,8 +1,18 @@
 import { Link } from "react-router-dom";
 import { MdWork } from "react-icons/md";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
+import { getLikeData } from "../../utils/jsonserver";
+import { useState, useEffect } from "react";
 
 function SavedJobs() {
+  const [likes, setLikes] = useState([]);
+
+  useEffect(() => {
+    getLikeData().then((data) => {
+      setLikes(data);
+      console.log(likes);
+    });
+  }, []);
   return (
     <>
       <HeaderOtherPages />
@@ -29,49 +39,21 @@ function SavedJobs() {
           <h6 className="mt-2  font-semi-bold text-xl ml-2">ANSÖKTA JOBB</h6>
         </div>
 
-        <div className="flex ms-10 mb-10 ml-20">
-          <div className="flex items-center mr-12 ">
-            <MdWork className="text-6xl" />
-            <div className="ml-8">
-              <p className="bg-stone-300  pr-40 mb-1">TITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">TEXT</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex ms-10 mb-10 ml-20">
-          <div className="flex items-center mr-12 ">
-            <MdWork className="text-6xl" />
-            <div className="ml-8">
-              <p className="bg-stone-300  pr-40 mb-1">TITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">TEXT</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex ms-10 mb-10 ml-20">
-          <div className="flex items-center mr-12 ">
-            <MdWork className="text-6xl" />
-            <div className="ml-8">
-              <p className="bg-stone-300  pr-40 mb-1">TITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">TEXT</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex ms-10 mb-5 ml-20">
-          <div className="flex items-center mr-12 ">
-            <MdWork className="text-6xl" />
-            <div className="ml-8">
-              <p className="bg-stone-300  pr-40 mb-1">TITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">SUBTITLE</p>
-              <p className="bg-stone-300  pr-40 mb-1">TEXT</p>
-            </div>
-          </div>
-        </div>
+        {likes &&
+          likes.map((data) => {
+            return (
+              <div className="flex ms-10 mb-10 ml-20">
+                <div className="flex items-center mr-12 ">
+                  <MdWork className="text-6xl" />
+                  <div className="ml-8">
+                    <p className="bg-stone-300 pr-40 mb-1">TITLE</p>
+                    <p className="bg-stone-300 pr-40 mb-1">{data.headline}</p>
+                    <p className="bg-stone-300 pr-40 mb-1">TEXT</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
 
         <div className="flex mb-10">
           <Link
@@ -85,4 +67,20 @@ function SavedJobs() {
     </>
   );
 }
+
+function SavedItem({ like }) {
+  return (
+    <div className="flex ms-10 mb-10 ml-20">
+      <div className="flex items-center mr-12 ">
+        <MdWork className="text-6xl" />
+        <div className="ml-8">
+          <p className="bg-stone-300 pr-40 mb-1">TITLE</p>
+          <p className="bg-stone-300 pr-40 mb-1">{like.headline}</p>
+          <p className="bg-stone-300 pr-40 mb-1">TEXT</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default SavedJobs;
