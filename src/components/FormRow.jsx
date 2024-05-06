@@ -48,11 +48,8 @@ function FormRow({
     setIsTyping(false);
     const newValue = value;
     if (
-      (name.toLowerCase() === "emailconfirmed" ||
-        name === "passwordConfirmed") &&
-      (name.toLowerCase() === "emailconfirmed"
-        ? compareValue.toLowerCase() !== newValue.toLowerCase()
-        : compareValue !== newValue)
+      (name === "emailconfirmed" && compareValue.toLowerCase() !== newValue.toLowerCase()) ||
+      (name === "passwordConfirmed" && compareValue !== newValue)
     ) {
       setIsValid(false);
     }
