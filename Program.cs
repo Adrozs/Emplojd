@@ -28,18 +28,18 @@ namespace ChasGPT_Backend
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Commented out add cors to test if it works to change it up so we do "UseCors" further down after app has been built instead?
+            builder.Services.AddCors(); //if below code is brought back remove this line
+            //// Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("OpenCorsPolicy", builder =>
+            //        builder.WithOrigins("http://localhost:5173", "http://localhost:54687", "https://localhost:5173", "https://localhost:54687")
+            //               .AllowAnyMethod()  // Allows all HTTP methods
+            //               .AllowAnyHeader() // Allows any header
+            //               .AllowCredentials()); // Allows for credentials (body, header, token etc) to be sent in
 
-            // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("OpenCorsPolicy", builder =>
-                    builder.WithOrigins("http://localhost:5173", "http://localhost:54687", "https://localhost:5173", "https://localhost:54687")
-                           .AllowAnyMethod()  // Allows all HTTP methods
-                           .AllowAnyHeader() // Allows any header
-                           .AllowCredentials()); // Allows for credentials (body, header, token etc) to be sent in
-                           
-            });
-
+            //});
 
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
@@ -133,6 +133,19 @@ namespace ChasGPT_Backend
 
             var app = builder.Build();
 
+            // IF bring back builder.AddCors remove this cors code block
+            // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
+            app.UseCors(builder =>
+            {
+                builder
+                      .WithOrigins("https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173")
+                      .SetIsOriginAllowedToAllowWildcardSubdomains()
+                      .AllowAnyHeader()
+                      .AllowCredentials()
+                      .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS");
+            });
+
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -172,6 +185,7 @@ namespace ChasGPT_Backend
             {
                 return await JobAdService.SearchJob(query, region, page ?? 1, jobAdRepository);
             }).RequireAuthorization();
+
             app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
 
             app.Run();
