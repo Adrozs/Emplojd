@@ -1,6 +1,7 @@
 ﻿using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace ChasGPT_Backend.Repositories
 {
@@ -9,7 +10,7 @@ namespace ChasGPT_Backend.Repositories
     {
         public Task<bool> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm);
         public Task<string> LoginAsync(string email, string password);
-        public Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm);
+        public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string newPasswordConfirm, ClaimsPrincipal currentUser);
     }
 
     public class UserRepository : IUserRepository
@@ -74,15 +75,28 @@ namespace ChasGPT_Backend.Repositories
             return token;
         }
 
-        public async Task<bool> ChangePasswordAsync(string email, string password, string newPassword, string newPasswordConfirm)
+        public async Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string newPasswordConfirm, ClaimsPrincipal currentUser)
         {
+            // Get the email from the JWT claims
+            string email = currentUser.FindFirst(ClaimTypes.Email)?.Value; 
+            
+            if (string.IsNullOrEmpty(email))
+                throw new InvalidOperationException("No email found in token claims.");
+
+
             User user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
-                throw new InvalidOperationException("No matching user found");
+                throw new InvalidOperationException("No matching user found.");
+
+            if (newPassword != newPasswordConfirm)
+                throw new InvalidOperationException("Passwords doesn't match.");
+
+            if (currentPassword == newPassword)
+                throw new InvalidOperationException("New password can't be the same as old password.");
 
             // Check if current password is correct and if yes change to the new password
-            IdentityResult result = await _userManager.ChangePasswordAsync(user, password, newPassword);
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
 
             // If the result wasn't successful throw exception with details as to why
             if (!result.Succeeded)

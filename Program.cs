@@ -28,6 +28,10 @@ namespace ChasGPT_Backend
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Add CORS services
+            builder.Services.AddCors(); 
+
+
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
@@ -51,7 +55,7 @@ namespace ChasGPT_Backend
                 .AddJwtBearer(options =>
                 {
                     options.SaveToken = true; // Allows the server to save the token for the duration of the request
-                    options.RequireHttpsMetadata = true; // Enforces HTTPS so tokens aren't transfered over unsecure connections
+                    options.RequireHttpsMetadata = false; // Enforces HTTPS so tokens aren't transfered over unsecure connections (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
                     options.TokenValidationParameters = new TokenValidationParameters // The rules of which authorization will check
                     {
                         ValidateIssuer = true,
@@ -76,7 +80,6 @@ namespace ChasGPT_Backend
 
 
             // Add services to the container.
-            builder.Services.AddAuthorization();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
             
 
@@ -121,6 +124,18 @@ namespace ChasGPT_Backend
 
             var app = builder.Build();
 
+            // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
+            app.UseCors(builder =>
+            {
+                builder
+                      .WithOrigins("https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173")
+                      .SetIsOriginAllowedToAllowWildcardSubdomains()
+                      .AllowAnyHeader()
+                      .AllowCredentials()
+                      .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS");
+            });
+
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -128,31 +143,39 @@ namespace ChasGPT_Backend
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
+
+
+            // Apply the CORS policy
+            app.UseCors("OpenCorsPolicy");
+
 
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
 
             // ENDPOINTS
             // Note: Don't forget to add ".RequireAuthorization()" to your endpoints! Without it you can access them without the token.
 
             // User account 
-            app.MapPost("/login", UserService.LoginAsync);
-            app.MapPost("/create-account", UserService.CreateAccountAsync);
+            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
+            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
             app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
-            // Job search
+            // Cover letter
+            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
+
+            // Job search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
             app.MapGet("/search", async (string query, int? region, int? page, IJobAdRepository jobAdRepository) =>
             {
                 return await JobAdService.SearchJob(query, region, page ?? 1, jobAdRepository);
             }).RequireAuthorization();
+
             app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
 
             app.Run();

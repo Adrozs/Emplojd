@@ -1,4 +1,5 @@
-﻿using ChasGPT_Backend.Repositories;
+﻿using Azure.Core;
+using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels___DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,14 +7,14 @@ namespace ChasGPT_Backend.Services
 {
     public class UserService
     {
-        public static async Task<IResult> CreateAccountAsync([FromBody] CreateAccountRequestDto  createAccReq, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> CreateAccountAsync([FromBody] CreateAccountRequestDto request, [FromServices] IUserRepository userRepository)
         {
             try
             {
-                if (createAccReq == null)
+                if (request == null)
                     return Results.BadRequest("Invalid request data.");
 
-                bool success = await userRepository.CreateAccountAsync(createAccReq.Email, createAccReq.EmailConfirmed, createAccReq.Password, createAccReq.PasswordConfirmed); 
+                bool success = await userRepository.CreateAccountAsync(request.Email, request.EmailConfirmed, request.Password, request.PasswordConfirmed); 
                 
                 if (success)
                 {
@@ -36,14 +37,14 @@ namespace ChasGPT_Backend.Services
             }
         }
 
-        public static async Task<IResult> LoginAsync([FromBody] LoginRequestDto loginReq, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> LoginAsync([FromBody] LoginRequestDto request, [FromServices] IUserRepository userRepository)
         {
             try
             {
-                if (loginReq == null)
+                if (request == null)
                     return Results.BadRequest("Invalid request data.");
 
-                string token = await userRepository.LoginAsync(loginReq.Email, loginReq.Password);
+                string token = await userRepository.LoginAsync(request.Email, request.Password);
                 return Results.Ok(new { Token = token });
 
             }
@@ -59,14 +60,14 @@ namespace ChasGPT_Backend.Services
             }
         }
 
-        public static async Task<IResult> ChangePasswordAsync([FromBody] ChangePasswordRequestDto changePassReq, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> ChangePasswordAsync([FromBody] ChangePasswordRequestDto request, [FromServices] IUserRepository userRepository, HttpContext httpContext)
         {
             try
             {
-                if (changePassReq == null)
+                if (request == null)
                     return Results.BadRequest("Invalid request data.");
 
-                bool success = await userRepository.ChangePasswordAsync(changePassReq.Email, changePassReq.Password, changePassReq.NewPassword, changePassReq.NewPasswordConfirm);
+                bool success = await userRepository.ChangePasswordAsync(request.CurrentPassword, request.NewPassword, request.NewPasswordConfirm, httpContext.User);
 
                 if (success)
                 {
