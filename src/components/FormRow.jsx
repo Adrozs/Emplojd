@@ -48,11 +48,11 @@ function FormRow({
     setIsTyping(false);
     const newValue = value;
     if (
-      (name === "emailconfirmed" && compareValue.toLowerCase() !== newValue.toLowerCase()) ||
-      (name === "passwordConfirmed" && compareValue !== newValue)
-    ) {
-      setIsValid(false);
-    }
+  (name === "emailConfirmed" && compareValue.toLowerCase() !== newValue.toLowerCase()) ||
+  (name === "passwordConfirmed" && compareValue !== newValue)
+) {
+  setIsValid(false);
+}
   };
 
   const inputClassName = () => {
