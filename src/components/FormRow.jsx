@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { CheckBoxSVG, ErrorBox, TypingSVG } from "./Icons/FormRowSvg";
 
-function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
+function FormRow({
+  type,
+  name,
+  value,
+  handleChange,
+  labelText,
+  placeholder,
+  compareValue,
+}) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -38,6 +46,16 @@ function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
     const currentIsValid = validateInput(value);
     setIsValid(currentIsValid);
     setIsTyping(false);
+    const newValue = value;
+    if (
+      (name.toLowerCase() === "emailconfirmed" ||
+        name === "passwordConfirmed") &&
+      (name.toLowerCase() === "emailconfirmed"
+        ? compareValue.toLowerCase() !== newValue.toLowerCase()
+        : compareValue !== newValue)
+    ) {
+      setIsValid(false);
+    }
   };
 
   const inputClassName = () => {
@@ -66,7 +84,10 @@ function FormRow({ type, name, value, handleChange, labelText, placeholder }) {
           value={value}
           onChange={handleInputChange}
           onBlur={handleBlur}
-          onClick={setIsTyping}
+          onClick={() => {
+            setIsTyping(true);
+            setIsTouched(false);
+          }}
           placeholder={placeholder}
           className={inputClassName()}
         />

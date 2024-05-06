@@ -112,6 +112,7 @@ const AuthForm = () => {
           value={values.emailConfirmed}
           handleChange={handleChange}
           placeholder="confirm.email@email.com"
+          compareValue={email.value}
         />
       )}
       <FormRow
@@ -131,6 +132,7 @@ const AuthForm = () => {
           value={values.passwordConfirmed}
           handleChange={handleChange}
           placeholder="●●●●●●●●●●●●"
+          compareValue={password.value}
         />
       )}
       <div className="flex justify-end pb-6">
