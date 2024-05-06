@@ -1,13 +1,24 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { SearchSVG, ProfileSVG, HeartSVG, LetterSVG, LogInSVG, LogOutSVG, CancelSVG } from './Icons/MenySvg';
+import {
+  SearchSVG,
+  ProfileSVG,
+  HeartSVG,
+  LetterSVG,
+  LogInSVG,
+  LogOutSVG,
+  CancelSVG,
+} from "./Icons/MenySvg";
+import { removeUserFromLocalStorage } from "../utils/localStorage";
+removeUserFromLocalStorage;
 
 function Modal({ onClose, menu }) {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
+    removeUserFromLocalStorage();
     logout();
     navigate("/signin");
     console.log("User signed out.");
@@ -45,17 +56,13 @@ function Modal({ onClose, menu }) {
                 <NavItem>
                   <SearchSVG />{" "}
                   <Link to="/joblist">
-                    <span className="text-gray-700 font-bold">
-                      Hitta Jobb
-                    </span>
+                    <span className="text-gray-700 font-bold">Hitta Jobb</span>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <ProfileSVG />
                   <Link to="/MyProfile">
-                    <span className="text-gray-700 font-bold">
-                      Min Profil
-                    </span>
+                    <span className="text-gray-700 font-bold">Min Profil</span>
                   </Link>
                 </NavItem>
                 <div className="flex flex-col">
@@ -63,7 +70,7 @@ function Modal({ onClose, menu }) {
                     <HeartSVG />
                     <Link to="/saved">
                       <span className="text-gray-500 font-semibold">
-                      &#8212; Sparade jobb
+                        &#8212; Sparade jobb
                       </span>
                     </Link>
                   </NavItem>
@@ -71,7 +78,7 @@ function Modal({ onClose, menu }) {
                     <LetterSVG />
                     <Link to="/NoEarlierCoverLetter">
                       <span className="text-gray-500 font-semibold">
-                      &#8212; Personliga brev
+                        &#8212; Personliga brev
                       </span>
                     </Link>
                   </NavItem>
@@ -85,20 +92,14 @@ function Modal({ onClose, menu }) {
                   >
                     {" "}
                     <LogOutSVG />
-                    <span>
-                      {" "}
-                      Logga ut
-                    </span>
+                    <span> Logga ut</span>
                   </button>
                 ) : (
                   <button className="flex items-center gap-4 text-gray-700">
                     {" "}
                     <LogInSVG />
                     <Link to="/signin">
-                      <span>
-                        {" "}
-                        Logga in
-                      </span>
+                      <span> Logga in</span>
                     </Link>
                   </button>
                 )}

@@ -3,7 +3,9 @@ import FormRow from "./FormRow";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+customFetch;
+import { addUserToLocalStorage } from "../utils/localStorage";
 import customFetch from "../utils/axios";
 
 const initialState = {
@@ -27,10 +29,11 @@ const AuthForm = () => {
         toast.success("Registrering lyckades!");
         console.log("Skapad användare:", data);
         login();
+        addUserToLocalStorage(values);
         navigate("/profile");
       },
       onError: (error) => {
-        toast.error("Registrering misslyckades!");
+        toast.error(error.response.data.detail);
         console.error("Error creating user:", error);
       },
     }
@@ -42,10 +45,11 @@ const AuthForm = () => {
         toast.success("Välkommen in!");
         console.log("Inloggning lyckades:", data);
         login();
+        addUserToLocalStorage(values);
         navigate("/profile");
       },
       onError: (error) => {
-        toast.error("Inloggning misslyckades!");
+        toast.error(error.response.data.detail);
         console.error("Error signing in:", error);
       },
     }

@@ -1,21 +1,25 @@
+// JobItem.jsx
 import { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
+import { sendLikeData } from "../../utils/jsonserver";
 
 function JobItem({ job, children }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
 
-  function handleLike() {
-    setIsLiked((like) => !like);
-  }
-
   useEffect(() => {
     const todaysDate = new Date();
-    const jobPosted = new Date(job.publication_date);
+    const jobPosted = new Date(job.date);
     const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     setDaySincePosted(differenceInDays);
   }, [job]);
+
+  function handleLike() {
+    setIsLiked((like) => !like);
+    if (!isLiked) {
+      sendLikeData(job.id, job.headline);
+    }
+  }
 
   return (
     <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[10px]">
@@ -34,28 +38,14 @@ function JobItem({ job, children }) {
         />
       </div>
       <div>
-        <h3 className="font-semibold text-xl text-stone-900">{job.headline}</h3>
-        <p className="text-lg">{job.employer.name}</p>
+        <h3 className="font-semibold text-xl text-stone-900">{job.title}</h3>
+        <p className="text-lg">{job.company_name}</p>
         <div>
           <p className="text-sm my-2">
-            {job.workplace_address.municipality} - {daySincePosted} dagar sen
+            {job.date} - {daySincePosted} dagar sen
           </p>
         </div>
       </div>
-      <div className="flex gap-2 text-[12px]">
-        {job.working_hours_type.label ? (
-          <span className="bg-stone-100 px-2 py-1">
-            {job.working_hours_type.label}
-          </span>
-        ) : (
-          <span className="bg-stone-100 px-2 py-1">
-            {job.employment_type.label}{" "}
-          </span>
-        )}
-
-        <span className="bg-stone-100 px-2 py-1">{job.occupation.label} </span>
-      </div>
-
       {children}
     </li>
   );
