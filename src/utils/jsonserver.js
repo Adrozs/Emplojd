@@ -1,10 +1,13 @@
 import axios from "axios";
 
-function sendLikeData(id, headline) {
+function sendLikeData(id, headline, employer, occupation, logo) {
   axios
     .post("http://localhost:3001/likes", {
       id: id,
       headline: headline,
+      employer: employer,
+      occupation: occupation,
+      logo: logo,
     })
     .then((response) => {
       console.log("Gillad annons", response.data);
@@ -18,7 +21,6 @@ function getLikeData() {
   return axios
     .get("http://localhost:3001/likes")
     .then((response) => {
-      console.log("Hämtade gillade annonser", response.data);
       return response.data;
     })
     .catch((error) => {
@@ -27,4 +29,17 @@ function getLikeData() {
     });
 }
 
-export { sendLikeData, getLikeData };
+function deleteLikeData(id) {
+  return axios
+    .delete(`http://localhost:3001/likes/${id}`)
+    .then((response) => {
+      console.log("Annonsen har tagits bort", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error", error);
+      return null;
+    });
+}
+
+export { sendLikeData, getLikeData, deleteLikeData };
