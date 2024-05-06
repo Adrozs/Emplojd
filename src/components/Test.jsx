@@ -13,8 +13,7 @@ const initialState = {
   passwordConfirmed: "",
   isMember: true,
 };
-//hej12345!
-//hej@hej.hej
+
 const AuthForm = () => {
   const [values, setValues] = useState(initialState);
   const navigate = useNavigate();
@@ -26,27 +25,10 @@ const AuthForm = () => {
       onSuccess: (data) => {
         toast.success("Registrering lyckades!");
         console.log("Skapad användare:", data);
-        login();
-        navigate("/profile");
       },
       onError: (error) => {
         toast.error("Registrering misslyckades!");
         console.error("Error creating user:", error);
-      },
-    }
-  );
-  const signInUserMutation = useMutation(
-    (user) => customFetch.post("/login", user),
-    {
-      onSuccess: (data) => {
-        toast.success("Välkommen in!");
-        console.log("Inloggning lyckades:", data);
-        login();
-        navigate("/profile");
-      },
-      onError: (error) => {
-        toast.error("Inloggning misslyckades!");
-        console.error("Error signing in:", error);
       },
     }
   );
@@ -78,16 +60,16 @@ const AuthForm = () => {
     }
 
     if (isMember) {
-      signInUserMutation.mutate({
-        email,
-        password,
-      });
+      login(email, password);
+      toast.success("Inloggning lyckades!");
+      // navigate("/profile");
     } else {
+      // Skicka användaruppgifterna för att skapa användaren
       createUserMutation.mutate({
-        email,
-        emailConfirmed,
-        password,
-        passwordConfirmed,
+        email: email,
+        emailConfirmed: emailConfirmed,
+        password: password,
+        passwordConfirmed: passwordConfirmed,
       });
     }
   };
