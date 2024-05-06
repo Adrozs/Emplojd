@@ -1,3 +1,4 @@
+﻿using ChasGPT_Backend.Repository;
 ﻿using Azure.Core;
 using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels___DTOs;

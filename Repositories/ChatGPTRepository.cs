@@ -6,7 +6,7 @@ namespace ChasGPT_Backend.Repository
 {
     public interface IChatGPTRepository
     {
-        public Task<string> GenerateLetterAsync(int userId, int jobId, double temperature, bool job);
+        public Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job);
     }
     public class ChatGPTRepository : IChatGPTRepository
     {
@@ -17,7 +17,7 @@ namespace ChasGPT_Backend.Repository
             api = openAIApi;
         }
 
-        public async Task<string> GenerateLetterAsync(int userId, int jobId, double temperature, bool job)
+        public async Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job)
         {
 
             //Här hämtas CV från databasen

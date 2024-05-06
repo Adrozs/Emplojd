@@ -3,7 +3,7 @@ using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace ChasGPT_Backend.Repositories
+namespace ChasGPT_Backend.Repository
 {
 
     public interface IUserRepository
@@ -16,7 +16,7 @@ namespace ChasGPT_Backend.Repositories
     public class UserRepository : IUserRepository
     {
         // No dbContext needed atm as UserManager interacts with db for user management purposes
-        // Might be needed to ad for other stuff not covered by UserManager - double check documentation before changing.
+        // Might be needed to ad for other stuff not covered by UserManager - float check documentation before changing.
 
         private readonly UserManager<User> _userManager;
         private readonly AuthenticationService _authService;
@@ -33,10 +33,9 @@ namespace ChasGPT_Backend.Repositories
             // Check so emails and passwords match
             if (email != emailConfirm)
                 throw new InvalidOperationException("Emails do not match.");
-
+                
             if (password != passwordConfirm)
                 throw new InvalidOperationException("Passwords do not match.");
-
 
             User user = new User
             {
