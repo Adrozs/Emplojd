@@ -3,8 +3,7 @@ import FormRow from "./FormRow";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useMutation, useQueryClient } from "react-query";
-customFetch;
+import { useMutation } from "react-query";
 import { addUserToLocalStorage } from "../utils/localStorage";
 import customFetch from "../utils/axios";
 
@@ -15,8 +14,6 @@ const initialState = {
   passwordConfirmed: "",
   isMember: true,
 };
-//hej12345!
-//hej@hej.hej
 const AuthForm = () => {
   const [values, setValues] = useState(initialState);
   const navigate = useNavigate();
@@ -56,13 +53,10 @@ const AuthForm = () => {
   );
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
+
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -127,6 +121,7 @@ const AuthForm = () => {
         value={values.password}
         handleChange={handleChange}
         placeholder="●●●●●●●●●●●●"
+  
       />
       {!values.isMember && (
         <FormRow

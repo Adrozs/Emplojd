@@ -33,48 +33,28 @@ const router = createBrowserRouter([
       { path: "/", element: <LandingPage /> },
       {
         path: "/jobsearch",
-        element: (
-          <ProtectedRoute>
-            <JobSearch />
-          </ProtectedRoute>
-        ),
+        element: <JobSearch />,
         loader: searchLoader,
         errorElement: <Error />,
       },
       {
         path: "/joblist",
-        element: (
-          <ProtectedRoute>
-            <JobList />
-          </ProtectedRoute>
-        ),
+        element: <JobList />,
         errorElement: <Error />,
       },
 
       { path: "/signin", element: <SignIn /> },
       {
         path: "/profile",
-        element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ),
+        element: <Profile />,
       },
       {
         path: "/MyProfile",
-        element: (
-          <ProtectedRoute>
-            <MyProfile />
-          </ProtectedRoute>
-        ),
+        element: <MyProfile />,
       },
       {
         path: "/CreateProfile",
-        element: (
-          <ProtectedRoute>
-            <CreateProfile />
-          </ProtectedRoute>
-        ),
+        element: <CreateProfile />,
       },
       {
         path: "/saved",
@@ -86,21 +66,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/job/:jobId",
-        element: (
-          <ProtectedRoute>
-            <JobInfo />
-          </ProtectedRoute>
-        ),
+        element: <JobInfo />,
         loader: jobLoader,
         errorElement: <Error />,
       },
       {
         path: "/job/:jobId/apply",
-        element: (
-          <ProtectedRoute>
-            <ApplyNow />
-          </ProtectedRoute>
-        ),
+        element: <ApplyNow />,
         errorElement: <Error />,
       },
     ],
