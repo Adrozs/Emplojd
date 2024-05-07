@@ -10,6 +10,7 @@ using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ChasGPT_Backend
 {
@@ -35,14 +36,22 @@ namespace ChasGPT_Backend
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
+                // Password requirements
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
+
+                // Ensure email is confirmed
+                options.SignIn.RequireConfirmedAccount = true; 
             })
             .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
             .AddDefaultTokenProviders();
+
+            // Add Mailkit email config
+            builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
+  
 
             // Adding authentication
             builder.Services.AddAuthentication(options =>
@@ -77,7 +86,7 @@ namespace ChasGPT_Backend
             builder.Services.AddSingleton<JwtRepository>(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
-
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
             // Add services to the container.
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
