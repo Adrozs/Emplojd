@@ -106,5 +106,12 @@ namespace ChasGPT_Backend.Repositories
 
             return result.Succeeded;
         }
+        
+        // Commented out to be able to push the code
+        //private async Task<bool> EmailVerificationCode()
+        //{
+
+        //}
+    
     }
 }
