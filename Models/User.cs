@@ -22,5 +22,9 @@ namespace ChasGPT_Backend.Models
             LockoutEnabled: Indicates whether the user can be locked out.
             AccessFailedCount: The number of failed login attempts. This is used for implementing lockout functionality.
          */
+
+
+        public virtual ICollection<JobAd>? SavedJobAds { get; set; } = new List<JobAd>();
+
     }
 }
