@@ -1,7 +1,11 @@
 ﻿using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Encodings.Web;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace ChasGPT_Backend.Repositories
 {
@@ -11,6 +15,7 @@ namespace ChasGPT_Backend.Repositories
         public Task<bool> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm);
         public Task<string> LoginAsync(string email, string password);
         public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string newPasswordConfirm, ClaimsPrincipal currentUser);
+        public Task<bool> EmailVerification(string userId, string emailConfirmationToken);
     }
 
     public class UserRepository : IUserRepository
@@ -20,11 +25,13 @@ namespace ChasGPT_Backend.Repositories
 
         private readonly UserManager<User> _userManager;
         private readonly AuthenticationService _authService;
+        private readonly IEmailSender _emailSender;
 
-        public UserRepository(UserManager<User> userManager, AuthenticationService authService)
+        public UserRepository(UserManager<User> userManager, AuthenticationService authService, IEmailSender emailSender)
         {
             _userManager = userManager;
             _authService = authService;
+            _emailSender = emailSender;
         }
 
 
@@ -40,20 +47,29 @@ namespace ChasGPT_Backend.Repositories
 
             User user = new User
             {
-                UserName = email,
+                UserName = email, 
                 Email = email
             };
 
             // Creates and hashes password for user in db - All MS Identity methods have build it validation and error handling
-            IdentityResult result = await _userManager.CreateAsync(user, password);
+            IdentityResult createUserResult = await _userManager.CreateAsync(user, password);
+
 
             // If the creation didn't succeeded throw exception with details as to why
-            if (!result.Succeeded)
-            {
-                throw new InvalidOperationException("Failed to create account: " + string.Join(", ", result.Errors.Select(e => e.Description)));
-            }
+            if (!createUserResult.Succeeded)
+                throw new InvalidOperationException("Failed to create account: " + string.Join(", ", createUserResult.Errors.Select(e => e.Description)));
 
-            return result.Succeeded;
+
+            // If account was sucesfully created - generate a confirmation token and send it with a link to the confirmation page on our website to the users email
+            var emailConfirmationToken = _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            string websiteUrl = "https://localhost:5173/confirm-email";
+            string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={emailConfirmationToken}";
+
+
+            var result = _emailSender.SendEmailAsync(email, "Emplojd - Just one more step!", $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+            return true;
         }
 
         public async Task<string> LoginAsync(string email, string password)
@@ -106,12 +122,12 @@ namespace ChasGPT_Backend.Repositories
 
             return result.Succeeded;
         }
-        
-        // Commented out to be able to push the code
-        //private async Task<bool> EmailVerificationCode()
-        //{
 
+        // Commented out to be able to push the code
+        //public async Task<bool> EmailVerification(string userId, string emailConfirmationToken)
+        //{
+        //    // code
         //}
-    
+
     }
 }
