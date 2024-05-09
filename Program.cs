@@ -184,7 +184,7 @@ namespace ChasGPT_Backend
             app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
 
-            // Job search
+            // JobAd search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
             app.MapGet("/search", async (string query, int? region, int? page, IJobAdRepository jobAdRepository) =>
             {
@@ -192,6 +192,14 @@ namespace ChasGPT_Backend
             }).RequireAuthorization();
 
             app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
+
+
+            // JobAds Get/Save/Delete
+            app.MapGet("/saved-ads", JobAdService.GetSavedJobAdsAsync).RequireAuthorization();
+            app.MapPost("/save-ad", JobAdService.SaveJobAdAsync).RequireAuthorization();
+            app.MapDelete("/saved-ad", JobAdService.RemoveSavedJobAdAsync).RequireAuthorization();
+
+
 
             app.Run();
         }
