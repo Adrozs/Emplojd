@@ -24,13 +24,13 @@ namespace ChasGPT_Backend
             // Add services to the container.
 
             DotNetEnv.Env.Load();
-          
+
             // Setup database context and connection string here
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add CORS services
-            builder.Services.AddCors(); 
+            builder.Services.AddCors();
 
 
             // Adding Microsoft identity with config settings
@@ -44,14 +44,14 @@ namespace ChasGPT_Backend
                 options.Password.RequireNonAlphanumeric = true;
 
                 // Ensure email is confirmed
-                options.SignIn.RequireConfirmedAccount = true; 
+                options.SignIn.RequireConfirmedAccount = true;
             })
             .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
             .AddDefaultTokenProviders();
 
             // Add Mailkit email config
             builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
-  
+
 
             // Adding authentication
             builder.Services.AddAuthentication(options =>
@@ -83,14 +83,12 @@ namespace ChasGPT_Backend
             // Add to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
-            builder.Services.AddSingleton<JwtRepository>(provider =>
+            builder.Services.AddSingleton(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
-            builder.Services.AddSingleton<IEmailSender, EmailSender>();
-
-            // Add services to the container.
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
-            
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -172,6 +170,7 @@ namespace ChasGPT_Backend
             app.MapPost("/login", UserService.LoginAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
             app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
             app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
+            //app.MapGet("/confirm-email")
 
 
             // Cover letter
