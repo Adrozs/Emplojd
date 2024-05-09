@@ -5,6 +5,7 @@ using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ChasGPT_Backend.Repository;
 using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

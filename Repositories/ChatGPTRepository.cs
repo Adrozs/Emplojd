@@ -17,7 +17,8 @@ namespace ChasGPT_Backend.Repositories
             api = openAIApi;
         }
 
-        public async Task<string> GenerateLetterAsync(int userId, int jobId, double temperature, bool job)
+
+        public async Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job)
         {
 
             //Här hämtas CV från databasen
