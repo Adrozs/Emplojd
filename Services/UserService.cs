@@ -18,7 +18,7 @@ namespace ChasGPT_Backend.Services
                 
                 if (success)
                 {
-                    return Results.Ok("Account successfully created.");
+                    return Results.Ok("Account successfully created. Please check your email to verify your account.");
                 }
                 else
                 {
@@ -68,6 +68,36 @@ namespace ChasGPT_Backend.Services
                     return Results.BadRequest("Invalid request data.");
 
                 bool success = await userRepository.ChangePasswordAsync(request.CurrentPassword, request.NewPassword, request.NewPasswordConfirm, httpContext.User);
+
+                if (success)
+                {
+                    return Results.Ok("Password successfully changed.");
+                }
+                else
+                {
+                    return Results.BadRequest("Failed to change password.");
+                }
+            }
+            // Known issues exceptions
+            catch (InvalidOperationException ex)
+            {
+                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
+            }
+            // Generic unpredicted exceptions
+            catch (Exception ex)
+            {
+                return Results.Problem("An unexpected error occurred.", ex.Message);
+            }
+        }
+
+        public static async Task<IResult> EmailVerificationAsync([FromQuery] string userId, string emailVerificationCode, [FromServices] IUserRepository userRepository)
+        {
+            try 
+            {
+                if (userId == null || emailVerificationCode == null)
+                    return Results.BadRequest("Invalid user id or verification code");
+
+                bool success = await userRepository.EmailVerification(userId, emailVerificationCode);
 
                 if (success)
                 {
