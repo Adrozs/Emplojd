@@ -1,15 +1,23 @@
-﻿using ChasGPT_Backend.ViewModels;
+﻿using ChasGPT_Backend.Data;
+using ChasGPT_Backend.Models;
+using ChasGPT_Backend.ViewModels;
+using ChasGPT_Backend.ViewModels___DTOs.JobAds;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace ChasGPT_Backend.Repositories
 {
     public interface IJobAdRepository
     {
-        public Task<List<JobDto>> GetJobAds(string search, int? region, int? pageIndex);
-        public Task<JobDto> GetJobAdFromId(int adId);
-        public  Task<JobChatGptDto> GetJobAdFromIdChatGpt(int jobId);
-
+        public Task<List<JobDto>> GetJobAdsAsync(string search, int? region, int? pageIndex);
+        public Task<JobDto> GetJobAdFromIdAsync(int adId);
+        public  Task<JobChatGptDto> GetJobAdFromIdChatGptAsync(int jobId);
+        public Task<List<SavedJobAdDto>> GetSavedJobAdsAsync(ClaimsPrincipal currentUser);
+        public Task<bool> SaveJobAdAsync(SaveJobAdRequest request, ClaimsPrincipal currentUser);
+        public Task<bool> RemoveSavedJobAdAsync(int platsbankenJobAdId, ClaimsPrincipal currentUser);
     }
 
     public class JobAdRepository : IJobAdRepository
@@ -17,6 +25,7 @@ namespace ChasGPT_Backend.Repositories
         private HttpClient _httpClient = new HttpClient();
         private string _apiBaseUri = "https://jobsearch.api.jobtechdev.se/";
         private int _limit = 25; // Search results
+        private readonly ApplicationContext _context;
 
         // Make sure that the deserializer ignores casing 
         private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
@@ -24,7 +33,12 @@ namespace ChasGPT_Backend.Repositories
             PropertyNameCaseInsensitive = true
         };
 
-        public async Task<List<JobDto>> GetJobAds(string search, int? region, int? pageIndex)
+        public JobAdRepository(ApplicationContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<JobDto>> GetJobAdsAsync(string search, int? region, int? pageIndex)
         {
             // If region isn't inputted omit it from the search query
             string query = (region == null) ? 
@@ -44,7 +58,7 @@ namespace ChasGPT_Backend.Repositories
             return result?.Jobs.ToList() ?? new List<JobDto>();
         }
 
-        public async Task<JobDto> GetJobAdFromId(int adId)
+        public async Task<JobDto> GetJobAdFromIdAsync(int adId)
         {
             string query = $"{_apiBaseUri}ad/{adId}";
 
@@ -60,7 +74,7 @@ namespace ChasGPT_Backend.Repositories
         }
 
         // Only returns the job title, description and id - used in our internal letter generator
-        public async Task<JobChatGptDto> GetJobAdFromIdChatGpt(int jobId)
+        public async Task<JobChatGptDto> GetJobAdFromIdChatGptAsync(int jobId)
         {
             string query = $"{_apiBaseUri}ad/{jobId}";
 
@@ -100,6 +114,118 @@ namespace ChasGPT_Backend.Repositories
                 throw new InvalidOperationException("The Api response is null or empty.");
 
             return responseBody;
+        }
+
+
+        public async Task<List<SavedJobAdDto>> GetSavedJobAdsAsync(ClaimsPrincipal currentUser)
+        {
+            // Get the email from the JWT claims
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                throw new InvalidOperationException("No email found in token claims.");
+
+            // Get user along with its saved job ads
+            User? user = await _context.Users
+                .Include(u => u.SavedJobAds)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                throw new InvalidOperationException("No matching user found.");
+
+
+            List<SavedJobAdDto>? savedJobAds = user.SavedJobAds.Select(j => new SavedJobAdDto
+            {
+                PlatsbankenId = j.PlatsbankenJobId,
+                Headline = j.Headline,
+                Employer = new EmployerDto
+                {
+                    Name = j.Employer
+                }
+            }).ToList();
+
+            if (savedJobAds.Count == 0)
+                throw new InvalidOperationException("Did not find any saved job ads.");
+
+            return savedJobAds;
+        }
+
+
+        public async Task<bool> SaveJobAdAsync(SaveJobAdRequest request, ClaimsPrincipal currentUser)
+        {
+            // Get the email from the JWT claims
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                throw new InvalidOperationException("No email found in token claims.");
+
+            // Get user along with its saved job ads
+            User? user = await _context.Users
+                .Include(u => u.SavedJobAds)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                throw new InvalidOperationException("No matching user found.");
+
+
+            if (user.SavedJobAds.Any(j => j.PlatsbankenJobId == request.PlatsbankenJobId))
+                throw new InvalidOperationException("User has already saved this job ad.");
+
+
+            JobAd jobAd = new JobAd
+            {
+                PlatsbankenJobId = request.PlatsbankenJobId,
+                Headline = request.Headline,
+                Employer = request.Employer,
+            };
+
+
+            try
+            {
+                user.SavedJobAds.Add(jobAd);
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to save the job ad.", ex);
+            }
+        }
+
+        public async Task<bool> RemoveSavedJobAdAsync(int platsbankenJobAdId, ClaimsPrincipal currentUser)
+        {
+            // Get the email from the JWT claims
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                throw new InvalidOperationException("No email found in token claims.");
+
+            // Get user along with its saved job ads
+            User? user = await _context.Users
+                .Include(u => u.SavedJobAds)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                throw new InvalidOperationException("No matching user found.");
+            
+
+            JobAd? jobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
+
+            if (jobAd == null)
+                throw new InvalidOperationException("User has not saved this job ad.");
+
+            try
+            {
+                user.SavedJobAds.Remove(jobAd);
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to remove the saved job ad.", ex);
+            }
         }
     }
 }
