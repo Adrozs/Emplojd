@@ -2,7 +2,6 @@
 using ChasGPT_Backend.Services;
 using OpenAI_API;
 using ChasGPT_Backend.Models;
-using ChasGPT_Backend.Services;
 using ChasGPT_Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,6 @@ using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ChasGPT_Backend
 {
@@ -44,7 +42,11 @@ namespace ChasGPT_Backend
                 options.Password.RequireNonAlphanumeric = true;
 
                 // Ensure email is confirmed
-                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedEmail = true;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 8;
             })
             .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
             .AddDefaultTokenProviders();
@@ -166,11 +168,16 @@ namespace ChasGPT_Backend
             // ENDPOINTS
             // Note: Don't forget to add ".RequireAuthorization()" to your endpoints! Without it you can access them without the token.
 
-            // User account 
-            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
-            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
-            app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
-            //app.MapGet("/confirm-email")
+            // User account
+            // .AllowAnonymous() to explicitly say that this doesn't require token auth
+            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
+            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
+            app.MapGet("/confirm-email", UserService.EmailVerificationAsync).AllowAnonymous();
+            app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
+            app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
+
+            // Is this even necessary anymore when we have /reset-password ??? - only difference with this one is it changed password without email verification
+            //app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
             // Cover letter
