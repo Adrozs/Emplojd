@@ -6,7 +6,14 @@ namespace ChasGPT_Backend
 {
     public interface IEmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string htmlmessage);
+        public Task<EmailResult> SendEmailAsync(string email, string subject, string htmlmessage);
+    }
+
+    // Class that has information on if an email was successfully sent or not and what went wrong. Used to send back to the calling method to verify the result.
+    public class EmailResult
+    {
+        public bool Success { get; set; }
+        public string? ErrorMessage { get; set; }
     }
 
     public class EmailSender : IEmailSender
@@ -19,7 +26,7 @@ namespace ChasGPT_Backend
             _emailSettings = emailSettings.Value;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string htmlmessage)
+        public async Task<EmailResult> SendEmailAsync(string email, string subject, string htmlMessage)
         {
             // Configure email instance
             MimeMessage message = new MimeMessage();
@@ -29,16 +36,25 @@ namespace ChasGPT_Backend
 
             message.Body = new TextPart("html")
             {
-                Text = htmlmessage
+                Text = htmlMessage
             };
 
-            // Connect, authenticate, send mail and then disconnect
+            // Connect, authenticate, send mail and then disconnect - send back result
             using (SmtpClient client = new SmtpClient())
             {
-                await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, useSsl: false);
-                await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
+                try
+                {
+                    await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, useSsl: false);
+                    await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+
+                    return new EmailResult { Success = true };
+                }
+                catch (Exception ex)
+                {
+                    return new EmailResult { Success = false, ErrorMessage = ex.Message };
+                }
             }
         }
 
