@@ -134,6 +134,9 @@ namespace ChasGPT_Backend.Services
 
         public static async Task<IResult> SaveJobAdAsync([FromBody] SaveJobAdRequest request, ClaimsPrincipal currentUser, [FromServices] IJobAdRepository jobAdRepository)
         {
+            if (request.PlatsbankenJobAdId == 0 || string.IsNullOrEmpty(request.Headline) || string.IsNullOrEmpty(request.Employer))
+                return Results.BadRequest("Invalid request data. All job ad fields must be filled out.");
+
             try
             {
                 bool result = await jobAdRepository.SaveJobAdAsync(request, currentUser);
@@ -158,6 +161,9 @@ namespace ChasGPT_Backend.Services
 
         public static async Task<IResult> RemoveSavedJobAdAsync([FromBody] RemoveJobAdRequest request, ClaimsPrincipal currentUser, [FromServices] IJobAdRepository jobAdRepository)
         {
+            if (request.PlatsbankenJobAdId == 0)
+                return Results.BadRequest("Invalid request data. All job ad fields must be filled out.");
+
             try
             {
                 bool result = await jobAdRepository.RemoveSavedJobAdAsync(request.PlatsbankenJobAdId, currentUser);

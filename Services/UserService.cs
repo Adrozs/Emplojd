@@ -3,6 +3,8 @@ using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels___DTOs;
 using ChasGPT_Backend.ViewModels___DTOs.Account;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Http.ModelBinding;
 
 namespace ChasGPT_Backend.Services
 {
@@ -10,11 +12,11 @@ namespace ChasGPT_Backend.Services
     {
         public static async Task<IResult> CreateAccountAsync([FromBody] CreateAccountRequestDto request, [FromServices] IUserRepository userRepository)
         {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.EmailConfirmed) || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.PasswordConfirmed))
+                return Results.BadRequest("Invalid request data. Account credentials can't be empty.");
+
             try
             {
-                if (request == null)
-                    return Results.BadRequest("Invalid request data.");
-
                 bool success = await userRepository.CreateAccountAsync(request.Email, request.EmailConfirmed, request.Password, request.PasswordConfirmed); 
                 
                 if (success)
@@ -40,11 +42,11 @@ namespace ChasGPT_Backend.Services
 
         public static async Task<IResult> LoginAsync([FromBody] LoginRequestDto request, [FromServices] IUserRepository userRepository)
         {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+                return Results.BadRequest("Invalid request data. Login credentials can't be empty.");
+
             try
             {
-                if (request == null)
-                    return Results.BadRequest("Invalid request data.");
-
                 string token = await userRepository.LoginAsync(request.Email, request.Password);
                 return Results.Ok(new { Token = token });
 
