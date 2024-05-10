@@ -168,13 +168,13 @@ namespace ChasGPT_Backend.Repositories
                 throw new InvalidOperationException("No matching user found.");
 
 
-            if (user.SavedJobAds.Any(j => j.PlatsbankenJobId == request.PlatsbankenJobId))
+            if (user.SavedJobAds.Any(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId))
                 throw new InvalidOperationException("User has already saved this job ad.");
 
 
             JobAd jobAd = new JobAd
             {
-                PlatsbankenJobId = request.PlatsbankenJobId,
+                PlatsbankenJobId = request.PlatsbankenJobAdId,
                 Headline = request.Headline,
                 Employer = request.Employer,
             };
