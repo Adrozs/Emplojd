@@ -64,15 +64,16 @@ namespace ChasGPT_Backend.Repositories
             string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(emailConfirmationToken)}";
 
             string emailSubject = "Emplojd - Just one more step!";
-            string emailBody = $"Welcome to Emplojd!,\r\n\r\n" +
-                $"We're so excited to have you on board and will be happy to help you set everything up.\r\n\r\n" +
-                $"Please click the link below to verify your email address:{email}\r\n\r\n" +
-                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Verify your email</a>.\"" +
-                $"If you're having trouble clicking the link, copy and paste the URL below into your browser:\r\n\r\n" +
-                $"{callbackUrl}\r\n\r\n" +
-                $"Please let us know if you have any questions or general feedback simply by replying to this email.\r\n\r\n\r\n" +
-                $"All the best,\r\n" +
-                $"Emplojd";
+            string emailBody = 
+                $"<h2>Welcome to Emplojd!</h2>" +
+                $"<p>We're so excited to have you on board and will be happy to help you set everything up.<br>" +
+                $"Please click the link below to verify your email address.<br>" +
+                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click here to verify your email.</a>.<br><br>" +
+                $"If you're having trouble clicking the link, copy and paste the URL below into your browser: <br>" +
+                $"{callbackUrl}<br><br><br>" +
+                $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>" +
+                $"All the best,<br>" +
+                $"Emplojd</p>";
 
 
             // Send email to users email with message and confirmaton link
@@ -100,7 +101,7 @@ namespace ChasGPT_Backend.Repositories
                 return token;
             }
             else if (loginResult.IsNotAllowed)
-                throw new InvalidOperationException("You must confirm your email to log in.");
+                throw new InvalidOperationException("You must confirm your account to log in. Please check your email for a verification link.");
             else if (loginResult.IsLockedOut)
                 throw new InvalidOperationException("The account is locked due to multiple failed attempts. Try again in a few minutes.");
             else
