@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend
+﻿namespace ChasGPT_Backend.Options
 {
     public class MailKitSettings
     {
