@@ -12,10 +12,17 @@ namespace ChasGPT_Backend.Services
             _jwtRepository = jwtRepository;
         }
 
-        // Call the generate jwt method
         public string GenerateToken(User user)
         {
-            return _jwtRepository.GenerateJwt(user);
+            try
+            {
+                return _jwtRepository.GenerateJwt(user);
+            }
+            catch (Exception ex)
+            {
+                // Rethrow the error from GenerateJWT to be handled further upp the chain
+                throw new ApplicationException("An error occurred while generating the JWT.", ex);
+            }
         }
     }
 }
