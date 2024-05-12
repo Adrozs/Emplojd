@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
 import { addUserToLocalStorage } from "../utils/localStorage";
 import customFetch from "../utils/axios";
+import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
 
 const initialState = {
   email: "",
@@ -56,7 +57,6 @@ const AuthForm = () => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -122,7 +122,6 @@ const AuthForm = () => {
         value={values.password}
         handleChange={handleChange}
         placeholder="●●●●●●●●●●●●"
-  
       />
       {!values.isMember && (
         <FormRow
@@ -142,10 +141,18 @@ const AuthForm = () => {
       </div>
       <div className="flex flex-col gap-4">
         <button
-          className="w-full bg-[#0783F6] h-14 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-2"
+          className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 justify-between items-center"
           type="submit"
         >
-          {!values.isMember ? "SKAPA DITT KONTO" : "LOGGA IN"}
+          {values.isMember ? (
+            <>
+              Logga in <LoginRightArrow />
+            </>
+          ) : (
+            <>
+              Skapa konto <SignUpCirclePlus />
+            </>
+          )}
         </button>
         <div className="flex justify-center gap-4">
           <div>
