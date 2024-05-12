@@ -1,4 +1,5 @@
-﻿using ChasGPT_Backend.Repositories;
+﻿using ChasGPT_Backend.Helpers;
+using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels;
 using ChasGPT_Backend.ViewModels___DTOs.JobAds;
 using Microsoft.AspNetCore.Mvc;
@@ -9,37 +10,21 @@ namespace ChasGPT_Backend.Services
 {
     public class JobAdService
     {
-        public static async Task<IResult> SearchJob([FromQuery] string search, [FromQuery] int? region, [FromQuery] int? pageIndex, [FromServices] IJobAdRepository jobAdRepository)
+        public static async Task<IResult> SearchJob([FromServices] IJobAdRepository jobAdRepository, [FromQuery] string search, [FromQuery] int? region, [FromQuery] int page = 1)
         {
             try
             {
-                List<JobDto> result = await jobAdRepository.GetJobAdsAsync(search, region, pageIndex);
+                List<JobDto> result = await jobAdRepository.GetJobAdsAsync(search, region, page);
 
-                // If there are 0 things in the result we got no results so return 204 NoContent
                 if (result.Count == 0)
-                    return Results.NoContent();
-                
+                    return Results.NotFound("No job ads matching search found.");
+
                 return Results.Json(result);
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            catch (HttpRequestException ex)
-            {
-                return Results.Problem("Request error:", ex.Message);
-            }
-            catch (JsonException ex)
-            {
-                return Results.Problem("JSON parsing error:", ex.Message);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
-
         }
 
         public static async Task<IResult> GetJobFromId([FromQuery] int adId, [FromServices] IJobAdRepository jobAdRepository)
@@ -48,30 +33,15 @@ namespace ChasGPT_Backend.Services
             {
                 JobDto result = await jobAdRepository.GetJobAdFromIdAsync(adId);
 
-                // If there are 0 things in the result we got no results so return 204 NoContent
                 if (result == null)
-                    return Results.NoContent();
+                    return Results.NotFound($"No job ad with id \"{adId}\" was found");
        
                return Results.Json(result);
                 
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            catch (HttpRequestException ex)
-            {
-                return Results.Problem("Request error:", ex.Message);
-            }
-            catch (JsonException ex)
-            {
-                return Results.Problem("JSON parsing error:", ex.Message);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
         
@@ -84,23 +54,10 @@ namespace ChasGPT_Backend.Services
                 // Returns the object or null
                 jobAd = await jobAdRepository.GetJobAdFromIdChatGptAsync(jobId);
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Invalid operation: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Request error: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"JSON parsing error: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
-            }
-            // Generic unpredicted exceptions
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An unexpected error occurred: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
+                // Rethrow caught error to method calling it to handle
+                throw;
             }
 
             return jobAd;
@@ -113,22 +70,15 @@ namespace ChasGPT_Backend.Services
             {
                 List<SavedJobAdDto> jobAds = await jobAdRepository.GetSavedJobAdsAsync(currentUser);
 
-                // If there are 0 things in the result we got no results so return 204 NoContent
-                if (jobAds == null)
-                    return Results.NoContent();
+                if (jobAds.Count == 0)
+                    return Results.NotFound("No saved job ads were found.");
 
                 return Results.Json(jobAds);
 
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
@@ -142,20 +92,14 @@ namespace ChasGPT_Backend.Services
                 bool result = await jobAdRepository.SaveJobAdAsync(request, currentUser);
 
                 if (!result)
-                    return Results.Problem("Something went wrong trying to save the job ad.");
+                    return Results.Problem("User has already saved this job ad.");
 
                 return Results.Ok("Job ad successfully saved.");
 
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
@@ -169,20 +113,14 @@ namespace ChasGPT_Backend.Services
                 bool result = await jobAdRepository.RemoveSavedJobAdAsync(request.PlatsbankenJobAdId, currentUser);
 
                 if (!result)
-                    return Results.Problem("Something went wrong trying to remove the saved job ad.");
+                    return Results.Problem("User has not saved this job ad.");
 
                 return Results.Ok("Job ad successfully removed.");
 
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
     }
