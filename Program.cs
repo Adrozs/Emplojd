@@ -151,9 +151,11 @@ namespace ChasGPT_Backend
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+     
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             //app.UseHttpsRedirection(); // (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
 
