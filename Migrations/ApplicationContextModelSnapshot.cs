@@ -22,6 +22,7 @@ namespace ChasGPT_Backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+
             modelBuilder.Entity("ChasGPT_Backend.Models.JobAd", b =>
                 {
                     b.Property<int>("JobAdId")
@@ -38,6 +39,7 @@ namespace ChasGPT_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
                         
+=======
             modelBuilder.Entity("ChasGPT_Backend.Models.CoverLetter", b =>
                 {
                     b.Property<int>("CoverLetterId")
@@ -66,6 +68,29 @@ namespace ChasGPT_Backend.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("CoverLetters");
+                });
+
+
+=======
+            modelBuilder.Entity("ChasGPT_Backend.Models.SavedJobAds", b =>
+                {
+                    b.Property<int>("SavedJobId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedJobId"));
+
+                    b.Property<int>("PlatsbankenJobId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SavedJobId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SavedJobAds");
                 });
 
 

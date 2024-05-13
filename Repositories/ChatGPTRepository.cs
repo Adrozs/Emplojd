@@ -17,6 +17,7 @@ namespace ChasGPT_Backend.Repositories
             api = openAIApi;
         }
 
+
         public async Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job)
         {
 

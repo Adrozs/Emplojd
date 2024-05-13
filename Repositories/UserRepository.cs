@@ -41,7 +41,11 @@ namespace ChasGPT_Backend.Repository
                 return IdentityResult.Failed(new IdentityError { Description = "Emails do not match."});
 
             if (password != passwordConfirm)
+
                 return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
+                
+                throw new ArgumentException("Passwords do not match.");
+
 
             User user = new User
             {

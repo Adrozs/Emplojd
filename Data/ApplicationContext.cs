@@ -7,12 +7,16 @@ namespace ChasGPT_Backend.Data
     public class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<User> Users { get; set; }
+
         public DbSet<JobAd> JobAd { get; set; }
+=======
+
         public DbSet<CoverLetter> CoverLetters { get; set; }
         public DbSet<SavedJobAds> SavedJobAds { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+
 
         // User and SavedJobAds relationship
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,5 +28,6 @@ namespace ChasGPT_Backend.Data
                 .WithMany(j => j.Users)
                 .UsingEntity(j => j.ToTable("UserJobAds"));
         }
+=======
     }
 }
