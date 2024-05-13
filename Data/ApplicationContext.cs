@@ -7,6 +7,7 @@ namespace ChasGPT_Backend.Data
     public class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<JobAd> JobAd { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
