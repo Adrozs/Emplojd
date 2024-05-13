@@ -9,6 +9,8 @@ using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ChasGPT_Backend.Helpers;
+using ChasGPT_Backend.Options;
 
 namespace ChasGPT_Backend
 {
@@ -152,7 +154,7 @@ namespace ChasGPT_Backend
                 app.UseSwaggerUI();
             }
 
-            //app.UseHttpsRedirection();
+            //app.UseHttpsRedirection(); // (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
 
 
             // Apply the CORS policy
@@ -186,11 +188,7 @@ namespace ChasGPT_Backend
 
             // JobAd search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
-            app.MapGet("/search", async (string query, int? region, int? page, IJobAdRepository jobAdRepository) =>
-            {
-                return await JobAdService.SearchJob(query, region, page ?? 1, jobAdRepository);
-            }).RequireAuthorization();
-
+            app.MapGet("/search", JobAdService.SearchJob).RequireAuthorization();
             app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
 
 
