@@ -125,14 +125,17 @@ namespace ChasGPT_Backend.Repositories
             if (user.SavedJobAds.Any(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId))
                 return false;
 
-
-            JobAd jobAd = new JobAd
+            // Check if job ad exists and select that or create new one
+            JobAd? jobAd = jobAd = await _context.JobAd.FirstOrDefaultAsync(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId);
+            if (jobAd == null)
             {
-                PlatsbankenJobId = request.PlatsbankenJobAdId,
-                Headline = request.Headline,
-                Employer = request.Employer,
-            };
-
+                jobAd = new JobAd
+                {
+                    PlatsbankenJobId = request.PlatsbankenJobAdId,
+                    Headline = request.Headline,
+                    Employer = request.Employer,
+                };
+            }
 
             try
             {
@@ -141,7 +144,7 @@ namespace ChasGPT_Backend.Repositories
                 return true;
 
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 throw new DbUpdateException("Failed to save the job ad.", ex);
             }
@@ -149,23 +152,42 @@ namespace ChasGPT_Backend.Repositories
 
         public async Task<bool> RemoveSavedJobAdAsync(int platsbankenJobAdId, ClaimsPrincipal currentUser)
         {
-            User user = await GetUserAndJobAdsAsync(currentUser);
-
-            JobAd? jobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
-
-            if (jobAd == null)
-                return false;
-
+            // Use transaction to assure that all database updates succeed otherwise fail and rollback the changes
+            // So we don't accidentally delete the job ad from the db but not for the user.
+            using var transaction = _context.Database.BeginTransaction();
             try
             {
+                User user = await GetUserAndJobAdsAsync(currentUser);
+
+                JobAd? jobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
+
+                if (jobAd == null)
+                    return false;
+
                 user.SavedJobAds.Remove(jobAd);
                 await _context.SaveChangesAsync();
-                return true;
 
+                // Check if there's any users connected to this job ad - if not then remove it so we don't keep loads of job ads in the db for no reason
+                bool isJobAdLinkedToAnyUser = await _context.Users
+                    .AnyAsync(u => u.SavedJobAds.Any(j => j.JobAdId == jobAd.JobAdId));
+                
+                if (!isJobAdLinkedToAnyUser)
+                {
+                    _context.JobAd.Remove(jobAd);
+                    await _context.SaveChangesAsync();
+                }
+
+
+                await transaction.CommitAsync();
+                return true;
             }
             catch (Exception ex)
             {
-                throw new DbUpdateException("Failed to remove the saved job ad.", ex);
+                // If exception occurred rollback any changes 
+                await transaction.RollbackAsync();
+                
+                // Throw exception as it to keep the stack trace
+                throw;
             }
         }
 
