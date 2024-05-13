@@ -4,7 +4,7 @@ using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Encodings.Web;
 
-namespace ChasGPT_Backend.Repositories
+namespace ChasGPT_Backend.Repository
 {
 
     public interface IUserRepository
@@ -42,7 +42,6 @@ namespace ChasGPT_Backend.Repositories
 
             if (password != passwordConfirm)
                 return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
-
 
             User user = new User
             {
