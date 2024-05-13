@@ -2,7 +2,6 @@
 using ChasGPT_Backend.Services;
 using OpenAI_API;
 using ChasGPT_Backend.Models;
-using ChasGPT_Backend.Services;
 using ChasGPT_Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,26 +23,38 @@ namespace ChasGPT_Backend
             // Add services to the container.
 
             DotNetEnv.Env.Load();
-          
+
             // Setup database context and connection string here
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add CORS services
-            builder.Services.AddCors(); 
+            builder.Services.AddCors();
 
 
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
+                // Password requirements
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
+
+                // Ensure email is confirmed
+                options.SignIn.RequireConfirmedEmail = true;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 8;
             })
             .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
             .AddDefaultTokenProviders();
+
+            // Add Mailkit email config
+            builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
+
 
             // Adding authentication
             builder.Services.AddAuthentication(options =>
@@ -75,14 +86,12 @@ namespace ChasGPT_Backend
             // Add to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
-            builder.Services.AddSingleton<JwtRepository>(provider =>
+            builder.Services.AddSingleton(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
-
-
-            // Add services to the container.
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
-            
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -160,10 +169,16 @@ namespace ChasGPT_Backend
             // ENDPOINTS
             // Note: Don't forget to add ".RequireAuthorization()" to your endpoints! Without it you can access them without the token.
 
-            // User account 
-            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
-            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
-            app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
+            // User account
+            // .AllowAnonymous() to explicitly say that this doesn't require token auth
+            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
+            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
+            app.MapGet("/confirm-email", UserService.EmailVerificationAsync).AllowAnonymous();
+            app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
+            app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
+
+            // Is this even necessary anymore when we have /reset-password ??? - only difference with this one is it changed password without email verification
+            //app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
             // Cover letter
