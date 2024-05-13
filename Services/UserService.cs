@@ -1,10 +1,9 @@
-﻿using Azure.Core;
+﻿using ChasGPT_Backend.Helpers;
 using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels___DTOs;
 using ChasGPT_Backend.ViewModels___DTOs.Account;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Http.ModelBinding;
 
 namespace ChasGPT_Backend.Services
 {
@@ -17,26 +16,14 @@ namespace ChasGPT_Backend.Services
 
             try
             {
-                bool success = await userRepository.CreateAccountAsync(request.Email, request.EmailConfirmed, request.Password, request.PasswordConfirmed); 
-                
-                if (success)
-                    return Results.Ok("Account successfully created. Please check your email to verify your account.");
-                else
-                    return Results.BadRequest("Something went wrong while trying to create the account");
+                IdentityResult result = await userRepository.CreateAccountAsync(request.Email, request.EmailConfirmed, request.Password, request.PasswordConfirmed);
+
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Account successfully created. Please check your email to verify your account.", "Failed to create account:");
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            catch (ArgumentException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
@@ -47,23 +34,16 @@ namespace ChasGPT_Backend.Services
 
             try
             {
-                string token = await userRepository.LoginAsync(request.Email, request.Password);
-                return Results.Ok(new { Token = token });
+                LoginResult result = await userRepository.LoginAsync(request.Email, request.Password);
 
+                if (result.Success)
+                    return Results.Ok(new { result.Token });
+                else
+                    return Results.BadRequest($"Failed to login: {result.ErrorMessage}");
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            catch (ArgumentException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
-            }
-            // Generic unpredicted exceptions
-            catch (Exception ex) 
-            {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
@@ -106,22 +86,14 @@ namespace ChasGPT_Backend.Services
         {
             try 
             {
-                bool success = await userRepository.EmailVerificationAsync(userId, code);
+                IdentityResult result = await userRepository.EmailVerificationAsync(userId, code);
 
-                if (success)
-                    return Results.Ok("Email successfully confirmed.");
-                else
-                    return Results.BadRequest("Failed to confirm email.");
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Email successfully confirmed.", "Failed to confirm email.");
             }
-            // Known issues exceptions
-            catch (ArgumentException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
@@ -129,54 +101,29 @@ namespace ChasGPT_Backend.Services
         {
             try
             {
-                bool success = await userRepository.GeneratePasswordResetCodeAsync(request.Email);
+                IdentityResult result = await userRepository.GeneratePasswordResetCodeAsync(request.Email);
 
-                if (success)
-                    return Results.Ok("Password reset email successfully sent.");
-                else
-                    return Results.BadRequest("Something went wrong trying to send the email or generate reset token.");
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Password reset email successfully sent.", "Failed to send reset email:");
             }
-            // Known issues exceptions
-            catch (ArgumentException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
         public static async Task<IResult> ResetPasswordAsync([FromQuery] string userId, [FromQuery] string code, ResetPasswordRequest request, [FromServices] IUserRepository userRepository)
         {
             try
             {
-                bool success = await userRepository.ResetPasswordAsync(userId, code, request.NewPassword, request.NewPasswordConfirm);
+                IdentityResult result = await userRepository.ResetPasswordAsync(userId, code, request.NewPassword, request.NewPasswordConfirm);
 
-                if (success)
-                    return Results.Ok("Password successfully changed.");
-                else
-                    return Results.BadRequest("Failed to change password.");
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Password successfully changed", "Failed to change password:");
             }
-            // Known issues exceptions
-            catch (ArgumentException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
-
     }
 }
