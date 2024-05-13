@@ -48,19 +48,16 @@ namespace ChasGPT_Backend.Services
 
         public static async Task<JobChatGptDto> GetJobAdFromIdChatGpt(int jobId, IJobAdRepository jobAdRepository)
         {
-            JobChatGptDto jobAd = new JobChatGptDto();
             try
             {
-                // Returns the object or null
-                jobAd = await jobAdRepository.GetJobAdFromIdChatGptAsync(jobId);
+                // Returns the JobAd if found or null if no matching ad was found
+                return await jobAdRepository.GetJobAdFromIdChatGptAsync(jobId);
             }
             catch (Exception)
             {
-                // Rethrow caught error to method calling it to handle
+                // If an exception occurred rethrow the error to the method calling it for it to handle.
                 throw;
             }
-
-            return jobAd;
         }
 
 
