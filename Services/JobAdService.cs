@@ -1,108 +1,124 @@
-﻿using ChasGPT_Backend.Repositories;
+﻿using ChasGPT_Backend.Helpers;
+using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels;
+using ChasGPT_Backend.ViewModels___DTOs.JobAds;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace ChasGPT_Backend.Services
 {
     public class JobAdService
     {
-        public static async Task<IResult> SearchJob([FromQuery] string search, [FromQuery] int? region, [FromQuery] int? pageIndex, [FromServices] IJobAdRepository jobAdRepository)
+        public static async Task<IResult> SearchJob([FromServices] IJobAdRepository jobAdRepository, [FromQuery] string search, [FromQuery] int? region, [FromQuery] int page = 1)
         {
             try
             {
-                List<JobDto> result = await jobAdRepository.GetJobAds(search, region, pageIndex);
+                List<JobDto> result = await jobAdRepository.GetJobAdsAsync(search, region, page);
 
-                // If there are 0 things in the result we got no results so return 204 NoContent
                 if (result.Count == 0)
-                    return Results.NoContent();
-                
+                    return Results.NotFound("No job ads matching search found.");
+
                 return Results.Json(result);
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            catch (HttpRequestException ex)
-            {
-                return Results.Problem("Request error:", ex.Message);
-            }
-            catch (JsonException ex)
-            {
-                return Results.Problem("JSON parsing error:", ex.Message);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
-
         }
 
         public static async Task<IResult> GetJobFromId([FromQuery] int adId, [FromServices] IJobAdRepository jobAdRepository)
         {
             try
             {
-                JobDto result = await jobAdRepository.GetJobAdFromId(adId);
+                JobDto result = await jobAdRepository.GetJobAdFromIdAsync(adId);
 
-                // If there are 0 things in the result we got no results so return 204 NoContent
                 if (result == null)
-                    return Results.NoContent();
+                    return Results.NotFound($"No job ad with id \"{adId}\" was found");
        
                return Results.Json(result);
                 
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            catch (HttpRequestException ex)
-            {
-                return Results.Problem("Request error:", ex.Message);
-            }
-            catch (JsonException ex)
-            {
-                return Results.Problem("JSON parsing error:", ex.Message);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
         
 
-        // Only to be used within the program - not an endpoint!
         public static async Task<JobChatGptDto> GetJobAdFromIdChatGpt(int jobId, IJobAdRepository jobAdRepository)
         {
-            JobChatGptDto jobAd = new JobChatGptDto();
             try
             {
-                // Returns the object or null
-                jobAd = await jobAdRepository.GetJobAdFromIdChatGpt(jobId);
+                // Returns the JobAd if found or null if no matching ad was found
+                return await jobAdRepository.GetJobAdFromIdChatGptAsync(jobId);
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Invalid operation: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
+                // If an exception occurred rethrow the error to the method calling it for it to handle.
+                throw;
             }
-            catch (HttpRequestException ex)
+        }
+
+
+        public static async Task<IResult> GetSavedJobAdsAsync(ClaimsPrincipal currentUser, [FromServices] IJobAdRepository jobAdRepository)
+        {
+            try
             {
-                Console.WriteLine($"Request error: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
+                List<SavedJobAdDto> jobAds = await jobAdRepository.GetSavedJobAdsAsync(currentUser);
+
+                if (jobAds.Count == 0)
+                    return Results.NotFound("No saved job ads were found.");
+
+                return Results.Json(jobAds);
+
             }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"JSON parsing error: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                Console.WriteLine($"An unexpected error occurred: {ex.Message} \nInner exception: {ex.InnerException} \nSource: {ex.Source}");
+                return ExceptionHandler.HandleException(ex);
             }
+        }
 
-            return jobAd;
+        public static async Task<IResult> SaveJobAdAsync([FromBody] SaveJobAdRequest request, ClaimsPrincipal currentUser, [FromServices] IJobAdRepository jobAdRepository)
+        {
+            if (request.PlatsbankenJobAdId == 0 || string.IsNullOrEmpty(request.Headline) || string.IsNullOrEmpty(request.Employer))
+                return Results.BadRequest("Invalid request data. All job ad fields must be filled out.");
+
+            try
+            {
+                bool result = await jobAdRepository.SaveJobAdAsync(request, currentUser);
+
+                if (!result)
+                    return Results.Problem("User has already saved this job ad.");
+
+                return Results.Ok("Job ad successfully saved.");
+
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
+            }
+        }
+
+        public static async Task<IResult> RemoveSavedJobAdAsync([FromBody] RemoveJobAdRequest request, ClaimsPrincipal currentUser, [FromServices] IJobAdRepository jobAdRepository)
+        {
+            if (request.PlatsbankenJobAdId == 0)
+                return Results.BadRequest("Invalid request data. All job ad fields must be filled out.");
+
+            try
+            {
+                bool result = await jobAdRepository.RemoveSavedJobAdAsync(request.PlatsbankenJobAdId, currentUser);
+
+                if (!result)
+                    return Results.Problem("User has not saved this job ad.");
+
+                return Results.Ok("Job ad successfully removed.");
+
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
+            }
         }
     }
 }

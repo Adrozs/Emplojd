@@ -4,6 +4,7 @@ using ChasGPT_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChasGPT_Backend.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240509173822_Adding_SavedJobAds")]
+    partial class Adding_SavedJobAds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +24,6 @@ namespace ChasGPT_Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
 
             modelBuilder.Entity("ChasGPT_Backend.Models.JobAd", b =>
                 {
@@ -38,76 +40,22 @@ namespace ChasGPT_Backend.Migrations
                     b.Property<string>("Headline")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-                        
-=======
-            modelBuilder.Entity("ChasGPT_Backend.Models.CoverLetter", b =>
-                {
-                    b.Property<int>("CoverLetterId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CoverLetterId"));
-
-                    b.Property<string>("GeneratedCoverLetter")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Temperature")
-                        .HasColumnType("real");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserProfileId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CoverLetterId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("CoverLetters");
-                });
-
-
-=======
-            modelBuilder.Entity("ChasGPT_Backend.Models.SavedJobAds", b =>
-                {
-                    b.Property<int>("SavedJobId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedJobId"));
 
                     b.Property<int>("PlatsbankenJobId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.HasKey("JobAdId");
 
-                    b.HasKey("SavedJobId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SavedJobAds");
+                    b.ToTable("JobAd");
                 });
-
 
             modelBuilder.Entity("ChasGPT_Backend.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -123,8 +71,8 @@ namespace ChasGPT_Backend.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LockoutEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -133,18 +81,18 @@ namespace ChasGPT_Backend.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SecurityStamp")
-                        .HasColumnType("int");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -378,85 +326,6 @@ namespace ChasGPT_Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.UserProfile", b =>
-                {
-                    b.Property<int>("UserProfileId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserProfileId"));
-
-                    b.Property<string>("DescriptiveWords")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SavedJobAdsSavedJobId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserInterestTags")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserProfileId");
-
-                    b.HasIndex("SavedJobAdsSavedJobId");
-
-                    b.ToTable("UserProfiles");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.CoverLetter", b =>
-                {
-                    b.HasOne("ChasGPT_Backend.Models.User", null)
-                        .WithMany("CoverLetter")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("ChasGPT_Backend.Models.UserProfile", null)
-                        .WithMany("CoverLetter")
-                        .HasForeignKey("UserProfileId");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.SavedJobAds", b =>
-                {
-                    b.HasOne("ChasGPT_Backend.Models.User", null)
-                        .WithMany("SavedJobAds")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.User", b =>
-                {
-                    b.HasOne("ChasGPT_Backend.Models.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.UserProfile", b =>
-                {
-                    b.HasOne("ChasGPT_Backend.Models.SavedJobAds", null)
-                        .WithMany("UserInterests")
-                        .HasForeignKey("SavedJobAdsSavedJobId");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.SavedJobAds", b =>
-                {
-                    b.Navigation("UserInterests");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.User", b =>
-                {
-                    b.Navigation("CoverLetter");
-
-                    b.Navigation("SavedJobAds");
-                });
-
-            modelBuilder.Entity("ChasGPT_Backend.Models.UserProfile", b =>
-                {
-                    b.Navigation("CoverLetter");
                 });
 #pragma warning restore 612, 618
         }

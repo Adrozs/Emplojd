@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using ChasGPT_Backend.Options;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
-namespace ChasGPT_Backend
+namespace ChasGPT_Backend.Helpers
 {
     public interface IEmailSender
     {
@@ -18,7 +19,7 @@ namespace ChasGPT_Backend
 
     public class EmailSender : IEmailSender
     {
-        // Get MailKit settings from appsettings
+        // Inject email config settings 
         private readonly MailKitSettings _emailSettings;
 
         public EmailSender(IOptions<MailKitSettings> emailSettings)
