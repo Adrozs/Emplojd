@@ -1,4 +1,5 @@
-﻿using ChasGPT_Backend.Models;
+﻿using ChasGPT_Backend.Helpers;
+using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Encodings.Web;
@@ -8,12 +9,12 @@ namespace ChasGPT_Backend.Repositories
 
     public interface IUserRepository
     {
-        public Task<bool> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm);
-        public Task<string> LoginAsync(string email, string password);
+        public Task<IdentityResult> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm);
+        public Task<LoginResult> LoginAsync(string email, string password);
         //public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string newPasswordConfirm, ClaimsPrincipal currentUser);
-        public Task<bool> EmailVerificationAsync(string userId, string code);
-        public Task<bool> GeneratePasswordResetCodeAsync(string email);
-        public Task<bool> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
+        public Task<IdentityResult> EmailVerificationAsync(string userId, string code);
+        public Task<IdentityResult> GeneratePasswordResetCodeAsync(string email);
+        public Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
 
     }
 
@@ -33,14 +34,14 @@ namespace ChasGPT_Backend.Repositories
         }
 
 
-        public async Task<bool> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm)
+        public async Task<IdentityResult> CreateAccountAsync(string email, string emailConfirm, string password, string passwordConfirm)
         {
             // Check so emails and passwords match
             if (email != emailConfirm)
-                throw new ArgumentException("Emails do not match.");
+                return IdentityResult.Failed(new IdentityError { Description = "Emails do not match."});
 
             if (password != passwordConfirm)
-                throw new ArgumentException("Passwords do not match.");
+                return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
 
 
             User user = new User
@@ -52,9 +53,9 @@ namespace ChasGPT_Backend.Repositories
             // Creates and hashes password for user in db - All MS Identity methods have build it validation and error handling
             IdentityResult createUserResult = await _userManager.CreateAsync(user, password);
 
-
             if (!createUserResult.Succeeded)
-                throw new InvalidOperationException("Failed to create account: " + string.Join(", ", createUserResult.Errors.Select(e => e.Description)));
+                return IdentityResult.Failed(new IdentityError { Description = string.Join(", ", createUserResult.Errors.Select(e => e.Description)) });
+
 
             string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -80,17 +81,16 @@ namespace ChasGPT_Backend.Repositories
             var sendEmailResult = await _emailSender.SendEmailAsync(email, emailSubject, emailBody);
 
             if (!sendEmailResult.Success)
-                throw new InvalidOperationException("Failed to send email: " + string.Join(", ", sendEmailResult.ErrorMessage));
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to send email: " + string.Join(", ", sendEmailResult.ErrorMessage) });
 
-            return sendEmailResult.Success;
+            return IdentityResult.Success;
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+        public async Task<LoginResult> LoginAsync(string email, string password)
         {
             User? user = await _userManager.FindByEmailAsync(email);
-
             if (user == null)
-                throw new InvalidOperationException("No matching user found.");
+                return LoginResult.Failed("No user found.");
 
             // Checks so password is valid for this user
             var loginResult = await _signInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: true);
@@ -98,14 +98,14 @@ namespace ChasGPT_Backend.Repositories
             if (loginResult.Succeeded)
             {
                 string token = _authService.GenerateToken(user);
-                return token;
+                return LoginResult.Successful(token);
             }
             else if (loginResult.IsNotAllowed)
-                throw new InvalidOperationException("You must confirm your account to log in. Please check your email for a verification link.");
+                return LoginResult.Failed("You must confirm your account to log in. Please check your email for a verification link.");
             else if (loginResult.IsLockedOut)
-                throw new InvalidOperationException("The account is locked due to multiple failed attempts. Try again in a few minutes.");
+                return LoginResult.Failed("The account is locked due to multiple failed attempts. Try again in a few minutes.");
             else
-                throw new InvalidOperationException("Invalid login attempt.");
+                return LoginResult.Failed("Invalid login attempt.");
         }
 
         // Commented away as is it even necessary?
@@ -145,36 +145,35 @@ namespace ChasGPT_Backend.Repositories
 
         // Takes in user id and email code and checks if it's the one we created and sent out to the user
 
-        public async Task<bool> EmailVerificationAsync(string userId, string code)
+        public async Task<IdentityResult> EmailVerificationAsync(string userId, string code)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
-                throw new ArgumentException("Invalid user ID or verification code");
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or verification code." });
 
             User? user = await _userManager.FindByIdAsync(userId);
-
             if (user == null)
-                throw new ArgumentException("No user found with specified id.");
+                return IdentityResult.Failed(new IdentityError { Description = "No user found." });
+
 
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, Uri.UnescapeDataString(code));
             
             // If the result wasn't successful throw exception with details as to why
             if (!result.Succeeded)
-                throw new Exception("Failed to confirm email: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to confirm email: " + string.Join(", ", result.Errors.Select(e => e.Description)) });
 
+            // Set the users email confirmation status
             user.EmailConfirmed = true;
 
-            return result.Succeeded;
+            return result;
         }
 
-        public async Task<bool> GeneratePasswordResetCodeAsync(string email)
+        public async Task<IdentityResult> GeneratePasswordResetCodeAsync(string email)
         {
-            // Find user
             User? user = await _userManager.FindByEmailAsync(email);
-
             if (user == null)
-                throw new InvalidOperationException("No matching user found.");
+                return IdentityResult.Failed(new IdentityError { Description = "No user found." });
 
-            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             // Create the redirect url to send in the email
             string websiteUrl = "https://localhost:5173/reset-password";
@@ -183,40 +182,43 @@ namespace ChasGPT_Backend.Repositories
             string emailSubject = "Password reset request";
             string emailBody = $"Please reset your password by clicking <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>here</a>. If you did not request a password reset, please ignore this email.";
 
-            // Send email
-            var sendEmailResult = await _emailSender.SendEmailAsync(user.Email, emailSubject, emailBody);
+            // Attempt to send email
+            EmailResult sendEmailResult = await _emailSender.SendEmailAsync(user.Email, emailSubject, emailBody);
 
             if (!sendEmailResult.Success)
-                throw new InvalidOperationException("Failed to send email: " + string.Join(", ", sendEmailResult.ErrorMessage));
-
-            return sendEmailResult.Success;
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to send email:" + string.Join(", ", sendEmailResult.ErrorMessage) });
+            
+            return IdentityResult.Success;
         }
 
-        public async Task<bool> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm)
+        public async Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm)
         {
             // Check input 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
-                throw new ArgumentException("Invalid user ID or verification code");
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or verification code." });
 
             if (string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(newPasswordConfirm))
-                throw new ArgumentException("Password can't be empty.");
+                return IdentityResult.Failed(new IdentityError { Description = "Password can't be empty." });
 
             if (newPassword != newPasswordConfirm)
-                throw new ArgumentException("Passwords doesn't match.");
+                return IdentityResult.Failed(new IdentityError { Description = "Passwords doesn't match." });
 
             User? user = await _userManager.FindByIdAsync(userId);
-
             if (user == null)
-                throw new ArgumentException("No user found with specified id.");
+                return IdentityResult.Failed(new IdentityError { Description = "No user found with specified id."});
 
-            IdentityResult result = await _userManager.ResetPasswordAsync(user, Uri.UnescapeDataString(code), newPassword);
+            // Attempt to reset password in the db and catch eventual exceptions
+            try
+            {
+                IdentityResult result = await _userManager.ResetPasswordAsync(user, Uri.UnescapeDataString(code), newPassword);
+                return result;
 
-            // If the result wasn't successful throw exception with details as to why
-            if (!result.Succeeded)
-                throw new InvalidOperationException("Failed to change password: " + string.Join(", ", result.Errors.Select(e => e.Description)));
-
-            return result.Succeeded;
+            }
+            catch (Exception) 
+            {
+                // Rethrow the unexpected exception to be handled further up
+                throw;
+            }
         }
-
     }
 }
