@@ -14,7 +14,7 @@ namespace ChasGPT_Backend.Helpers
             // logger.LogError(ex, "Handling exception of type {ExceptionType}", ex.GetType().Name);
 
 
-            // Handle our own exceptions
+            // Handle our own custom exceptions
             if (ex is ApiException apiEx)
             {
                 return apiEx.ToActionResult();
@@ -32,6 +32,8 @@ namespace ChasGPT_Backend.Helpers
                 case InvalidOperationException invalidOpEx:
                     return Results.Problem(invalidOpEx.Message, statusCode: StatusCodes.Status400BadRequest);
                 default:
+                    // Log unexpected exceptions and return a generic error response
+                    // Log.Error(ex, "Unexpected error occurred.");
                     return Results.Problem("An unexpected error occurred.", ex.Message, statusCode: StatusCodes.Status500InternalServerError);
             }
         }
