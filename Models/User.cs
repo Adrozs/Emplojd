@@ -6,25 +6,8 @@ namespace ChasGPT_Backend.Models
     {
         // Properties included because we inherit from IdentityUser:
 
-        public int Id {  get; set; }
-        public string UserName { get; set; }
-        public string NormalizedUserName {  get; set; }
-        public string Email {  get; set; }
-        public bool EmailConfirmed { get; set; }
-        public string Address { get; set; }
-        public string PasswordHash {  get; set; }
-        public int SecurityStamp { get; set; }
-        public string ConcurrencyStamp {  get; set; }
-        public int PhoneNumber {  get; set; }
-        public bool PhoneNumberConfirmed {  get; set; }
-        public bool TwoFactorEnabled {  get; set; }
-        public DateTime LockoutEnd { get ; set; }
-        public bool LockoutEnabled {  get; set; }
-        public int AccessFailedCount {  get; set; }
-
-
         public virtual UserProfile UserProfile { get; set; }
-        public virtual ICollection<SavedJobAds> SavedJobAds { get; set; }
+        public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
         public virtual ICollection<CoverLetter> CoverLetter { get; set; }
 
         /*
@@ -44,9 +27,6 @@ namespace ChasGPT_Backend.Models
             LockoutEnabled: Indicates whether the user can be locked out.
             AccessFailedCount: The number of failed login attempts. This is used for implementing lockout functionality.
          */
-
-
-        public virtual ICollection<JobAd>? SavedJobAds { get; set; } = new List<JobAd>();
 
     }
 }
