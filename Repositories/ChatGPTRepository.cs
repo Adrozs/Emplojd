@@ -6,7 +6,7 @@ namespace ChasGPT_Backend.Repositories
 {
     public interface IChatGPTRepository
     {
-        public Task<string> GenerateLetterAsync(int userId, int jobId, double temperature, bool job);
+        public Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job);
     }
     public class ChatGPTRepository : IChatGPTRepository
     {
