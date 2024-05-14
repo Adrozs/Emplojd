@@ -15,7 +15,6 @@ namespace ChasGPT_Backend.Repository
         public Task<IdentityResult> EmailVerificationAsync(string userId, string code);
         public Task<IdentityResult> GeneratePasswordResetCodeAsync(string email);
         public Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
-
     }
 
     public class UserRepository : IUserRepository
@@ -41,11 +40,7 @@ namespace ChasGPT_Backend.Repository
                 return IdentityResult.Failed(new IdentityError { Description = "Emails do not match."});
 
             if (password != passwordConfirm)
-
                 return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
-                
-                throw new ArgumentException("Passwords do not match.");
-
 
             User user = new User
             {
@@ -215,7 +210,6 @@ namespace ChasGPT_Backend.Repository
             {
                 IdentityResult result = await _userManager.ResetPasswordAsync(user, Uri.UnescapeDataString(code), newPassword);
                 return result;
-
             }
             catch (Exception) 
             {
