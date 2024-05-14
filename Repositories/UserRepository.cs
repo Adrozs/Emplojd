@@ -1,7 +1,11 @@
-﻿using ChasGPT_Backend.Helpers;
+﻿using ChasGPT_Backend.Data;
+using ChasGPT_Backend.Exceptions.JobAdExceptions;
+using ChasGPT_Backend.Helpers;
 using ChasGPT_Backend.Models;
 using ChasGPT_Backend.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 
 namespace ChasGPT_Backend.Repository
@@ -15,6 +19,7 @@ namespace ChasGPT_Backend.Repository
         public Task<IdentityResult> EmailVerificationAsync(string userId, string code);
         public Task<IdentityResult> GeneratePasswordResetCodeAsync(string email);
         public Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
+        public Task<IdentityResult> DeleteAccountAsync(ClaimsPrincipal currentUser, string password);
     }
 
     public class UserRepository : IUserRepository
@@ -23,13 +28,16 @@ namespace ChasGPT_Backend.Repository
         private readonly SignInManager<User> _signInManager;
         private readonly AuthenticationService _authService;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationContext _context;
 
-        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, AuthenticationService authService, IEmailSender emailSender)
+
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, AuthenticationService authService, IEmailSender emailSender, ApplicationContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _authService = authService;
             _emailSender = emailSender;
+            _context = context;
         }
 
 
@@ -216,6 +224,64 @@ namespace ChasGPT_Backend.Repository
                 // Rethrow the unexpected exception to be handled further up
                 throw;
             }
+        }
+
+        public async Task<IdentityResult> DeleteAccountAsync(ClaimsPrincipal currentUser, string password)
+        {
+            // Get valid user with all its info
+
+            // Get the email from the JWT claims
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                return IdentityResult.Failed(new IdentityError { Description = "No matching user found with the provided email." });
+
+            // Get user along with its saved job ads
+            User? user = await _context.Users
+                .Include(u => u.SavedJobAds)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "No matching user found." });
+
+            // Validate password
+            if (!await _userManager.CheckPasswordAsync(user, password))
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid login." });
+
+
+
+            // Begin db transaction and delete everything connected to a user - rollback if something fails
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                // Remove users saved job ads
+                List<JobAd> savedJobAds = user.SavedJobAds.ToList();
+                foreach (JobAd jobAd in savedJobAds)
+                {
+                    _context.Remove(jobAd);
+                }
+                await _context.SaveChangesAsync();
+
+                // TODO:
+
+                // Remove users CoverLetters 
+
+                // Remove UserProfile if that table is used
+
+
+                // Finally delete the account
+                IdentityResult result = await _userManager.DeleteAsync(user);
+
+                return result; // Just added this to be able to push the branch to remote - double check what this needs to be
+
+            }
+            catch(Exception)
+            {
+                // If exception occurred rollback any changes and rethrow the exception to the service
+                await transaction.RollbackAsync();
+                throw;
+            }
+
         }
     }
 }
