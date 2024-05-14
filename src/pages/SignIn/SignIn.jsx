@@ -12,7 +12,7 @@ function SignIn() {
         <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
           <Header>
             {" "}
-            <h1 className="text-xl font-Glockenspiel cursor-pointer text-white">
+            <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
               EMPLOJD
             </h1>
           </Header>
