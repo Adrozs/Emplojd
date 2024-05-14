@@ -4,12 +4,8 @@ namespace ChasGPT_Backend.Models
 {
     public class User : IdentityUser
     {
+        // LET THIS STAY HERE AT THE TOP SO WE CAN SEE WHAT IS A PART OF THE MODEL! THANK YOU.
         // Properties included because we inherit from IdentityUser:
-
-        public virtual UserProfile UserProfile { get; set; }
-        public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
-        public virtual ICollection<CoverLetter> CoverLetter { get; set; }
-
         /*
             Id: A primary key for the user.
             UserName: The username of the user.
@@ -27,6 +23,10 @@ namespace ChasGPT_Backend.Models
             LockoutEnabled: Indicates whether the user can be locked out.
             AccessFailedCount: The number of failed login attempts. This is used for implementing lockout functionality.
          */
+
+        public virtual UserProfile UserProfile { get; set; }
+        public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
+        public virtual ICollection<CoverLetter> CoverLetter { get; set; }
 
     }
 }
