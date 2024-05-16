@@ -5,6 +5,7 @@ import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
+import html2pdf from "html2pdf.js";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -246,6 +247,18 @@ function ApplySideThree({ job, page, setPage }) {
       .catch((error) => console.error("Could not copy text: ", error));
   };
 
+  const saveAsPdf = () => {
+    const confirmDownload = window.confirm("Vill du ladda ner brevet som PDF?");
+    if (confirmDownload) {
+      const element = editEl.current;
+      const tempDiv = document.createElement("div");
+      tempDiv.appendChild(element.cloneNode(true));
+
+      // Konvertera innehållet till en PDF med html2pdf
+      html2pdf().from(tempDiv).save();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
       <div className="h-[340px] w-[90%] bg-white p-4 flex flex-col justify-between">
@@ -283,7 +296,9 @@ function ApplySideThree({ job, page, setPage }) {
             <button className="underline text-sm" onClick={() => setPage(2)}>
               &larr; Tillbaka till innehållet
             </button>
-            <button className="underline text-sm">Ladda ner brev</button>
+            <button onClick={saveAsPdf} className="underline text-sm">
+              Ladda ner brev
+            </button>
           </div>
         </div>
         <div className="flex justify-between">
