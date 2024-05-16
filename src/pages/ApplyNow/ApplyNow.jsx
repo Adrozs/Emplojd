@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../ui/Loader";
@@ -177,61 +177,62 @@ function ApplySideTwo({ job, page, setPage }) {
         </div>
         <div>
           <p>Arbetstitle</p>
-          <p className="text-l font-semibold">{job.headline}</p>
+          <p className="text-xl font-semibold">{job.headline}</p>
         </div>
         <form className="max-w-sm my-4">
-          <label className="flex flex-col text-l mb-4">
-            <span>Namn</span>
+          <label className="flex flex-col text-sm mb-6">
+            <span>Fullständingt namn</span>
             <input
-              className="p-1 bg-stone-100"
+              className="p-1 bg-stone-100 h-[52px] px-3 rounded-[20px]"
               type="text"
               placeholder="Namn Efternamnsson"
             />
           </label>
-          <label className="flex flex-col text-l my-4">
-            <span>Intressen</span>
+          <label className="flex flex-col text-sm my-4 mb-6">
+            <span>Intressen (separerat med kommatecken)</span>
             <input
-              className="p-1 mt-1 bg-stone-100"
+              className="p-1 mt-1 bg-stone-100 h-[52px] px-3 rounded-[20px]"
               type="text"
-              placeholder="..."
+              placeholder="Fiske, odling, bilar"
             />
           </label>
-          <label className="flex flex-col text-l my-4">
-            <span>Ditt cv</span>
+
+          <label className="flex flex-col text-sm my-4 mb-6">
+            <span>Beskrivande ord (separerat med kommatecken)</span>
             <input
-              className="p-1 mt-1 bg-stone-100 w-full"
-              type="file"
-              placeholder="CV-namn.pdf"
-            />
-          </label>
-          <label className="flex flex-col text-l my-4">
-            <span>Beskrivande ord (t.ex. snabblärd, per)</span>
-            <input
-              className="p-1 mt-1 bg-stone-100 "
+              className="p-1 mt-1 bg-stone-100 h-[52px] px-3 rounded-[20px]"
               type="text"
-              placeholder="..."
+              placeholder="Problemlösare, snabblärd"
             />
           </label>
-          <label className='text-l"'>
+          <label className='text-sm"'>
             <span>Hur självständig ska AI:n vara?</span>
             <input
               type="range"
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
               value="10"
             />
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Lite självständig</span>
               <span>Mycket självständig</span>
             </div>
           </label>
         </form>
-        <div className="flex justify-between mt-4">
-          <button onClick={() => setPage(1)}>Avbryt</button>
+        <div className="flex justify-between items-center mt-4">
+          <Link to="/joblist" className="text-sm">
+            Avbryt
+          </Link>
           <button
-            className="bg-customBlue rounded-[4px] text-white p-1 w-[70%]"
+            className=" w-[35%] text-customBlue py-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 "
+            onClick={() => setPage(2)}
+          >
+            &larr; Tillbaka
+          </button>
+          <button
+            className="bg-customBlue rounded-[4px] text-white py-1 w-[45%]"
             onClick={() => setPage(3)}
           >
-            Nästa &rarr;
+            Fortsätt &rarr;
           </button>
         </div>
       </div>
