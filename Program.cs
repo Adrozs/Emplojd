@@ -12,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ChasGPT_Backend.Helpers;
 using ChasGPT_Backend.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using AspNet.Security.OAuth.LinkedIn;
 
 namespace ChasGPT_Backend
 {
@@ -20,6 +23,31 @@ namespace ChasGPT_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllers();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddCookie()
+                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+                {
+                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                    options.CallbackPath = "/googleresponse";
+                })
+        
+
+            .AddLinkedIn(options =>
+             {
+                 options.ClientId = builder.Configuration.GetSection("LinkedIn:ClientId").Value;
+                 options.ClientSecret = builder.Configuration.GetSection("LinkedIn:ClientSecret").Value;
+                 options.CallbackPath = new PathString("/signin-linkedin");
+             });
+
+
             ConfigurationManager configuration = builder.Configuration;
 
             // Add services to the container.
@@ -136,6 +164,8 @@ namespace ChasGPT_Backend
 
             var app = builder.Build();
 
+            app.UseRouting();
+
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
             app.UseCors(builder =>
             {
@@ -151,11 +181,12 @@ namespace ChasGPT_Backend
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-     
+
             }
 
             app.UseSwagger();
             app.UseSwaggerUI();
+
 
             //app.UseHttpsRedirection(); // (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
 
@@ -167,6 +198,8 @@ namespace ChasGPT_Backend
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapControllers();
+
 
 
 
