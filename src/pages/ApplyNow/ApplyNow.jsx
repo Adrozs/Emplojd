@@ -5,9 +5,13 @@ import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
-import html2pdf from "html2pdf.js";
-import { FiCopy } from "react-icons/fi";
 import Tooltip from "../../components/Tooltip";
+
+import html2pdf from "html2pdf.js";
+//Icons
+import { FiCopy } from "react-icons/fi";
+import { FaEdit } from "react-icons/fa";
+import { IoMdRefresh } from "react-icons/io";
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
@@ -64,21 +68,21 @@ function ApplyNow() {
               <span
                 className={
                   page === 1
-                    ? "h-4 w-4 bg-slate-600 rounded-full"
+                    ? "h-4 w-4 bg-customBlue rounded-full"
                     : "h-4 w-4 rounded-full  bg-slate-300"
                 }
               ></span>
               <span
                 className={
                   page === 2
-                    ? "h-4 w-4 bg-slate-600 rounded-full"
+                    ? "h-4 w-4 bg-customBlue rounded-full"
                     : "h-4 w-4 rounded-full  bg-slate-300"
                 }
               ></span>
               <span
                 className={
                   page === 3
-                    ? "h-4 w-4 bg-slate-600 rounded-full"
+                    ? "h-4 w-4 bg-customBlue rounded-full"
                     : "h-4 w-4 rounded-full bg-slate-300"
                 }
               ></span>
@@ -89,13 +93,16 @@ function ApplyNow() {
       {page === 1 && (
         <>
           <ul className="flex justify-center my-14  max-w-lg mx-auto">
-            <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between">
+            <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
               <div>
-                <div className="grid grid-cols-2 w-[70%] items-center">
-                  <h2 className="text-2xl font-semibold">{page}.</h2>
+                <div className="grid grid-cols-2 w-[70%] items-center ">
+                  <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
                   <div className="flex justify-center">
                     <p className="text-sm ">Jobb du söker</p>
                   </div>
+                </div>
+                <div className="w-full flex items-center justify-center mt-1">
+                  <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
                 </div>
               </div>
               <div>
@@ -149,13 +156,16 @@ function ApplyNow() {
 function ApplySideTwo({ job, page, setPage }) {
   return (
     <ul className="flex justify-center my-14  max-w-lg mx-auto">
-      <div className=" w-[90%] bg-white p-4 flex flex-col text-stone-800 ">
+      <div className=" w-[90%] bg-white p-4 pb-10 flex flex-col text-stone-800 rounded-[20px] ">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
-            <h2 className="text-2xl font-semibold">{page}.</h2>
+            <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
             <div className="flex justify-center">
               <p className="text-sm ">Fyll i ansökan</p>
             </div>
+          </div>
+          <div className="w-full flex items-center justify-center mt-1">
+            <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
           </div>
         </div>
         <div className="flex flex-col items-center text-center">
@@ -262,13 +272,16 @@ function ApplySideThree({ job, page, setPage }) {
 
   return (
     <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
-      <div className="h-[340px] w-[90%] bg-white p-4 flex flex-col justify-between">
+      <div className="h-[200px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
-            <h2 className="text-2xl font-semibold">{page}.</h2>
+            <h2 className=" ml-10 text-2xl font-semibold">{page}.</h2>
             <div className="flex justify-center">
               <p className="text-sm ">Kontrollera brevet</p>
             </div>
+          </div>
+          <div className="w-full flex items-center justify-center mt-1">
+            <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
           </div>
         </div>
         <div>
@@ -276,41 +289,8 @@ function ApplySideThree({ job, page, setPage }) {
           <h3 className="font-semibold text-xl text-stone-900">
             {job.headline}
           </h3>
-          <p className="text-lg">{job.employer.name}</p>
         </div>
-        <div className="flex gap-2 text-[12px]">
-          {job.working_hours_type.label ? (
-            <span className="bg-stone-100 px-2 py-1">
-              {job.working_hours_type.label}
-            </span>
-          ) : (
-            <span className="bg-stone-100 px-2 py-1">
-              {job.employment_type.label}{" "}
-            </span>
-          )}
-          <span className="bg-stone-100 px-2 py-1">
-            {job.occupation.label}{" "}
-          </span>
-        </div>
-        <div>
-          <div className="flex justify-between">
-            <button className="underline text-sm" onClick={() => setPage(2)}>
-              &larr; Tillbaka till innehållet
-            </button>
-            <button onClick={saveAsPdf} className="underline text-sm">
-              Ladda ner brev
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between">
-          <button
-            onClick={() => setEditable(!editable)}
-            className="w-[40%] bg-stone-100 p-1"
-          >
-            Redigera brev
-          </button>
-          <button className="w-[40%] bg-stone-100 p-1">Generera brev</button>
-        </div>
+
         <div className="flex justify-center">
           <button
             className="bg-customBlue rounded-[4px] text-white p-1 w-[90%]"
@@ -320,7 +300,7 @@ function ApplySideThree({ job, page, setPage }) {
           </button>
         </div>
       </div>
-      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col">
+      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px]">
         <div className="self-end">
           <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
             <button onClick={copyTextToClipboard}>
@@ -369,6 +349,37 @@ function ApplySideThree({ job, page, setPage }) {
           </p>
         </div>
       </aside>
+      <div className="h-[170px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+        <div>
+          <div className="flex justify-between">
+            <button
+              className="underline text-sm ml-3"
+              onClick={() => setPage(2)}
+            >
+              &larr; Tillbaka till innehållet
+            </button>
+          </div>
+        </div>
+        <div className="flex justify-between mx-3">
+          <button
+            onClick={() => setEditable(!editable)}
+            className="w-[40%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2"
+          >
+            Redigera brev <FaEdit size={17} />
+          </button>
+          <button className="w-[40%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1">
+            Generera brev <IoMdRefresh size={20} />
+          </button>
+        </div>
+        <div className="flex justify-center">
+          <button
+            className="bg-customBlue rounded-[4px] text-white p-1 w-[95%] h-[40px]"
+            onClick={() => setPage(2)}
+          >
+            Skicka ansökan &rarr;
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
