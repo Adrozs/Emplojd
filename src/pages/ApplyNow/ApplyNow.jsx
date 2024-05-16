@@ -6,7 +6,8 @@ import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 import html2pdf from "html2pdf.js";
-
+import { FiCopy } from "react-icons/fi";
+import Tooltip from "../../components/Tooltip";
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
@@ -320,9 +321,13 @@ function ApplySideThree({ job, page, setPage }) {
         </div>
       </div>
       <aside className="my-6 w-[90%] bg-white p-4 flex flex-col">
-        <button className="self-end" onClick={copyTextToClipboard}>
-          {copied ? "✅ Kopierad" : "Kopiera"}
-        </button>
+        <div className="self-end">
+          <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
+            <button onClick={copyTextToClipboard}>
+              <FiCopy size={22} />
+            </button>
+          </Tooltip>
+        </div>
         <div
           className="p-4"
           contentEditable={editable ? "true" : "false"}

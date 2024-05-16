@@ -6,6 +6,7 @@ import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { FaBullhorn } from "react-icons/fa";
 // uuid
 import { v4 as uuidv4 } from "uuid";
+import Tooltip from "../../components/Tooltip";
 function JobSearchForm() {
   const navigate = useNavigate();
   const [city, setCity] = useState("");
@@ -198,9 +199,11 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
           </div>
         )}
       </div>
-      <button onClick={onDelete}>
-        <img src="/trash.png" alt="papperskorg" className="h-[14px]" />
-      </button>
+      <Tooltip tooltip="Ta bort">
+        <button onClick={onDelete}>
+          <img src="/trash.png" alt="papperskorg" className="h-[14px]" />
+        </button>
+      </Tooltip>
     </div>
   );
 }
