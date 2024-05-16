@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
@@ -226,8 +226,17 @@ function ApplySideTwo({ job, page, setPage }) {
     </ul>
   );
 }
-
 function ApplySideThree({ job, page, setPage }) {
+  const [editable, setEditable] = useState(false);
+  const editEl = useRef(null);
+
+  useEffect(() => {
+    if (editable) {
+      // Sätt fokus på contentEditable-elementet när editable blir true
+      editEl.current.focus();
+    }
+  }, [editable]);
+
   return (
     <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
       <div className="h-[340px] w-[90%] bg-white p-4 flex flex-col justify-between">
@@ -244,7 +253,6 @@ function ApplySideThree({ job, page, setPage }) {
           <h3 className="font-semibold text-xl text-stone-900">
             {job.headline}
           </h3>
-
           <p className="text-lg">{job.employer.name}</p>
         </div>
         <div className="flex gap-2 text-[12px]">
@@ -257,7 +265,6 @@ function ApplySideThree({ job, page, setPage }) {
               {job.employment_type.label}{" "}
             </span>
           )}
-
           <span className="bg-stone-100 px-2 py-1">
             {job.occupation.label}{" "}
           </span>
@@ -271,7 +278,12 @@ function ApplySideThree({ job, page, setPage }) {
           </div>
         </div>
         <div className="flex justify-between">
-          <button className="w-[40%] bg-stone-100 p-1">Redigera brev</button>
+          <button
+            onClick={() => setEditable(!editable)}
+            className="w-[40%] bg-stone-100 p-1"
+          >
+            Redigera brev
+          </button>
           <button className="w-[40%] bg-stone-100 p-1">Generera brev</button>
         </div>
         <div className="flex justify-center">
@@ -284,40 +296,44 @@ function ApplySideThree({ job, page, setPage }) {
         </div>
       </div>
       <aside className="my-6 w-[90%] bg-white p-4">
-        <div className="p-4">
-          <h3>Hej ChasGPT</h3>
+        <div
+          className="p-4"
+          contentEditable={editable ? "true" : "false"}
+          ref={editEl}
+        >
+          <h3> Hej där,</h3>
           <br />
           <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Exercitationem quisquam ea eos reprehenderit soluta obcaecati eum
-            voluptate eaque nam assumenda corrupti, ducimus error tempore ipsa
-            nulla sunt temporibus impedit, blanditiis illo voluptatum ad
-            consequuntur, debitis harum eius. Harum, eveniet eos? Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Nam voluptas temporibus
-            at placeat quasi tempora nobis pariatur praesentium rerum odio?
-            Molestiae maxime voluptates obcaecati, beatae assumenda suscipit
-            nobis, tempore nostrum quaerat nisi ab ea, veniam quos! Beatae
-            totam, ut eligendi rem quibusdam aspernatur necessitatibus quos
-            fugiat vel quidem eveniet dolor tenetur? Maxime sequi illo tempora,
-            odit reprehenderit enim ipsam vel sit. Error corporis magnam iure
-            ullam pariatur, quis ab tempora! Asperiores ratione molestiae,
-            minima aspernatur repellendus similique. Culpa praesentium deleniti
-            autem similique cupiditate fugiat, porro quidem placeat accusantium
-            adipisci ea reprehenderit facilis neque voluptatem saepe illo, quos
-            possimus est molestiae hic pariatur dolorem debitis molestias! Quo
-            officiis fuga eum id suscipit ipsa ratione dolores fugiat possimus
-            non aperiam, molestiae rerum explicabo maxime aliquid deleniti et
-            amet ut fugit at qui? Corporis veritatis officia voluptatibus illum
-            quisquam ut corrupti optio quod reprehenderit vitae illo neque,
-            necessitatibus id deserunt consequuntur dolor consectetur nostrum
-            recusandae temporibus tempora suscipit? Eveniet unde explicabo,
-            dignissimos, cupiditate repellendus ratione mollitia dolorum sequi,
-            aspernatur voluptatem vitae ipsum totam illo. Est iste ipsum
-            officiis repudiandae tempore animi. Ut ab necessitatibus quia,
-            numquam autem dolorum voluptatum ratione. Magni saepe sapiente
-            dolorem incidunt quas, corrupti unde dolorum culpa sequi neque
-            consequatur fugiat error, aspernatur id deleniti eveniet ipsam
-            laudantium porro!
+            Jag hoppas att detta brev når er i god hälsa och högmod. Mitt namn
+            är Fady och jag skriver till er med en genuin passion för
+            .NET-utveckling och en stark önskan att bidra till ert team.
+            <br />
+            <br />
+            Jag har nyligen stött på er annonsering för en .NET-utvecklare och
+            jag kunde inte motstå att söka. Efter att ha granskat er verksamhet
+            och era projekt, är jag imponerad av den nivå av innovation och
+            engagemang ni visar. Att få möjlighet att arbeta med er och bidra
+            till era framgångar skulle vara en ära för mig.
+            <br />
+            <br />
+            Med en gedigen erfarenhet inom .NET-utveckling och en passion för
+            att lösa komplexa problem, tror jag att jag kan vara en tillgång för
+            ert team. Jag har arbetat med olika projekt inom området och har en
+            djup förståelse för ramverket och dess möjligheter. Jag är van vid
+            att arbeta både självständigt och i team och har en stark vilja att
+            lära och växa.
+            <br />
+            <br /> Det är min övertygelse att genom att kombinera min tekniska
+            expertis med min förmåga att tänka kreativt och
+            problemlösningsorienterat, kan jag bidra till att driva era projekt
+            framåt och uppnå era mål.
+            <br />
+            <br />
+            Jag ser fram emot möjligheten att diskutera hur jag kan bidra till
+            ert team ytterligare. Tack för er tid och övervägande. <br />
+            <br />
+            Med vänliga hälsningar, <br />
+            Fady
           </p>
         </div>
       </aside>

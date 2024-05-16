@@ -1,7 +1,7 @@
 {
   "jobs": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Job Title 1",
       "content_text": "Lorem ipsum dolor sit amet...",
       "company_name": "Company A",
@@ -9,7 +9,7 @@
       "likes": 0
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Job Title 2",
       "content_text": "Lorem ipsum dolor sit amet...",
       "company_name": "Company B",
@@ -31,6 +31,20 @@
       "employer": "Nexer Recruit AB",
       "occupation": "Testledare/QA lead",
       "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5569754970/logotyper/logo.png"
+    },
+    {
+      "id": "28777535",
+      "headline": "Systemutvecklare .NET / Java Automotive",
+      "employer": "AFRY AB",
+      "occupation": "Systemutvecklare/Programmerare",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/87599216/logotyper/logo.png"
+    },
+    {
+      "id": "28774551",
+      "headline": "Deploja söker en Java Backend Utvecklare",
+      "employer": "Deploja AB",
+      "occupation": "Systemutvecklare/Programmerare",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5569328155/logotyper/logo.png"
     }
   ],
   "profile": []
