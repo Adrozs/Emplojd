@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ChasGPT_Backend.Helpers;
 using ChasGPT_Backend.Options;
+using AspNet.Security.OAuth.LinkedIn;
 
 namespace ChasGPT_Backend
 {
@@ -20,6 +21,7 @@ namespace ChasGPT_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllers();
             ConfigurationManager configuration = builder.Configuration;
 
             // Add services to the container.
@@ -94,10 +96,42 @@ namespace ChasGPT_Backend
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
 
+            // Amanda
+            // Adding LinkedIn authorization 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]))
+                };
+            })
+            .AddLinkedIn(options =>
+            {
+                options.ClientId = builder.Configuration.GetSection("LinkedIn:ClientId").Value;
+                options.ClientSecret = builder.Configuration.GetSection("LinkedIn:ClientSecret").Value;
+                options.CallbackPath = new PathString("/signin-linkedin");
+            });
+
+            builder.Services.AddAuthorization();
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers();
 
             // Configure Swagger to include JWT authorization input
             builder.Services.AddSwaggerGen(c =>
@@ -167,7 +201,6 @@ namespace ChasGPT_Backend
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
             app.UseAuthentication();
             app.UseAuthorization();
-
 
 
             // ENDPOINTS

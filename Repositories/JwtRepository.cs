@@ -48,5 +48,10 @@ namespace ChasGPT_Backend.Repositories
                 throw new ApplicationException("Error generationg JWT token", ex);
             }
         }
+
+        public string LinkedInGenerateJwt(User user)
+        {
+
+        }
     }
 }
