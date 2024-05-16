@@ -226,16 +226,25 @@ function ApplySideTwo({ job, page, setPage }) {
     </ul>
   );
 }
+
 function ApplySideThree({ job, page, setPage }) {
   const [editable, setEditable] = useState(false);
   const editEl = useRef(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (editable) {
-      // Sätt fokus på contentEditable-elementet när editable blir true
       editEl.current.focus();
     }
   }, [editable]);
+
+  const copyTextToClipboard = () => {
+    const textToCopy = editEl.current.innerText;
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => setCopied(true))
+      .catch((error) => console.error("Could not copy text: ", error));
+  };
 
   return (
     <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
@@ -295,7 +304,10 @@ function ApplySideThree({ job, page, setPage }) {
           </button>
         </div>
       </div>
-      <aside className="my-6 w-[90%] bg-white p-4">
+      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col">
+        <button className="self-end" onClick={copyTextToClipboard}>
+          {copied ? "✅ Kopierad" : "Kopiera"}
+        </button>
         <div
           className="p-4"
           contentEditable={editable ? "true" : "false"}
