@@ -272,7 +272,7 @@ function ApplySideThree({ job, page, setPage }) {
 
   return (
     <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
-      <div className="h-[200px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className=" ml-10 text-2xl font-semibold">{page}.</h2>
@@ -280,24 +280,15 @@ function ApplySideThree({ job, page, setPage }) {
               <p className="text-sm ">Kontrollera brevet</p>
             </div>
           </div>
-          <div className="w-full flex items-center justify-center mt-1">
+          <div className="w-full flex items-center justify-center mt-1 py-1">
             <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
           </div>
         </div>
         <div>
-          <p>Ansökan för</p>
+          <p className="text-sm">Ansökan för</p>
           <h3 className="font-semibold text-xl text-stone-900">
             {job.headline}
           </h3>
-        </div>
-
-        <div className="flex justify-center">
-          <button
-            className="bg-customBlue rounded-[4px] text-white p-1 w-[90%]"
-            onClick={() => setPage(2)}
-          >
-            Skicka ansökan &rarr;
-          </button>
         </div>
       </div>
       <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px]">
@@ -349,7 +340,7 @@ function ApplySideThree({ job, page, setPage }) {
           </p>
         </div>
       </aside>
-      <div className="h-[170px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[160px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
           <div className="flex justify-between">
             <button
@@ -363,12 +354,12 @@ function ApplySideThree({ job, page, setPage }) {
         <div className="flex justify-between mx-3">
           <button
             onClick={() => setEditable(!editable)}
-            className="w-[40%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2"
+            className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 text-[13px]"
           >
-            Redigera brev <FaEdit size={17} />
+            Redigera brev <FaEdit size={15} />
           </button>
-          <button className="w-[40%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1">
-            Generera brev <IoMdRefresh size={20} />
+          <button className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px]">
+            Generera brev <IoMdRefresh size={18} />
           </button>
         </div>
         <div className="flex justify-center">
@@ -376,7 +367,7 @@ function ApplySideThree({ job, page, setPage }) {
             className="bg-customBlue rounded-[4px] text-white p-1 w-[95%] h-[40px]"
             onClick={() => setPage(2)}
           >
-            Skicka ansökan &rarr;
+            Spara personligt brev &rarr;
           </button>
         </div>
       </div>
