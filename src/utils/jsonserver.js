@@ -1,6 +1,15 @@
 import axios from "axios";
 
-function sendLikeData(id, headline, employer, occupation, logo) {
+function sendLikeData(
+  id,
+  headline,
+  employer,
+  occupation,
+  logo,
+  working_hours_type,
+  employment_type,
+  workplace_address
+) {
   axios
     .post("http://localhost:3001/likes", {
       id: id,
@@ -8,6 +17,9 @@ function sendLikeData(id, headline, employer, occupation, logo) {
       employer: employer,
       occupation: occupation,
       logo: logo,
+      working_hours_type: working_hours_type,
+      employment_type: employment_type,
+      workplace_address: workplace_address,
     })
     .then((response) => {
       console.log("Gillad annons", response.data);

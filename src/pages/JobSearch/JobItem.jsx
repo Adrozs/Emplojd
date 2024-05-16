@@ -36,7 +36,10 @@ function JobItem({ job, children }) {
         job.headline,
         job.employer.name,
         job.occupation.label,
-        job.logo_url
+        job.logo_url,
+        job.employment_type.label,
+        job.working_hours_type.label,
+        job.workplace_address.municipality
       );
     } else if (isLiked) {
       deleteLikeData(job.id);
@@ -53,7 +56,7 @@ function JobItem({ job, children }) {
             className="object-contain w-[50px] h-[50px] p-1 rounded-full"
           />
         </div>
-        <div onClick={() => setIsLiked(!isLiked)}>
+        <div onClick={handleLike}>
           {isLiked ? (
             <FaHeart className="text-customBlue" size={24} />
           ) : (
