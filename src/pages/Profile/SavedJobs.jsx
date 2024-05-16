@@ -7,12 +7,25 @@ import { FaHeart } from "react-icons/fa6";
 
 function SavedJobs() {
   const [likes, setLikes] = useState([]);
+  const [daySincePosted, setDaySincePosted] = useState(null);
 
   useEffect(() => {
     getLikeData().then((data) => {
       setLikes(data);
+      const todaysDate = new Date();
+      const updatedLikes = data.map((job) => {
+        const jobPosted = new Date(job.publication_date);
+        const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
+        const differenceInDays = Math.ceil(
+          differenceInTime / (1000 * 3600 * 24)
+        );
+        setDaySincePosted(differenceInDays);
+        return { ...job, daysSincePosted: differenceInDays };
+      });
+      setLikes(updatedLikes);
     });
   }, []);
+
   return (
     <>
       <HeaderOtherPages />
@@ -28,7 +41,11 @@ function SavedJobs() {
           </p>
         </div>
         <ul className="flex flex-col items-center justify-center my-10  max-w-lg mx-auto">
-          {likes > 0 ? (
+          {likes === 0 ? (
+            <div className="border-gray-400 border-dashed border-2 h-[230px] w-[90%]  p-4 flex justify-between rounded-[20px] mb-4  items-center">
+              <p className="text-xl"> Dina framtida sparade jobb hamnar här.</p>
+            </div>
+          ) : (
             likes.map((data) => {
               return (
                 <li className="h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 ">
@@ -47,7 +64,7 @@ function SavedJobs() {
                   </div>
                   <div>
                     <p className="text-sm my-2">
-                      {data.workplace_address.municipality} - 2 dagar sen
+                      {data.workplace_address} - {daySincePosted} dagar sen
                     </p>
                   </div>
                   <div className="flex gap-2 text-[12px]">
@@ -71,10 +88,6 @@ function SavedJobs() {
                 </li>
               );
             })
-          ) : (
-            <div className="border-gray-400 border-dashed border-2 h-[230px] w-[90%]  p-4 flex justify-between rounded-[20px] mb-4  items-center">
-              <p className="text-xl"> Dina framtida sparade jobb hamnar här.</p>
-            </div>
           )}
         </ul>
         <div className="flex mb-10"></div>

@@ -8,7 +8,8 @@ function sendLikeData(
   logo,
   working_hours_type,
   employment_type,
-  workplace_address
+  workplace_address,
+  publication_date
 ) {
   axios
     .post("http://localhost:3001/likes", {
@@ -20,6 +21,7 @@ function sendLikeData(
       working_hours_type: working_hours_type,
       employment_type: employment_type,
       workplace_address: workplace_address,
+      publication_date: publication_date,
     })
     .then((response) => {
       console.log("Gillad annons", response.data);
