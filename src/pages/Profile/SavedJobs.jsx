@@ -4,6 +4,7 @@ import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import { getLikeData } from "../../utils/jsonserver";
 import { useState, useEffect } from "react";
 import { FaHeart } from "react-icons/fa6";
+import Footer from "../../components/Footer";
 
 function SavedJobs() {
   const [likes, setLikes] = useState([]);
@@ -91,6 +92,7 @@ function SavedJobs() {
           )}
         </ul>
         <div className="flex mb-10"></div>
+        <Footer />
       </div>
     </>
   );

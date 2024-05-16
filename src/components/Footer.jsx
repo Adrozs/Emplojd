@@ -23,11 +23,6 @@ export default function Footer({ children }) {
               <h2 className="inline  p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
                 EMPLOJD
               </h2>
-              <img
-                src="/LogoEmplojd.png"
-                alt="logo"
-                className="w-[54px] h-[54px]"
-              />
             </div>
             <div className="text-center mb-10">
               <h3 className="mb-5 font-bold text-xl">TEXT</h3>
