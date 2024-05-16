@@ -12,6 +12,8 @@ import html2pdf from "html2pdf.js";
 import { FiCopy } from "react-icons/fi";
 import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
+import { RiCheckboxCircleFill } from "react-icons/ri";
+
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
@@ -86,6 +88,13 @@ function ApplyNow() {
                     : "h-4 w-4 rounded-full bg-slate-300"
                 }
               ></span>
+              <span
+                className={
+                  page === 4
+                    ? "h-4 w-4 bg-customBlue rounded-full"
+                    : "h-4 w-4 rounded-full bg-slate-300"
+                }
+              ></span>
             </div>
           </div>
         )}
@@ -151,6 +160,7 @@ function ApplyNow() {
       )}
       {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
       {page === 3 && <ApplySideThree job={job} page={page} setPage={setPage} />}
+      {page === 4 && <ApplySideFour job={job} page={page} setPage={setPage} />}
       <Footer />
     </main>
   );
@@ -267,15 +277,12 @@ function ApplySideThree({ job, page, setPage }) {
       .then(() => setCopied(true))
       .catch((error) => console.error("Could not copy text: ", error));
   };
-
   const saveAsPdf = () => {
     const confirmDownload = window.confirm("Vill du ladda ner brevet som PDF?");
     if (confirmDownload) {
       const element = editEl.current;
       const tempDiv = document.createElement("div");
       tempDiv.appendChild(element.cloneNode(true));
-
-      // Konvertera innehållet till en PDF med html2pdf
       html2pdf().from(tempDiv).save();
     }
   };
@@ -350,7 +357,7 @@ function ApplySideThree({ job, page, setPage }) {
           </p>
         </div>
       </aside>
-      <div className="h-[160px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
           <div className="flex justify-between">
             <button
@@ -375,13 +382,46 @@ function ApplySideThree({ job, page, setPage }) {
             Generera brev <IoMdRefresh size={18} />
           </button>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center flex-col">
           <button
-            className="bg-customBlue rounded-[4px] text-white p-1 w-[95%] h-[40px]"
-            onClick={() => setPage(3)}
+            className="bg-customBlue rounded-[4px] text-white p-1 w-[100%] h-[40px]"
+            onClick={() => setPage(4)}
           >
             Spara personligt brev &rarr;
           </button>
+          <button className="text-sm mt-2 underline" onClick={saveAsPdf}>
+            Ladda ner som pdf
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ApplySideFour({ job, page, setPage }) {
+  return (
+    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
+      <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col gap-4 rounded-[20px]">
+        <div className="mx-auto">
+          <RiCheckboxCircleFill size={36} />
+        </div>
+        <div className="px-10">
+          Ditt personliga brev är nu sparat och lorem ipsum lorem ipsum
+        </div>
+        <div className="flex flex-col items-center gap-4">
+          <Link
+            to="/saved"
+            className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
+          >
+            Gå till sparade brev
+          </Link>
+          <button className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px]">
+            Ansök här &rarr;
+          </button>
+
+          <Link className="text-sm underline" to="/joblist">
+            Sök fler jobb
+          </Link>
         </div>
       </div>
     </div>
