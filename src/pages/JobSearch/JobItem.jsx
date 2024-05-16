@@ -4,6 +4,8 @@ import {
   getLikeData,
   deleteLikeData,
 } from "../../utils/jsonserver";
+import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 
 function JobItem({ job, children }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
@@ -51,11 +53,13 @@ function JobItem({ job, children }) {
             className="object-contain w-[50px] h-[50px] p-1 rounded-full"
           />
         </div>
-        <img
-          src={isLiked ? "liked-heart.svg" : "/like-heart.svg"}
-          alt="bild"
-          onClick={handleLike}
-        />
+        <div onClick={() => setIsLiked(!isLiked)}>
+          {isLiked ? (
+            <FaHeart className="text-customBlue" size={24} />
+          ) : (
+            <FaRegHeart className="text-customBlue" size={24} />
+          )}
+        </div>
       </div>
       <div>
         <h3 className="font-semibold text-xl text-stone-900">{job.headline}</h3>
@@ -68,16 +72,18 @@ function JobItem({ job, children }) {
       </div>
       <div className="flex gap-2 text-[12px]">
         {job.working_hours_type.label ? (
-          <span className="bg-stone-100 px-2 py-1">
+          <span className="bg-[#CFEBD4] rounded-[2px] px-2 py-1">
             {job.working_hours_type.label}
           </span>
         ) : (
-          <span className="bg-stone-100 px-2 py-1">
+          <span className="bg-purple-300 rounded-[2px] px-2 py-1">
             {job.employment_type.label}{" "}
           </span>
         )}
 
-        <span className="bg-stone-100 px-2 py-1">{job.occupation.label} </span>
+        <span className="bg-[#C3E7F3] rounded-[2px] px-2 py-1">
+          {job.occupation.label}{" "}
+        </span>
       </div>
 
       {children}

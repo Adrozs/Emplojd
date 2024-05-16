@@ -3,6 +3,9 @@ import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useState } from "react";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 
+import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
+
 import {
   sendLikeData,
   getLikeData,
@@ -67,20 +70,24 @@ function JobInfo() {
   return (
     <>
       <HeaderSearchJob>
-        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+        <img src="/LogoEmplojd.png" className="w-[45px]" />
       </HeaderSearchJob>
 
-      <main className="m-2 max-w-7xl mx-auto">
+      <main className="m-2 max-w-7xl mx-auto px-2">
         {job && (
           <>
-            <div className="bg-white pb-4 pt-1 mt-8 px-1 rounded-[10px]">
-              <div className="flex w-full justify-between items-center">
-                <a onClick={handleBack}>Tillbaka till resultaten</a>
-                <img
-                  src={isLiked ? "/liked-heart.svg" : "/like-heart.svg"}
-                  alt="gilla knapp"
-                  onClick={handleLike}
-                />
+            <div className="bg-white  py-3 mt-8 px-1 rounded-[10px]">
+              <div className="flex w-full justify-between items-center text-sm">
+                <a className="mb-5 ml-1" onClick={handleBack}>
+                  Tillbaka till resultaten
+                </a>
+                <div className="mb-4" onClick={handleLike}>
+                  {isLiked ? (
+                    <FaHeart className="text-customBlue" size={24} />
+                  ) : (
+                    <FaRegHeart className="text-customBlue" size={24} />
+                  )}
+                </div>
               </div>
               <div className="w-full flex flex-col  text-center justify-center ">
                 <h1 className="text-2xl font-semibold text-stone-700">
@@ -97,7 +104,7 @@ function JobInfo() {
               </div>
             </div>
             {job.logo_url && (
-              <div className="w-full flex items-center justify-center py-2 ">
+              <div className="w-full flex items-center justify-center py-2 m-3 ">
                 <img
                   src={job.logo_url}
                   alt="logo"
@@ -107,14 +114,14 @@ function JobInfo() {
             )}
             {isHTML(job.description.text_formatted) ? (
               <div
-                className=" p-3 max-w-4xl mx-auto"
+                className=" p-2 max-w-4xl mx-auto mt-3"
                 dangerouslySetInnerHTML={{
                   __html: job.description.text_formatted,
                 }}
               />
             ) : (
               <p
-                className=" p-3 max-w-4xl mx-auto"
+                className=" p-2 max-w-4xl mx-auto mt-3"
                 style={{ whiteSpace: "pre-line" }}
                 dangerouslySetInnerHTML={{
                   __html: makeLinksClickable(job.description.text_formatted),

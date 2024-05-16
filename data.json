@@ -45,6 +45,13 @@
       "employer": "Deploja AB",
       "occupation": "Systemutvecklare/Programmerare",
       "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5569328155/logotyper/logo.png"
+    },
+    {
+      "id": "28809793",
+      "headline": "Devops-tekniker med bred bakgrund till Sveriges geologiska undersökning",
+      "employer": "Sveriges Geologiska Undersökning",
+      "occupation": "Systemutvecklare/Programmerare",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/88195623/logotyper/logo.png"
     }
   ],
   "profile": []

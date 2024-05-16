@@ -93,7 +93,7 @@ function ApplyNow() {
       {page === 1 && (
         <>
           <ul className="flex justify-center my-14  max-w-lg mx-auto">
-            <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
+            <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
               <div>
                 <div className="grid grid-cols-2 w-[70%] items-center ">
                   <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -120,24 +120,27 @@ function ApplyNow() {
               </div>
               <div className="flex gap-2 text-[12px]">
                 {job.working_hours_type.label ? (
-                  <span className="bg-stone-100 px-2 py-1">
+                  <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
                     {job.working_hours_type.label}
                   </span>
                 ) : (
-                  <span className="bg-stone-100 px-2 py-1">
+                  <span className="bg-purple-300 px-2 py-1">
                     {job.employment_type.label}{" "}
                   </span>
                 )}
 
-                <span className="bg-stone-100 px-2 py-1">
-                  {job.occupation.label}{" "}
+                <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
+                  {job.occupation.label}
                 </span>
               </div>
               <div className="flex justify-between">
                 <button onClick={handleBack}>Avbryt</button>
                 <button
                   className="bg-customBlue rounded-[4px] text-white p-1 w-[70%]"
-                  onClick={() => setPage(2)}
+                  onClick={() => {
+                    setPage(2);
+                    window.scrollTo(0, 0);
+                  }}
                 >
                   Nästa &rarr;
                 </button>
@@ -224,13 +227,19 @@ function ApplySideTwo({ job, page, setPage }) {
           </Link>
           <button
             className=" w-[35%] text-customBlue py-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 "
-            onClick={() => setPage(2)}
+            onClick={() => {
+              setPage(1);
+              window.scrollTo(0, 0);
+            }}
           >
             &larr; Tillbaka
           </button>
           <button
             className="bg-customBlue rounded-[4px] text-white py-1 w-[45%]"
-            onClick={() => setPage(3)}
+            onClick={() => {
+              setPage(3);
+              window.scrollTo(0, 0);
+            }}
           >
             Fortsätt &rarr;
           </button>
@@ -346,7 +355,10 @@ function ApplySideThree({ job, page, setPage }) {
           <div className="flex justify-between">
             <button
               className="underline text-sm ml-3"
-              onClick={() => setPage(2)}
+              onClick={() => {
+                setPage(2);
+                window.scrollTo(0, 0);
+              }}
             >
               &larr; Tillbaka till innehållet
             </button>
@@ -366,7 +378,7 @@ function ApplySideThree({ job, page, setPage }) {
         <div className="flex justify-center">
           <button
             className="bg-customBlue rounded-[4px] text-white p-1 w-[95%] h-[40px]"
-            onClick={() => setPage(2)}
+            onClick={() => setPage(3)}
           >
             Spara personligt brev &rarr;
           </button>
