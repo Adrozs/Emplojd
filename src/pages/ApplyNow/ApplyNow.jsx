@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
-import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
+import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import Tooltip from "../../components/Tooltip";
 
 import html2pdf from "html2pdf.js";
@@ -49,9 +49,9 @@ function ApplyNow() {
   if (!job) {
     return (
       <>
-        <HeaderSearchJob>
+        <HeaderOtherPages>
           <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
-        </HeaderSearchJob>
+        </HeaderOtherPages>
         <Loader />
       </>
     );
@@ -59,9 +59,9 @@ function ApplyNow() {
 
   return (
     <main className="mb-2">
-      <HeaderSearchJob>
+      <HeaderOtherPages>
         <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
-      </HeaderSearchJob>
+      </HeaderOtherPages>
       <div className="my-4">
         {job && (
           <div className="mt-4 text-center font-semibold">

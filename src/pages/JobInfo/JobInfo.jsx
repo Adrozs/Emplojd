@@ -1,7 +1,8 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useState } from "react";
-import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
+
+import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 
 import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
@@ -69,9 +70,9 @@ function JobInfo() {
 
   return (
     <>
-      <HeaderSearchJob>
+      <HeaderOtherPages>
         <img src="/LogoEmplojd.png" className="w-[45px]" />
-      </HeaderSearchJob>
+      </HeaderOtherPages>
 
       <main className="m-2 max-w-7xl mx-auto px-2">
         {job && (

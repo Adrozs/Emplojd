@@ -3,7 +3,8 @@ import JobItem from "./JobItem";
 import { Link, useLocation } from "react-router-dom";
 import { getJobs } from "../../services/apiJobs";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
+
+import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 
 function JobSearch() {
   const { state } = useLocation();
@@ -76,9 +77,9 @@ function JobSearch() {
 
   return (
     <>
-      <HeaderSearchJob>
+      <HeaderOtherPages>
         <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
-      </HeaderSearchJob>
+      </HeaderOtherPages>
       <main className="flex flex-col items-center max-w-4xl mx-auto">
         <div className="w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">
           <p className="font-semibold text-stone-500">
