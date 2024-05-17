@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend.Exceptions.JobAdExceptions
+﻿namespace Emplojd.Exceptions.JobAdExceptions
 {
     public class ExternalApiException : ApiException
     {

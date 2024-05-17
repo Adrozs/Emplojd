@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ChasGPT_Backend.Migrations
+namespace Emplojd.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration

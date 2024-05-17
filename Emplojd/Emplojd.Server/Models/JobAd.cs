@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ChasGPT_Backend.Models
+namespace Emplojd.Models
 {
     public class JobAd
     {

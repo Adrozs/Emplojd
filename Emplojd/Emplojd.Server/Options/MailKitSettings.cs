@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend.Options
+﻿namespace Emplojd.Options
 {
     public class MailKitSettings
     {

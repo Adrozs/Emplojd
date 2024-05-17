@@ -1,13 +1,13 @@
-using ChasGPT_Backend.Helpers;
-﻿using ChasGPT_Backend.Repository;
+using Emplojd.Helpers;
+﻿using Emplojd.Repository;
 ﻿using Azure.Core;
-using ChasGPT_Backend.Repositories;
-using ChasGPT_Backend.ViewModels___DTOs;
-using ChasGPT_Backend.ViewModels___DTOs.Account;
+using Emplojd.Repositories;
+using Emplojd.ViewModels___DTOs;
+using Emplojd.ViewModels___DTOs.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChasGPT_Backend.Services
+namespace Emplojd.Services
 {
     public class UserService
     {

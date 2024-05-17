@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend.Models
+﻿namespace Emplojd.Models
 {
     public class CoverLetter
     {

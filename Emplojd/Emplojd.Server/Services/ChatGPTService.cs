@@ -1,8 +1,8 @@
-﻿using ChasGPT_Backend.Repositories;
+﻿using Emplojd.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
 
-namespace ChasGPT_Backend.Services
+namespace Emplojd.Services
 {
     public class ChatGPTService
     {

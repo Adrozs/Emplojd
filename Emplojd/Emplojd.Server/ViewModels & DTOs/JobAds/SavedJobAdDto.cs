@@ -1,6 +1,6 @@
-﻿using ChasGPT_Backend.ViewModels;
+﻿using Emplojd.ViewModels;
 
-namespace ChasGPT_Backend.ViewModels___DTOs.JobAds
+namespace Emplojd.ViewModels___DTOs.JobAds
 {
     public class SavedJobAdDto
     {

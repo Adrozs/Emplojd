@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ChasGPT_Backend.ViewModels___DTOs.Account
+namespace Emplojd.ViewModels___DTOs.Account
 {
     public class GeneratePasswordResetTokenRequest
     {

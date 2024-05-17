@@ -1,9 +1,9 @@
-﻿using ChasGPT_Backend.Options;
+﻿using Emplojd.Options;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
-namespace ChasGPT_Backend.Helpers
+namespace Emplojd.Helpers
 {
     public interface IEmailSender
     {

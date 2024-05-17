@@ -1,7 +1,7 @@
-﻿using ChasGPT_Backend.Models;
-using ChasGPT_Backend.Repositories;
+﻿using Emplojd.Models;
+using Emplojd.Repositories;
 
-namespace ChasGPT_Backend.Services
+namespace Emplojd.Services
 {
     public class AuthenticationService
     {

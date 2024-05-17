@@ -1,8 +1,8 @@
-using ChasGPT_Backend.Models;
+using Emplojd.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChasGPT_Backend.Data
+namespace Emplojd.Data
 {
     public class ApplicationContext : IdentityDbContext<User>
     {

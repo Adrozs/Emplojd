@@ -1,12 +1,12 @@
-﻿using ChasGPT_Backend.Helpers;
-using ChasGPT_Backend.Repositories;
-using ChasGPT_Backend.ViewModels;
-using ChasGPT_Backend.ViewModels___DTOs.JobAds;
+﻿using Emplojd.Helpers;
+using Emplojd.Repositories;
+using Emplojd.ViewModels;
+using Emplojd.ViewModels___DTOs.JobAds;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace ChasGPT_Backend.Services
+namespace Emplojd.Services
 {
     public class JobAdService
     {

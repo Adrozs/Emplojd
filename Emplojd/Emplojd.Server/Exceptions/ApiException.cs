@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend.Exceptions
+﻿namespace Emplojd.Exceptions
 {
     public abstract class ApiException : Exception
     {

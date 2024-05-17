@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend.ViewModels___DTOs.JobAds
+﻿namespace Emplojd.ViewModels___DTOs.JobAds
 {
     public class SaveJobAdRequest
     {

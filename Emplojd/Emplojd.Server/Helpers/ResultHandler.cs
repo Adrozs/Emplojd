@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ChasGPT_Backend.Helpers
+namespace Emplojd.Helpers
 {
     public class ResultHandler
     {

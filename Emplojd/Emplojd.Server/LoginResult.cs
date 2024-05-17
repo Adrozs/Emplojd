@@ -1,4 +1,4 @@
-﻿namespace ChasGPT_Backend
+﻿namespace Emplojd
 {
     public class LoginResult
     {

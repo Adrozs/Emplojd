@@ -1,10 +1,10 @@
-﻿using ChasGPT_Backend.Models;
+﻿using Emplojd.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ChasGPT_Backend.Repositories
+namespace Emplojd.Repositories
 {
     public class JwtRepository
     {

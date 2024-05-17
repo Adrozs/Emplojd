@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ChasGPT_Backend.ViewModels___DTOs
+namespace Emplojd.ViewModels___DTOs
 {
     public class CreateAccountRequestDto
     {

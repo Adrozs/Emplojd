@@ -2,7 +2,7 @@
 using OpenAI_API.Models;
 using OpenAI_API;
 
-namespace ChasGPT_Backend.Repositories
+namespace Emplojd.Repositories
 {
     public interface IChatGPTRepository
     {

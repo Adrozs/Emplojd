@@ -1,9 +1,9 @@
-﻿//using ChasGPT_Backend.Exceptions.JobAdExceptions;
-//using ChasGPT_Backend.Exceptions.LoginExceptions;
-using ChasGPT_Backend.Exceptions;
+﻿//using Emplojd.Exceptions.JobAdExceptions;
+//using Emplojd.Exceptions.LoginExceptions;
+using Emplojd.Exceptions;
 using Newtonsoft.Json;
 
-namespace ChasGPT_Backend.Helpers
+namespace Emplojd.Helpers
 {
     public static class ExceptionHandler
     {

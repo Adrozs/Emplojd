@@ -1,7 +1,7 @@
 ﻿using System.Reflection.Emit;
 using System.Text.Json.Serialization;
 
-namespace ChasGPT_Backend.ViewModels
+namespace Emplojd.ViewModels
 {
     public class JobChatGptDto
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace ChasGPT_Backend.Controller
+namespace Emplojd.Controller
 {
     [Route("api/[controller]")]
     [ApiController]

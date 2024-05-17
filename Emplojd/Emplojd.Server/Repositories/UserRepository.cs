@@ -1,10 +1,10 @@
-﻿using ChasGPT_Backend.Helpers;
-using ChasGPT_Backend.Models;
-using ChasGPT_Backend.Services;
+﻿using Emplojd.Helpers;
+using Emplojd.Models;
+using Emplojd.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Encodings.Web;
 
-namespace ChasGPT_Backend.Repository
+namespace Emplojd.Repository
 {
 
     public interface IUserRepository

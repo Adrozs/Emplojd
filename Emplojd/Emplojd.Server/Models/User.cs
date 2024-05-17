@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ChasGPT_Backend.Models
+namespace Emplojd.Models
 {
     public class User : IdentityUser
     {

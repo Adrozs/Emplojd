@@ -1,13 +1,13 @@
-﻿using ChasGPT_Backend.Data;
-using ChasGPT_Backend.Exceptions.JobAdExceptions;
-using ChasGPT_Backend.Models;
-using ChasGPT_Backend.ViewModels;
-using ChasGPT_Backend.ViewModels___DTOs.JobAds;
+﻿using Emplojd.Data;
+using Emplojd.Exceptions.JobAdExceptions;
+using Emplojd.Models;
+using Emplojd.ViewModels;
+using Emplojd.ViewModels___DTOs.JobAds;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace ChasGPT_Backend.Repositories
+namespace Emplojd.Repositories
 {
     public interface IJobAdRepository
     {
