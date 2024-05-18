@@ -19,46 +19,16 @@
   ],
   "likes": [
     {
-      "id": "28811979",
-      "headline": "Teknisk Testspecialist",
-      "employer": "Länsförsäkringar AB (publ)",
-      "occupation": "Testledare/QA lead",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5020109681/logotyper/logo.png",
-      "working_hours_type": "Vanlig anställning",
-      "employment_type": "Heltid",
-      "workplace_address": "Stockholm"
-    },
-    {
-      "id": "28809671",
-      "headline": "Java utvecklare - SE HIT!",
-      "employer": "Gigstep AB",
+      "id": "28814886",
+      "headline": "Senior Java Software Engineer",
+      "employer": "Kindred People AB",
       "occupation": "Mjukvaruutvecklare",
       "logo": null,
       "working_hours_type": "Vanlig anställning",
       "employment_type": "Heltid",
-      "workplace_address": "Lund"
-    },
-    {
-      "id": "28806262",
-      "headline": "Java Developer",
-      "employer": "Come On Stockholm AB",
-      "occupation": "Mjukvaruutvecklare",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/88627783/logotyper/logo.png",
-      "working_hours_type": "Vanlig anställning",
-      "employment_type": "Heltid",
       "workplace_address": "Stockholm",
-      "publication_date": "2024-05-15T13:13:52"
-    },
-    {
-      "id": "28802358",
-      "headline": "Senior Java Developer",
-      "employer": "Telenor Sverige AB",
-      "occupation": "Civilingenjör, systemutveckling",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5564210309/logotyper/logo.png",
-      "working_hours_type": "Vanlig anställning",
-      "employment_type": "Heltid",
-      "workplace_address": "Stockholm",
-      "publication_date": "2024-05-14T13:50:13"
+      "publication_date": "2024-05-17T14:00:16",
+      "text_formatted": "<p>Kindred Group is a digital entertainment pioneer bringing together nine successful online gambling brands, forming one of the largest online gambling groups in the world. Our purpose is to transform gambling by being a trusted source of entertainment that contributes positively to society. Our goal is that 0% revenue is derived from harmful gambling. </p><p>Our global team of more than 2000 people represents 60+ nationalities. When you join Kindred, you'll be part of a collaborative, diverse and inclusive team that has your best interest at heart. We are a trusting company that knows the value of a healthy work-life balance. We offer a wide range of benefits, along with a hybrid working model which allows flexibility between working from home and enjoying our superb office facilities. </p><p>  </p><p>Kindred Group plc proudly hosts nine renowned gambling brands, such as Unibet, 32 Red, Maria Casino, and others, trusted by millions of customers worldwide. Each brand boasts its distinctive offerings and identity, all centered on the essential commitment to player safety while delivering exhilarating entertainment experiences.</p><p>Explore more about us and our brands by visiting the 'About Us | Our Brands' page on the Kindred Group plc website.</p><p> </p><p>The Role</p><p>Join Our Team at Kindred - Are you the software engineer we are looking for?</p><p>Are you passionate about innovation and working in an ever-changing, competitive industry? Our Payment team is seeking a dedicated individual with expertise in Java and Spring, React JS is a plus, to enhance the payment experience for customers across all brands. If you thrive in dynamic environments, aspire to leave a lasting impact, and seek to work with cutting edge technologies, Open Banking and Payment integrations, this is your opportunity to shine!</p><p>You will participate in design discussions with your colleagues to find great solutions to complex engineering challenges. We strongly believe in the \"You Design it, You Build It, You Test It, You Run It, You Tweak It\" ethos and everyone is expected to take part of the full system / development life cycle to ensure reliability and uptime of the production environment.</p><p> </p><p>Requirements:</p><ul><li>Proficiency in building services in Java and Spring framework</li><li>Knowledge of build pipeline preferably Jenkins CI/CD</li><li>Basic understanding of React JS, Javascript and/or Typescript. Having worked with micro-frontends is a plus</li><li>Good understanding of Git, Gradle, Maven, RPM and Docker</li><li>Experience working in agile environments</li><li>Continuous Delivery</li><li>Excellent problem-solving skills and attention to detail</li><li>Ability to thrive in a fast-paced, collaborative team environment</li></ul><p> </p><p>In addition, you..</p><ul><li>Are a positive person by nature and have a passion for what you do, putting teamwork and collaboration above all else?</li><li>Have great communication skills and appreciate a culture where feedback sharing is encouraged to achieve not only to the success of the team, but also seen as essential to the improvement of personal and professional development.</li><li>Take great pride in your ability to grasp complex business scenarios and translate them into solutions with high quality, clean and performant code.</li><li>Believe in yourself and your own abilities, but also appreciate that there is an endless ocean of new things to learn and take on board, cherishing the opportunity to do so.</li></ul><p> </p>"
     }
   ],
   "profile": []

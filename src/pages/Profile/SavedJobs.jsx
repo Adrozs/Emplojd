@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { MdWork } from "react-icons/md";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import { getLikeData } from "../../utils/jsonserver";
 import { useState, useEffect } from "react";
@@ -49,7 +48,10 @@ function SavedJobs() {
           ) : (
             likes.map((data) => {
               return (
-                <li className="h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 ">
+                <li
+                  key={data.id}
+                  className="h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 "
+                >
                   <div className="flex justify-end">
                     <FaHeart size={22} className="text-customBlue mr-2" />
                   </div>
@@ -82,9 +84,15 @@ function SavedJobs() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <button className="bg-customBlue rounded-[12px] text-white py-2 w-[100%]">
-                      Läs mer &rarr;
-                    </button>
+                    <Link
+                      className="items-center justify-center flex mt-2 w-full py-2 h-9 bg-customBlue rounded-[12px] text-white text-lg"
+                      to={{
+                        pathname: `/saved/${data.id}`,
+                        state: { jobId: data.id },
+                      }}
+                    >
+                      Läs mer <span className="text-xl"> &rarr;</span>
+                    </Link>
                   </div>
                 </li>
               );

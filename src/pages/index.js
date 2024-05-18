@@ -8,6 +8,7 @@ import MyProfile from "./Profile/MyProfile";
 import NoEarlierCoverLetter from "./Profile/NoEarlierCoverLetter";
 import Profile from "./Profile/Profile";
 import SavedJobs from "./Profile/SavedJobs";
+import SavedJobsReadMore from "./Profile/SavedJobsReadMore";
 import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
 
@@ -24,4 +25,5 @@ export {
   NoEarlierCoverLetter,
   CreateProfile,
   MyProfile,
+  SavedJobsReadMore,
 };

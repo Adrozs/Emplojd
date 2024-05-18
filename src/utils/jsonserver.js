@@ -9,7 +9,8 @@ function sendLikeData(
   working_hours_type,
   employment_type,
   workplace_address,
-  publication_date
+  publication_date,
+  text_formatted
 ) {
   axios
     .post("http://localhost:3001/likes", {
@@ -22,6 +23,7 @@ function sendLikeData(
       employment_type: employment_type,
       workplace_address: workplace_address,
       publication_date: publication_date,
+      text_formatted: text_formatted,
     })
     .then((response) => {
       console.log("Gillad annons", response.data);
@@ -34,6 +36,17 @@ function sendLikeData(
 function getLikeData() {
   return axios
     .get("http://localhost:3001/likes")
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error", error);
+      return [];
+    });
+}
+function getOneLikeData(id) {
+  return axios
+    .get(`http://localhost:3001/likes/${id}`)
     .then((response) => {
       return response.data;
     })
@@ -56,4 +69,4 @@ function deleteLikeData(id) {
     });
 }
 
-export { sendLikeData, getLikeData, deleteLikeData };
+export { sendLikeData, getLikeData, deleteLikeData, getOneLikeData };

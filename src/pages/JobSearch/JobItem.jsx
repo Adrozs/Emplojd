@@ -40,7 +40,8 @@ function JobItem({ job, children }) {
         job.employment_type.label,
         job.working_hours_type.label,
         job.workplace_address.municipality,
-        job.publication_date
+        job.publication_date,
+        job.description.text_formatted
       );
     } else if (isLiked) {
       deleteLikeData(job.id);
