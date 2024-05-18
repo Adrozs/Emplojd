@@ -5,6 +5,8 @@ import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 
 import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
+import { FaChevronLeft } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa6";
 
 import {
   sendLikeData,
@@ -12,6 +14,7 @@ import {
   getOneLikeData,
   deleteLikeData,
 } from "../../utils/jsonserver";
+import Footer from "../../components/Footer";
 
 function SavedJobsReadMore() {
   const { jobId } = useParams();
@@ -66,31 +69,36 @@ function SavedJobsReadMore() {
         <img src="/LogoEmplojd.png" className="w-[45px]" />
       </HeaderOtherPages>
 
-      <main className="m-2 max-w-7xl mx-auto px-2">
+      <main className=" max-w-7xl mx-auto px-2">
         {job && (
           <>
             <div className="bg-white  py-3 mt-8 px-1 rounded-[10px]">
-              <div className="flex w-full justify-between items-center text-sm">
-                <a className="mb-5 ml-1" onClick={handleBack}>
-                  Tillbaka till resultaten
-                </a>
-              </div>
               <div className="w-full flex flex-col  text-center justify-center ">
                 <h1 className="text-2xl font-semibold text-stone-700">
                   {job.headline}
                 </h1>
-                <div className="w-full flex items-center justify-center mx-auto">
+                <div className="self-start px-2 py-2 ">
+                  <p className=" text-left">till</p>
+                  <p className="font-semibold">{job.employer}</p>
+                </div>
+                <div className="w-full flex items-center justify-center mx-auto px-2 mt-3 gap-1">
+                  <div className="flex w-full  items-center text-m underline text-sky-800">
+                    <FaChevronLeft size={20} />
+                    <a className="ml-1" onClick={handleBack}>
+                      Tillbaka till resultaten
+                    </a>
+                  </div>{" "}
                   <Link
-                    className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1 max-w-lg"
+                    className=" w-[80%] bg-sky-500 rounded-[8px] text-white py-1  gap-1 max-w-lg flex justify-evenly items-center"
                     to={`/job/${job.id}/apply`}
                   >
-                    Ansök nu <span className="text-xl"> &rarr;</span>
+                    Ansök nu <FaArrowRight size={20} />
                   </Link>
                 </div>
               </div>
             </div>
             {job.logo_url && (
-              <div className="w-full flex items-center justify-center py-2 m-3 ">
+              <div className="w-full flex items-center justify-center py-2 m-3 bg-white ">
                 <img
                   src={job.logo_url}
                   alt="logo"
@@ -100,33 +108,24 @@ function SavedJobsReadMore() {
             )}
             {isHTML(job.text_formatted) ? (
               <div
-                className=" p-2 max-w-4xl mx-auto mt-3"
+                className=" p-2 max-w-4xl mx-auto mt-3 pb-28 bg-white"
                 dangerouslySetInnerHTML={{
                   __html: job.text_formatted,
                 }}
               />
             ) : (
               <p
-                className=" p-2 max-w-4xl mx-auto mt-3"
+                className=" p-2 max-w-4xl mx-auto my-3"
                 style={{ whiteSpace: "pre-line" }}
                 dangerouslySetInnerHTML={{
                   __html: makeLinksClickable(job.description.text_formatted),
                 }}
               />
             )}
-            <div className="w-full my-3 text-center ">
-              <div className="w-[95%] flex items-center justify-center mx-auto">
-                <Link
-                  className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1"
-                  to={`/job/${job.id}/apply`}
-                >
-                  Ansök nu <span className="text-xl"> &rarr;</span>
-                </Link>
-              </div>
-            </div>
           </>
         )}
       </main>
+      <Footer />
     </>
   );
 }

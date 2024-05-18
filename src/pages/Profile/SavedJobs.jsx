@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import { getLikeData } from "../../utils/jsonserver";
 import { useState, useEffect } from "react";
-import { FaHeart } from "react-icons/fa6";
+import { FaHeart, FaArrowRight } from "react-icons/fa6";
+
 import Footer from "../../components/Footer";
 
 function SavedJobs() {
@@ -40,7 +41,7 @@ function SavedJobs() {
             Här har du åtkomst till alla jobbannonser du har valt att spara.
           </p>
         </div>
-        <ul className="flex flex-col items-center justify-center my-10  max-w-lg mx-auto">
+        <ul className="flex flex-col items-center justify-center my-10  max-w-lg mx-auto pb-12">
           {likes === 0 ? (
             <div className="border-gray-400 border-dashed border-2 h-[230px] w-[90%]  p-4 flex justify-between rounded-[20px] mb-4  items-center">
               <p className="text-xl"> Dina framtida sparade jobb hamnar här.</p>
@@ -85,21 +86,27 @@ function SavedJobs() {
                   </div>
                   <div className="flex justify-between items-center">
                     <Link
-                      className="items-center justify-center flex mt-2 w-full py-2 h-9 bg-customBlue rounded-[12px] text-white text-lg"
+                      className="items-center justify-center flex mt-2 w-full py-2 h-9 bg-customBlue rounded-[12px] text-white text-lg gap-4"
                       to={{
                         pathname: `/saved/${data.id}`,
                         state: { jobId: data.id },
                       }}
                     >
-                      Läs mer <span className="text-xl"> &rarr;</span>
+                      Läs mer <FaArrowRight size={16} />
                     </Link>
                   </div>
                 </li>
               );
             })
           )}
+          <Link
+            to="/joblist"
+            className="items-center justify-center flex mt-2 w-[85%] py-2 h-14 bg-customBlue rounded-[8px] text-white text-lg font-semibold"
+          >
+            Hitta jobb
+          </Link>
         </ul>
-        <div className="flex mb-10"></div>
+
         <Footer />
       </div>
     </>
