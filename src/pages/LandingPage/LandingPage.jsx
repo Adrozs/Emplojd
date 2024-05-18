@@ -1,7 +1,6 @@
 import { BsArrowDownCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { SearchForm } from "../JobList/JobSearchForm";
-
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
@@ -12,12 +11,12 @@ export default function LandingPage() {
   return (
     <>
       <section
-        className="bg-gradient-to-b from-[#CA81ED] to-[#4086C6] bg-cover bg-no-repeat h-screen lg:pb-20"
+        className="bg-gradient-to-b from-[#CA81ED] to-[#4086C6] bg-cover bg-no-repeat lg:pb-20"
         id="hero"
       >
         <Header> </Header>
-        <div className=" container flex flex-col-reverse items-center  px-6 mx-auto space-y-0 mt-[-100px] md:space-y-0 flex-grow  md:flex-grow  sm:mt-[-75px] md:mt-[-75px]">
-          <div className="flex flex-col items-center justify-center mt-48 space-y-12 md:w-1/2 text-white">
+        <div className="container flex flex-col-reverse items-center px-6 mx-auto space-y-0 mt-[-100px] md:space-y-0 flex-grow md:flex-grow sm:mt-[-75px] md:mt-[-75px]">
+          <div className="flex flex-col items-center justify-center mt-44 space-y-12 sm:mt-48  md:w-1/2 text-white">
             <h1 className="text-3xl">
               Välkommen till <br />
               <span className="text-7xl font-Glockenspiel uppercase ">
@@ -37,18 +36,18 @@ export default function LandingPage() {
                 Kom igång helt kostnadsfritt
                 <span className="text-2xl"> &rarr;</span>
               </Link>
-              <div className="max-w-sm text-center md:text-center mt-[100px] md:mt-[-40px]">
+              <div className="text-center md:text-center">
                 <p>Hitta din nya tjänst</p>
                 <div className="flex justify-center md:justify-center">
                   <button
-                    className="p-5 px-6 pt-2 baseline"
+                    className="px-6 pt-2"
                     onClick={() => {
                       learnMore.current?.scrollIntoView({
                         behavior: "smooth",
                       });
                     }}
                   >
-                    <BsArrowDownCircle size="2rem" />
+                    <BsArrowDownCircle className="mb-20 sm:mb-32" size="2rem" />
                   </button>
                 </div>
               </div>
@@ -75,7 +74,7 @@ export default function LandingPage() {
 
         <div ref={learnMore}></div>
         <div className=" flex justify-center  ">
-          <h6 className="my-4 flex-col font-semi-bold items-center justify-center text-center text-2xl font-bold ">
+          <h6 className="flex-col font-semi-bold mt-12 mb-5 text-center text-2xl font-bold sm:mt-8">
             Hitta <span className="text-customBlue">rätt</span> jobb för dig
           </h6>
         </div>
@@ -89,11 +88,11 @@ export default function LandingPage() {
             to="/signin"
             className="rounded-[4px] p-3 px-12 mb-20 bg-customBlue text-stone-100"
           >
-            Börja söka &rarr;
+            Logga In &rarr;
           </Link>
         </div>
       </section>
-      <p className="ms-10 mr-10 mt-5 mb-20 md:mb-16">
+      <p className="ms-10 mr-10 mt-5 mb-28 md:mb-16">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
