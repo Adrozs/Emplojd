@@ -42,14 +42,14 @@ function MyProfile() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="flex flex-col" >
+      <div className="flex flex-col h-screen justify-between" >
         <div className="mx-4">
-          <div className="grid grid-cols-[auto_1fr] gap-x-8 mt-2">
-            <div className="flex flex-col bg-gradient-to-b from-[#CA81ED] to-[#4086C6] text-white p-4 w-44 rounded-xl">
+          <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
+            <div className="flex flex-col z-10 bg-gradient-to-b from-[#CA81ED] to-[#4086C6] text-white p-4 w-44 rounded-xl">
               <h2 className="font-semibold">Min Profil</h2>
               <h3 className="text-xs text-">Inga ändringar att spara</h3>
             </div>
-            <div className="bg-gradient-to-b from-[#cb81ed52] to-[#4085c647] size-44 -top-4 rounded-full col-start-2 row-span-2 relative overflow-hidden items-end border-2 border-customBlue">
+            <div className="bg-gradient-to-b from-[#cb81ed52] to-[#4085c647] size-32 -top-4 rounded-full col-start-2 row-span-2 relative overflow-hidden border-2 border-customBlue">
               <img
                 src={profilePic || "path_to_default_image.jpg"}
                 className="rounded-full w-full h-full object-cover"
@@ -75,29 +75,31 @@ function MyProfile() {
               />
             </div>
           </div>
-          <div className="mb-8">
-            <FormRow
-              type="firstname"
-              labelText="Förnamn"
-              handleChange={handleChange}
-            />
-            <FormRow
-              type="lastname"
-              labelText="Efternamn"
-              handleChange={handleChange}
-            />
-            <FormRow
-              type="email"
-              labelText="Email"
-              handleChange={handleChange}
-            />
+          <div>
+            <div className="mb-8">
+              <FormRow
+                type="firstname"
+                labelText="Förnamn"
+                handleChange={handleChange}
+              />
+              <FormRow
+                type="lastname"
+                labelText="Efternamn"
+                handleChange={handleChange}
+              />
+              <FormRow
+                type="email"
+                labelText="Email"
+                handleChange={handleChange}
+              />
+            </div>
+            <button
+              className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-20 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-96"
+              type="submit"
+            >
+              Spara ändringar <LoginRightArrow />
+            </button>
           </div>
-          <button
-            className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-32 flex px-8 justify-between items-center"
-            type="submit"
-          >
-            Spara ändringar <LoginRightArrow />
-          </button>
         </div>
         <Footer />
       </div>

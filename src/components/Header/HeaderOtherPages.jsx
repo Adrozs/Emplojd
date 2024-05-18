@@ -17,7 +17,7 @@ const HeaderOtherPages = () => {
           viewBox="0 0 360 108"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="-top-4 absolute"
+          className="-top-4 absolute md:-top-12 ls:-top-28 lg:-top-44 xl:-top-64 xxl:-top-96"
         >
           <g filter="url(#filter0_d_1273_1292)">
             <path

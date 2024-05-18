@@ -7,7 +7,7 @@ export default function Footer({ children }) {
         <svg
           viewBox="20.02 16 337 79.16"
           xmlns="http://www.w3.org/2000/svg"
-          className="absolute -top-12 w-full"
+          className="absolute z-0 -top-12 w-full md:-top-20 ls:-top-32 lg:-top-42 xl:-top-56 xxl:-top-80"
         >
           <g filter="url(#filter0_d_1272_965)">
             <path
@@ -19,19 +19,19 @@ export default function Footer({ children }) {
           </g>
         </svg>
         <div className="z-10">
-          <div className="bg-white">
+          <div className="bg-white xxl:pb-42">
             <div className="flex justify-center items-center">
-              <h2 className="inline p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
+              <h2 className="inline z-20 p-2.5 pl-5 pr-5 font-bold mt-14 mb-10 text-5xl font-Glockenspiel ">
                 EMPLOJD
               </h2>
             </div>
-            <div className="text-center pb-20">
-              <h3 className="mb-5 font-bold text-xl">Hitta hos oss</h3>
+            <div className="flex flex-col text-center pb-20">
+              <h2 className="inline mb-5 font-bold text-xl z-10">Hitta hos oss</h2>
               <div className="flex flex-col gap-3 text-blue-600 underline underline-offset-2">
-                <Link to="/myProfile">
-                  <span>Min sida</span>
+                <Link className="inline z-10" to="/myProfile">
+                  <span >Min sida</span>
                 </Link>
-                <Link to="/joblist">
+                <Link className="inline z-10" to="/joblist">
                   <span>Sök jobb</span>
                 </Link>
               </div>

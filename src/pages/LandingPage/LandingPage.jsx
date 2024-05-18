@@ -4,10 +4,8 @@ import { SearchForm } from "../JobList/JobSearchForm";
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
-import { useRef } from "react";
 
 export default function LandingPage() {
-  const learnMore = useRef(null);
   return (
     <>
       <section
@@ -16,7 +14,7 @@ export default function LandingPage() {
       >
         <Header> </Header>
         <div className="container flex flex-col-reverse items-center px-6 mx-auto space-y-0 mt-[-100px] md:space-y-0 flex-grow md:flex-grow sm:mt-[-75px] md:mt-[-75px]">
-          <div className="flex flex-col items-center justify-center mt-44 space-y-12 sm:mt-48  md:w-1/2 text-white">
+          <div className="flex flex-col items-center justify-center mt-44 space-y-12 sm:mt-48  text-white">
             <h1 className="text-3xl">
               Välkommen till <br />
               <span className="text-7xl font-Glockenspiel uppercase ">
@@ -28,7 +26,7 @@ export default function LandingPage() {
               baserade på ditt CV, dina intressen samt dina preferenser. <br />
               För att <strong>det ska vara enkelt att söka jobb</strong>
             </p>
-            <div className="flex justify-center md:justify-center flex-col">
+            <div className="flex justify-center flex-col">
               <Link
                 to="/signin"
                 className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl"
@@ -47,7 +45,7 @@ export default function LandingPage() {
                       });
                     }}
                   >
-                    <BsArrowDownCircle className="mb-20 sm:mb-32" size="2rem" />
+                    <BsArrowDownCircle className="mb-28" size="2rem" />
                   </button>
                 </div>
               </div>
@@ -56,8 +54,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section>
-      <div className="w-full relative -top-10">
+      <section className="flex flex-col ">
+      <div className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
           <svg
             viewBox="0 0 360 81"
             fill="none"
@@ -71,28 +69,26 @@ export default function LandingPage() {
             />
           </svg>
         </div>
-
-        <div ref={learnMore}></div>
-        <div className=" flex justify-center  ">
-          <h6 className="flex-col font-semi-bold mt-12 mb-5 text-center text-2xl font-bold sm:mt-8">
-            Hitta <span className="text-customBlue">rätt</span> jobb för dig
-          </h6>
-        </div>
-
-        
-        <SearchForm />
-
-        <ActiveSlider />
-        <div className="flex justify-center md:justify-center">
-          <Link
-            to="/signin"
-            className="rounded-[4px] p-3 px-12 mb-20 bg-customBlue text-stone-100"
-          >
-            Logga In &rarr;
-          </Link>
+        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
+          <div className=" flex justify-center">
+            <h6 className="font-semi-bold mb-5 text-center text-2xl font-bold">
+              Hitta <span className="text-customBlue">rätt</span> jobb för dig
+            </h6>
+          </div>
+          
+            <SearchForm />
+            <ActiveSlider />
+          <div className="flex justify-center sm:mt-8">
+            <Link
+              to="/signin"
+              className="rounded-[4px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
+            >
+              Logga In &rarr;
+            </Link>
+          </div>
         </div>
       </section>
-      <p className="ms-10 mr-10 mt-5 mb-28 md:mb-16">
+      <p className="relative ms-10 mr-10 mb-28 md:mb-20 lg:mb-10 -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-80 text-center xxl:mb-40">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
