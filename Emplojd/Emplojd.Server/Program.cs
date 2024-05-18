@@ -1,22 +1,21 @@
 
-using ChasGPT_Backend.Services;
+using Emplojd.Services;
 using OpenAI_API;
-using ChasGPT_Backend.Models;
-using ChasGPT_Backend.Data;
+using Emplojd.Models;
+using Emplojd.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ChasGPT_Backend.Repository;
-using ChasGPT_Backend.Repositories;
+using Emplojd.Repository;
+using Emplojd.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ChasGPT_Backend.Helpers;
-using ChasGPT_Backend.Options;
+using Emplojd.Helpers;
+using Emplojd.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
-using AspNet.Security.OAuth.LinkedIn;
 
-namespace ChasGPT_Backend
+namespace Emplojd
 {
     public class Program
     {
@@ -29,7 +28,6 @@ namespace ChasGPT_Backend
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = GoogleDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
                 .AddCookie()
                 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
@@ -37,15 +35,7 @@ namespace ChasGPT_Backend
                     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
                     options.CallbackPath = "/googleresponse";
-                })
-        
-
-            .AddLinkedIn(options =>
-             {
-                 options.ClientId = builder.Configuration.GetSection("LinkedIn:ClientId").Value;
-                 options.ClientSecret = builder.Configuration.GetSection("LinkedIn:ClientSecret").Value;
-                 options.CallbackPath = new PathString("/signin-linkedin");
-             });
+                });
 
 
             ConfigurationManager configuration = builder.Configuration;
