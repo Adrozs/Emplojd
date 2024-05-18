@@ -1,49 +1,91 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+//Imports
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Pages
+import {
+  SignIn,
+  SignUp,
+  Profile,
+  JobList,
+  LandingPage,
+  ApplyNow,
+  SavedJobs,
+  NoEarlierCoverLetter,
+  CreateProfile,
+  MyProfile,
+} from "./pages/index";
+import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
+import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
+
+//Ui
+import AppLayout from "./ui/AppLayout";
+import Error from "./ui/Error";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    errorElement: <Error />,
+    children: [
+      { path: "/", element: <LandingPage /> },
+      {
+        path: "/jobsearch",
+        element: <JobSearch />,
+        loader: searchLoader,
+        errorElement: <Error />,
+      },
+      {
+        path: "/joblist",
+        element: <JobList />,
+        errorElement: <Error />,
+      },
+
+      { path: "/signin", element: <SignIn /> },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/MyProfile",
+        element: <MyProfile />,
+      },
+      {
+        path: "/CreateProfile",
+        element: <CreateProfile />,
+      },
+      {
+        path: "/saved",
+        element: <SavedJobs />,
+      },
+      {
+        path: "/NoEarlierCoverLetter",
+        element: <NoEarlierCoverLetter />,
+      },
+      {
+        path: "/job/:jobId",
+        element: <JobInfo />,
+        loader: jobLoader,
+        errorElement: <Error />,
+      },
+      {
+        path: "/job/:jobId/apply",
+        element: <ApplyNow />,
+        errorElement: <Error />,
+      },
+    ],
+  },
+]);
 
 function App() {
-    const [forecasts, setForecasts] = useState();
-
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
-
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
-
-    return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
-    
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-center" />
+    </AuthProvider>
+  );
 }
 
 export default App;

@@ -1,0 +1,65 @@
+{
+  "jobs": [
+    {
+      "id": "1",
+      "title": "Job Title 1",
+      "content_text": "Lorem ipsum dolor sit amet...",
+      "company_name": "Company A",
+      "date": "2024-05-10",
+      "likes": 0
+    },
+    {
+      "id": "2",
+      "title": "Job Title 2",
+      "content_text": "Lorem ipsum dolor sit amet...",
+      "company_name": "Company B",
+      "date": "2024-05-09",
+      "likes": 0
+    }
+  ],
+  "likes": [
+    {
+      "id": "28811979",
+      "headline": "Teknisk Testspecialist",
+      "employer": "Länsförsäkringar AB (publ)",
+      "occupation": "Testledare/QA lead",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5020109681/logotyper/logo.png",
+      "working_hours_type": "Vanlig anställning",
+      "employment_type": "Heltid",
+      "workplace_address": "Stockholm"
+    },
+    {
+      "id": "28809671",
+      "headline": "Java utvecklare - SE HIT!",
+      "employer": "Gigstep AB",
+      "occupation": "Mjukvaruutvecklare",
+      "logo": null,
+      "working_hours_type": "Vanlig anställning",
+      "employment_type": "Heltid",
+      "workplace_address": "Lund"
+    },
+    {
+      "id": "28806262",
+      "headline": "Java Developer",
+      "employer": "Come On Stockholm AB",
+      "occupation": "Mjukvaruutvecklare",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/88627783/logotyper/logo.png",
+      "working_hours_type": "Vanlig anställning",
+      "employment_type": "Heltid",
+      "workplace_address": "Stockholm",
+      "publication_date": "2024-05-15T13:13:52"
+    },
+    {
+      "id": "28802358",
+      "headline": "Senior Java Developer",
+      "employer": "Telenor Sverige AB",
+      "occupation": "Civilingenjör, systemutveckling",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5564210309/logotyper/logo.png",
+      "working_hours_type": "Vanlig anställning",
+      "employment_type": "Heltid",
+      "workplace_address": "Stockholm",
+      "publication_date": "2024-05-14T13:50:13"
+    }
+  ],
+  "profile": []
+}
