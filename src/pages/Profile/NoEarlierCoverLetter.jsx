@@ -19,7 +19,7 @@ function NoEarlierCoverLetter() {
             Här har du full åtkomst till dina sparade personliga brev.
           </p>
         </div>
-        <ul className="flex flex-col items-center justify-center my-10  max-w-lg mx-auto">
+        <ul className="flex flex-col items-center justify-center my-10  max-w-lg mx-auto pb-10">
           <div className="border-gray-400 border-dashed border-2 h-[230px] w-[90%]  p-4 flex justify-between rounded-[20px] mb-4  items-center">
             <p className="text-xl">
               {" "}

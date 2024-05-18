@@ -1,36 +1,21 @@
 import React, { useState } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
+import FormRow from "../../components/FormRow";
+import Footer from "../../components/Footer";
+import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
 
 function MyProfile() {
-  const [answerData, setAnswerData] = useState([
-    { question: "FRÅGA 1", answer: "SVAR, SVAR, SVAR, SVAR" },
-    { question: "FRÅGA 2", answer: "SVAR, SVAR, SVAR, SVAR" },
-    { question: "FRÅGA 3", answer: "SVAR, SVAR, SVAR, SVAR" },
-    { question: "FRÅGA 4", answer: "SVAR, SVAR, SVAR, SVAR" },
-    { question: "FRÅGA 5", answer: "SVAR, SVAR, SVAR, SVAR" },
-  ]);
-
-  const [profileData, setProfileData] = useState({
-    name: "",
-    phone: "",
-    address: "",
+  const initialState = {
     email: "",
-  });
+    emailConfirmed: "",
+    password: "",
+    passwordConfirmed: "",
+    isMember: true,
+  };
+
+  const [values, setValues] = useState(initialState);
 
   const [profilePic, setProfilePic] = useState("");
-
-  const updateAnswer = (index, newAnswer) => {
-    const updatedQaData = [...answerData];
-    updatedQaData[index].answer = newAnswer;
-    setAnswerData(updatedQaData);
-  };
-
-  const updateProfile = (field, value) => {
-    setProfileData((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
-  };
 
   const handleProfilePicChange = (event) => {
     const file = event.target.files[0];
@@ -43,6 +28,11 @@ function MyProfile() {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
   const fileInputRef = React.createRef();
 
   const triggerFileInput = () => {
@@ -52,74 +42,64 @@ function MyProfile() {
   return (
     <>
       <HeaderOtherPages />
-      <div
-        className="flex flex-col min-h-screen gap-2 m-4"
-        style={{ minHeight: "calc(100vh - 170px)" }}
-      >
-        <div className="flex bg-stone-300 h-12 items-center p-4 w-64 mb-4">
-          MIN JOBBPROFIL
-        </div>
-        <div className="grid grid-cols-[auto_1fr] mb-8 gap-5">
-          <div className="bg-stone-300 size-48 rounded-full col-start-1 row-span-4 relative overflow-hidden">
-            <img
-              src={profilePic || "path_to_default_image.jpg"}
-              className="rounded-full w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-0 hover:bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-              <svg
-                onClick={triggerFileInput}
-                xmlns="http://www.w3.org/2000/svg"
-                width="4em"
-                height="4em"
-                viewBox="0 0 24 24"
-              >
-                <g fill="white" fillRule="evenodd" clipRule="evenodd">
-                  <path d="M6.64 9.788a.75.75 0 0 1 .53.918a5 5 0 0 0 7.33 5.624a.75.75 0 1 1 .75 1.3a6.501 6.501 0 0 1-9.529-7.312a.75.75 0 0 1 .919-.53M8.75 6.37a6.5 6.5 0 0 1 9.529 7.312a.75.75 0 1 1-1.45-.388A5.001 5.001 0 0 0 9.5 7.67a.75.75 0 1 1-.75-1.3" />
-                  <path d="M5.72 9.47a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 1 1-1.06 1.06l-1.97-1.97l-1.97 1.97a.75.75 0 0 1-1.06-1.06zm9 1.5a.75.75 0 0 1 1.06 0l1.97 1.97l1.97-1.97a.75.75 0 1 1 1.06 1.06l-2.5 2.5a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 0 1 0-1.06" />
-                </g>
-              </svg>
+      <div className="flex flex-col" >
+        <div className="mx-4">
+          <div className="grid grid-cols-[auto_1fr] gap-x-8 mt-2">
+            <div className="flex flex-col bg-gradient-to-b from-[#CA81ED] to-[#4086C6] text-white p-4 w-44 rounded-xl">
+              <h2 className="font-semibold">Min Profil</h2>
+              <h3 className="text-xs text-">Inga ändringar att spara</h3>
             </div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleProfilePicChange}
-            />
-          </div>
-          {Object.entries(profileData).map(([field, value]) => (
-            <div
-              key={field}
-              className="bg-stone-300 h-8 w-full col-start-2 pl-2 items-center flex"
-            >
+            <div className="bg-gradient-to-b from-[#cb81ed52] to-[#4085c647] size-44 -top-4 rounded-full col-start-2 row-span-2 relative overflow-hidden items-end border-2 border-customBlue">
+              <img
+                src={profilePic || "path_to_default_image.jpg"}
+                className="rounded-full w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-0 hover:bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                <svg
+                  onClick={triggerFileInput}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="4em"
+                  height="4em"
+                  viewBox="0 0 24 24"
+                >
+                  <g fill="white" fillRule="evenodd" clipRule="evenodd">
+                    <path d="M6.64 9.788a.75.75 0 0 1 .53.918a5 5 0 0 0 7.33 5.624a.75.75 0 1 1 .75 1.3a6.501 6.501 0 0 1-9.529-7.312a.75.75 0 0 1 .919-.53M8.75 6.37a6.5 6.5 0 0 1 9.529 7.312a.75.75 0 1 1-1.45-.388A5.001 5.001 0 0 0 9.5 7.67a.75.75 0 1 1-.75-1.3" />
+                    <path d="M5.72 9.47a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 1 1-1.06 1.06l-1.97-1.97l-1.97 1.97a.75.75 0 0 1-1.06-1.06zm9 1.5a.75.75 0 0 1 1.06 0l1.97 1.97l1.97-1.97a.75.75 0 1 1 1.06 1.06l-2.5 2.5a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 0 1 0-1.06" />
+                  </g>
+                </svg>
+              </div>
               <input
-                className="bg-transparent autofill:shadow-[inset_0_0_0px_1000px_rgb(214,211,209)] outline-none w-full h-full placeholder-black"
-                type="text"
-                value={value}
-                onChange={(e) => updateProfile(field, e.target.value)}
-                placeholder={field.toUpperCase()}
+                type="file"
+                ref={fileInputRef}
+                onChange={handleProfilePicChange}
               />
             </div>
-          ))}
+          </div>
+          <div className="mb-8">
+            <FormRow
+              type="firstname"
+              labelText="Förnamn"
+              handleChange={handleChange}
+            />
+            <FormRow
+              type="lastname"
+              labelText="Efternamn"
+              handleChange={handleChange}
+            />
+            <FormRow
+              type="email"
+              labelText="Email"
+              handleChange={handleChange}
+            />
+          </div>
+          <button
+            className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-32 flex px-8 justify-between items-center"
+            type="submit"
+          >
+            Spara ändringar <LoginRightArrow />
+          </button>
         </div>
-        <div className="flex bg-stone-300 h-8 items-center p-4 w-48 mb-4">
-          OM MIG
-        </div>
-        <div>
-          {answerData.map((item, index) => (
-            <div key={index} className="mb-4">
-              <div className="bg-stone-300 p-2 w-56 h-8 flex items-center mb-4">
-                {item.question}
-              </div>
-              <div className="bg-stone-300 p-2 w-full h-20 flex items-center">
-                <input
-                  className="bg-transparent outline-none w-full h-full"
-                  type="text"
-                  value={item.answer}
-                  onChange={(e) => updateAnswer(index, e.target.value)}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+        <Footer />
       </div>
     </>
   );

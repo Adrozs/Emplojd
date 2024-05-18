@@ -1,5 +1,3 @@
-import { AiFillTwitterCircle } from "react-icons/ai";
-import { FaFacebook, FaInstagramSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function Footer({ children }) {
@@ -23,47 +21,21 @@ export default function Footer({ children }) {
         <div className="z-10">
           <div className="bg-white">
             <div className="flex justify-center items-center">
-              <h2 className="inline  p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
+              <h2 className="inline p-2.5 pl-5 pr-5 font-bold mt-10 mb-10 text-5xl font-Glockenspiel">
                 EMPLOJD
               </h2>
             </div>
-            <div className="text-center mb-10">
-              <h3 className="mb-5 font-bold text-xl">TEXT</h3>
-              <p className="mb-3">Min sida</p>
-              <p className="mb-3">Sök jobb</p>
-            </div>
-            <h2 className="flex justify-center font-bold mb-3 text-xl">
-              Följ oss på sociala medier
-            </h2>
-            <div className="flex justify-center">
-              <button className="p-5 px-6 pt-2 baseline">
-                <AiFillTwitterCircle size="2.5rem" />
-              </button>
-              <button className="p-5 px-6 pt-2 baseline">
-                <FaInstagramSquare size="2.5rem" />
-              </button>
-              <button className="p-5 px-6 pt-2 baseline">
-                <FaFacebook size="2.5rem" />
-              </button>
-            </div>
-            <h3 className="flex justify-center text-xl font-bold mb-7 mt-4">
-              Ladda ner vår app
-            </h3>
-            <div className="flex justify-evenly ">
-              <div className="ml-5">
-                <Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
-                  App Store
+            <div className="text-center pb-20">
+              <h3 className="mb-5 font-bold text-xl">Hitta hos oss</h3>
+              <div className="flex flex-col gap-3 text-blue-600 underline underline-offset-2">
+                <Link to="/myProfile">
+                  <span>Min sida</span>
                 </Link>
-              </div>
-              <div>
-                <Link to="/signin" className="p-3 px-6 font-bold bg-stone-300">
-                  Google Play
+                <Link to="/joblist">
+                  <span>Sök jobb</span>
                 </Link>
               </div>
             </div>
-            <p className="flex justify-center pt-12 pb-7 text-xs ">
-              Copyright bla bla bla
-            </p>
           </div>
         </div>
       </div>

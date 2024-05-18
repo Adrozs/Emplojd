@@ -36,7 +36,7 @@ const handleInputChange = (e) => {
   const newValue = e.target.value;
   setIsValid(validateInput(newValue) === "");
   handleChange(e);
-  if (!isTyped) {
+  if (!isTyping) {
     setIsTyping(true);
   }
   if (isTouched && !newValue) {
