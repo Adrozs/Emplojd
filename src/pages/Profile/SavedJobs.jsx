@@ -106,7 +106,7 @@ function SavedJobs() {
             Hitta jobb
           </Link>
         </ul>
-
+        <div className="flex mb-40"></div>
         <Footer />
       </div>
     </>
