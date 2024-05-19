@@ -13,7 +13,7 @@ function NoEarlierCoverLetter() {
         <FaFileSignature size={22} className="text-white mr-2" />
       </div>
 
-      <div className=" mt-4 ">
+      <div className=" mt-4 pb-80 ">
         <div className="bg-sky-100 p-4 w-[90%] mx-auto rounded-[10px]">
           <p className=" text-sm ml-2 text-black">
             Här har du full åtkomst till dina sparade personliga brev.

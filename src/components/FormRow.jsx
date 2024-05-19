@@ -83,7 +83,7 @@ const handleBlur = () => {
     <div className="flex flex-col pb-6">
       <label
         htmlFor={name}
-        className="form-label text-lg mb-2 font-semibold px-2"
+        className="text-lg mb-2 font-semibold px-2"
       >
         {labelText || name}
       </label>

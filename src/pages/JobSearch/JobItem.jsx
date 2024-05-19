@@ -48,7 +48,7 @@ function JobItem({ job, children }) {
   }
 
   return (
-    <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[10px]">
+    <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[10px]">
       <div className="flex justify-between">
         <div className="bg-stone-100 flex items-center rounded-full p-1 h-[55px]">
           <img

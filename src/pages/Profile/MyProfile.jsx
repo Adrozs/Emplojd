@@ -3,6 +3,8 @@ import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import FormRow from "../../components/FormRow";
 import Footer from "../../components/Footer";
 import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
+import ListForm from "../../components/ListForm";
+import { FaPlus } from "react-icons/fa";
 
 function MyProfile() {
   const initialState = {
@@ -14,6 +16,7 @@ function MyProfile() {
   };
 
   const [values, setValues] = useState(initialState);
+  const [selectedOption, setSelectedOption] = useState("none");
 
   const [profilePic, setProfilePic] = useState("");
 
@@ -42,7 +45,7 @@ function MyProfile() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="flex flex-col h-screen justify-between" >
+      <div className="flex flex-col h-screen justify-between">
         <div className="mx-4">
           <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
             <div className="flex flex-col z-10 bg-gradient-to-b from-[#CA81ED] to-[#4086C6] text-white p-4 w-44 rounded-xl">
@@ -54,19 +57,11 @@ function MyProfile() {
                 src={profilePic || "path_to_default_image.jpg"}
                 className="rounded-full w-full h-full object-cover"
               />
-              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-0 hover:bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-                <svg
-                  onClick={triggerFileInput}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="4em"
-                  height="4em"
-                  viewBox="0 0 24 24"
-                >
-                  <g fill="white" fillRule="evenodd" clipRule="evenodd">
-                    <path d="M6.64 9.788a.75.75 0 0 1 .53.918a5 5 0 0 0 7.33 5.624a.75.75 0 1 1 .75 1.3a6.501 6.501 0 0 1-9.529-7.312a.75.75 0 0 1 .919-.53M8.75 6.37a6.5 6.5 0 0 1 9.529 7.312a.75.75 0 1 1-1.45-.388A5.001 5.001 0 0 0 9.5 7.67a.75.75 0 1 1-.75-1.3" />
-                    <path d="M5.72 9.47a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 1 1-1.06 1.06l-1.97-1.97l-1.97 1.97a.75.75 0 0 1-1.06-1.06zm9 1.5a.75.75 0 0 1 1.06 0l1.97 1.97l1.97-1.97a.75.75 0 1 1 1.06 1.06l-2.5 2.5a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 0 1 0-1.06" />
-                  </g>
-                </svg>
+              <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-0 hover:bg-opacity-30 opacity-0 hover:opacity-75 transition-opacity duration-300 cursor-pointer">
+                <FaPlus onClick={triggerFileInput}
+                size="2rem"
+                fill="white"
+                 />
               </div>
               <input
                 type="file"
@@ -89,12 +84,61 @@ function MyProfile() {
               />
               <FormRow
                 type="email"
+                name="email"
                 labelText="Email"
+                value={values.email}
                 handleChange={handleChange}
+                placeholder="your.email@email.com"
               />
             </div>
+            <ListForm/>
+            <ListForm />
+            <div className="pb-6 px-2 rounded-lg max-w-md">
+              <div className="flex items-center mb-4">
+                <div className="text-lg text-line mb-2 font-semibold flex items-center top-1 relative">
+                  Signatur
+                </div>
+                <div className="ml-2 bg-purple-400 px-2.5 py-1 rounded-full text-sm text-white font-semibold flex items-center justify-center">
+                  ?
+                </div>
+              </div>
+              <div className="flex flex-col px-2">
+                <label className="inline-flex items-center mb-2">
+                  <input
+                    type="radio"
+                    className="form-radio text-sky-700"
+                    checked={selectedOption === "none"}
+                    onChange={() => setSelectedOption("none")}
+                  />
+                  <span className="ml-2 text-gray-700">Ingen signatur</span>
+                </label>
+                <label className="inline-flex items-center mb-2">
+                  <input
+                    type="radio"
+                    className="form-radio text-sky-700"
+                    checked={selectedOption === "ai"}
+                    onChange={() => setSelectedOption("ai")}
+                  />
+                  <span className="ml-2 text-gray-700">
+                    Låt AI generera signaturer i mina brev
+                  </span>
+                </label>
+                <label className="inline-flex items-center mb-2">
+                  <input
+                    type="radio"
+                    className="form-radio text-sky-700"
+                    checked={selectedOption === "custom"}
+                    onChange={() => setSelectedOption("custom")}
+                  />
+                  <span className="ml-2 text-gray-700">
+                    Skapa egen signatur
+                  </span>
+                </label>
+              </div>
+            </div>
+
             <button
-              className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-20 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-96"
+              className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-32 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-96"
               type="submit"
             >
               Spara ändringar <LoginRightArrow />

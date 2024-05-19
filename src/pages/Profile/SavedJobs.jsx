@@ -91,7 +91,7 @@ function SavedJobs() {
             })
           )}
         </ul>
-        <div className="flex mb-10"></div>
+        <div className="flex mb-40"></div>
         <Footer />
       </div>
     </>

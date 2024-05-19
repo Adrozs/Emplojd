@@ -49,7 +49,7 @@ function Modal({ onClose, menu }) {
   return (
     <>
       {menu && (
-        <nav className="fixed z-10 inset-0 overflow-y-auto bg-opacity-75 flex justify-end items-start">
+        <nav className="fixed z-40 inset-0 overflow-y-auto bg-opacity-75 flex justify-end items-start">
           <div className="bg-gray-100 max-w-lg w-[15rem] h-[25rem] z-1 modal-content drop-shadow-xl rounded-b-xl rounded-tl-xl">
             <div className="p-5 flex flex-col h-[100%] text-gray-300 justify-between">
               <div className="flex flex-col mt-24">
