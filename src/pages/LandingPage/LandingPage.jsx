@@ -4,6 +4,7 @@ import { SearchForm } from "../JobList/JobSearchForm";
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
+import { FaArrowRight } from "react-icons/fa6";
 
 export default function LandingPage() {
   return (
@@ -29,10 +30,10 @@ export default function LandingPage() {
             <div className="flex justify-center flex-col">
               <Link
                 to="/signin"
-                className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl"
+                className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl gap-4"
               >
                 Kom igång helt kostnadsfritt
-                <span className="text-2xl"> &rarr;</span>
+                <FaArrowRight size={16} />
               </Link>
               <div className="text-center md:text-center">
                 <p>Hitta din nya tjänst</p>
@@ -55,7 +56,7 @@ export default function LandingPage() {
       </section>
 
       <section className="flex flex-col ">
-      <div className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
+        <div className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
           <svg
             viewBox="0 0 360 81"
             fill="none"
@@ -75,15 +76,15 @@ export default function LandingPage() {
               Hitta <span className="text-customBlue">rätt</span> jobb för dig
             </h6>
           </div>
-          
-            <SearchForm />
-            <ActiveSlider />
+
+          <SearchForm />
+          <ActiveSlider />
           <div className="flex justify-center sm:mt-8">
             <Link
               to="/signin"
-              className="rounded-[4px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
+              className="flex items-center gap-3 rounded-[4px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
             >
-              Logga In &rarr;
+              Logga In <FaArrowRight size={14} />
             </Link>
           </div>
         </div>

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 
-import { FaRegHeart } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa6";
+import { FaRegHeart, FaArrowRight, FaHeart } from "react-icons/fa6";
 
 import {
   sendLikeData,
@@ -96,10 +95,10 @@ function JobInfo() {
                 </h1>
                 <div className="w-full flex items-center justify-center mx-auto">
                   <Link
-                    className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1 max-w-lg"
+                    className="flex items-center justify-center gap-3 mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg max-w-lg"
                     to={`/job/${job.id}/apply`}
                   >
-                    Ansök nu <span className="text-xl"> &rarr;</span>
+                    Ansök nu <FaArrowRight />
                   </Link>
                 </div>
               </div>
@@ -132,10 +131,10 @@ function JobInfo() {
             <div className="w-full my-3 text-center ">
               <div className="w-[95%] flex items-center justify-center mx-auto">
                 <Link
-                  className="mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg gap-1"
+                  className="flex items-center justify-center gap-3 mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg max-w-lg"
                   to={`/job/${job.id}/apply`}
                 >
-                  Ansök nu <span className="text-xl"> &rarr;</span>
+                  Ansök nu <FaArrowRight />
                 </Link>
               </div>
             </div>
