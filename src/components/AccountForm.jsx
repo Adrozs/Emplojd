@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus } from "react-icons/fa";
 
 function AccountForm({
   type,
@@ -43,7 +43,7 @@ function AccountForm({
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleSubmit();
     }
@@ -51,11 +51,11 @@ function AccountForm({
 
   const inputClassName = () => {
     if (!isTouched) {
-      return "px-4 py-2 text-black rounded-xl bg-[#F0F0F0] border-2 flex-grow outline-sky-800 hover:border-gray-400";
+      return "px-4 py-2 text-black rounded-xl border-2 flex-grow bg-white outline-sky-800 hover:border-gray-400";
     } else if (isValid) {
-      return "px-4 py-2 text-black rounded-xl bg-[#F0F0F0] border-sky-800 border-2 flex-grow outline-sky-800";
+      return "px-4 py-2 text-black rounded-xl border-sky-800 border-2 flex-grow bg-white outline-sky-800";
     } else {
-      return "px-4 py-2 text-black rounded-xl bg-[#F0F0F0] border-red-400 border-2 flex-grow outline-sky-800";
+      return "px-4 py-2 text-black rounded-xl border-red-400 border-2 flex-grow bg-white outline-sky-800";
     }
   };
 
@@ -83,7 +83,7 @@ function AccountForm({
                 setIsTouched(false);
               }}
               placeholder={placeholder}
-              className="appearance-none bg-transparent border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
+              className="appearance-none  border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
             />
             <button
               type="button"
@@ -93,12 +93,14 @@ function AccountForm({
               <FaPlus fill={isTyping ? "#075985" : "currentColor"} />
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="flex flex-wrap gap-2 bg-white mt-2">
             {words.map((word, index) => (
               <div
                 key={index}
                 className={`flex items-center ${
-                  index >= 5 ? 'bg-red-200 text-red-700' : 'bg-purple-100 text-purple-700'
+                  index >= 5
+                    ? "bg-red-200 text-red-700"
+                    : "bg-purple-100 text-purple-700"
                 } rounded-lg px-3 py-1`}
               >
                 <button
@@ -117,7 +119,6 @@ function AccountForm({
                       fill="#374151"
                     />
                   </svg>
-                  
                 </button>
                 <span className="ml-1">{word}</span>
               </div>

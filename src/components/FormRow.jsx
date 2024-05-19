@@ -71,11 +71,11 @@ const handleBlur = () => {
 
   const inputClassName = () => {
     if (!isTouched) {
-      return "px-4 py-2 text-black rounded-xl bg-[#F0F0F0] border-2 flex-grow outline-sky-800 hover:border-gray-400";
+      return "px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800 hover:border-gray-400";
     } else if (isValid) {
-      return "px-4 py-2 text-black rounded-xl bg-[#F0F0F0] border-sky-800 border-2 flex-grow outline-sky-800";
+      return "px-4 py-2 text-black rounded-xl border-sky-800 border-2 flex-grow outline-sky-800";
     } else {
-      return "px-4 py-2 text-black rounded-xl bg-[#F0F0F0] border-red-400 border-2 flex-grow outline-sky-800";
+      return "px-4 py-2 text-black rounded-xl border-red-400 border-2 flex-grow outline-sky-800";
     }
   };
 
