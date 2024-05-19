@@ -116,6 +116,9 @@ function JobSearch() {
                   pathname: `/job/${job.id}`,
                   state: { jobId: job.id },
                 }}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
               >
                 Läs mer <span className="text-xl"> &rarr;</span>
               </Link>
