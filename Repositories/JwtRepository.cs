@@ -45,13 +45,30 @@ namespace ChasGPT_Backend.Repositories
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Error generationg JWT token", ex);
+                throw new ApplicationException("Error generating JWT token", ex);
             }
         }
 
-        public string LinkedInGenerateJwt(User user)
+        public string LinkedInGenerateJwt(IEnumerable<Claim> claims)
         {
+            try
+            {
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["Jwt:Issuer"],
+                    audience: _configuration["Jwt:Audience"],
+                    claims: claims,
+                    expires: DateTime.Now.AddHours(3),
+                    signingCredentials: creds);
+
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error generating JWT token", ex);
+            }
         }
     }
 }
