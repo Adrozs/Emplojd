@@ -4,28 +4,15 @@ namespace ChasGPT_Backend.Models
 {
     public class User : IdentityUser
     {
-        // Properties included because we inherit from IdentityUser:
+        // For user profile
+        public string? Name { get; set; }
+        public List<string>? UserInterestTags { get; set; }
+        public List<string>? DescriptiveWords { get; set; }
+        public string? CvContentText { get; set; }
 
-        public int Id {  get; set; }
-        public string UserName { get; set; }
-        public string NormalizedUserName {  get; set; }
-        public string Email {  get; set; }
-        public bool EmailConfirmed { get; set; }
-        public string Address { get; set; }
-        public string PasswordHash {  get; set; }
-        public int SecurityStamp { get; set; }
-        public string ConcurrencyStamp {  get; set; }
-        public int PhoneNumber {  get; set; }
-        public bool PhoneNumberConfirmed {  get; set; }
-        public bool TwoFactorEnabled {  get; set; }
-        public DateTime LockoutEnd { get ; set; }
-        public bool LockoutEnabled {  get; set; }
-        public int AccessFailedCount {  get; set; }
-
-
-        public virtual UserProfile UserProfile { get; set; }
-        public virtual ICollection<SavedJobAds> SavedJobAds { get; set; }
-        public virtual ICollection<CoverLetter> CoverLetter { get; set; }
+        public virtual ICollection<CvManually> CvManually { get; set; }
+        public virtual ICollection<SavedCoverLetter> SavedCoverLetters { get; set; }
+        public virtual ICollection<SavedJobAd> SavedJobAds { get; set; }
 
         /*
             Id: A primary key for the user.
