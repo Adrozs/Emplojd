@@ -8,6 +8,7 @@
     <SpaRoot>..\emplojd.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <UserSecretsId>476d7c13-d378-46c1-a496-2b8166cfbae3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
