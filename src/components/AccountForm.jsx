@@ -23,6 +23,8 @@ function AccountForm({
   const [isValid, setIsValid] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [validationError, setValidationError] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
 
   useEffect(() => {
     if (inputState) {
@@ -31,18 +33,34 @@ function AccountForm({
     }
   }, [inputState]);
 
+  useEffect(() => {
+    if (words.length > 0) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [words]);
+
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     handleChange(e);
     if (!isTyping) {
       setIsTyping(true);
+      setIsTouched(true);
     }
     if (isTouched && !newValue) {
       setIsTouched(false);
     }
   };
+  
 
+  const handleFocus = () => {
+    setIsFocused(true);
+    setIsTouched(false);
+  };
+  
   const handleBlur = () => {
+    setIsFocused(false);
     setIsTouched(true);
     setIsTyping(false);
   };
@@ -56,13 +74,14 @@ function AccountForm({
 
   const inputClassName = () => {
     if (!isTouched) {
-      return "px-4 py-2 text-gray-800 rounded-xl border-2 flex-grow bg-white outline-sky-800 hover:border-gray-400";
+      return `px-2 pt-4 text-gray-800 rounded-xl border-2 flex-grow bg-white ${isFocused ? 'border-sky-800' : 'hover:border-gray-400'}`;
     } else if (isValid) {
-      return "px-4 py-2 text-gray-800 rounded-xl border-sky-800 border-2 flex-grow bg-white outline-sky-800";
+      return "px-2 pt-4  text-gray-800 rounded-xl border-sky-800 border-2 flex-grow bg-white";
     } else {
-      return "px-4 py-2 text-red-400 rounded-xl border-red-400 border-2 flex-grow bg-white outline-sky-800";
+      return "px-2 pt-4 text-red-400 rounded-xl border-red-400 border-2 flex-grow bg-white";
     }
-  };
+  };  
+  
 
   return (
     <div>
@@ -81,6 +100,7 @@ function AccountForm({
               name={name}
               value={value}
               onChange={handleInputChange}
+              onFocus={handleFocus}
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               onClick={() => {
@@ -88,17 +108,17 @@ function AccountForm({
                 setIsTouched(false);
               }}
               placeholder={placeholder}
-              className="appearance-none border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
+              className="appearance-none border-none w-full text-gray-700 px-2 leading-tight focus:outline-none"
             />
             <button
               type="button"
               onClick={handleSubmit}
-              className="text-sm rounded p-2"
+              className="relative text-sm rounded -top-[6px] p-2 h-2 text-gray-400"
             >
               <FaPlus fill={isTyping ? "#075985" : "currentColor"} />
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 bg-white mt-2">
+          <div className="flex flex-wrap gap-2 bg-white m-2">
             {words.map((word, index) => (
               <div
                 key={index}
