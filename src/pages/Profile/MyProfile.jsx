@@ -97,7 +97,7 @@ function MyProfile() {
                   xmlns="http://www.w3.org/2000/svg"
                   className="row-start-2 ml-2"
                 >
-                  <g clip-path="url(#clip0_1137_1448)">
+                  <g clipPath="url(#clip0_1137_1448)">
                     <rect y="0.5" width="16" height="16" rx="8" fill="white" />
                     <path
                       d="M8 16.5C10.1217 16.5 12.1566 15.6571 13.6569 14.1569C15.1571 12.6566 16 10.6217 16 8.5C16 6.37827 15.1571 4.34344 13.6569 2.84315C12.1566 1.34285 10.1217 0.5 8 0.5C5.87827 0.5 3.84344 1.34285 2.34315 2.84315C0.842855 4.34344 0 6.37827 0 8.5C0 10.6217 0.842855 12.6566 2.34315 14.1569C3.84344 15.6571 5.87827 16.5 8 16.5ZM8 4.5C8.41562 4.5 8.75 4.83437 8.75 5.25V8.75C8.75 9.16562 8.41562 9.5 8 9.5C7.58437 9.5 7.25 9.16562 7.25 8.75V5.25C7.25 4.83437 7.58437 4.5 8 4.5ZM7 11.5C7 11.2348 7.10536 10.9804 7.29289 10.7929C7.48043 10.6054 7.73478 10.5 8 10.5C8.26522 10.5 8.51957 10.6054 8.70711 10.7929C8.89464 10.9804 9 11.2348 9 11.5C9 11.7652 8.89464 12.0196 8.70711 12.2071C8.51957 12.3946 8.26522 12.5 8 12.5C7.73478 12.5 7.48043 12.3946 7.29289 12.2071C7.10536 12.0196 7 11.7652 7 11.5Z"
@@ -243,7 +243,9 @@ function MyProfile() {
 
             <button
               className={`w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-32 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-96 ${
-                !unsavedChanges ? "bg-gray-300 hover:bg-gray-300 active:bg-gray-300 cursor-not-allowed" : ""
+                !unsavedChanges
+                  ? "bg-gray-300 hover:bg-gray-300 active:bg-gray-300 cursor-not-allowed"
+                  : ""
               }`}
               type="submit"
               disabled={!unsavedChanges}
