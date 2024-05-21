@@ -53,9 +53,9 @@ function AccountForm({
     if (!isTouched) {
       return "px-4 py-2 text-gray-400 rounded-xl border-2 flex-grow bg-white outline-sky-800 hover:border-gray-400";
     } else if (isValid) {
-      return "px-4 py-2 text-gray-400 rounded-xl border-sky-800 border-2 flex-grow bg-white outline-sky-800";
+      return "px-4 py-2 text-sky-800 rounded-xl border-sky-800 border-2 flex-grow bg-white outline-sky-800";
     } else {
-      return "px-4 py-2 text-gray-400 rounded-xl border-red-400 border-2 flex-grow bg-white outline-sky-800";
+      return "px-4 py-2 text-red-400 rounded-xl border-red-400 border-2 flex-grow bg-white outline-sky-800";
     }
   };
 
