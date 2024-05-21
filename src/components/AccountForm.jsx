@@ -115,7 +115,7 @@ function AccountForm({
               className={`relative text-sm rounded -top-[6px] p-2 h-2 ${
                 !isValid && isTouched
                   ? "text-red-400"
-                  : isValid && isTyping
+                  : isValid && isTouched
                   ? "text-sky-800"
                   : "text-gray-400"
               }`}
