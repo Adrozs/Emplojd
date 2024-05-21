@@ -2,12 +2,12 @@
 
 namespace ChasGPT_Backend.Models
 {
-    public class SavedJobAds
+    public class SavedJobAd
     {
         [Key]
-        public int SavedJobId { get; set; }
+        public int SavedJobAdId { get; set; }
         public int PlatsbankenJobId { get; set; }
 
-        public virtual ICollection<UserProfile> UserInterests { get; set; }
+        public virtual ICollection<User> User { get; set; }
     }
 }

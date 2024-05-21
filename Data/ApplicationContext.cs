@@ -8,6 +8,9 @@ namespace ChasGPT_Backend.Data
     {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<SavedCoverLetter> CoverLetters { get; set; }
+        public DbSet<SavedJobAd> SavedJobAds { get; set; }
+
         public DbSet<JobAd> JobAd { get; set; }
 
 
