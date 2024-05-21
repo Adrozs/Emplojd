@@ -411,7 +411,7 @@ function ApplySideFour({ job, page, setPage }) {
         </div>
         <div className="flex flex-col items-center gap-4">
           <Link
-            to="/saved"
+            to="/NoEarlierCoverLetter"
             className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
           >
             Gå till sparade brev
