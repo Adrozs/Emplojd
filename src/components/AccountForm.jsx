@@ -18,7 +18,6 @@ function AccountForm({
   errorTextColor = "text-red-800",
   errorBgColor = "bg-red-200",
   labelBgColor = "bg-purple-100",
-  onChange,
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -53,16 +52,6 @@ function AccountForm({
       e.preventDefault();
       handleSubmit();
     }
-  };
-
-  const handleSubmitClick = () => {
-    handleSubmit();
-    if (onChange) onChange();
-  };
-
-  const handleRemoveWordClick = (index) => {
-    handleRemoveWord(index);
-    if (onChange) onChange();
   };
 
   const inputClassName = () => {
