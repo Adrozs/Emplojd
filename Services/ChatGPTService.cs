@@ -1,4 +1,4 @@
-﻿using ChasGPT_Backend.Repository;
+﻿using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
 

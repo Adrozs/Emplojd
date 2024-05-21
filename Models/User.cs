@@ -10,9 +10,14 @@ namespace ChasGPT_Backend.Models
         public List<string>? DescriptiveWords { get; set; }
         public string? CvContentText { get; set; }
 
+
         public virtual ICollection<CvManually> CvManually { get; set; }
         public virtual ICollection<SavedCoverLetter> SavedCoverLetters { get; set; }
         public virtual ICollection<SavedJobAd> SavedJobAds { get; set; }
+
+        public virtual UserProfile UserProfile { get; set; }
+        public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
+        public virtual ICollection<CoverLetter> CoverLetter { get; set; }
 
         /*
             Id: A primary key for the user.
@@ -31,5 +36,6 @@ namespace ChasGPT_Backend.Models
             LockoutEnabled: Indicates whether the user can be locked out.
             AccessFailedCount: The number of failed login attempts. This is used for implementing lockout functionality.
          */
+
     }
 }

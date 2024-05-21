@@ -2,7 +2,7 @@
 using OpenAI_API.Models;
 using OpenAI_API;
 
-namespace ChasGPT_Backend.Repository
+namespace ChasGPT_Backend.Repositories
 {
     public interface IChatGPTRepository
     {
@@ -16,6 +16,7 @@ namespace ChasGPT_Backend.Repository
         {
             api = openAIApi;
         }
+
 
         public async Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job)
         {

@@ -1,7 +1,10 @@
+using ChasGPT_Backend.Helpers;
 ﻿using ChasGPT_Backend.Repository;
 ﻿using Azure.Core;
 using ChasGPT_Backend.Repositories;
 using ChasGPT_Backend.ViewModels___DTOs;
+using ChasGPT_Backend.ViewModels___DTOs.Account;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChasGPT_Backend.Services
@@ -10,84 +13,118 @@ namespace ChasGPT_Backend.Services
     {
         public static async Task<IResult> CreateAccountAsync([FromBody] CreateAccountRequestDto request, [FromServices] IUserRepository userRepository)
         {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.EmailConfirmed) || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.PasswordConfirmed))
+                return Results.BadRequest("Invalid request data. Account credentials can't be empty.");
+
             try
             {
-                if (request == null)
-                    return Results.BadRequest("Invalid request data.");
+                IdentityResult result = await userRepository.CreateAccountAsync(request.Email, request.EmailConfirmed, request.Password, request.PasswordConfirmed);
 
-                bool success = await userRepository.CreateAccountAsync(request.Email, request.EmailConfirmed, request.Password, request.PasswordConfirmed); 
-                
-                if (success)
-                {
-                    return Results.Ok("Account successfully created.");
-                }
-                else
-                {
-                    return Results.BadRequest("Something went wrong while trying to create the account");
-                }
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Account successfully created. Please check your email to verify your account.", "Failed to create account:");
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
         public static async Task<IResult> LoginAsync([FromBody] LoginRequestDto request, [FromServices] IUserRepository userRepository)
         {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+                return Results.BadRequest("Invalid request data. Login credentials can't be empty.");
+
             try
             {
-                if (request == null)
-                    return Results.BadRequest("Invalid request data.");
+                LoginResult result = await userRepository.LoginAsync(request.Email, request.Password);
 
-                string token = await userRepository.LoginAsync(request.Email, request.Password);
-                return Results.Ok(new { Token = token });
-
+                if (result.Success)
+                    return Results.Ok(new { result.Token });
+                else
+                    return Results.BadRequest($"Failed to login: {result.ErrorMessage}");
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
-            catch (Exception ex) 
-            {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
-        public static async Task<IResult> ChangePasswordAsync([FromBody] ChangePasswordRequestDto request, [FromServices] IUserRepository userRepository, HttpContext httpContext)
+        // Commented away as is it even necessary? 
+        //public static async Task<IResult> ChangePasswordAsync([FromBody] ChangePasswordRequestDto request, [FromServices] IUserRepository userRepository, HttpContext httpContext)
+        //{
+        //    try
+        //    {
+        //        if (request == null)
+        //            return Results.BadRequest("Invalid request data.");
+
+        //        bool success = await userRepository.ChangePasswordAsync(request.CurrentPassword, request.NewPassword, request.NewPasswordConfirm, httpContext.User);
+
+        //        if (success)
+        //        {
+        //            return Results.Ok("Password successfully changed.");
+        //        }
+        //        else
+        //        {
+        //            return Results.BadRequest("Failed to change password.");
+        //        }
+        //    }
+        //    // Known issues exceptions
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
+        //    }
+        //    // Generic unpredicted exceptions
+        //    catch (Exception ex)
+        //    {
+        //        return Results.Problem("An unexpected error occurred.", ex.Message);
+        //    }
+        //}
+
+        public static async Task<IResult> EmailVerificationAsync([FromQuery] string userId, [FromQuery] string code, [FromServices] IUserRepository userRepository)
+        {
+            try 
+            {
+                IdentityResult result = await userRepository.EmailVerificationAsync(userId, code);
+
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Email successfully confirmed.", "Failed to confirm email.");
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
+            }
+        }
+
+        public static async Task<IResult> GeneratePasswordResetTokenAsync([FromBody] GeneratePasswordResetTokenRequest request, [FromServices] IUserRepository userRepository)
         {
             try
             {
-                if (request == null)
-                    return Results.BadRequest("Invalid request data.");
+                IdentityResult result = await userRepository.GeneratePasswordResetCodeAsync(request.Email);
 
-                bool success = await userRepository.ChangePasswordAsync(request.CurrentPassword, request.NewPassword, request.NewPasswordConfirm, httpContext.User);
-
-                if (success)
-                {
-                    return Results.Ok("Password successfully changed.");
-                }
-                else
-                {
-                    return Results.BadRequest("Failed to change password.");
-                }
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Password reset email successfully sent.", "Failed to send reset email:");
             }
-            // Known issues exceptions
-            catch (InvalidOperationException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized);
-            }
-            // Generic unpredicted exceptions
             catch (Exception ex)
             {
-                return Results.Problem("An unexpected error occurred.", ex.Message);
+                return ExceptionHandler.HandleException(ex);
+            }
+        }
+        public static async Task<IResult> ResetPasswordAsync([FromQuery] string userId, [FromQuery] string code, ResetPasswordRequest request, [FromServices] IUserRepository userRepository)
+        {
+            try
+            {
+                IdentityResult result = await userRepository.ResetPasswordAsync(userId, code, request.NewPassword, request.NewPasswordConfirm);
+
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Password successfully changed", "Failed to change password:");
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
             }
         }
     }

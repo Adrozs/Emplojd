@@ -17,31 +17,36 @@ namespace ChasGPT_Backend.Repositories
 
         public string GenerateJwt(User user)
         {
-            // Create claims
-            List<Claim> claims = new List<Claim>
+            try
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            };
+                // Create claims
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                };
 
-            // Configure token settings
-            SymmetricSecurityKey secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
-            SigningCredentials credentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+                // Configure token settings
+                SymmetricSecurityKey secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+                SigningCredentials credentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
 
-            // Create JWT
-            JwtSecurityToken jwt = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(3),
-                signingCredentials: credentials
-                );
+                // Create JWT
+                JwtSecurityToken jwt = new JwtSecurityToken(
+                    issuer: _configuration["Jwt:Issuer"],
+                    audience: _configuration["Jwt:Audience"],
+                    claims: claims,
+                    expires: DateTime.Now.AddHours(3),
+                    signingCredentials: credentials
+                    );
 
-            // Generate token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.WriteToken(jwt);
-
-            return token;
+                // Serialize token
+                var tokenHandler = new JwtSecurityTokenHandler();
+                return tokenHandler.WriteToken(jwt);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error generationg JWT token", ex);
+            }
         }
     }
 }

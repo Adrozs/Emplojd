@@ -2,7 +2,6 @@
 using ChasGPT_Backend.Services;
 using OpenAI_API;
 using ChasGPT_Backend.Models;
-using ChasGPT_Backend.Services;
 using ChasGPT_Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +10,11 @@ using ChasGPT_Backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ChasGPT_Backend.Helpers;
+using ChasGPT_Backend.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using AspNet.Security.OAuth.LinkedIn;
 
 namespace ChasGPT_Backend
 {
@@ -19,31 +23,68 @@ namespace ChasGPT_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllers();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddCookie()
+                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+                {
+                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                    options.CallbackPath = "/googleresponse";
+                })
+        
+
+            .AddLinkedIn(options =>
+             {
+                 options.ClientId = builder.Configuration.GetSection("LinkedIn:ClientId").Value;
+                 options.ClientSecret = builder.Configuration.GetSection("LinkedIn:ClientSecret").Value;
+                 options.CallbackPath = new PathString("/signin-linkedin");
+             });
+
+
             ConfigurationManager configuration = builder.Configuration;
 
             // Add services to the container.
 
             DotNetEnv.Env.Load();
-          
+
             // Setup database context and connection string here
             builder.Services.AddDbContext<ApplicationContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add CORS services
-            builder.Services.AddCors(); 
+            builder.Services.AddCors();
 
 
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
+                // Password requirements
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
+
+                // Ensure email is confirmed
+                options.SignIn.RequireConfirmedEmail = true;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 8;
             })
             .AddEntityFrameworkStores<ApplicationContext>() // Connects identity to the database giving its method ability to access it
             .AddDefaultTokenProviders();
+
+            // Add Mailkit email config
+            builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
+
 
             // Adding authentication
             builder.Services.AddAuthentication(options =>
@@ -75,14 +116,12 @@ namespace ChasGPT_Backend
             // Add to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
-            builder.Services.AddSingleton<JwtRepository>(provider =>
+            builder.Services.AddSingleton(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
-
-
-            // Add services to the container.
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
-            
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -125,6 +164,8 @@ namespace ChasGPT_Backend
 
             var app = builder.Build();
 
+            app.UseRouting();
+
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
             app.UseCors(builder =>
             {
@@ -140,11 +181,14 @@ namespace ChasGPT_Backend
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+
             }
 
-            //app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+
+            //app.UseHttpsRedirection(); // (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
 
 
             // Apply the CORS policy
@@ -154,30 +198,42 @@ namespace ChasGPT_Backend
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapControllers();
+
 
 
 
             // ENDPOINTS
             // Note: Don't forget to add ".RequireAuthorization()" to your endpoints! Without it you can access them without the token.
 
-            // User account 
-            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
-            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous(); //.AllowAnonymous() to explicitly say that this doesn't require token auth
-            app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
+            // User account
+            // .AllowAnonymous() to explicitly say that this doesn't require token auth
+            app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
+            app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
+            app.MapGet("/confirm-email", UserService.EmailVerificationAsync).AllowAnonymous();
+            app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
+            app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
+
+            // Is this even necessary anymore when we have /reset-password ??? - only difference with this one is it changed password without email verification
+            //app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
 
 
             // Cover letter
             app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
 
 
-            // Job search
+            // JobAd search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
-            app.MapGet("/search", async (string query, int? region, int? page, IJobAdRepository jobAdRepository) =>
-            {
-                return await JobAdService.SearchJob(query, region, page ?? 1, jobAdRepository);
-            }).RequireAuthorization();
-
+            app.MapGet("/search", JobAdService.SearchJob).RequireAuthorization();
             app.MapGet("/ad/{adId}", JobAdService.GetJobFromId).RequireAuthorization();
+
+
+            // JobAds Get/Save/Delete
+            app.MapGet("/saved-ads", JobAdService.GetSavedJobAdsAsync).RequireAuthorization();
+            app.MapPost("/save-ad", JobAdService.SaveJobAdAsync).RequireAuthorization();
+            app.MapDelete("/saved-ad", JobAdService.RemoveSavedJobAdAsync).RequireAuthorization();
+
+
 
             app.Run();
         }
