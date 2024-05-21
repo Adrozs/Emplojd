@@ -27,14 +27,12 @@ namespace Emplojd
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = GoogleDefaults.AuthenticationScheme;
             })
                 .AddCookie()
-                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+                .AddGoogle( options =>
                 {
                     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                    options.CallbackPath = "/googleresponse";
                 });
 
 
@@ -55,7 +53,7 @@ namespace Emplojd
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
-                // Password requirements
+                // Password Requirements
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
