@@ -25,7 +25,6 @@ function AccountForm({
   const [validationError, setValidationError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-
   useEffect(() => {
     if (inputState) {
       setIsTouched(inputState.isTouched);
@@ -52,13 +51,12 @@ function AccountForm({
       setIsTouched(false);
     }
   };
-  
 
   const handleFocus = () => {
     setIsFocused(true);
     setIsTouched(false);
   };
-  
+
   const handleBlur = () => {
     setIsFocused(false);
     setIsTouched(true);
@@ -74,14 +72,15 @@ function AccountForm({
 
   const inputClassName = () => {
     if (!isTouched) {
-      return `px-2 pt-4 text-gray-800 rounded-xl border-2 flex-grow bg-white ${isFocused ? 'border-sky-800' : 'hover:border-gray-400'}`;
+      return `px-2 pt-4 rounded-xl border-2 flex-grow bg-white ${
+        isFocused ? "border-sky-800" : "hover:border-gray-400"
+      }`;
     } else if (isValid) {
-      return "px-2 pt-4  text-gray-800 rounded-xl border-sky-800 border-2 flex-grow bg-white";
+      return "px-2 pt-4 rounded-xl border-sky-800 border-2 flex-grow bg-white";
     } else {
-      return "px-2 pt-4 text-red-400 rounded-xl border-red-400 border-2 flex-grow bg-white";
+      return "px-2 pt-4 rounded-xl border-red-400 border-2 flex-grow bg-white";
     }
-  };  
-  
+  };
 
   return (
     <div>
@@ -113,7 +112,13 @@ function AccountForm({
             <button
               type="button"
               onClick={handleSubmit}
-              className="relative text-sm rounded -top-[6px] p-2 h-2 text-gray-400"
+              className={`relative text-sm rounded -top-[6px] p-2 h-2 ${
+                !isValid && isTouched
+                  ? "text-red-400"
+                  : isValid && isTyping
+                  ? "text-sky-800"
+                  : "text-gray-400"
+              }`}
             >
               <FaPlus fill={isTyping ? "#075985" : "currentColor"} />
             </button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AccountForm from "./AccountForm";
 
 function ListForm({
@@ -14,6 +14,22 @@ function ListForm({
     isValid: false,
   });
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (words.length > 5) {
+      setInputState({
+        isTouched: true,
+        isValid: false,
+      });
+      setError("Max antal ord: 5st.");
+    } else {
+      setInputState((prevState) => ({
+        ...prevState,
+        isValid: true,
+      }));
+      setError("");
+    }
+  }, [words]);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
