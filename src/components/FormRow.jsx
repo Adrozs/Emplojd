@@ -9,6 +9,7 @@ function FormRow({
   labelText,
   placeholder,
   compareValue,
+  labelBgColor = "transparent",
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -80,10 +81,10 @@ const handleBlur = () => {
   };
 
   return (
-    <div className="flex flex-col pb-6">
+    <div className="pb-6">
       <label
         htmlFor={name}
-        className="text-lg mb-2 font-semibold px-2"
+        className={`text-lg mb-2 font-semibold px-2 inline-block py-1 rounded-lg ${labelBgColor}`}
       >
         {labelText || name}
       </label>

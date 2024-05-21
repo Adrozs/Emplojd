@@ -13,6 +13,12 @@ function AccountForm({
   error,
   words = [],
   handleRemoveWord,
+  wordTextColor = "text-gray-800",
+  wordBgColor = "bg-purple-100",
+  errorTextColor = "text-red-800",
+  errorBgColor = "bg-red-200",
+  labelBgColor = "bg-purple-100",
+  onChange,
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -49,21 +55,31 @@ function AccountForm({
     }
   };
 
+  const handleSubmitClick = () => {
+    handleSubmit();
+    if (onChange) onChange();
+  };
+
+  const handleRemoveWordClick = (index) => {
+    handleRemoveWord(index);
+    if (onChange) onChange();
+  };
+
   const inputClassName = () => {
     if (!isTouched) {
-      return "px-4 py-2 text-gray-400 rounded-xl border-2 flex-grow bg-white outline-sky-800 hover:border-gray-400";
+      return "px-4 py-2 text-gray-800 rounded-xl border-2 flex-grow bg-white outline-sky-800 hover:border-gray-400";
     } else if (isValid) {
-      return "px-4 py-2 text-sky-800 rounded-xl border-sky-800 border-2 flex-grow bg-white outline-sky-800";
+      return "px-4 py-2 text-gray-800 rounded-xl border-sky-800 border-2 flex-grow bg-white outline-sky-800";
     } else {
       return "px-4 py-2 text-red-400 rounded-xl border-red-400 border-2 flex-grow bg-white outline-sky-800";
     }
   };
 
   return (
-    <div className="flex flex-col pb-6 w-full">
+    <div>
       <label
         htmlFor={name}
-        className="form-label text-lg mb-2 font-semibold px-2"
+        className={`inline-block mb-2 font-semibold px-2 py-1 rounded-lg ${labelBgColor}`}
       >
         {labelText || name}
       </label>
@@ -83,7 +99,7 @@ function AccountForm({
                 setIsTouched(false);
               }}
               placeholder={placeholder}
-              className="appearance-none  border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
+              className="appearance-none border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
             />
             <button
               type="button"
@@ -98,14 +114,12 @@ function AccountForm({
               <div
                 key={index}
                 className={`flex items-center ${
-                  index >= 5
-                    ? "bg-red-200 text-red-700"
-                    : "bg-purple-100 text-purple-700"
+                  index >= 5 ? errorBgColor : wordBgColor
                 } rounded-lg px-3 py-1`}
               >
                 <button
                   onClick={() => handleRemoveWord(index)}
-                  className="flex items-center text-gray-700 hover:text-purple-700"
+                  className={`flex items-center ${wordTextColor} hover:text-purple-700`}
                 >
                   <svg
                     width="16"
@@ -127,7 +141,7 @@ function AccountForm({
         </div>
       </div>
       {(validationError || error) && (
-        <div className="text-red-400 text-sm mt-1 pl-2">
+        <div className={`text-sm mt-1 pl-2 ${errorTextColor}`}>
           &bull; {validationError || error}
         </div>
       )}

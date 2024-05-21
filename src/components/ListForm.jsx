@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import AccountForm from "./AccountForm";
 
-function App() {
+function ListForm({
+  wordBgColor = "bg-purple-100",
+  name = "name",
+  labelBgColor = "bg-purple-100",
+  onChange,
+}) {
   const [words, setWords] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [inputState, setInputState] = useState({
@@ -28,6 +33,7 @@ function App() {
       } else {
         setError("");
       }
+      if (onChange) onChange();
     }
   };
 
@@ -37,35 +43,32 @@ function App() {
     if (newWords.length <= 5) {
       setError("");
     }
+    if (onChange) onChange();
   };
 
-  
-
   return (
-    <div className="flex justify-center items-center">
-      <div className="rounded-lg w-full">
         <form onSubmit={(e) => e.preventDefault()} className="mb-4">
           <AccountForm
             type="text"
-            name="Beskriv dig själv med några ord"
+            name={name}
             value={inputValue}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
-            onClick={() => {
-                setIsTyping(true);
-                setIsTouched(false);
-              }}
             placeholder="Påbörja nytt ord med ENTER"
             showIcons={false}
             inputState={inputState}
             error={error}
             words={words}
             handleRemoveWord={handleRemoveWord}
+            wordTextColor="text-blue-700"
+            wordBgColor={wordBgColor}
+            errorTextColor="text-red-700"
+            errorBgColor="bg-red-200"
+            labelBgColor={labelBgColor}
+            onChange={onChange}
           />
         </form>
-      </div>
-    </div>
   );
 }
 
-export default App;
+export default ListForm;
