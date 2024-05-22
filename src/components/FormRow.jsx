@@ -10,6 +10,7 @@ function FormRow({
   placeholder,
   compareValue,
   labelBgColor = "transparent",
+  disabled = false,
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -17,66 +18,70 @@ function FormRow({
   const [matchError, setMatchError] = useState("");
   const [validationError, setValidationError] = useState("");
 
-const validateInput = (value) => {
-  if (type === "email") {
-    const valid = /\S+@\S+\.\S+/.test(value);
-    return valid ? "" : "Ogiltig e-postadress.";
-  } else if (type === "password") {
-    const valid =
-      /[A-Z]/.test(value) &&
-      /[a-z]/.test(value) &&
-      /\d/.test(value) &&
-      /[!@#$%^&*(),.?":{}|<>]/.test(value) &&
-      value.length >= 8;
-    return valid ? "" : "Lösenordet behöver: >8, A-Z, a-z, 0-9, #@$!.";
-  }
-  return "";
-};
+  const validateInput = (value) => {
+    if (type === "email") {
+      const valid = /\S+@\S+\.\S+/.test(value);
+      return valid ? "" : "Ogiltig e-postadress.";
+    } else if (type === "password") {
+      const valid =
+        /[A-Z]/.test(value) &&
+        /[a-z]/.test(value) &&
+        /\d/.test(value) &&
+        /[!@#$%^&*(),.?":{}|<>]/.test(value) &&
+        value.length >= 8;
+      return valid ? "" : "Lösenordet behöver: >8, A-Z, a-z, 0-9, #@$!.";
+    }
+    return "";
+  };
 
-const handleInputChange = (e) => {
-  const newValue = e.target.value;
-  setIsValid(validateInput(newValue) === "");
-  handleChange(e);
-  if (!isTyping) {
-    setIsTyping(true);
-  }
-  if (isTouched && !newValue) {
-    setIsTouched(false);
-  }
-};
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    setIsValid(validateInput(newValue) === "");
+    handleChange(e);
+    if (!isTyping) {
+      setIsTyping(true);
+    }
+    if (isTouched && !newValue) {
+      setIsTouched(false);
+    }
+  };
 
-const handleBlur = () => {
-  setIsTouched(true);
-  setIsTyping(false);
-  const errorMessage = validateInput(value);
-  setValidationError(errorMessage);
-  const currentIsValid = errorMessage === "";
-  setIsValid(currentIsValid);
+  const handleBlur = () => {
+    setIsTouched(true);
+    setIsTyping(false);
+    const errorMessage = validateInput(value);
+    setValidationError(errorMessage);
+    const currentIsValid = errorMessage === "";
+    setIsValid(currentIsValid);
 
-  if (
-    (name === "emailConfirmed" &&
-      compareValue.toLowerCase() !== value.toLowerCase()) ||
-    (name === "passwordConfirmed" && compareValue !== value)
-  ) {
-    setIsValid(false);
-    setMatchError(
-      name === "emailConfirmed"
-        ? "E-postadressen du angav stämmer inte överens."
-        : "Lösenorden du angav stämmer inte överens."
-    );
-  } else {
-    setMatchError("");
-  }
-};
-
+    if (
+      (name === "emailConfirmed" &&
+        compareValue.toLowerCase() !== value.toLowerCase()) ||
+      (name === "passwordConfirmed" && compareValue !== value)
+    ) {
+      setIsValid(false);
+      setMatchError(
+        name === "emailConfirmed"
+          ? "E-postadressen du angav stämmer inte överens."
+          : "Lösenorden du angav stämmer inte överens."
+      );
+    } else {
+      setMatchError("");
+    }
+  };
 
   const inputClassName = () => {
+    let baseClass =
+      "px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800";
+    if (disabled) {
+      return baseClass + " border-gray-300 bg-gray-100 cursor-not-allowed";
+    }
     if (!isTouched) {
-      return "px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800 hover:border-gray-400";
+      return baseClass + " hover:border-gray-400";
     } else if (isValid) {
-      return "px-4 py-2 text-black rounded-xl border-sky-800 border-2 flex-grow outline-sky-800";
+      return baseClass + " border-sky-800";
     } else {
-      return "px-4 py-2 text-black rounded-xl border-red-400 border-2 flex-grow outline-sky-800";
+      return baseClass + " border-red-400";
     }
   };
 
@@ -102,8 +107,11 @@ const handleBlur = () => {
           }}
           placeholder={placeholder}
           className={inputClassName()}
+          disabled={disabled}
         />
-        {isTouched && !isValid ? (
+         {disabled ? (
+          <TypingSVG isTyping={false} />
+        ) : isTouched && !isValid ? (
           <ErrorBox />
         ) : isTouched && isValid ? (
           <CheckBoxSVG />
