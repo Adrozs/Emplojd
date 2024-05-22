@@ -10,7 +10,6 @@ namespace Emplojd.Data
 
         public DbSet<JobAd> JobAd { get; set; }
 
-
         public DbSet<CoverLetter> CoverLetters { get; set; }
         public DbSet<SavedJobAds> SavedJobAds { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }

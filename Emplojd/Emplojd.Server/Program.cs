@@ -1,4 +1,3 @@
-
 using Emplojd.Services;
 using OpenAI_API;
 using Emplojd.Models;
@@ -14,6 +13,17 @@ using Emplojd.Helpers;
 using Emplojd.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using AspNet.Security.OAuth.LinkedIn;
+using Microsoft.Extensions.Options;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Sprache;
+using Microsoft.Extensions.Logging;
+using Emplojd.Server.Controllers;
 
 namespace Emplojd
 {
@@ -22,20 +32,68 @@ namespace Emplojd
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration.AddJsonFile("appsettings.json");
+
+            // testing purposes, remove when done(2024-05-22)
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+
             builder.Services.AddControllers();
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = GoogleDefaults.AuthenticationScheme;
+                // options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
-                .AddCookie()
-                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+            .AddCookie()
+            .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+            {
+                options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                options.CallbackPath = "/googleresponse";
+            })
+            .AddLinkedIn(LinkedInAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+
+                options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+                options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                options.CallbackPath = "/linkedinresponse";
+
+                options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
+                options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
+                options.UserInformationEndpoint = "https://api.linkedin.com/v2/me";
+
+                options.Scope.Add("r_liteprofile");
+                options.Scope.Add("r_emailaddress");
+                options.SaveTokens = true;
+
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "formattedName");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+
+
+                options.Events = new OAuthEvents
                 {
-                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                    options.CallbackPath = "/googleresponse";
-                });
+                    OnCreatingTicket = async context =>
+                    {
+                        var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+
+                        var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
+                        response.EnsureSuccessStatusCode();
+
+                        var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+
+                        context.RunClaimActions(user.RootElement);
+                    },
+                    OnTicketReceived = context =>
+                    {
+                        // Hantera när biljetten mottas
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
 
             ConfigurationManager configuration = builder.Configuration;
@@ -106,9 +164,10 @@ namespace Emplojd
             // Add to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
+            builder.Services.AddScoped<LinkedInController>();
             builder.Services.AddSingleton(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
-            builder.Services.AddScoped<AuthenticationService>();
+            builder.Services.AddScoped<Services.AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
 
@@ -151,9 +210,8 @@ namespace Emplojd
                     }
                 });
             });
-
+            
             var app = builder.Build();
-
             app.UseRouting();
 
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
