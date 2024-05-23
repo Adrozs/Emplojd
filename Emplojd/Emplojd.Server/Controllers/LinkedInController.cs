@@ -27,10 +27,10 @@ namespace Emplojd.Server.Controllers
         [HttpGet("/login-linkedin")]
         public IActionResult LinkedInLogin()
         {
-            var redirectUri = "https://localhost:54686/linkedinresponse";
+            var redirectUri = Url.Action(nameof(LinkedInResponse));
             var property = new AuthenticationProperties
             {
-                RedirectUri = Url.Action("LinkedInResponse", new { redirectUri })
+                RedirectUri = redirectUri
             };
 
             return Challenge(property, LinkedInAuthenticationDefaults.AuthenticationScheme);
@@ -41,15 +41,18 @@ namespace Emplojd.Server.Controllers
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (!authenticateResult.Succeeded)
-                return BadRequest(); 
+            {
+                return BadRequest("LinkedIn authentication failed.");
+            }
 
             var claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
             claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, authenticateResult.Principal.FindFirstValue(ClaimTypes.NameIdentifier)));
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, authenticateResult.Principal.FindFirstValue(ClaimTypes.Name)));
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, authenticateResult.Principal.FindFirstValue(ClaimTypes.Email)));
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-            // Generate JWT
+            // return token
             var token = LinkedInJwtToken(claimsIdentity.Claims);
             return Ok(new { Token = token });
         }

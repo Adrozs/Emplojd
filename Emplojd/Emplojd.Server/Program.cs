@@ -32,9 +32,7 @@ namespace Emplojd
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Configuration.AddJsonFile("appsettings.json");
 
-            // testing purposes, remove when done(2024-05-22)
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
 
@@ -42,7 +40,7 @@ namespace Emplojd
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                // options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
@@ -54,24 +52,22 @@ namespace Emplojd
             })
             .AddLinkedIn(LinkedInAuthenticationDefaults.AuthenticationScheme, options =>
             {
-
+                // Fetch ClientId, ClientSecret from appsettings and redirect url
                 options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
                 options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
                 options.CallbackPath = "/linkedinresponse";
 
-                options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
-                options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
-                options.UserInformationEndpoint = "https://api.linkedin.com/v2/me";
-
+                // Add scopes required for accessing LinkedIn user information
                 options.Scope.Add("r_liteprofile");
                 options.Scope.Add("r_emailaddress");
                 options.SaveTokens = true;
 
+                // Map JSON respons to claims (key/value pairs)
                 options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
                 options.ClaimActions.MapJsonKey(ClaimTypes.Name, "formattedName");
                 options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
 
-
+                // Event handlers that maps the authentication process
                 options.Events = new OAuthEvents
                 {
                     OnCreatingTicket = async context =>
@@ -89,7 +85,6 @@ namespace Emplojd
                     },
                     OnTicketReceived = context =>
                     {
-                        // Hantera när biljetten mottas
                         return Task.CompletedTask;
                     }
                 };
