@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Emplojd.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace Emplojd.Models
+namespace Emplojd.Server.Models
 {
     public class JobAd
     {
