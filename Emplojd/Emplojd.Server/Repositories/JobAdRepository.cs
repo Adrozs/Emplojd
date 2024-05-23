@@ -1,8 +1,10 @@
 ﻿using Emplojd.Data;
 using Emplojd.Exceptions.JobAdExceptions;
 using Emplojd.Models;
+using Emplojd.Server.Models;
 using Emplojd.ViewModels;
 using Emplojd.ViewModels___DTOs.JobAds;
+using Emplojd.ViewModels___DTOs.SavedJobAdDto;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text.Json;
@@ -159,12 +161,13 @@ namespace Emplojd.Repositories
             {
                 User user = await GetUserAndJobAdsAsync(currentUser);
 
-                JobAd? jobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
+                SavedJobAd? savedJobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
 
-                if (jobAd == null)
+
+                if (savedJobAd == null)
                     return false;
 
-                user.SavedJobAds.Remove(jobAd);
+                user.SavedJobAds.Remove(savedJobAd);
                 await _context.SaveChangesAsync();
 
                 // Check if there's any users connected to this job ad - if not then remove it so we don't keep loads of job ads in the db for no reason
