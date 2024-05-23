@@ -5,18 +5,18 @@ namespace Emplojd.Models
 {
     public class User : IdentityUser
     {
-        // Properties included because we inherit from IdentityUser:
-
-        public virtual UserProfile UserProfile { get; set; }
-
-        //*
-        public virtual ICollection<JobAd> SavedJobAd { get; set; } = new List<JobAd>();
-        public virtual ICollection<CoverLetter> CoverLetter { get; set; }
+        // For user profile
+        public string? Name { get; set; }
+        public List<string>? UserInterestTags { get; set; }
+        public List<string>? DescriptiveWords { get; set; }
+        public string? CvContentText { get; set; }
 
 
         public virtual ICollection<CvManually> CvManually { get; set; }
         public virtual ICollection<SavedCoverLetter> SavedCoverLetters { get; set; }
         public virtual ICollection<SavedJobAd> SavedJobAds { get; set; }
+
+        public virtual ICollection<JobAd> SavedJobAd { get; set; } = new List<JobAd>();
 
         /*
             Id: A primary key for the user.
