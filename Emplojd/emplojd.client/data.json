@@ -59,6 +59,17 @@
       "employment_type": "Heltid",
       "workplace_address": "Stockholm",
       "publication_date": "2024-05-14T13:50:13"
+    },
+    {
+      "id": "28831686",
+      "headline": "Frontend Game Developer",
+      "employer": "Evolution Services Sweden AB",
+      "occupation": "Mjukvaruutvecklare",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/88379126/logotyper/logo.png",
+      "working_hours_type": "Vanlig anställning",
+      "employment_type": "Heltid",
+      "workplace_address": "Göteborg",
+      "publication_date": "2024-05-23T10:42:26"
     }
   ],
   "profile": []

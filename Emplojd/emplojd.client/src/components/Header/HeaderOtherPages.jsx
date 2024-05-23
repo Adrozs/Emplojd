@@ -24,9 +24,9 @@ const DynamicSVG = () => {
           width="429.223"
           height="171.962"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -60,8 +60,8 @@ const DynamicSVG = () => {
           y2="58.3957"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.25" stop-color="#A78BFA" />
-          <stop offset="1" stop-color="#0EA5E9" />
+          <stop offset="0.25" stopColor="#A78BFA" />
+          <stop offset="1" stopColor="#0EA5E9" />
         </linearGradient>
       </defs>
     </svg>

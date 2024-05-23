@@ -49,7 +49,10 @@ function SavedJobs() {
           ) : (
             likes.map((data) => {
               return (
-                <li className="h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 ">
+                <li
+                  key={data.id}
+                  className="h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 "
+                >
                   <div className="flex justify-end">
                     <FaHeart size={22} className="text-customBlue mr-2" />
                   </div>
