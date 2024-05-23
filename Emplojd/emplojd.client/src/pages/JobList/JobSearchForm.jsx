@@ -119,7 +119,7 @@ export function SearchForm({
 }) {
   return (
     <form
-      className="max-w-sm mx-auto bg-white p-3 rounded-[10px]"
+      className="mx-6 bg-white p-3 rounded-[10px]"
       onSubmit={handleSubmit}
     >
       <div className="mb-5">

@@ -15,6 +15,7 @@ import {
   NoEarlierCoverLetter,
   CreateProfile,
   MyProfile,
+  SavedJobsReadMore,
 } from "./pages/index";
 import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/saved",
         element: <SavedJobs />,
+      },
+      {
+        path: "/saved/:jobId",
+        element: <SavedJobsReadMore />,
       },
       {
         path: "/NoEarlierCoverLetter",

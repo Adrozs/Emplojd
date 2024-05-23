@@ -5,6 +5,7 @@ import { getJobs } from "../../services/apiJobs";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
+import Footer from "../../components/Footer";
 
 function JobSearch() {
   const { state } = useLocation();
@@ -107,7 +108,7 @@ function JobSearch() {
             </select>
           </div>
         </div>
-        <ul className="w-full flex flex-col items-center gap-5">
+        <ul className="w-full flex flex-col items-center gap-5 mb-40">
           {sortedJobs.map((job) => (
             <JobItem job={job} key={job.id}>
               <Link
@@ -116,6 +117,9 @@ function JobSearch() {
                   pathname: `/job/${job.id}`,
                   state: { jobId: job.id },
                 }}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
               >
                 Läs mer <span className="text-xl"> &rarr;</span>
               </Link>
@@ -123,6 +127,7 @@ function JobSearch() {
           ))}
         </ul>
       </main>
+      <Footer />
     </>
   );
 }
