@@ -122,10 +122,12 @@ namespace Emplojd.Repositories
         {
             User user = await GetUserAndJobAdsAsync(currentUser);
 
+            // Check if job ad already is saved.
             if (user.SavedJobAds.Any(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId))
                 return false;
 
-            // Check if job ad exists and select that or create new one
+            // Check if job ad already exists in the db (from another user that saved it) and select that one. If not create new object to save in the db
+            // To avoid duplicate job ads saved in the db
             JobAd? jobAd = jobAd = await _context.JobAd.FirstOrDefaultAsync(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId);
             if (jobAd == null)
             {
@@ -181,7 +183,7 @@ namespace Emplojd.Repositories
                 await transaction.CommitAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 // If exception occurred rollback any changes 
                 await transaction.RollbackAsync();

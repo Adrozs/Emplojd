@@ -1,20 +1,31 @@
 ﻿using System.Reflection;
 using OpenAI_API.Models;
 using OpenAI_API;
+using Emplojd.Server.ViewModels___DTOs.CoverLetter;
+using System.Security.Claims;
+using Emplojd.Data;
+using Emplojd.Models;
+using Emplojd.Exceptions.JobAdExceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Emplojd.Repositories
 {
     public interface IChatGPTRepository
     {
         public Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job);
+        Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser);
+        Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser);
+        Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser);
     }
     public class ChatGPTRepository : IChatGPTRepository
     {
         private readonly OpenAIAPI api;
+        private readonly ApplicationContext _context;
 
-        public ChatGPTRepository(OpenAIAPI openAIApi)
+        public ChatGPTRepository(OpenAIAPI openAIApi, ApplicationContext context)
         {
             api = openAIApi;
+            _context = context;
         }
 
 
@@ -56,5 +67,63 @@ namespace Emplojd.Repositories
             //Spara till databasen i en separat tabell tillsammans med userId
 
         }
+
+
+        public async Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser)
+        {
+            User user = await GetUserAndCoverLettersAsync(currentUser);
+
+            List<SavedCoverLetterDto>? savedCoverLetters = user.CoverLetters.Select(c => new SavedCoverLetterDto
+            {
+                CoverLetterId = c.CoverLetterId,
+                Temperature = c.Temperature,
+                CoverLetterText = c.GeneratedCoverLetter
+            })
+            .ToList();
+
+            return savedCoverLetters;
+        }
+
+        public async Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser)
+        {
+            User user = await GetUserAndCoverLettersAsync(currentUser);
+
+            // Check so there's only 1 cover letter for each platsbanken job ad 
+            // if there already is one, then overwrite that one with the new cover letter
+            // Comment out that code though but make it work. Add later if frontend has more time on their end.
+
+            throw new NotImplementedException();
+
+
+            //if (user.CoverLetters.Any(c => c.CoverLetterId == request.CoverLetterId)
+            //{
+
+            //}
+        }
+
+        public async Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<User> GetUserAndCoverLettersAsync(ClaimsPrincipal currentUser)
+        {
+            // Get the email from the JWT claims
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                throw new UserNotFoundException("No email found in token claims.");
+
+            // Get user along with its cover letters
+            User? user = await _context.Users
+                .Include(u => u.CoverLetters)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                throw new UserNotFoundException("No matching user found with the provided email.");
+
+            return user;
+        }
+
     }
 }

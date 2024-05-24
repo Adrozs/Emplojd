@@ -41,11 +41,8 @@ namespace Emplojd.Repository
                 return IdentityResult.Failed(new IdentityError { Description = "Emails do not match."});
 
             if (password != passwordConfirm)
-
                 return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
                 
-                throw new ArgumentException("Passwords do not match.");
-
 
             User user = new User
             {
@@ -53,12 +50,17 @@ namespace Emplojd.Repository
                 Email = email
             };
 
+            await Console.Out.WriteLineAsync("Created user");
+
             // Creates and hashes password for user in db - All MS Identity methods have build it validation and error handling
             IdentityResult createUserResult = await _userManager.CreateAsync(user, password);
+
+            await Console.Out.WriteLineAsync("user manager created user");
 
             if (!createUserResult.Succeeded)
                 return IdentityResult.Failed(new IdentityError { Description = string.Join(", ", createUserResult.Errors.Select(e => e.Description)) });
 
+            await Console.Out.WriteLineAsync("generating email token");
 
             string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -77,7 +79,12 @@ namespace Emplojd.Repository
                 $"{callbackUrl}<br><br><br>" +
                 $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>" +
                 $"All the best,<br>" +
-                $"Emplojd</p>";
+                $"Emplojd</p>" +
+                // Remove this when not testing anymore
+                $"<p><br>TEMP REMOVE LATER <br> CODE: {Uri.EscapeDataString(emailConfirmationToken)} <br> USERID: {user.Id} </p>";
+
+
+            await Console.Out.WriteLineAsync("trying to send email");
 
 
             // Send email to users email with message and confirmaton link
