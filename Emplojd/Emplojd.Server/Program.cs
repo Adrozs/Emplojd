@@ -1,11 +1,11 @@
-using Emplojd.Services;
 using OpenAI_API;
+using Emplojd.Services;
 using Emplojd.Models;
 using Emplojd.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Emplojd.Repository;
 using Emplojd.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,6 +14,7 @@ using Emplojd.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using AspNet.Security.OAuth.LinkedIn;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -21,9 +22,12 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Sprache;
+using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Logging;
 using Emplojd.Server.Controllers;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace Emplojd
 {
@@ -35,60 +39,49 @@ namespace Emplojd
 
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
+            builder.Services.AddDistributedMemoryCache();
 
+            // Added session 
             builder.Services.AddControllers();
+            builder.Services.AddSession();
+
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
             .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
             {
                 options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                 options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                options.CallbackPath = "/googleresponse";
             })
-            .AddLinkedIn(LinkedInAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                // Fetch ClientId, ClientSecret from appsettings and redirect url
-                options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
-                options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
-                options.CallbackPath = "/linkedinresponse";
 
-                // Add scopes required for accessing LinkedIn user information
-                options.Scope.Add("r_liteprofile");
-                options.Scope.Add("r_emailaddress");
-                options.SaveTokens = true;
+                        .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                        {
+                            options.ClientId = builder.Configuration.GetSection("Authentication:LinkedInKeys:ClientId").Value;
+                            options.ClientSecret = builder.Configuration.GetSection("Authentication:LinkedInKeys:ClientSecret").Value;
+                            options.ResponseType = OpenIdConnectResponseType.Code;
+                            options.Configuration = new OpenIdConnectConfiguration
+                            {
+                                AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization",
+                                TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken",
+                                UserInfoEndpoint = "https://api.linkedin.com/v2/userinfo"
+                            };
 
-                // Map JSON respons to claims (key/value pairs)
-                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "formattedName");
-                options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+                            options.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuer = true
+                            };
 
-                // Event handlers that maps the authentication process
-                options.Events = new OAuthEvents
-                {
-                    OnCreatingTicket = async context =>
-                    {
-                        var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
-                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-
-                        var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
-                        response.EnsureSuccessStatusCode();
-
-                        var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-
-                        context.RunClaimActions(user.RootElement);
-                    },
-                    OnTicketReceived = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+                            options.Scope.Clear();
+                            options.Scope.Add("openid");
+                            options.Scope.Add("profile");
+                            options.Scope.Add("email");
+                            options.GetClaimsFromUserInfoEndpoint = true;
+                            options.CallbackPath = "/signin-linkedin";
+                        });
 
 
             ConfigurationManager configuration = builder.Configuration;
@@ -108,7 +101,7 @@ namespace Emplojd
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
-                // Password requirements
+                // Password Requirements
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
@@ -205,9 +198,12 @@ namespace Emplojd
                     }
                 });
             });
-            
+
             var app = builder.Build();
             app.UseRouting();
+
+            // Activating session
+            app.UseSession();
 
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
             app.UseCors(builder =>

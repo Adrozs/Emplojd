@@ -20,7 +20,6 @@ namespace Emplojd.Controller
         public GoogleController(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-
         }
         [HttpGet("/login-google")]
         public IActionResult GoogleLogin()

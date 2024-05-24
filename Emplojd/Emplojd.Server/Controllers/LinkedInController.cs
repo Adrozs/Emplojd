@@ -1,14 +1,20 @@
-﻿using AspNet.Security.OAuth.LinkedIn;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
+using AspNet.Security.OAuth.LinkedIn;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration; 
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace Emplojd.Server.Controllers
 {
@@ -27,34 +33,58 @@ namespace Emplojd.Server.Controllers
         [HttpGet("/login-linkedin")]
         public IActionResult LinkedInLogin()
         {
-            var redirectUri = Url.Action(nameof(LinkedInResponse));
-            var property = new AuthenticationProperties
+            try
             {
-                RedirectUri = redirectUri
-            };
+                var state = Guid.NewGuid().ToString("N");
+                HttpContext.Session.SetString("LinkedInOAuthState", state);
 
-            return Challenge(property, LinkedInAuthenticationDefaults.AuthenticationScheme);
+                var redirectUri = "https://localhost:54686/linkedinresponse";
+                var properties = new AuthenticationProperties
+                {
+                    RedirectUri = redirectUri
+                };
+
+                return Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme);
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("/linkedinresponse")]
         public async Task<IActionResult> LinkedInResponse()
         {
-            var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            if (!authenticateResult.Succeeded)
+            try
             {
-                return BadRequest("LinkedIn authentication failed.");
+                var state = HttpContext.Session.GetString("LinkedInOAuthState");
+                var authenticateResult = await HttpContext.AuthenticateAsync();
+                if (!authenticateResult.Succeeded)
+                {
+                    return BadRequest("LinkedIn authentication failed.");
+                }
+
+                var receivedState = HttpContext.Request.Query["state"];
+                if (state != receivedState)
+                {
+                    return BadRequest("Invalid OAuth state.");
+                }
+
+                // Remove state after verifying it
+                HttpContext.Session.Remove("LinkedInOAuthState");
+
+                var claimsIdentity = (ClaimsIdentity)authenticateResult.Principal.Identity;
+
+                // Generate JWT token
+                var token = LinkedInJwtToken(claimsIdentity.Claims);
+                return Ok(new { Token = token });
             }
-
-            var claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, authenticateResult.Principal.FindFirstValue(ClaimTypes.NameIdentifier)));
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, authenticateResult.Principal.FindFirstValue(ClaimTypes.Name)));
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, authenticateResult.Principal.FindFirstValue(ClaimTypes.Email)));
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            // return token
-            var token = LinkedInJwtToken(claimsIdentity.Claims);
-            return Ok(new { Token = token });
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception during LinkedIn authentication: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         private string LinkedInJwtToken(IEnumerable<Claim> claims)
