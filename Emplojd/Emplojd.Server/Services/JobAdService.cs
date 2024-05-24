@@ -2,6 +2,7 @@
 using Emplojd.Repositories;
 using Emplojd.ViewModels;
 using Emplojd.ViewModels___DTOs.JobAds;
+using Emplojd.ViewModels___DTOs.SavedJobAdDto;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
