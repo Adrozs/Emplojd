@@ -4,10 +4,10 @@ using Emplojd.Models;
 using Emplojd.Server.Models;
 using Emplojd.ViewModels;
 using Emplojd.ViewModels___DTOs.JobAds;
-using Emplojd.ViewModels___DTOs.SavedJobAdDto;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text.Json;
+using Emplojd.ViewModels___DTOs.SavedJobAdDto;
 
 namespace Emplojd.Repositories
 {
@@ -141,8 +141,8 @@ namespace Emplojd.Repositories
 
             try
             {
-                user.SavedJobAds.Add(jobAd);
-                await _context.SaveChangesAsync();
+                //user.SavedJobAds.Add(jobAd);
+                //await _context.SaveChangesAsync();
                 return true;
 
             }
@@ -164,21 +164,21 @@ namespace Emplojd.Repositories
                 SavedJobAd? savedJobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
 
 
-                if (savedJobAd == null)
-                    return false;
+                //if (savedJobAd == null)
+                //    return false;
 
-                user.SavedJobAds.Remove(savedJobAd);
-                await _context.SaveChangesAsync();
+                //user.SavedJobAds.Remove(savedJobAd);
+                //await _context.SaveChangesAsync();
 
-                // Check if there's any users connected to this job ad - if not then remove it so we don't keep loads of job ads in the db for no reason
-                bool isJobAdLinkedToAnyUser = await _context.Users
-                    .AnyAsync(u => u.SavedJobAds.Any(j => j.JobAdId == jobAd.JobAdId));
+                //// Check if there's any users connected to this job ad - if not then remove it so we don't keep loads of job ads in the db for no reason
+                //bool isJobAdLinkedToAnyUser = await _context.Users
+                //    .AnyAsync(u => u.SavedJobAds.Any(j => j.JobAdId == jobAd.JobAdId));
                 
-                if (!isJobAdLinkedToAnyUser)
-                {
-                    _context.JobAd.Remove(jobAd);
-                    await _context.SaveChangesAsync();
-                }
+                //if (!isJobAdLinkedToAnyUser)
+                //{
+                //    _context.JobAd.Remove(jobAd);
+                //    await _context.SaveChangesAsync();
+                //}
 
 
                 await transaction.CommitAsync();
