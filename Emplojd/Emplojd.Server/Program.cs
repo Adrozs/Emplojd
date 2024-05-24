@@ -14,6 +14,12 @@ using Emplojd.Helpers;
 using Emplojd.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using System.Text.Json;
+using AuthenticationService = Emplojd.Services.AuthenticationService;
+using AspNet.Security.OAuth.LinkedIn;
 
 namespace Emplojd
 {
@@ -26,15 +32,52 @@ namespace Emplojd
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
                 .AddCookie()
-                .AddGoogle( options =>
+                .AddGoogle(options =>
                 {
                     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                });
+                })
+    .AddOAuth("LinkedIn", options =>
+    {
+        options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+        options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+        options.CallbackPath = new PathString("/signin-linkedin");
 
+        options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
+        options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
+        options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
+
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+
+        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+
+        options.Events = new OAuthEvents
+        {
+            OnCreatingTicket = async context =>
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
+
+                var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                response.EnsureSuccessStatusCode();
+
+                var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+
+                context.RunClaimActions(user);
+
+            }
+        };
+
+    });
 
             ConfigurationManager configuration = builder.Configuration;
 
