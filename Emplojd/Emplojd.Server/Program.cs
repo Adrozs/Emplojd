@@ -16,29 +16,18 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Emplojd
-{
+{ 
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllers();
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            })
-                .AddCookie()
-                .AddGoogle( options =>
-                {
-                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                });
-
-
+           
             ConfigurationManager configuration = builder.Configuration;
 
             // Add services to the container.
+            builder.Services.AddControllers();
+
 
             DotNetEnv.Env.Load();
 
@@ -73,19 +62,30 @@ namespace Emplojd
             // Add Mailkit email config
             builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
 
-
             // Adding authentication
             builder.Services.AddAuthentication(options =>
             {
+                // JWT options
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                // Google SSO options
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             })
-                // Add JWT Bearer
+                // Add Google config
+                .AddCookie()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                })
+                // Add JWT bearer config
                 .AddJwtBearer(options =>
                 {
                     options.SaveToken = true; // Allows the server to save the token for the duration of the request
-                    options.RequireHttpsMetadata = false; // Enforces HTTPS so tokens aren't transfered over unsecure connections (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
+                    options.RequireHttpsMetadata = true; // Enforces HTTPS so tokens aren't transfered over unsecure connections
                     options.TokenValidationParameters = new TokenValidationParameters // The rules of which authorization will check
                     {
                         ValidateIssuer = true,
@@ -152,6 +152,7 @@ namespace Emplojd
 
             var app = builder.Build();
 
+            // Used for the controllers configuration
             app.UseRouting();
 
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
@@ -207,8 +208,10 @@ namespace Emplojd
 
 
             // Cover letter
-            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
-
+            app.MapGet("/GetCoverLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
+            app.MapGet("/saved-letter", ChatGPTService.GetCoverLettersAsync).RequireAuthorization();
+            app.MapPost("/save-letter", ChatGPTService.SaveCoverLetterAsync).RequireAuthorization();
+            app.MapDelete("/saved-letter", ChatGPTService.RemoveSavedCoverLettersAsync).RequireAuthorization();
 
             // JobAd search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
