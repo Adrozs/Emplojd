@@ -1,6 +1,6 @@
 ﻿using Emplojd.ViewModels;
 
-namespace Emplojd.ViewModels___DTOs.JobAds
+namespace Emplojd.ViewModels___DTOs.SavedJobAdDto
 {
     public class SavedJobAdDto
     {
