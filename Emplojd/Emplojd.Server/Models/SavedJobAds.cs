@@ -7,7 +7,5 @@ namespace Emplojd.Models
         [Key]
         public int SavedJobId { get; set; }
         public int PlatsbankenJobId { get; set; }
-
-        public virtual ICollection<UserProfile> UserInterests { get; set; }
     }
 }

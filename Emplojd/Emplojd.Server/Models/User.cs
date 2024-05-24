@@ -5,11 +5,6 @@ namespace Emplojd.Models
     public class User : IdentityUser
     {
         // Properties included because we inherit from IdentityUser:
-
-        public virtual UserProfile UserProfile { get; set; }
-        public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
-        public virtual ICollection<CoverLetter> CoverLetter { get; set; }
-
         /*
             Id: A primary key for the user.
             UserName: The username of the user.
@@ -27,6 +22,17 @@ namespace Emplojd.Models
             LockoutEnabled: Indicates whether the user can be locked out.
             AccessFailedCount: The number of failed login attempts. This is used for implementing lockout functionality.
          */
+
+        // For user profile
+        public string? Name { get; set; }
+        public List<string>? UserInterestTags { get; set; }
+        public List<string>? DescriptiveWords { get; set; }
+        public string? CvContentText { get; set; }
+
+
+        // Nav properties
+        public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
+        public virtual ICollection<CoverLetter> CoverLetters { get; set; }
 
     }
 }
