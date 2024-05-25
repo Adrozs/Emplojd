@@ -25,7 +25,7 @@ namespace Emplojd.Controller
         public IActionResult GoogleLogin()
         {
             //here we construct the redirectUri based on the applications Configuration(!!)
-            var redirectUri = "https://localhost:54686/googleresponse";
+            var redirectUri = "https://emplojdserver20240525201259.azurewebsites.net/googleresponse";
             var property = new AuthenticationProperties
             {
                 RedirectUri = Url.Action("GoogleResponse", new { redirectUri })
