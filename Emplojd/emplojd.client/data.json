@@ -19,46 +19,28 @@
   ],
   "likes": [
     {
-      "id": "28811979",
-      "headline": "Teknisk Testspecialist",
-      "employer": "Länsförsäkringar AB (publ)",
-      "occupation": "Testledare/QA lead",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5020109681/logotyper/logo.png",
-      "working_hours_type": "Vanlig anställning",
-      "employment_type": "Heltid",
-      "workplace_address": "Stockholm"
-    },
-    {
-      "id": "28809671",
-      "headline": "Java utvecklare - SE HIT!",
-      "employer": "Gigstep AB",
+      "id": "28814886",
+      "headline": "Senior Java Software Engineer",
+      "employer": "Kindred People AB",
       "occupation": "Mjukvaruutvecklare",
       "logo": null,
       "working_hours_type": "Vanlig anställning",
       "employment_type": "Heltid",
-      "workplace_address": "Lund"
+      "workplace_address": "Stockholm",
+      "publication_date": "2024-05-17T14:00:16",
+      "text_formatted": "<p>Kindred Group is a digital entertainment pioneer bringing together nine successful online gambling brands, forming one of the largest online gambling groups in the world. Our purpose is to transform gambling by being a trusted source of entertainment that contributes positively to society. Our goal is that 0% revenue is derived from harmful gambling. </p><p>Our global team of more than 2000 people represents 60+ nationalities. When you join Kindred, you'll be part of a collaborative, diverse and inclusive team that has your best interest at heart. We are a trusting company that knows the value of a healthy work-life balance. We offer a wide range of benefits, along with a hybrid working model which allows flexibility between working from home and enjoying our superb office facilities. </p><p>  </p><p>Kindred Group plc proudly hosts nine renowned gambling brands, such as Unibet, 32 Red, Maria Casino, and others, trusted by millions of customers worldwide. Each brand boasts its distinctive offerings and identity, all centered on the essential commitment to player safety while delivering exhilarating entertainment experiences.</p><p>Explore more about us and our brands by visiting the 'About Us | Our Brands' page on the Kindred Group plc website.</p><p> </p><p>The Role</p><p>Join Our Team at Kindred - Are you the software engineer we are looking for?</p><p>Are you passionate about innovation and working in an ever-changing, competitive industry? Our Payment team is seeking a dedicated individual with expertise in Java and Spring, React JS is a plus, to enhance the payment experience for customers across all brands. If you thrive in dynamic environments, aspire to leave a lasting impact, and seek to work with cutting edge technologies, Open Banking and Payment integrations, this is your opportunity to shine!</p><p>You will participate in design discussions with your colleagues to find great solutions to complex engineering challenges. We strongly believe in the \"You Design it, You Build It, You Test It, You Run It, You Tweak It\" ethos and everyone is expected to take part of the full system / development life cycle to ensure reliability and uptime of the production environment.</p><p> </p><p>Requirements:</p><ul><li>Proficiency in building services in Java and Spring framework</li><li>Knowledge of build pipeline preferably Jenkins CI/CD</li><li>Basic understanding of React JS, Javascript and/or Typescript. Having worked with micro-frontends is a plus</li><li>Good understanding of Git, Gradle, Maven, RPM and Docker</li><li>Experience working in agile environments</li><li>Continuous Delivery</li><li>Excellent problem-solving skills and attention to detail</li><li>Ability to thrive in a fast-paced, collaborative team environment</li></ul><p> </p><p>In addition, you..</p><ul><li>Are a positive person by nature and have a passion for what you do, putting teamwork and collaboration above all else?</li><li>Have great communication skills and appreciate a culture where feedback sharing is encouraged to achieve not only to the success of the team, but also seen as essential to the improvement of personal and professional development.</li><li>Take great pride in your ability to grasp complex business scenarios and translate them into solutions with high quality, clean and performant code.</li><li>Believe in yourself and your own abilities, but also appreciate that there is an endless ocean of new things to learn and take on board, cherishing the opportunity to do so.</li></ul><p> </p>"
     },
     {
-      "id": "28806262",
-      "headline": "Java Developer",
-      "employer": "Come On Stockholm AB",
-      "occupation": "Mjukvaruutvecklare",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/arbetsplatser/88627783/logotyper/logo.png",
+      "id": "28811904",
+      "headline": "Product Designer",
+      "employer": "Matsmart in Scandinavia AB",
+      "occupation": "Designer",
+      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5569016354/logotyper/logo.png",
       "working_hours_type": "Vanlig anställning",
       "employment_type": "Heltid",
       "workplace_address": "Stockholm",
-      "publication_date": "2024-05-15T13:13:52"
-    },
-    {
-      "id": "28802358",
-      "headline": "Senior Java Developer",
-      "employer": "Telenor Sverige AB",
-      "occupation": "Civilingenjör, systemutveckling",
-      "logo": "https://www.arbetsformedlingen.se/rest/arbetsgivare/rest/af/v3/organisation/5564210309/logotyper/logo.png",
-      "working_hours_type": "Vanlig anställning",
-      "employment_type": "Heltid",
-      "workplace_address": "Stockholm",
-      "publication_date": "2024-05-14T13:50:13"
+      "publication_date": "2024-05-16T17:36:33",
+      "text_formatted": "Matsmart-Motatos is a different kind of food store, challenging the thought of sustainable consumption. We’re a European grocery e-commerce, aiding the sustainable reform of our food system by giving everyone a chance to save our planet in an effortless way. We partner with food and FMCG companies to save products at risk of going to waste by re-selling them at discounted prices directly to consumers: sustainable, affordable and accessible to all. Today, our shops are open in Sweden, Finland, Denmark, Germany and Austria.Working at Matsmart-Motatos, you will join our fight against food waste and contribute to making the world a better place. <p></p><p>We are seeking a talented (Digital) Product Designer with a strong focus on the holistic UX workflow to join our team. As a Product Designer, you will be responsible for creating intuitive and engaging digital user experiences (UX) for our customers across markets and platforms. You will work closely with product managers, developers and other stakeholders to ensure that our designs meet both user needs and business goals in a goals-driven environment.</p> <strong>Product and tech at Matsmart-Motatos</strong> <p>Matsmart-Motatos is one of the leading e-commerce companies in Sweden. We have a modern architecture built on a headless e-commerce platform. Our product design stack consists of a Figma Design Library used for exploring and delivering designs and a React component library in Storybook. We are continuously discovering new opportunities to expand the use of design in our way of working.</p><p> </p><p>Our tech organization is a growing team of tech and design enthusiasts, and every member of the team plays a crucial role in our success story. We’re organized in cross-functional product teams, each with their own focus on a particular part of the value stream. In our teams, you will be challenged and have the opportunity to make a difference. If you are passionate about digital products and design, want to make an impact, and have fun along the way, you will fit our team nicely!</p><p></p><strong>What you’ll do as Product Designer</strong><ul> <li><p>Collaborate with stakeholders to design effective solutions for best-in-class e-commerce user experiences within a product team focusing on end customer communication, interaction and journey</p></li> <li><p>Conduct quantitative and qualitative user research to identify existing and emerging trends and user needs</p></li> <li><p>Conceptualize, evaluate, and map user flows and high-fidelity prototypes that effectively communicate the design solutions</p></li> <li><p>Work closely with cross-functional teams to ensure designs are feasible and aligned with user needs, business goals, design system and the brand</p></li> <li><p>Contribute to our Design Library in Figma with high quality components that scale</p></li> </ul><p></p><strong>To be successful in this role, we believe you need</strong><ul> <li><p>At least three years of experience in a product organization as a Product Designer, UX Designer, or similar, with proficiency in Figma </p></li> <li><p>Experience in designing customer-facing web and mobile applications, as well as communication mediums such as email and mobile.</p></li> <li><p>Proven ability to thrive in a goals-driven environment using data as the backbone of your design decisions.</p></li> <li><p>Experience in planning, executing, and reporting on user tests (qualitative and quantitative).</p></li> <li><p>Excellent collaboration and communication skills while being flexible and pragmatic about your designs.</p></li> <li><p>Bachelor's or Master's degree in Design, Human-Computer Interaction, or a related field.</p></li> <li><p>Proficiency in English.</p></li> </ul> <strong>Bonus skills</strong> <ul> <li><p>Previous work experience in ecommerce </p></li> <li><p>Familiarity with front-end technologies such as HTML, CSS, and JavaScript</p></li> <li><p>UX/Marketing copywriting skills in either english, german, swedish, danish or finnish </p></li> </ul> <strong>Join us</strong> <p>If you are passionate about digital products, design, and making a positive impact while having fun along the way, we'd love to hear from you. Join our growing team of tech and design enthusiasts, where every member plays a crucial role in our success story.</p><strong>What we offer</strong><p>Matsmart-Motatos offers a social and energizing workplace where creativity and ideas are more than welcome and appreciated. We like to explore, and encourage testing and learning, taking ownership and action. We strongly value collaboration and showing we care for one another. We win and lose together as one team.</p><p>Matsmart-Motatos is growing. This means we offer being part of an exciting journey where we grow in terms of teams, new markets, new products and the development of the platform. Together we are building a successful and unique e-commerce company that is contributing to a more sustainable world.</p><p>Final day to apply is May 5th 2024.</p>"
     }
   ],
   "profile": []

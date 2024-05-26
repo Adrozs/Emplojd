@@ -1,11 +1,10 @@
-import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
-import react from '@vitejs/plugin-react'
+
 
 const baseFolder =
     process.env.APPDATA !== undefined && process.env.APPDATA !== ''
@@ -58,4 +57,4 @@ export default defineConfig({
             cert: fs.readFileSync(certFilePath),
         }
     }
-})
+});
