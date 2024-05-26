@@ -48,8 +48,8 @@ namespace Emplojd.Services
 
         public static async Task<IResult> SaveCoverLetterAsync([FromBody] SaveCoverLetterRequest request, ClaimsPrincipal currentUser, [FromServices] IChatGPTRepository chatGptRepository)
         {
-            if (string.IsNullOrEmpty(request.CoverLetterText) || request.Temperature == 0)
-                return Results.BadRequest("Invalid request data. All cover letter fields must be filled out.");
+            if (string.IsNullOrEmpty(request.CoverLetterText))
+                return Results.BadRequest("Invalid request data. Cover letter text must be submitted.");
 
             try
             {
