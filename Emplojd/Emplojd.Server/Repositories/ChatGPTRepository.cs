@@ -88,22 +88,77 @@ namespace Emplojd.Repositories
         {
             User user = await GetUserAndCoverLettersAsync(currentUser);
 
+            // To do:
             // Check so there's only 1 cover letter for each platsbanken job ad 
             // if there already is one, then overwrite that one with the new cover letter
             // Comment out that code though but make it work. Add later if frontend has more time on their end.
 
-            throw new NotImplementedException();
+            try
+            {
+                // Check if cover letter already exists
+                var coverLetter = user.CoverLetters.SingleOrDefault(c => c.CoverLetterId == request.CoverLetterId);
 
 
-            //if (user.CoverLetters.Any(c => c.CoverLetterId == request.CoverLetterId)
-            //{
+                // If cover letter doesn't exist create new one and save to db if not null write over the existing one
+                if (coverLetter == null)
+                {
+                    coverLetter = new CoverLetter
+                    {
+                        GeneratedCoverLetter = request.CoverLetterText,
+                        Temperature = request.Temperature,
+                    };
 
-            //}
+                    // Add cover letter to user and the context
+                    user.CoverLetters.Add(coverLetter);
+                }
+                else
+                {
+                    coverLetter.GeneratedCoverLetter = request.CoverLetterText;
+                    coverLetter.Temperature = request.Temperature;
+
+                    _context.CoverLetters.Update(coverLetter);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return CoverLetterResult.Successful();
+
+            }
+            catch(DbUpdateException ex)
+            {
+                return CoverLetterResult.Failed(ex.Message);
+            }
         }
 
         public async Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser)
         {
-            throw new NotImplementedException();
+            User user = await GetUserAndCoverLettersAsync(currentUser);
+            
+            CoverLetter? coverLetter = user.CoverLetters.SingleOrDefault(c => c.CoverLetterId == request.CoverLetterId);
+            if (coverLetter == null)
+                return CoverLetterResult.Failed("Cover letter not found.");
+
+
+            // Start transaction
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                user.CoverLetters.Remove(coverLetter);
+                _context.CoverLetters.Remove(coverLetter);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return CoverLetterResult.Successful();
+
+            }
+            catch (DbUpdateException ex)
+            {
+                await transaction.RollbackAsync();
+
+                return CoverLetterResult.Failed(ex.Message);
+            }
+
         }
 
         private async Task<User> GetUserAndCoverLettersAsync(ClaimsPrincipal currentUser)
