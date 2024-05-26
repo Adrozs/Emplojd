@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Emplojd.Migrations
+namespace Emplojd.Server.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -26,6 +26,35 @@ namespace Emplojd.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserInterestTags = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DescriptiveWords = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CvContentText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobAd",
                 columns: table => new
                 {
@@ -44,13 +73,15 @@ namespace Emplojd.Migrations
                 name: "SavedJobAds",
                 columns: table => new
                 {
-                    SavedJobId = table.Column<int>(type: "int", nullable: false)
+                    SavedJobAdId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlatsbankenJobId = table.Column<int>(type: "int", nullable: false)
+                    PlatsbankenJobId = table.Column<int>(type: "int", nullable: false),
+                    Headline = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Employer = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SavedJobAds", x => x.SavedJobId);
+                    table.PrimaryKey("PK_SavedJobAds", x => x.SavedJobAdId);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,58 +102,6 @@ namespace Emplojd.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserProfiles",
-                columns: table => new
-                {
-                    UserProfileId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserInterestTags = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptiveWords = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SavedJobAdsSavedJobId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserProfiles", x => x.UserProfileId);
-                    table.ForeignKey(
-                        name: "FK_UserProfiles_SavedJobAds_SavedJobAdsSavedJobId",
-                        column: x => x.SavedJobAdsSavedJobId,
-                        principalTable: "SavedJobAds",
-                        principalColumn: "SavedJobId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserProfileId = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_UserProfiles_UserProfileId",
-                        column: x => x.UserProfileId,
-                        principalTable: "UserProfiles",
-                        principalColumn: "UserProfileId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -215,49 +194,93 @@ namespace Emplojd.Migrations
                 name: "CoverLetters",
                 columns: table => new
                 {
-                    CoverLetterId = table.Column<int>(type: "int", nullable: false)
+                    SavedCoverLetterId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Temperature = table.Column<float>(type: "real", nullable: false),
-                    GeneratedCoverLetter = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserProfileId = table.Column<int>(type: "int", nullable: true)
+                    PlatsbankenId = table.Column<int>(type: "int", nullable: false),
+                    CoverLetterTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoverLetterContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CoverLetters", x => x.CoverLetterId);
+                    table.PrimaryKey("PK_CoverLetters", x => x.SavedCoverLetterId);
                     table.ForeignKey(
                         name: "FK_CoverLetters_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CvManuallys",
+                columns: table => new
+                {
+                    CvManuallyId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PositionEducation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EndDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SchoolWorkplace = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsEducation = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CvManuallys", x => x.CvManuallyId);
                     table.ForeignKey(
-                        name: "FK_CoverLetters_UserProfiles_UserProfileId",
-                        column: x => x.UserProfileId,
-                        principalTable: "UserProfiles",
-                        principalColumn: "UserProfileId");
+                        name: "FK_CvManuallys_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobAdUser",
+                columns: table => new
+                {
+                    SavedJobAdJobAdId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobAdUser", x => new { x.SavedJobAdJobAdId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_JobAdUser_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_JobAdUser_JobAd_SavedJobAdJobAdId",
+                        column: x => x.SavedJobAdJobAdId,
+                        principalTable: "JobAd",
+                        principalColumn: "JobAdId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "UserJobAds",
                 columns: table => new
                 {
-                    SavedJobAdsJobAdId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SavedJobAdsSavedJobAdId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserJobAds", x => new { x.SavedJobAdsJobAdId, x.UsersId });
+                    table.PrimaryKey("PK_UserJobAds", x => new { x.SavedJobAdsSavedJobAdId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserJobAds_AspNetUsers_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_UserJobAds_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserJobAds_JobAd_SavedJobAdsJobAdId",
-                        column: x => x.SavedJobAdsJobAdId,
-                        principalTable: "JobAd",
-                        principalColumn: "JobAdId",
+                        name: "FK_UserJobAds_SavedJobAds_SavedJobAdsSavedJobAdId",
+                        column: x => x.SavedJobAdsSavedJobAdId,
+                        principalTable: "SavedJobAds",
+                        principalColumn: "SavedJobAdId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -294,11 +317,6 @@ namespace Emplojd.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_UserProfileId",
-                table: "AspNetUsers",
-                column: "UserProfileId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -311,19 +329,19 @@ namespace Emplojd.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CoverLetters_UserProfileId",
-                table: "CoverLetters",
-                column: "UserProfileId");
+                name: "IX_CvManuallys_UserId",
+                table: "CvManuallys",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserJobAds_UsersId",
-                table: "UserJobAds",
+                name: "IX_JobAdUser_UsersId",
+                table: "JobAdUser",
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserProfiles_SavedJobAdsSavedJobId",
-                table: "UserProfiles",
-                column: "SavedJobAdsSavedJobId");
+                name: "IX_UserJobAds_UserId",
+                table: "UserJobAds",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -348,19 +366,22 @@ namespace Emplojd.Migrations
                 name: "CoverLetters");
 
             migrationBuilder.DropTable(
+                name: "CvManuallys");
+
+            migrationBuilder.DropTable(
+                name: "JobAdUser");
+
+            migrationBuilder.DropTable(
                 name: "UserJobAds");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "JobAd");
 
             migrationBuilder.DropTable(
-                name: "UserProfiles");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "SavedJobAds");
