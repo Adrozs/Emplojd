@@ -1,4 +1,6 @@
 import ApplyNow from "./ApplyNow/ApplyNow";
+import ConfirmEmail from "./Confirm/ConfirmEmail";
+
 import JobInfo from "./JobInfo/JobInfo";
 import JobList from "./JobList/JobList";
 import JobSearch from "./JobSearch/JobSearch";
@@ -26,4 +28,5 @@ export {
   CreateProfile,
   MyProfile,
   SavedJobsReadMore,
+  ConfirmEmail,
 };

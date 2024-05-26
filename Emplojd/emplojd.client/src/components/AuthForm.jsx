@@ -42,6 +42,7 @@ const AuthForm = () => {
       onSuccess: (data) => {
         toast.success("Välkommen in!");
         console.log("Inloggning lyckades:", data);
+        localStorage.setItem("authToken", data.data.token);
         login();
         addUserToLocalStorage(values);
         navigate("/profile");
