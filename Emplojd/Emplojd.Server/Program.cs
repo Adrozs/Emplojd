@@ -104,6 +104,7 @@ namespace Emplojd
             // Add to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
+            builder.Services.AddScoped<IChatGPTRepository, ChatGPTRepository>();
             builder.Services.AddSingleton(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
