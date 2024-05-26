@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
 using OpenAI_API.Models;
 using OpenAI_API;
+using System.Text;
+using Emplojd.Models;
+using Emplojd.Server.Models;
 
 namespace Emplojd.Repositories
 {
@@ -56,5 +59,61 @@ namespace Emplojd.Repositories
             //Spara till databasen i en separat tabell tillsammans med userId
 
         }
+
+        //private string GenerateCvText(List<CvManually> cvManuals)
+        //{
+        //    var sb = new StringBuilder();
+        //    foreach (var cv in cvManuals)
+        //    {
+        //        sb.AppendLine($"{cv.PositionEducation} ({cv.StartDate.ToShortDateString()} - {cv.EndDate.ToShortDateString()}) at {cv.SchoolWorkplace}");
+        //        sb.AppendLine(cv.IsEducation ? "Education" : "Work Experience");
+        //    }
+        //    return sb.ToString();
+        //}
+
+        public async Task<string> GetUserCvTextAsync(int userId)
+        {
+            // Replace with actual data access logic to fetch the CV text from db
+            return await Task.FromResult("CV content for user " + userId);
+        }
+
+        public async Task<JobAd> GetJobAdAsync(int jobId)
+        {
+            // Replace with actual data access logic to fetch the job ad from db
+            return await Task.FromResult(new JobAd
+            {
+                JobAdId = jobId,
+                Employer = "Tech Corp"
+            });
+        }
+
+        public async Task<User> GetUserInfoAsync(int userId)
+        {
+            // replace with actual data access logic (just test)
+            return await Task.FromResult(new User
+            {
+                //Id = UserIdentity.Id,
+                Name = "John",
+                UserInterestTags = new List<string> { "Programming", "Reading" },
+                DescriptiveWords = new List<string> { "Hardworking", "Team player" }
+            });
+        }
     }
 }
+
+        //public async Task<List<CvManuallyModel>> GetCvManualAsync(int userId)
+        //{
+        //    // Replace with actual data access logic to fetch the manual CV entries from the database
+        //    return await Task.FromResult(new List<CvManuallyModel>
+        //    {
+        //        new CvManuallyModel
+        //        {
+        //            Id = 1,
+        //            PositionEducation = "Software Engineer",
+        //            StartDate = new DateTime(2020, 1, 1),
+        //            EndDate = new DateTime(2022, 12, 31),
+        //            SchoolWorkplace = "Tech Corp",
+        //            IsEducation = false,
+        //            UserId = userId
+        //        }
+
