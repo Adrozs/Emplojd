@@ -13,6 +13,7 @@ namespace Emplojd.Server.Models
         public string SchoolWorkplace { get; set; }
         public bool IsEducation { get; set; }
 
+        public string UserId { get; set; }
         public virtual User User { get; set; }
     }
 }
