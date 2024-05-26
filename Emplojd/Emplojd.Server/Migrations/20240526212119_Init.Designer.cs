@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Emplojd.Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240526204730_init")]
-    partial class init
+    [Migration("20240526212119_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
