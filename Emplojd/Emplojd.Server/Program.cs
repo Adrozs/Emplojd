@@ -20,6 +20,11 @@ using System.Security.Claims;
 using System.Text.Json;
 using AuthenticationService = Emplojd.Services.AuthenticationService;
 using AspNet.Security.OAuth.LinkedIn;
+using Emplojd.Server.Services;
+using Azure.Identity;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
+using Azure.Security.KeyVault.Secrets;
 
 namespace Emplojd
 {
@@ -29,7 +34,35 @@ namespace Emplojd
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
-            builder.Services.AddAuthentication(options =>
+            builder.Services.AddScoped<UserProfileService>(); // Register UserProfileService
+
+            if (builder.Environment.IsProduction())
+            {
+                var keyVaultUrl = builder.Configuration.GetSection("KeyVault:KeyVaultURL");
+                var keyVaultClientId = builder.Configuration.GetSection("KeyVault:ClientId");
+                var keyVaultClientSecret = builder.Configuration.GetSection("KeyVault:ClientSecret");
+                var keyVaultDirectoryID = builder.Configuration.GetSection("KeyVault:DirectoryID");
+
+
+                var credential = new ClientSecretCredential(keyVaultDirectoryID.Value!.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString());
+                builder.Configuration.AddAzureKeyVault(keyVaultUrl.Value.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString(), new DefaultKeyVaultSecretManager());
+
+                var client = new SecretClient(new Uri(keyVaultUrl.Value!.ToString()), credential);
+
+                builder.Services.AddDbContext<ApplicationContext>(options =>
+                {
+                    options.UseSqlServer(client.GetSecret("ProdConnection").Value.Value.ToString());
+                });
+            }
+            if (builder.Environment.IsDevelopment())
+            {
+                // Setup database context and connection string here
+                builder.Services.AddDbContext<ApplicationContext>(options =>
+                {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+        }
+        builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
@@ -84,13 +117,10 @@ namespace Emplojd
             // Add services to the container.
 
             DotNetEnv.Env.Load();
-
-            // Setup database context and connection string here
-            builder.Services.AddDbContext<ApplicationContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
             // Add CORS services
             builder.Services.AddCors();
+
+
 
 
             // Adding Microsoft identity with config settings
