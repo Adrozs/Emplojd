@@ -45,8 +45,7 @@ namespace Emplojd.Services
             }
             catch (Exception ex)
             {
-                return Results.Text(ex.Message + " | " + ex.InnerException.Message);
-                //return ExceptionHandler.HandleException(ex);
+                return ExceptionHandler.HandleException(ex);
             }
         }
 
