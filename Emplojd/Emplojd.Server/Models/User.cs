@@ -32,7 +32,7 @@ namespace Emplojd.Models
 
         // Nav properties
         public virtual ICollection<JobAd> SavedJobAds { get; set; } = new List<JobAd>();
-        public virtual ICollection<CoverLetter> CoverLetters { get; set; }
+        public virtual ICollection<CoverLetter> CoverLetters { get; set; } = new List<CoverLetter>();
 
     }
 }
