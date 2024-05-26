@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Emplojd.Migrations
+namespace Emplojd.Server.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
@@ -22,38 +22,13 @@ namespace Emplojd.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Emplojd.Models.CoverLetter", b =>
+            modelBuilder.Entity("Emplojd.Models.SavedJobAd", b =>
                 {
-                    b.Property<int>("CoverLetterId")
+                    b.Property<int>("SavedJobAdId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CoverLetterId"));
-
-                    b.Property<string>("GeneratedCoverLetter")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Temperature")
-                        .HasColumnType("real");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CoverLetterId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CoverLetters");
-                });
-
-            modelBuilder.Entity("Emplojd.Models.JobAd", b =>
-                {
-                    b.Property<int>("JobAdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobAdId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedJobAdId"));
 
                     b.Property<string>("Employer")
                         .IsRequired()
@@ -63,26 +38,10 @@ namespace Emplojd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlatsbankenJobId")
+                    b.Property<int>("PlatsbankenJobAdId")
                         .HasColumnType("int");
 
-                    b.HasKey("JobAdId");
-
-                    b.ToTable("JobAd");
-                });
-
-            modelBuilder.Entity("Emplojd.Models.SavedJobAds", b =>
-                {
-                    b.Property<int>("SavedJobId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedJobId"));
-
-                    b.Property<int>("PlatsbankenJobId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SavedJobId");
+                    b.HasKey("SavedJobAdId");
 
                     b.ToTable("SavedJobAds");
                 });
@@ -164,19 +123,71 @@ namespace Emplojd.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("JobAdUser", b =>
+            modelBuilder.Entity("Emplojd.Server.Models.CvManually", b =>
                 {
-                    b.Property<int>("SavedJobAdsJobAdId")
+                    b.Property<int>("CvManuallyId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("UsersId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CvManuallyId"));
+
+                    b.Property<string>("EndDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEducation")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PositionEducation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolWorkplace")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("SavedJobAdsJobAdId", "UsersId");
+                    b.HasKey("CvManuallyId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("UserJobAds", (string)null);
+                    b.ToTable("CvManually");
+                });
+
+            modelBuilder.Entity("Emplojd.Server.Models.SavedCoverLetter", b =>
+                {
+                    b.Property<int>("SavedCoverLetterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedCoverLetterId"));
+
+                    b.Property<string>("CoverLetterContent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CoverLetterTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Temperature")
+                        .HasColumnType("real");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SavedCoverLetterId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CoverLetters");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -312,26 +323,37 @@ namespace Emplojd.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Emplojd.Models.CoverLetter", b =>
+            modelBuilder.Entity("SavedJobAdUser", b =>
                 {
-                    b.HasOne("Emplojd.Models.User", null)
-                        .WithMany("CoverLetters")
-                        .HasForeignKey("UserId");
+                    b.Property<int>("SavedJobAdsSavedJobAdId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SavedJobAdsSavedJobAdId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserJobAds", (string)null);
                 });
 
-            modelBuilder.Entity("JobAdUser", b =>
+            modelBuilder.Entity("Emplojd.Server.Models.CvManually", b =>
                 {
-                    b.HasOne("Emplojd.Models.JobAd", null)
-                        .WithMany()
-                        .HasForeignKey("SavedJobAdsJobAdId")
+                    b.HasOne("Emplojd.Models.User", "User")
+                        .WithMany("CvManually")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Emplojd.Server.Models.SavedCoverLetter", b =>
+                {
                     b.HasOne("Emplojd.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("SavedCoverLetters")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -385,9 +407,26 @@ namespace Emplojd.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SavedJobAdUser", b =>
+                {
+                    b.HasOne("Emplojd.Models.SavedJobAd", null)
+                        .WithMany()
+                        .HasForeignKey("SavedJobAdsSavedJobAdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Emplojd.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Emplojd.Models.User", b =>
                 {
-                    b.Navigation("CoverLetters");
+                    b.Navigation("CvManually");
+
+                    b.Navigation("SavedCoverLetters");
                 });
 #pragma warning restore 612, 618
         }
