@@ -14,10 +14,10 @@ namespace Emplojd.Models
 
         public virtual ICollection<CvManually> CvManually { get; set; }
         public virtual ICollection<SavedCoverLetter> SavedCoverLetters { get; set; }
-        public virtual ICollection<SavedJobAd> SavedJobAds { get; set; }
+        public virtual ICollection<SavedJobAd> SavedJobAds { get; set; } = new List<SavedJobAd>();
 
-        public virtual ICollection<JobAd> SavedJobAd { get; set; } = new List<JobAd>();
 
+        // Inherited from IdentityUser
         /*
             Id: A primary key for the user.
             UserName: The username of the user.

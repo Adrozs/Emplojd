@@ -4,6 +4,7 @@
     {
         public int CoverLetterId { get; set; }
         public float Temperature { get; set; }
-        public string CoverLetterText { get; set; }
+        public string CoverLetterTitle { get; set; }
+        public string CoverLetterContent{ get; set; }
     }
 }

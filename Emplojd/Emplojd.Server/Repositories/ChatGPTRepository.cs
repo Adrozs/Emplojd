@@ -7,6 +7,7 @@ using Emplojd.Data;
 using Emplojd.Models;
 using Emplojd.Exceptions.JobAdExceptions;
 using Microsoft.EntityFrameworkCore;
+using Emplojd.Server.Models;
 
 namespace Emplojd.Repositories
 {
@@ -73,11 +74,12 @@ namespace Emplojd.Repositories
         {
             User user = await GetUserAndCoverLettersAsync(currentUser);
 
-            List<SavedCoverLetterDto>? savedCoverLetters = user.CoverLetters.Select(c => new SavedCoverLetterDto
+            List<SavedCoverLetterDto>? savedCoverLetters = user.SavedCoverLetters.Select(c => new SavedCoverLetterDto
             {
-                CoverLetterId = c.CoverLetterId,
+                CoverLetterId = c.SavedCoverLetterId,
                 Temperature = c.Temperature,
-                CoverLetterText = c.GeneratedCoverLetter
+                CoverLetterTitle = c.CoverLetterTitle,
+                CoverLetterContent = c.CoverLetterContent
             })
             .ToList();
 
@@ -96,24 +98,26 @@ namespace Emplojd.Repositories
             try
             {
                 // Check if cover letter already exists
-                var coverLetter = user.CoverLetters.SingleOrDefault(c => c.CoverLetterId == request.CoverLetterId);
+                var coverLetter = user.SavedCoverLetters.SingleOrDefault(c => c.SavedCoverLetterId == request.CoverLetterId);
 
 
                 // If cover letter doesn't exist create new one and save to db if not null write over the existing one
                 if (coverLetter == null)
                 {
-                    coverLetter = new CoverLetter
+                    coverLetter = new SavedCoverLetter
                     {
-                        GeneratedCoverLetter = request.CoverLetterText,
+                        CoverLetterTitle = request.CoverLetterTitle,
+                        CoverLetterContent = request.CoverLetterContent,
                         Temperature = request.Temperature,
                     };
 
                     // Add cover letter to user and the context
-                    user.CoverLetters.Add(coverLetter);
+                    user.SavedCoverLetters.Add(coverLetter);
                 }
                 else
                 {
-                    coverLetter.GeneratedCoverLetter = request.CoverLetterText;
+                    coverLetter.CoverLetterTitle = request.CoverLetterTitle;
+                    coverLetter.CoverLetterContent = request.CoverLetterContent;
                     coverLetter.Temperature = request.Temperature;
 
                     _context.CoverLetters.Update(coverLetter);
@@ -134,7 +138,7 @@ namespace Emplojd.Repositories
         {
             User user = await GetUserAndCoverLettersAsync(currentUser);
             
-            CoverLetter? coverLetter = user.CoverLetters.SingleOrDefault(c => c.CoverLetterId == request.CoverLetterId);
+            SavedCoverLetter? coverLetter = user.SavedCoverLetters.SingleOrDefault(c => c.SavedCoverLetterId == request.CoverLetterId);
             if (coverLetter == null)
                 return CoverLetterResult.Failed("Cover letter not found.");
 
@@ -143,7 +147,7 @@ namespace Emplojd.Repositories
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                user.CoverLetters.Remove(coverLetter);
+                user.SavedCoverLetters.Remove(coverLetter);
                 _context.CoverLetters.Remove(coverLetter);
 
                 await _context.SaveChangesAsync();
@@ -171,7 +175,7 @@ namespace Emplojd.Repositories
 
             // Get user along with its cover letters
             User? user = await _context.Users
-                .Include(u => u.CoverLetters)
+                .Include(u => u.SavedCoverLetters)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
