@@ -15,7 +15,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "@tanstack/react-query": "^5.35.1",
     "axios": "^1.6.8",
-    "html2pdf.js": "^0.9.0",
+    "html2pdf.js": "^0.10.1",
     "json-server": "^1.0.0-alpha.23",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

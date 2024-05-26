@@ -11,12 +11,12 @@ export default {
         Glockenspiel: ["Glockenspiel", "Inter"],
       },
       screens: {
-        sm: "640px", // Small devices (phones, 640px and up)
-        md: "768px",
-        ls: "900px",
-        lg: "1024px",
-        xl: "1280px",
-        xxl: "1380px",
+        sm: "400px",
+        md: "500px",
+        ls: "800px",
+        lg: "1200px",
+        xl: "1600px",
+        xxl: "2400px",
       },
       backgroundImage: {
         "gradient-to-r-custom":

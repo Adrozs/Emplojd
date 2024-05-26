@@ -11,4 +11,7 @@
   <ItemGroup>
     <None Remove=".vscode/launch.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".vscode\" />
+  </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@ import { FiCopy } from "react-icons/fi";
 import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { RiCheckboxCircleFill } from "react-icons/ri";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -101,7 +102,7 @@ function ApplyNow() {
       </div>
       {page === 1 && (
         <>
-          <ul className="flex justify-center my-14  max-w-lg mx-auto">
+          <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
             <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
               <div>
                 <div className="grid grid-cols-2 w-[70%] items-center ">
@@ -145,13 +146,13 @@ function ApplyNow() {
               <div className="flex justify-between">
                 <button onClick={handleBack}>Avbryt</button>
                 <button
-                  className="bg-customBlue rounded-[4px] text-white p-1 w-[70%]"
+                  className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3"
                   onClick={() => {
                     setPage(2);
                     window.scrollTo(0, 0);
                   }}
                 >
-                  Nästa &rarr;
+                  Nästa <FaArrowRight />
                 </button>
               </div>
             </li>
@@ -168,7 +169,7 @@ function ApplyNow() {
 
 function ApplySideTwo({ job, page, setPage }) {
   return (
-    <ul className="flex justify-center my-14  max-w-lg mx-auto">
+    <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
       <div className=" w-[90%] bg-white p-4 pb-10 flex flex-col text-stone-800 rounded-[20px] ">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
@@ -242,16 +243,16 @@ function ApplySideTwo({ job, page, setPage }) {
               window.scrollTo(0, 0);
             }}
           >
-            &larr; Tillbaka
+            <FaArrowLeft /> Tillbaka
           </button>
           <button
-            className="bg-customBlue rounded-[4px] text-white py-1 w-[45%]"
+            className="bg-customBlue rounded-[4px] text-white py-1 w-[45%] flex items-center justify-center gap-3"
             onClick={() => {
               setPage(3);
               window.scrollTo(0, 0);
             }}
           >
-            Fortsätt &rarr;
+            Fortsätt <FaArrowRight />
           </button>
         </div>
       </div>
@@ -288,7 +289,7 @@ function ApplySideThree({ job, page, setPage }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
+    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto pb-12">
       <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
@@ -361,13 +362,13 @@ function ApplySideThree({ job, page, setPage }) {
         <div>
           <div className="flex justify-between">
             <button
-              className="underline text-sm ml-3"
+              className="underline text-sm ml-3 flex items-center gap-1"
               onClick={() => {
                 setPage(2);
                 window.scrollTo(0, 0);
               }}
             >
-              &larr; Tillbaka till innehållet
+              <FaArrowLeft /> Tillbaka till innehållet
             </button>
           </div>
         </div>
@@ -384,10 +385,10 @@ function ApplySideThree({ job, page, setPage }) {
         </div>
         <div className="flex justify-center flex-col">
           <button
-            className="bg-customBlue rounded-[4px] text-white p-1 w-[100%] h-[40px]"
+            className="bg-customBlue rounded-[4px] text-white p-1 w-[100%] h-[40px] flex items-center justify-center gap-3"
             onClick={() => setPage(4)}
           >
-            Spara personligt brev &rarr;
+            Spara personligt brev <FaArrowRight />
           </button>
           <button className="text-sm mt-2 underline" onClick={saveAsPdf}>
             Ladda ner som pdf
@@ -400,7 +401,7 @@ function ApplySideThree({ job, page, setPage }) {
 
 function ApplySideFour({ job, page, setPage }) {
   return (
-    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto">
+    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto pb-12">
       <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col gap-4 rounded-[20px]">
         <div className="mx-auto">
           <RiCheckboxCircleFill size={36} />
@@ -410,13 +411,13 @@ function ApplySideFour({ job, page, setPage }) {
         </div>
         <div className="flex flex-col items-center gap-4">
           <Link
-            to="/saved"
+            to="/NoEarlierCoverLetter"
             className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
           >
             Gå till sparade brev
           </Link>
-          <button className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px]">
-            Ansök här &rarr;
+          <button className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3">
+            Ansök här <FaArrowRight />
           </button>
 
           <Link className="text-sm underline" to="/joblist">

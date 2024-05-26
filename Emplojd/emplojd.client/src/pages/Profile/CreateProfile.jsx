@@ -1,16 +1,51 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
+import CvFileSelecter from "../../components/CvFileSelecter";
+import Footer from "../../components/Footer";
+import FormRow from "../../components/FormRow";
+import ListForm from "../../components/ListForm";
 
 function CreateProfile() {
-  const [expandedStep, setExpandedStep] = useState(null);
-  const [fileName, setFileName] = useState("INGEN FIL ÄR VALD");
-  const fileInputRef = useRef(null);
+  const initialState = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    emailConfirmed: "",
+    password: "",
+    passwordConfirmed: "",
+    isMember: true,
+  };
 
-  const toggleExpansion = (stepNumber) => {
-    if (stepNumber === 1) {
-      setExpandedStep(expandedStep === stepNumber ? null : stepNumber);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [fileName, setFileName] = useState("INGEN FIL ÄR VALD");
+  const [manualInputEnabled, setManualInputEnabled] = useState(false);
+  const fileInputRef = useRef(null);
+  const [values, setValues] = useState(initialState);
+
+  const messages = [
+    "Börja hitta jobb direkt efter du har skapat din jobbprofil!",
+    <>
+      <span className="font-semibold">Snyggt {values.firstName}!</span> <br />{" "}
+      Nu behöver vi bara fråga några saker till!
+    </>,
+    "Nu är du nästan färdig med din jobbprofil! Använd dig av ditt CV för att få ännu bättre personliga brev!",
+  ];
+
+  const nextStep = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
     }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (event) => {
@@ -30,163 +65,178 @@ function CreateProfile() {
     fileInputRef.current.click();
   };
 
-  const UploadSVG = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="2em"
-      height="2em"
-      viewBox="0 0 24 24"
-    >
-      <path fill="currentColor" d="M9 16v-6H5l7-7l7 7h-4v6zm-4 4v-2h14v2z" />
-    </svg>
-  );
-  const ProfileSVG = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="2em"
-      height="2em"
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm10 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1m0 3a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1m0 3a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1m-8-5a3 3 0 1 1 6 0a3 3 0 0 1-6 0m1.942 4a3 3 0 0 0-2.847 2.051l-.044.133l-.004.012c-.042.126-.055.167-.042.195c.006.013.02.023.038.039c.032.025.08.064.146.155A1 1 0 0 0 6 17h6a1 1 0 0 0 .811-.415a.7.7 0 0 1 .146-.155c.019-.016.031-.026.038-.04c.014-.027 0-.068-.042-.194l-.004-.012l-.044-.133A3 3 0 0 0 10.059 14z"
-        clipRule="evenodd"
-      />
-    </svg>
-  );
-  const SwipeSVG = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="2em"
-      height="2em"
-      viewBox="0 0 24 24"
-    >
-      <g
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      >
-        <path d="M15 16.572v2.42A2.01 2.01 0 0 1 12.991 21H5.01A2.01 2.01 0 0 1 3 18.991V11.01A2.01 2.01 0 0 1 5.009 9h2.954" />
-        <path d="M9.167 4.511a2.04 2.04 0 0 1 2.496-1.441l7.826 2.097a2.04 2.04 0 0 1 1.441 2.496l-2.097 7.826a2.04 2.04 0 0 1-2.496 1.441L8.51 14.833a2.04 2.04 0 0 1-1.441-2.496L9.167 4.51z" />
-      </g>
-    </svg>
-  );
-  const LetterSVG = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="2em"
-      height="2em"
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor"
-        d="M15 5.25A3.25 3.25 0 0 0 18.25 2h1.5A3.25 3.25 0 0 0 23 5.25v1.5A3.25 3.25 0 0 0 19.75 10h-1.5A3.25 3.25 0 0 0 15 6.75zM4 7a2 2 0 0 1 2-2h7V3H6a4 4 0 0 0-4 4v10a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4v-5h-2v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"
-      />
-    </svg>
-  );
-  const DeleteSVG = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor"
-        d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"
-      />
-    </svg>
-  );
+  const handleListFormChange = () => {
+    setUnsavedChanges(true);
+  };
+
+  const toggleManualInput = () => {
+    setManualInputEnabled((prev) => !prev);
+  };
 
   return (
     <>
       <HeaderOtherPages />
-      <div
-        className="flex flex-col min-h-screen gap-2 m-4 relative"
-        style={{ minHeight: "calc(100vh - 120px)" }}
-      >
-        <div className="flex justify-center">
-          <div className="flex justify-center items-center bg-stone-200 w-[75%] h-16 my-8">
-            VÄLKOMMEN USER
+      <div className="flex justify-center">
+        <div className="w-full">
+          <h2 className="p-4 text-2xl font-bold mb-4">Skapa jobbprofil</h2>
+          <p className="bg-blue-100 p-4 rounded-lg mb-4 mx-8">
+            {messages[currentStep - 1]}
+          </p>
+
+          <div className="flex justify-center my-4">
+            {[1, 2, 3].map((step) => (
+              <span
+                key={step}
+                className={`w-3 h-3 mx-1 rounded-full ${
+                  currentStep === step ? "bg-blue-500" : "bg-gray-300"
+                }`}
+              ></span>
+            ))}
+          </div>
+
+          <div className="mb-6 min-h-[40vh]">
+            {currentStep === 1 && (
+              <div className="mx-4">
+                <FormRow
+                  type="firstName"
+                  name="firstName"
+                  labelText="Förnamn"
+                  value={values.firstName}
+                  placeholder="Ange ditt förnamn"
+                  handleChange={handleChange}
+                />
+                <FormRow
+                  type="lastname"
+                  name="lastName"
+                  labelText="Efternamn"
+                  placeholder="Ange ditt efternamn"
+                  value={values.lastName}
+                  handleChange={handleChange}
+                />
+              </div>
+            )}
+
+            {currentStep === 2 && (
+              <div className="mx-4">
+                <ListForm
+                  wordBgColor="bg-sky-100"
+                  name="Vad är dina intressen?"
+                  labelBgColor="none"
+                  onChange={handleListFormChange}
+                />
+                <ListForm
+                  name="Beskriv dig själv med några ord"
+                  labelBgColor="none"
+                  onChange={handleListFormChange}
+                />
+              </div>
+            )}
+
+            {currentStep === 3 && (
+              <div className="mx-4">
+                <CvFileSelecter
+                  fileName={fileName}
+                  handleFileChange={handleFileChange}
+                  handleDeleteFile={handleDeleteFile}
+                  fileInputRef={fileInputRef}
+                  triggerFileInput={triggerFileInput}
+                />
+
+                <div className="flex items-center my-4 pl-2">
+                  <input
+                    type="checkbox"
+                    id="manualInput"
+                    name="manualInput"
+                    className="mr-2"
+                    checked={manualInputEnabled}
+                    onChange={toggleManualInput}
+                  />
+                  <label htmlFor="manualInput" className="text-gray-700">
+                    Ange information manuellt
+                  </label>
+                </div>
+
+                <div className="mb-6">
+                  <FormRow
+                    type="text"
+                    name="Utbildningstitel"
+                    placeholder="Ange namn på utbildning"
+                    handleChange={handleChange}
+                    disabled={!manualInputEnabled}
+                  />
+                  <FormRow
+                    type="text"
+                    name="Skolan namn"
+                    placeholder="Ange namn på skolan/lärosäte"
+                    handleChange={handleChange}
+                    disabled={!manualInputEnabled}
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <FormRow
+                    type="text"
+                    name="Jobbtitel"
+                    placeholder="Ange jobbtitel"
+                    handleChange={handleChange}
+                    disabled={!manualInputEnabled}
+                  />
+                  <FormRow
+                    type="text"
+                    name="Företagsnamn"
+                    placeholder="Ange företagsnamn"
+                    handleChange={handleChange}
+                    disabled={!manualInputEnabled}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-around items-center shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.3)] bg-gray-100 h-52">
+            <button
+              className="border-2 border-sky-500 p-6 rounded-xl text-white text-xl  mb-2 flex justify-between items-center"
+              onClick={prevStep}
+              disabled={currentStep === 1}
+            >
+              <svg
+                height="24"
+                width="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="flex items-center"
+              >
+                <path
+                  d="M24 12C24 8.8174 22.7357 5.76516 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0C8.8174 0 5.76516 1.26428 3.51472 3.51472C1.26428 5.76516 0 8.8174 0 12C0 15.1826 1.26428 18.2348 3.51472 20.4853C5.76516 22.7357 8.8174 24 12 24C15.1826 24 18.2348 22.7357 20.4853 20.4853C22.7357 18.2348 24 15.1826 24 12ZM12.7031 6.32812C13.1438 5.8875 13.8562 5.8875 14.2922 6.32812C14.7281 6.76875 14.7328 7.48125 14.2922 7.91719L10.2141 11.9953L14.2922 16.0734C14.7328 16.5141 14.7328 17.2266 14.2922 17.6625C13.8516 18.0984 13.1391 18.1031 12.7031 17.6625L7.82812 12.7969C7.3875 12.3563 7.3875 11.6438 7.82812 11.2078L12.7031 6.32812Z"
+                  fill="#0EA5E9"
+                />
+              </svg>
+            </button>
+            <button
+              className="bg-sky-500 h-16 rounded-xl text-white text-lg hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 items-center"
+              onClick={nextStep}
+              disabled={currentStep === 3}
+            >
+              Spara och fortsätt
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="ml-6"
+              >
+                <path
+                  d="M0 12C0 15.1826 1.26428 18.2348 3.51472 20.4853C5.76516 22.7357 8.8174 24 12 24C15.1826 24 18.2348 22.7357 20.4853 20.4853C22.7357 18.2348 24 15.1826 24 12C24 8.8174 22.7357 5.76516 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0C8.8174 0 5.76516 1.26428 3.51472 3.51472C1.26428 5.76516 0 8.8174 0 12ZM11.2969 17.6719C10.8562 18.1125 10.1438 18.1125 9.70781 17.6719C9.27188 17.2313 9.26719 16.5188 9.70781 16.0828L13.7859 12.0047L9.70781 7.92656C9.26719 7.48594 9.26719 6.77344 9.70781 6.3375C10.1484 5.90156 10.8609 5.89687 11.2969 6.3375L16.1719 11.2031C16.6125 11.6438 16.6125 12.3562 16.1719 12.7922L11.2969 17.6719Z"
+                  fill="#F5F5F5"
+                />
+              </svg>
+            </button>
           </div>
         </div>
-        <div className="flex bg-stone-300 h-6 items-center p-4">
-          4 ENKLA STEG
-        </div>
-        <div>
-          {[
-            { text: "1. LADDA UPP DITT CV", icon: <UploadSVG /> },
-            { text: "2. SKAPA DIN JOBBPROFIL", icon: <ProfileSVG /> },
-            { text: "3. SWIPEA BLAND MATCHANDE JOBB", icon: <SwipeSVG /> },
-            { text: "4. GENERERA PERSONLIGA BREV", icon: <LetterSVG /> },
-          ].map((step, index) => (
-            <div
-              key={index}
-              className={`flex flex-col bg-stone-400 mb-4 p-4 cursor-pointer ${
-                expandedStep === index + 1 ? "h-52" : "h-16"
-              }`}
-              onClick={() => toggleExpansion(index + 1)}
-            >
-              <div className="flex items-center justify-between">
-                {step.text}
-                {step.icon}
-              </div>
-
-              {expandedStep === 1 && index === 0 && (
-                <span>
-                  <div className="mt-8">
-                    <div
-                      className={`flex items-center h-12 p-2 ${
-                        fileName !== "INGEN FIL ÄR VALD" ? "file-selected" : ""
-                      }`}
-                    >
-                      {fileName}
-                      {fileName !== "INGEN FIL ÄR VALD" && (
-                        <button
-                          className="ml-auto p-2"
-                          onClick={handleDeleteFile}
-                        >
-                          <DeleteSVG />
-                        </button>
-                      )}
-                    </div>
-                    {fileName === "INGEN FIL ÄR VALD" && (
-                      <>
-                        <div className="flex justify-center mt-8">
-                          <button
-                            className="bg-stone-500 p-2 px-8"
-                            onClick={triggerFileInput}
-                          >
-                            VÄLJ FIL
-                          </button>
-                        </div>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={handleFileChange}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      </>
-                    )}
-                  </div>
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="absolute bottom-0 w-full">
-          <Link
-            className="flex bg-stone-500 w-full h-16 justify-center items-center mt-64"
-            to="/joblist"
-          >
-            KOM IGÅNG
-          </Link>
-        </div>
       </div>
+      <Footer />
     </>
   );
 }

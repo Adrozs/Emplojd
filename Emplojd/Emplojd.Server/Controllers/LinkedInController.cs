@@ -1,52 +1,53 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using AspNet.Security.OAuth.LinkedIn;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Security.Claims;
+using System.Text;
 
-namespace Emplojd.Controller
+
+namespace Emplojd.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GoogleController : ControllerBase
+    public class LinkedInController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        //Config with errorhandling
-        public GoogleController(IConfiguration configuration)
+        public LinkedInController(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
-        [HttpGet("/login-google")]
-        public IActionResult GoogleLogin()
+        [HttpGet("/login-linkedin")]
+        public IActionResult Login()
         {
-            //here we construct the redirectUri based on the applications Configuration(!!)
-            var redirectUri = "https://emplojdserver20240525201259.azurewebsites.net/googleresponse";
+            var redirectUri = "https://localhost:54686/linkedinresponse";
             var property = new AuthenticationProperties
             {
-                RedirectUri = Url.Action("GoogleResponse", new { redirectUri })
+                RedirectUri = Url.Action("LinkedInResponse", new { redirectUri })
             };
 
-            return Challenge(property, GoogleDefaults.AuthenticationScheme);
+            return Challenge(property, LinkedInAuthenticationDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("/googleresponse")]
-        public async Task<IActionResult> GoogleResponse(string redirectUri)
+        [HttpGet("/linkedinresponse")]
+        public async Task<IActionResult> LinkedInResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             var claims = result.Principal?.Identities.FirstOrDefault()?.Claims.ToList();
 
-            var token = GenerateJwtToken(claims);
+            var token = LinkedInJwtToken(claims);
 
             return Ok(new { token });
         }
 
-        private string GenerateJwtToken(IEnumerable<Claim> claims)
+        private string LinkedInJwtToken(IEnumerable<Claim> claims)
         {
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
             var credentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
