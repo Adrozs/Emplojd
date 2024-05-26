@@ -108,7 +108,7 @@ namespace Emplojd.Repositories
 
             List<SavedJobAdDto>? savedJobAds = user.SavedJobAds.Select(j => new SavedJobAdDto
             {
-                PlatsbankenId = j.PlatsbankenJobId,
+                PlatsbankenId = j.PlatsbankenJobAdId,
                 Headline = j.Headline,
                 Employer = new EmployerDto
                 {
@@ -124,16 +124,18 @@ namespace Emplojd.Repositories
         {
             User user = await GetUserAndJobAdsAsync(currentUser);
 
-            if (user.SavedJobAds.Any(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId))
+            // Check if job ad already is saved.
+            if (user.SavedJobAds.Any(j => j.PlatsbankenJobAdId == request.PlatsbankenJobAdId))
                 return false;
 
-            // Check if job ad exists and select that or create new one
-            JobAd? jobAd = jobAd = await _context.JobAd.FirstOrDefaultAsync(j => j.PlatsbankenJobId == request.PlatsbankenJobAdId);
+            // Check if job ad already exists in the db (from another user that saved it) and select that one. If not create new object to save in the db
+            // To avoid duplicate job ads saved in the db
+            SavedJobAd? jobAd = jobAd = await _context.SavedJobAds.FirstOrDefaultAsync(j => j.PlatsbankenJobAdId == request.PlatsbankenJobAdId);
             if (jobAd == null)
             {
-                jobAd = new JobAd
+                jobAd = new SavedJobAd
                 {
-                    PlatsbankenJobId = request.PlatsbankenJobAdId,
+                    PlatsbankenJobAdId = request.PlatsbankenJobAdId,
                     Headline = request.Headline,
                     Employer = request.Employer,
                 };
@@ -141,8 +143,8 @@ namespace Emplojd.Repositories
 
             try
             {
-                //user.SavedJobAds.Add(jobAd);
-                //await _context.SaveChangesAsync();
+                user.SavedJobAds.Add(jobAd);
+                await _context.SaveChangesAsync();
                 return true;
 
             }
@@ -161,30 +163,30 @@ namespace Emplojd.Repositories
             {
                 User user = await GetUserAndJobAdsAsync(currentUser);
 
-                SavedJobAd? savedJobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobId == platsbankenJobAdId);
+                SavedJobAd? savedJobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobAdId == platsbankenJobAdId);
 
 
-                //if (savedJobAd == null)
-                //    return false;
+                if (savedJobAd == null)
+                    return false;
 
-                //user.SavedJobAds.Remove(savedJobAd);
-                //await _context.SaveChangesAsync();
+                user.SavedJobAds.Remove(savedJobAd);
+                await _context.SaveChangesAsync();
 
-                //// Check if there's any users connected to this job ad - if not then remove it so we don't keep loads of job ads in the db for no reason
-                //bool isJobAdLinkedToAnyUser = await _context.Users
-                //    .AnyAsync(u => u.SavedJobAds.Any(j => j.JobAdId == jobAd.JobAdId));
-                
-                //if (!isJobAdLinkedToAnyUser)
-                //{
-                //    _context.JobAd.Remove(jobAd);
-                //    await _context.SaveChangesAsync();
-                //}
+                // Check if there's any users connected to this job ad - if not then remove it so we don't keep loads of job ads in the db for no reason
+                bool isJobAdLinkedToAnyUser = await _context.Users
+                    .AnyAsync(u => u.SavedJobAds.Any(j => j.PlatsbankenJobAdId == savedJobAd.PlatsbankenJobAdId));
+
+                if (!isJobAdLinkedToAnyUser)
+                {
+                    _context.SavedJobAds.Remove(savedJobAd);
+                    await _context.SaveChangesAsync();
+                }
 
 
                 await transaction.CommitAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 // If exception occurred rollback any changes 
                 await transaction.RollbackAsync();

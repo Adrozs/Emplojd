@@ -15,7 +15,7 @@ namespace Emplojd.ViewModels
         public string Id { get; set; }
         public string Headline { get; set; } 
         public string Logo_Url { get; set; }
-        //public string ApplicationDeadline { get; set; } 
+        public string ApplicationDeadline { get; set; } 
         public DescriptionDto Description { get; set; } 
         public EmploymentTypeDto EmploymentType { get; set; } 
         //public SalaryTypeDto SalaryType { get; set; } 

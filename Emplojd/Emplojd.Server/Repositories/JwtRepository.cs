@@ -45,7 +45,7 @@ namespace Emplojd.Repositories
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Error generationg JWT token", ex);
+                throw new ApplicationException("Error generating JWT token", ex);
             }
         }
     }
