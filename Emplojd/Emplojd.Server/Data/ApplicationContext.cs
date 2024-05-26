@@ -8,10 +8,6 @@ namespace Emplojd.Data
     public class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<User> Users { get; set; }
-
-        public DbSet<JobAd> JobAd { get; set; }
-
-
         public DbSet<SavedCoverLetter> CoverLetters { get; set; }
         public DbSet<SavedJobAd> SavedJobAds { get; set; }
 
@@ -25,7 +21,7 @@ namespace Emplojd.Data
 
             modelBuilder.Entity<User>()
                 .HasMany(p => p.SavedJobAds)
-                .WithMany(j => j.User)
+                .WithMany(j => j.Users)
                 .UsingEntity(j => j.ToTable("UserJobAds"));
         }
     }
