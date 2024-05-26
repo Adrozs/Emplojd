@@ -1,11 +1,11 @@
-﻿using Emplojd.Server.Models;
+﻿using Emplojd.Server.ViewModels___DTOs.UserProfile;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Emplojd.Server.ViewModels___DTOs
 {
     public class UserProfileDto
     {
-        // User id
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
@@ -22,7 +22,6 @@ namespace Emplojd.Server.ViewModels___DTOs
         public string? CvContentText { get; set; }
 
         [JsonPropertyName("cv-manual-entry")]
-        //Kolla hur man lägger till objekt inom objekt från json-fil för CV-manually nedan
-        public ICollection<CvManually>? CvManually { get; set; }
+        public ICollection<CvManuallyDto>? CvManually { get; set; }
     }
 }
