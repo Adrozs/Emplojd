@@ -17,11 +17,5 @@ namespace Emplojd.Server.ViewModels___DTOs
 
         [JsonPropertyName("descriptive-words")]
         public List<string>? DescriptiveWords { get; set; }
-
-        [JsonPropertyName("cv-from-file")]
-        public string? CvContentText { get; set; }
-
-        [JsonPropertyName("cv-manual-entry")]
-        public ICollection<CvManuallyDto>? CvManually { get; set; }
     }
 }
