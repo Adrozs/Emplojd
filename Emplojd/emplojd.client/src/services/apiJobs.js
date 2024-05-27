@@ -1,4 +1,4 @@
-/* const API_URL = "https://jobsearch.api.jobtechdev.se/search";
+const API_URL = "https://jobsearch.api.jobtechdev.se/search";
 
 export async function getJobs(query) {
   try {
@@ -13,7 +13,7 @@ export async function getJobs(query) {
     throw Error("Failed to fetch jobs data: " + error.message);
   }
 }
-
+/* 
 export async function getOneJob(id) {
   const res = await fetch(`${API_URL}?q=${id}`);
   if (!res.ok) throw Error(`Couldn't find job #${id}`);
