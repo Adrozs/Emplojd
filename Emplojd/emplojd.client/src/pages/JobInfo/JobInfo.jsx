@@ -1,17 +1,21 @@
 import { Link, useLoaderData } from "react-router-dom";
-import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useState } from "react";
 
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 
 import { FaRegHeart, FaArrowRight, FaHeart } from "react-icons/fa6";
 
-import {
-  sendLikeData,
-  getLikeData,
-  deleteLikeData,
-} from "../../utils/jsonserver";
+// import {
+//   sendLikeData,
+//   getLikeData,
+//   deleteLikeData,
+// } from "../../utils/jsonserver";
 import { getOneBackendJob } from "../../utils/backendserver";
+import {
+  deleteLikeDataBackend,
+  getLikeDataBackend,
+  sendLikeDataBackend,
+} from "../../utils/savedAds";
 
 function JobInfo() {
   const job = useLoaderData();
@@ -19,8 +23,10 @@ function JobInfo() {
 
   useEffect(() => {
     const fetchLikedJobs = async () => {
-      const likedJobs = await getLikeData();
-      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
+      const likedJobs = await getLikeDataBackend();
+      const liked = likedJobs.some(
+        (likedJob) => likedJob.platsbankenId === job.id
+      );
       setIsLiked(liked);
     };
     fetchLikedJobs();
@@ -49,15 +55,9 @@ function JobInfo() {
   const handleLike = () => {
     setIsLiked((like) => !like);
     if (!isLiked) {
-      sendLikeData(
-        job.id,
-        job.headline,
-        job.employer.name,
-        job.occupation.label,
-        job.logo_url
-      );
+      sendLikeDataBackend(job.id, job.headline, job.employer.name);
     } else if (isLiked) {
-      deleteLikeData(job.id);
+      deleteLikeDataBackend(job.id);
     }
   };
 

@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";

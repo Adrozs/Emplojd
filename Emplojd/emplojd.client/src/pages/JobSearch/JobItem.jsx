@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import {
-  sendLikeData,
-  getLikeData,
-  deleteLikeData,
-} from "../../utils/jsonserver";
-import { FaRegHeart } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa6";
+  sendLikeDataBackend,
+  getLikeDataBackend,
+  deleteLikeDataBackend,
+} from "../../utils/savedAds";
 
 function JobItem({ job, children }) {
   const [daySincePosted, setDaySincePosted] = useState(null);
@@ -13,12 +12,22 @@ function JobItem({ job, children }) {
 
   useEffect(() => {
     const fetchLikedJobs = async () => {
-      const likedJobs = await getLikeData();
-      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
-      setIsLiked(liked);
+      try {
+        const likedJobs = await getLikeDataBackend();
+        if (likedJobs && likedJobs.length > 0) {
+          const platsbankenIds = likedJobs.map(
+            (likedJob) => likedJob.platsbankenId
+          );
+
+          const liked = platsbankenIds.includes(job.id);
+          setIsLiked(liked);
+        }
+      } catch (error) {
+        console.error("Failed to fetch liked jobs:", error);
+      }
     };
     fetchLikedJobs();
-  }, [job, getLikeData]);
+  }, [job, getLikeDataBackend]);
 
   useEffect(() => {
     const todaysDate = new Date();
@@ -28,26 +37,22 @@ function JobItem({ job, children }) {
     setDaySincePosted(differenceInDays);
   }, [job]);
 
-  //pausad tills vidare
-  /*   function handleLike() {
-    setIsLiked((like) => !like);
+  const handleLike = async () => {
+    setIsLiked((prevIsLiked) => !prevIsLiked);
     if (!isLiked) {
-      sendLikeData(
-        job.id,
-        job.headline,
-        job.employer.name,
-        job.occupation.label,
-        job.logo_Url,
-        job.employment_type.label,
-        job.working_hours_type.label,
-
-        job.publication_date,
-        job.description.text_formatted
-      );
-    } else if (isLiked) {
-      deleteLikeData(job.id);
+      try {
+        await sendLikeDataBackend(job.id, job.headline, job.employer.name);
+      } catch (error) {
+        console.error("Failed to send like data:", error);
+      }
+    } else {
+      try {
+        await deleteLikeDataBackend(job.id);
+      } catch (error) {
+        console.error("Failed to delete like data:", error);
+      }
     }
-  } */
+  };
 
   return (
     <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[10px]">
@@ -59,7 +64,7 @@ function JobItem({ job, children }) {
             className="object-contain w-[50px] h-[50px] p-1 rounded-full"
           />
         </div>
-        <div onClick={() => console.log("HANDLE LIKE ")}>
+        <div onClick={handleLike}>
           {isLiked ? (
             <FaHeart className="text-customBlue" size={24} />
           ) : (
@@ -75,10 +80,6 @@ function JobItem({ job, children }) {
         </div>
       </div>
       <div className="flex gap-2 text-[12px]">
-        <span className="bg-[#CFEBD4] rounded-[2px] px-2 py-1">
-          {job.employment_Type.label}
-        </span>
-
         <span className="bg-purple-300 rounded-[2px] px-2 py-1">
           {job.working_Hours_Type.label}
         </span>

@@ -1,6 +1,5 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { getJobs } from "../../services/apiJobs";
 
 //icons
 import { PiClockCounterClockwiseBold } from "react-icons/pi";

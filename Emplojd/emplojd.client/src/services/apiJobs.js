@@ -1,4 +1,4 @@
-const API_URL = "https://jobsearch.api.jobtechdev.se/search";
+/* const API_URL = "https://jobsearch.api.jobtechdev.se/search";
 
 export async function getJobs(query) {
   try {
@@ -56,3 +56,4 @@ export async function updateLetter(id, updateObj) {
     throw Error("Failed updating your cv");
   }
 }
+ */
