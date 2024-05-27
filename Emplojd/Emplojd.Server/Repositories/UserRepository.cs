@@ -43,7 +43,6 @@ namespace Emplojd.Repository
             if (password != passwordConfirm)
                 return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
                 
-
             User user = new User
             {
                 UserName = email, 

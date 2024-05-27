@@ -6,6 +6,9 @@ using Emplojd.ViewModels___DTOs;
 using Emplojd.ViewModels___DTOs.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Emplojd.Models;
+using Emplojd.Server.Models;
+using Emplojd.Server.ViewModels___DTOs;
 
 namespace Emplojd.Services
 {
