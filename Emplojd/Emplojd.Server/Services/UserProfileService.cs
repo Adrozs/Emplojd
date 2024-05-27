@@ -20,17 +20,18 @@ namespace Emplojd.Server.Services
 
         public async Task AddUserProfileAsync(UserProfileDto userProfileDto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userProfileDto.Id);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == userProfileDto.Id);
 
             if (user == null)
             {
                 user = new User
                 {
                     Id = userProfileDto.Id,
+                    UserName = userProfileDto.Id,
                     Name = userProfileDto.Name,
                     UserInterestTags = userProfileDto.UserInterestTags,
                     DescriptiveWords = userProfileDto.DescriptiveWords,
-                    CvContentText = userProfileDto.CvContentText,
                 };
 
                 _context.Users.Add(user);
@@ -40,36 +41,16 @@ namespace Emplojd.Server.Services
                 user.Name = userProfileDto.Name;
                 user.UserInterestTags = userProfileDto.UserInterestTags;
                 user.DescriptiveWords = userProfileDto.DescriptiveWords;
-                user.CvContentText = userProfileDto.CvContentText;
             }
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddUserCvManuallyAsync(int userId, List<CvManuallyDto> cvManuallyDtos)
-        {
-            var userIdString = userId.ToString();
-            var user = await _context.Users.Include(u => u.CvManually).FirstOrDefaultAsync(u => u.Id == userIdString);
-
-            if (user != null)
-            {
-                user.CvManually = cvManuallyDtos.Select(c => new CvManually
-                {
-                    CvManuallyId = c.CvManuallyId,
-                    PositionEducation = c.PositionEducation,
-                    StartDate = c.StartDate,
-                    EndDate = c.EndDate,
-                    SchoolWorkplace = c.SchoolWorkplace,
-                    IsEducation = c.IsEducation,
-                }).ToList();
-
-                await _context.SaveChangesAsync();
-            }
-        }
-
         public async Task<UserProfileDto> GetUserProfileAsync(string userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users
+                .Include(u => u.CvManually)
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
@@ -82,9 +63,9 @@ namespace Emplojd.Server.Services
                 Name = user.Name,
                 UserInterestTags = user.UserInterestTags,
                 DescriptiveWords = user.DescriptiveWords,
-                CvContentText = user.CvContentText
             };
         }
+
 
         public async Task<List<CvManuallyDto>> GetUserCvManuallyAsync(string userId)
         {
@@ -92,7 +73,7 @@ namespace Emplojd.Server.Services
 
             if (user == null || user.CvManually == null)
             {
-                return new List<CvManuallyDto>(); // better handling if we get an empty list instead of null as it wont conflict with the CV generation
+                return null;
             }
 
             return user.CvManually.Select(c => new CvManuallyDto
@@ -105,5 +86,44 @@ namespace Emplojd.Server.Services
                 IsEducation = c.IsEducation
             }).ToList();
         }
+
+        public async Task AddUserCvManuallyAsync(string userId, CvManuallyDto cvManuallyDtos)
+        {
+            try
+            {
+                var user = await _context.Users.Include(u => u.CvManually).FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user != null)
+                {
+                    var newCvManually =
+                        new CvManually
+                        {
+                            CvManuallyId = cvManuallyDtos.CvManuallyId,
+                            PositionEducation = cvManuallyDtos.PositionEducation,
+                            StartDate = cvManuallyDtos.StartDate,
+                            EndDate = cvManuallyDtos.EndDate,
+                            SchoolWorkplace = cvManuallyDtos.SchoolWorkplace,
+                            IsEducation = cvManuallyDtos.IsEducation,
+                        };
+
+                    //foreach (var cv in newCvManually)
+                    //{
+                    //    user.CvManually.Add(cv);
+                    //}
+
+                    user.CvManually.Add(newCvManually);
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception appropriately (log, throw, etc.)
+                // For now, let's log the exception
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Re-throw the exception to propagate it upwards
+            }
+        }
+
     }
 }
