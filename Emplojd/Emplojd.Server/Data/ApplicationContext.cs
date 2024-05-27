@@ -25,13 +25,11 @@ namespace Emplojd.Data
                 .WithMany(j => j.User)
                 .UsingEntity(j => j.ToTable("UserJobAds"));
 
-            // Configure the User and CvManually relationship
+            // User and CvManually relationship
             modelBuilder.Entity<CvManually>()
                 .HasOne(cm => cm.User)
                 .WithMany(u => u.CvManually)
                 .HasForeignKey(cm => cm.UserId);
-
-            // Additional configurations can be added here
         }
     }
 }
