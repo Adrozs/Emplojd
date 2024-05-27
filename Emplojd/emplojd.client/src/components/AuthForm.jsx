@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
-import { addUserToLocalStorage } from "../utils/localStorage";
 import customFetch from "../utils/axios";
 import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
 
@@ -26,9 +25,9 @@ const AuthForm = () => {
       onSuccess: (data) => {
         toast.success("Registrering lyckades!");
         console.log("Skapad användare:", data);
-        login();
-        addUserToLocalStorage(values);
-        navigate("/profile");
+        const { token } = data.data;
+        login(token, { ...values, isMember: false });
+        navigate("/createprofile");
       },
       onError: (error) => {
         toast.error(error.response.data.detail);
@@ -36,16 +35,16 @@ const AuthForm = () => {
       },
     }
   );
+
   const signInUserMutation = useMutation(
     (user) => customFetch.post("/login", user),
     {
       onSuccess: (data) => {
         toast.success("Välkommen in!");
         console.log("Inloggning lyckades:", data);
-        localStorage.setItem("authToken", data.data.token);
-        login();
-        addUserToLocalStorage(values);
-        navigate("/profile");
+        const { token } = data.data;
+        login(token, { ...values, isMember: true });
+        navigate("/joblist");
       },
       onError: (error) => {
         toast.error(error.response.data.detail);

@@ -4,7 +4,7 @@ import AccountForm from "./AccountForm";
 function ListForm({
   wordBgColor = "bg-purple-100",
   name = "name",
-  labelBgColor = "bg-purple-100",
+  labelBgColor = "transparent",
   onChange,
 }) {
   const [words, setWords] = useState([]);

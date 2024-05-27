@@ -167,13 +167,13 @@ function MyProfile() {
                 type="firstname"
                 labelText="Förnamn"
                 handleChange={handleChange}
-                labelBgColor="bg-purple-100"
+                
               />
               <FormRow
                 type="lastname"
                 labelText="Efternamn"
                 handleChange={handleChange}
-                labelBgColor="bg-purple-100"
+                
               />
               <FormRow
                 type="email"
@@ -182,14 +182,13 @@ function MyProfile() {
                 value={values.email}
                 handleChange={handleChange}
                 placeholder="your.email@email.com"
-                labelBgColor="bg-purple-100"
+                
               />
             </div>
             <div>
               <ListForm
                 wordBgColor="bg-sky-100"
                 name="Mina intressen"
-                labelBgColor="bg-sky-100"
                 onChange={handleListFormChange}
               />
               <ListForm
@@ -199,7 +198,7 @@ function MyProfile() {
             </div>
             <div className="pb-6 rounded-lg max-w-md">
               <div className="flex items-center mb-4">
-                <div className="text-line mb-2 font-semibold flex items-center top-1 relative bg-sky-100 px-2 py-1 rounded-lg">
+                <div className="text-line mb-2 font-semibold flex items-center top-1 relative px-2 py-1 rounded-lg">
                   Signatur
                 </div>
                 <div className="ml-2 bg-purple-400 px-2.5 py-1 rounded-full text-sm text-white font-semibold flex items-center justify-center">
