@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Emplojd.Server.Services;
-using Emplojd.Server.ViewModels___DTOs;
-using System.Threading.Tasks;
+﻿using Emplojd.Server.Services;
 using Emplojd.Server.ViewModels___DTOs.UserProfile;
+using Emplojd.Server.ViewModels___DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Emplojd.Server.Controllers
 {
@@ -25,7 +24,7 @@ namespace Emplojd.Server.Controllers
         }
 
         [HttpPost("CreateUserCvManually")]
-        public async Task<IActionResult> CreateUserCvManually([FromBody] List<CvManuallyDto> cvManuallyDtos, [FromQuery] int userId)
+         public async Task<IActionResult> CreateUserCvManually([FromBody] CvManuallyDto cvManuallyDtos, [FromQuery] string userId)
         {
             await _userProfileService.AddUserCvManuallyAsync(userId, cvManuallyDtos);
             return Ok();
