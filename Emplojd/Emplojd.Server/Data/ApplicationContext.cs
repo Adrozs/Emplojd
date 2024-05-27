@@ -8,11 +8,12 @@ namespace Emplojd.Data
     public class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<User> Users { get; set; }
-
         public DbSet<SavedCoverLetter> CoverLetters { get; set; }
+        public DbSet<SavedJobAd> SavedJobAds { get; set; }
         public DbSet<CvManually> CvManuallys { get; set; }
-        // User and SavedJobAds relationship
 
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

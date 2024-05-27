@@ -110,9 +110,30 @@ namespace Emplojd.Repositories
             {
                 PlatsbankenId = j.PlatsbankenJobAdId,
                 Headline = j.Headline,
+                Publication_Date = j.Publication_Date,
+                Description = new DescriptionDto
+                {
+                    Text_Formatted = j.Description
+                },
+                Employment_Type = new EmploymentTypeDto
+                {
+                    Label = j.Employment_Type
+                },
+                Working_Hours_Type = new WorkingHoursTypeDto
+                {
+                    Label = j.Working_Hours_Type
+                },
                 Employer = new EmployerDto
                 {
                     Name = j.Employer
+                },
+                Occupation = new OccupationDto
+                {
+                    Label = j.Occupation
+                },
+                Workplace_Address = new WorkplaceAddressDto
+                {
+                    Municipality = j.Workplace_Address
                 }
             }).ToList();
 
@@ -138,6 +159,13 @@ namespace Emplojd.Repositories
                     PlatsbankenJobAdId = request.PlatsbankenJobAdId,
                     Headline = request.Headline,
                     Employer = request.Employer,
+                    Description = request.Description,
+                    Employment_Type = request.Employment_Type,
+                    Working_Hours_Type = request.Working_Hours_Type,
+                    Occupation = request.Occupation,
+                    Workplace_Address = request.Workplace_Address,
+                    Publication_Date = request.Publication_Date,
+                    Logo_Url = request.Logo_Url,
                 };
             }
 
@@ -165,7 +193,6 @@ namespace Emplojd.Repositories
 
                 SavedJobAd? savedJobAd = user.SavedJobAds.FirstOrDefault(j => j.PlatsbankenJobAdId == platsbankenJobAdId);
 
-
                 if (savedJobAd == null)
                     return false;
 
@@ -181,7 +208,6 @@ namespace Emplojd.Repositories
                     _context.SavedJobAds.Remove(savedJobAd);
                     await _context.SaveChangesAsync();
                 }
-
 
                 await transaction.CommitAsync();
                 return true;
