@@ -15,14 +15,14 @@ namespace Emplojd.ViewModels
         public string Id { get; set; }
         public string Headline { get; set; } 
         public string Logo_Url { get; set; }
-        public string ApplicationDeadline { get; set; } 
+        public string Application_Deadline { get; set; } 
         public DescriptionDto Description { get; set; } 
-        public EmploymentTypeDto EmploymentType { get; set; } 
+        public EmploymentTypeDto Employment_Type { get; set; } 
         //public SalaryTypeDto SalaryType { get; set; } 
         //public DurationDto Duration { get; set; } 
-        public WorkingHoursTypeDto WorkingHoursType { get; set; } //Heltid
+        public WorkingHoursTypeDto Working_Hours_Type { get; set; } //Heltid
         public EmployerDto Employer { get; set; } // Rekryterare??
-        public ApplicationDetailsDto ApplicationDetails { get; set; }
+        public ApplicationDetailsDto Application_Details { get; set; }
         public OccupationDto Occupation { get; set; }
         //public List<ApplicationContactDto> ApplicationContacts { get; set; }
         //public string PublicationDate { get; set; }
@@ -30,7 +30,7 @@ namespace Emplojd.ViewModels
     public class DescriptionDto
     {
         public string Text { get; set; }
-        public string Text_formatted { get; set; }
+        public string Text_Formatted { get; set; }
     }
 
     public class EmploymentTypeDto
