@@ -5,7 +5,6 @@ namespace Emplojd.ViewModels
 {
     public class JobSearchResultWrapper
     {
-        //public int SearchResults { get; set; } avvakta med detta?
         [JsonPropertyName("hits")]
         public List<JobDto> Jobs { get; set; }
     }
@@ -13,19 +12,17 @@ namespace Emplojd.ViewModels
     public class JobDto
     {
         public string Id { get; set; }
-        public string Headline { get; set; } 
         public string Logo_Url { get; set; }
+        public string Headline { get; set; }
         public string Application_Deadline { get; set; } 
         public DescriptionDto Description { get; set; } 
         public EmploymentTypeDto Employment_Type { get; set; } 
-        //public SalaryTypeDto SalaryType { get; set; } 
-        //public DurationDto Duration { get; set; } 
-        public WorkingHoursTypeDto Working_Hours_Type { get; set; } //Heltid
-        public EmployerDto Employer { get; set; } // Rekryterare??
+        public WorkingHoursTypeDto Working_Hours_Type { get; set; }
+        public EmployerDto Employer { get; set; }
         public ApplicationDetailsDto Application_Details { get; set; }
         public OccupationDto Occupation { get; set; }
-        //public List<ApplicationContactDto> ApplicationContacts { get; set; }
-        //public string PublicationDate { get; set; }
+        public WorkplaceAddressDto Workplace_Address { get; set; }
+        public string Publication_Date { get; set; }
     }
     public class DescriptionDto
     {
@@ -37,17 +34,6 @@ namespace Emplojd.ViewModels
     {
         public string Label { get; set; }
     }
-
-    //public class SalaryTypeDto
-    //{
-    //    public string Label { get; set; }
-    //    public string Description { get; set; }
-    //}
-
-    //public class DurationDto
-    //{
-    //    public string Label { get; set; }
-    //}
 
     public class WorkingHoursTypeDto
     {
@@ -75,13 +61,4 @@ namespace Emplojd.ViewModels
     {
         public string Municipality { get; set; }
     }
-
-    //public class ApplicationContactDto
-    //{
-    //    public string Name { get; set; }
-    //    public string Description { get; set; }
-    //    public string Email { get; set; }
-    //    public string Telephone { get; set; }
-    //}
-
 }
