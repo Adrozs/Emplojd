@@ -11,6 +11,7 @@ import {
   getLikeData,
   deleteLikeData,
 } from "../../utils/jsonserver";
+import { getOneBackendJob } from "../../utils/backendserver";
 
 function JobInfo() {
   const job = useLoaderData();
@@ -28,13 +29,6 @@ function JobInfo() {
   const isHTML = (str) => {
     const doc = new DOMParser().parseFromString(str, "text/html");
     return Array.from(doc.body.childNodes).some((node) => node.nodeType === 1);
-  };
-
-  const makeLinksClickable = (text) => {
-    return text.replace(
-      /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g,
-      ' <a class="regular-url" href="$1" target="_blank">$1</a>'
-    );
   };
 
   const handleBack = () => {
@@ -103,30 +97,26 @@ function JobInfo() {
                 </div>
               </div>
             </div>
-            {job.logo_url && (
+            {job.logo_Url && (
               <div className="w-full flex items-center justify-center py-2 m-3 ">
                 <img
-                  src={job.logo_url}
+                  src={job.logo_Url}
                   alt="logo"
                   className="h-[100px] max-w-[200px]"
                 />
               </div>
             )}
-            {isHTML(job.description.text_formatted) ? (
+            {isHTML(job.description.text_Formatted) ? (
               <div
                 className=" p-2 max-w-4xl mx-auto mt-3"
                 dangerouslySetInnerHTML={{
-                  __html: job.description.text_formatted,
+                  __html: job.description.text_Formatted,
                 }}
               />
             ) : (
-              <p
-                className=" p-2 max-w-4xl mx-auto mt-3"
-                style={{ whiteSpace: "pre-line" }}
-                dangerouslySetInnerHTML={{
-                  __html: makeLinksClickable(job.description.text_formatted),
-                }}
-              />
+              <div className="p-2 max-w-4xl mx-auto mt-3">
+                {job.description.text}
+              </div>
             )}
             <div className="w-full my-3 text-center ">
               <div className="w-[95%] flex items-center justify-center mx-auto">
@@ -146,7 +136,7 @@ function JobInfo() {
 }
 
 export async function loader({ params }) {
-  const job = getOneJob(params.jobId);
+  const job = getOneBackendJob(params.jobId);
   return job;
 }
 

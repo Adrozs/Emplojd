@@ -1,12 +1,14 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { getJobs } from "../../services/apiJobs";
+
 //icons
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { FaBullhorn } from "react-icons/fa";
 // uuid
 import { v4 as uuidv4 } from "uuid";
 import Tooltip from "../../components/Tooltip";
+import { getJobsBackend } from "../../utils/backendserver";
 function JobSearchForm() {
   const navigate = useNavigate();
   const [city, setCity] = useState("");
@@ -32,16 +34,16 @@ function JobSearchForm() {
     try {
       let data;
       if (city && job) {
-        data = await getJobs(city + "+" + job);
+        data = await getJobsBackend(city + "+" + job);
         setLatest((items) => [...items, { id: uuidv4(), city, job }]);
         setCity("");
         setJob("");
       } else if (city && !job) {
-        data = await getJobs(city);
+        data = await getJobsBackend(city);
         setLatest((items) => [...items, { id: uuidv4(), city }]);
         setCity("");
       } else if (!city && job) {
-        data = await getJobs(job);
+        data = await getJobsBackend(job);
         setLatest((items) => [...items, { id: uuidv4(), job }]);
         setJob("");
       } else {
@@ -118,10 +120,7 @@ export function SearchForm({
   latest,
 }) {
   return (
-    <form
-      className="mx-6 bg-white p-3 rounded-[10px]"
-      onSubmit={handleSubmit}
-    >
+    <form className="mx-6 bg-white p-3 rounded-[10px]" onSubmit={handleSubmit}>
       <div className="mb-5">
         <label className="block mb-2 font-medium text-stone-400 dark:text-white">
           Ange title, företag, nyckelord
