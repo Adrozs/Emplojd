@@ -11,7 +11,6 @@ namespace Emplojd.Data
 
         public DbSet<SavedCoverLetter> CoverLetters { get; set; }
         public DbSet<CvManually> CvManuallys { get; set; }
-        public DbSet<CvManually> CvManuallys { get; set; }
         // User and SavedJobAds relationship
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
