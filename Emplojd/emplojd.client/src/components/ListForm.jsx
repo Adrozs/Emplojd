@@ -6,14 +6,19 @@ function ListForm({
   name = "name",
   labelBgColor = "transparent",
   onChange,
+  value = [],
 }) {
-  const [words, setWords] = useState([]);
+  const [words, setWords] = useState(value);
   const [inputValue, setInputValue] = useState("");
   const [inputState, setInputState] = useState({
     isTouched: false,
     isValid: false,
   });
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setWords(value);
+  }, [value]);
 
   useEffect(() => {
     if (words.length > 5) {
@@ -31,11 +36,6 @@ function ListForm({
     }
   }, [words]);
 
-  useEffect(() => {
-    if (onChange) onChange(words);  // Notify parent component about the change
-  }, [words, onChange]);
-
-
   const handleChange = (e) => {
     setInputValue(e.target.value);
     setInputState({ ...inputState, isTouched: false });
@@ -43,18 +43,19 @@ function ListForm({
 
   const handleSubmit = () => {
     if (inputValue.trim() !== "") {
-      setWords([...words, inputValue]);
+      const newWords = [...words, inputValue];
+      setWords(newWords);
       setInputValue("");
       setInputState({
         isTouched: true,
         isValid: true,
       });
-      if (words.length >= 5) {
+      if (newWords.length > 5) {
         setError("Max antal ord: 5st.");
       } else {
         setError("");
       }
-      if (onChange) onChange();
+      if (onChange) onChange(newWords); 
     }
   };
 
@@ -64,31 +65,30 @@ function ListForm({
     if (newWords.length <= 5) {
       setError("");
     }
-    if (onChange) onChange();
+    if (onChange) onChange(newWords);
   };
 
   return (
-        <form onSubmit={(e) => e.preventDefault()} className="mb-4">
-          <AccountForm
-            type="text"
-            name={name}
-            value={inputValue}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            placeholder="Påbörja nytt ord med ENTER"
-            showIcons={false}
-            inputState={inputState}
-            error={error}
-            words={words}
-            handleRemoveWord={handleRemoveWord}
-            wordTextColor="text-blue-700"
-            wordBgColor={wordBgColor}
-            errorTextColor="text-red-700"
-            errorBgColor="bg-red-200"
-            labelBgColor={labelBgColor}
-            onChange={onChange}
-          />
-        </form>
+    <form onSubmit={(e) => e.preventDefault()} className="mb-4">
+      <AccountForm
+        type="text"
+        name={name}
+        value={inputValue}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        placeholder="Påbörja nytt ord med ENTER"
+        showIcons={false}
+        inputState={inputState}
+        error={error}
+        words={words}
+        handleRemoveWord={handleRemoveWord}
+        wordTextColor="text-blue-700"
+        wordBgColor={wordBgColor}
+        errorTextColor="text-red-700"
+        errorBgColor="bg-red-200"
+        labelBgColor={labelBgColor}
+      />
+    </form>
   );
 }
 
