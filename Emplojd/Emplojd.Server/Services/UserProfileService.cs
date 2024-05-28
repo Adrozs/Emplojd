@@ -1,4 +1,5 @@
-﻿using Emplojd.Data;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Emplojd.Data;
 using Emplojd.Models;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
@@ -29,7 +30,8 @@ namespace Emplojd.Server.Services
                 {
                     Id = userProfileDto.Id,
                     UserName = userProfileDto.Id,
-                    Name = userProfileDto.Name,
+                    FirstName = userProfileDto.FirstName,
+                    LastName = userProfileDto.LastName,
                     UserInterestTags = userProfileDto.UserInterestTags,
                     DescriptiveWords = userProfileDto.DescriptiveWords,
                 };
@@ -38,7 +40,8 @@ namespace Emplojd.Server.Services
             }
             else
             {
-                user.Name = userProfileDto.Name;
+                user.FirstName = userProfileDto.FirstName;
+                user.LastName = userProfileDto.LastName;
                 user.UserInterestTags = userProfileDto.UserInterestTags;
                 user.DescriptiveWords = userProfileDto.DescriptiveWords;
             }
@@ -60,7 +63,8 @@ namespace Emplojd.Server.Services
             return new UserProfileDto
             {
                 Id = user.Id,
-                Name = user.Name,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 UserInterestTags = user.UserInterestTags,
                 DescriptiveWords = user.DescriptiveWords,
             };
