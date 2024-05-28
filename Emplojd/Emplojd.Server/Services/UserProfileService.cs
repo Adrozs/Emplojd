@@ -86,7 +86,6 @@ namespace Emplojd.Server.Services
 
             return user.CvManually.Select(c => new CvManuallyDto
             {
-                CvManuallyId = c.CvManuallyId,
                 PositionEducation = c.PositionEducation,
                 StartDate = c.StartDate,
                 EndDate = c.EndDate,
@@ -110,7 +109,6 @@ namespace Emplojd.Server.Services
                     var newCvManually =
                         new CvManually
                         {
-                            CvManuallyId = cvManuallyDtos.CvManuallyId,
                             PositionEducation = cvManuallyDtos.PositionEducation,
                             StartDate = cvManuallyDtos.StartDate,
                             EndDate = cvManuallyDtos.EndDate,
