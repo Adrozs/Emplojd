@@ -31,6 +31,11 @@ function ListForm({
     }
   }, [words]);
 
+  useEffect(() => {
+    if (onChange) onChange(words);  // Notify parent component about the change
+  }, [words, onChange]);
+
+
   const handleChange = (e) => {
     setInputValue(e.target.value);
     setInputState({ ...inputState, isTouched: false });

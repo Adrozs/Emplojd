@@ -9,19 +9,59 @@ import { FaPlus } from "react-icons/fa";
 function MyProfile() {
   const initialState = {
     email: "",
-    emailConfirmed: "",
-    password: "",
-    passwordConfirmed: "",
     isMember: true,
+    firstname: "",
+    lastname: "",
   };
 
   const [values, setValues] = useState(initialState);
   const [selectedOption, setSelectedOption] = useState("none");
   const [profilePic, setProfilePic] = useState("");
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [interests, setInterests] = useState([]);
+  const [descriptiveWords, setDescriptiveWords] = useState([]);
   const prevValues = useRef(values);
   const prevProfilePic = useRef(profilePic);
   const prevSelectedOption = useRef(selectedOption);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const authToken = "1bfa402d-b033-45eb-be9a-c84828a98077"
+
+      try {
+        const response = await fetch(
+          "https://localhost:54686/api/UserProfile/GetUserProfile",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setValues({
+          email: data.email,
+          firstname: data.firstname,
+          lastname: data.lastname,
+          isMember: data.isMember,
+        });
+        setProfilePic(data.profilePic);
+        setInterests(data.interests || []);
+        setDescriptiveWords(data["descriptive-words"] || []);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleProfilePicChange = (event) => {
     const file = event.target.files[0];
@@ -41,7 +81,12 @@ function MyProfile() {
     setUnsavedChanges(true);
   };
 
-  const handleListFormChange = () => {
+  const handleListFormChange = (type, value) => {
+    if (type === "interests") {
+      setInterests(value);
+    } else if (type === "descriptive-words") {
+      setDescriptiveWords(value);
+    }
     setUnsavedChanges(true);
   };
 
@@ -50,10 +95,46 @@ function MyProfile() {
     setUnsavedChanges(true);
   };
 
-  const fileInputRef = React.createRef();
-
   const triggerFileInput = () => {
     fileInputRef.current.click();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const authToken = "1bfa402d-b033-45eb-be9a-c84828a98077"
+
+    const interestsArray = interests || [];
+    const descriptiveWordsArray = descriptiveWords || [];
+
+    const data = {
+      id: authToken,
+      name: `${values.firstname.trim()} ${values.lastname.trim()}`,
+      interests: interestsArray,
+      "descriptive-words": descriptiveWordsArray,
+    };
+
+    console.log("Data being sent:", data);
+
+    try {
+      const response = await fetch(
+        "https://localhost:54686/api/UserProfile/CreateUserProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   useEffect(() => {
@@ -166,14 +247,14 @@ function MyProfile() {
               <FormRow
                 type="firstname"
                 labelText="Förnamn"
+                name="firstname"
                 handleChange={handleChange}
-                
               />
               <FormRow
                 type="lastname"
                 labelText="Efternamn"
+                name="lastname"
                 handleChange={handleChange}
-                
               />
               <FormRow
                 type="email"
@@ -182,18 +263,23 @@ function MyProfile() {
                 value={values.email}
                 handleChange={handleChange}
                 placeholder="your.email@email.com"
-                
               />
             </div>
             <div>
               <ListForm
                 wordBgColor="bg-sky-100"
                 name="Mina intressen"
-                onChange={handleListFormChange}
+                type="interests"
+                onChange={(value) => handleListFormChange("interests", value)}
+                value={interests}
               />
               <ListForm
                 name="Beskrivning av mig"
-                onChange={handleListFormChange}
+                type="descriptive-words"
+                onChange={(value) =>
+                  handleListFormChange("descriptive-words", value)
+                }
+                value={descriptiveWords}
               />
             </div>
             <div className="pb-6 rounded-lg max-w-md">
@@ -248,6 +334,7 @@ function MyProfile() {
               }`}
               type="submit"
               disabled={!unsavedChanges}
+              onClick={handleSubmit}
             >
               Spara ändringar <LoginRightArrow />
             </button>
