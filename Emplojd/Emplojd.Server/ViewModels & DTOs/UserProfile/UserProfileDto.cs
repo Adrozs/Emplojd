@@ -9,8 +9,10 @@ namespace Emplojd.Server.ViewModels___DTOs
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
+        [JsonPropertyName("firstname")]
+        public string? FirstName { get; set; }
+        [JsonPropertyName("lastname")]
+        public string? LastName { get; set; }
 
         [JsonPropertyName("interests")]
         public List<string>? UserInterestTags { get; set; }
