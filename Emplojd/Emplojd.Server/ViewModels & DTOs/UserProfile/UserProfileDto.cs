@@ -6,9 +6,12 @@ namespace Emplojd.Server.ViewModels___DTOs
 {
     public class UserProfileDto
     {
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-
+        [JsonPropertyName("firstname")]
+        public string? FirstName { get; set; }
+      
+        [JsonPropertyName("lastname")]
+        public string? LastName { get; set; }
+      
         [JsonPropertyName("interests")]
         public List<string>? UserInterestTags { get; set; }
 
