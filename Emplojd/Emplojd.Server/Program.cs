@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using AuthenticationService = Emplojd.Services.AuthenticationService;
 using AspNet.Security.OAuth.LinkedIn;
+using Emplojd.Server.Services;
 
 namespace Emplojd
 { 
@@ -155,6 +156,8 @@ namespace Emplojd
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
+            builder.Services.AddScoped<UserProfileService>();
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
