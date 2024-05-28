@@ -6,7 +6,8 @@ namespace Emplojd.Models
     public class User : IdentityUser
     {
         // For user profile
-        public string? Name { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public List<string>? UserInterestTags { get; set; }
         public List<string>? DescriptiveWords { get; set; }
         public string? CvContentText { get; set; }
