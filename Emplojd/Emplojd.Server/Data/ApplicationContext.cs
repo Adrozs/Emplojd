@@ -10,7 +10,7 @@ namespace Emplojd.Data
         public DbSet<User> Users { get; set; }
         public DbSet<SavedCoverLetter> CoverLetters { get; set; }
         public DbSet<SavedJobAd> SavedJobAds { get; set; }
-        public DbSet<CvManually> CvManuallys { get; set; }
+        public DbSet<CvManually> CvManually { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
         
