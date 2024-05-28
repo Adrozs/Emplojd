@@ -41,7 +41,18 @@ function JobItem({ job, children }) {
     setIsLiked((prevIsLiked) => !prevIsLiked);
     if (!isLiked) {
       try {
-        await sendLikeDataBackend(job.id, job.headline, job.employer.name);
+        await sendLikeDataBackend(
+          job.id,
+          job.headline,
+          job.employer.name,
+          job.description,
+          job.employment_Type,
+          job.working_Hours_Type,
+          job.occupation,
+          job.workplace_Address,
+          job.publication_Date,
+          job.logo_Url
+        );
       } catch (error) {
         console.error("Failed to send like data:", error);
       }

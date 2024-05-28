@@ -18,7 +18,7 @@ function SavedJobs() {
       setLikes(data);
       const todaysDate = new Date();
       const updatedLikes = data.map((job) => {
-        const jobPosted = new Date(job.publication_date);
+        const jobPosted = new Date(job.publication_Date);
         const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
         const differenceInDays = Math.ceil(
           differenceInTime / (1000 * 3600 * 24)
@@ -94,24 +94,25 @@ function SavedJobs() {
                       <p className="text-sm my-2"></p>
                     </div>
                   </div>
-                  {/*     <div>
+                  <div>
                     <p className="text-sm my-2">
-                      {data.workplace_address} - {daySincePosted} dagar sen
+                      {data.workplace_Address.municipality} - {daySincePosted}{" "}
+                      dagar sen
                     </p>
-                  </div> */}
-                  {/*     <div className="flex gap-2 text-[12px]">
+                  </div>
+                  <div className="flex gap-2 text-[12px]">
                     <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
-                      {data.working_hours_type}
+                      {data.working_Hours_Type.label}
                     </span>
 
-                    <span className="bg-purple-300 px-2 py-1">
-                      {data.employment_type}
-                    </span>
+                    {/*    <span className="bg-purple-300 px-2 py-1">
+                      {data.employment_Type.label}
+                    </span> */}
 
                     <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
-                      {data.occupation} text
+                      {data.occupation.label} text
                     </span>
-                  </div> */}
+                  </div>
                   <div className="flex justify-between items-center">
                     <Link
                       className="items-center justify-center flex mt-2 w-full py-2 h-9 bg-sky-500 rounded-[12px] text-white text-lg gap-4"
