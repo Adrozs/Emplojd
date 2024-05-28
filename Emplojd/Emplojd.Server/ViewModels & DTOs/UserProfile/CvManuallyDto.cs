@@ -24,7 +24,6 @@ namespace Emplojd.Server.ViewModels___DTOs.UserProfile
 
         public class CvFileDto
         {
-            [JsonPropertyName("cv-from-file")]
             public string? CvContentText { get; set; }
         }
     }
