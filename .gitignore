@@ -11,3 +11,7 @@
 *.json
 /Emplojd/emplojd.client/obj/Debug/emplojd.client.esproj.CoreCompileInputs.cache
 /.vs/ChasGPT_Backend/FileContentIndex
+/obj/Debug/net8.0
+/.vs/ChasGPT_Backend/v17
+/.vs/ChasGPT/v17
+/obj
