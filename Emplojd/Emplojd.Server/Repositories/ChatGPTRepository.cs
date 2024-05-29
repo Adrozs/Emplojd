@@ -16,7 +16,7 @@ namespace Emplojd.Repositories
 {
     public interface IChatGPTRepository
     {
-        public Task<string> GenerateLetterAsync(UserProfileDto userProfileDto, JobChatGptDto jobChatGptDto, int jobId, float temperature);
+        public Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId);
         Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser);
         Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser);
@@ -34,38 +34,41 @@ namespace Emplojd.Repositories
         }
 
 
-        public async Task<string> GenerateLetterAsync(UserProfileDto userProfileDto, JobChatGptDto jobChatGptDto, int jobId, float temperature)
+        public async Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId)
         {
-            ArgumentNullException.ThrowIfNull(userProfileDto);
 
             // hämta CV content
-            string cvContentText = userProfileDto.CvContentText;
+            string cvContentText = generateCoverLetterDto.CvText;
 
             // hämta job ad
-            string jobAd = jobChatGptDto.Headline + jobChatGptDto.Description;
+            string jobAd = generateCoverLetterDto.JobTitle + generateCoverLetterDto.JobDescription;
 
             // Hämta name, interests, and descriptive words
-            string userName = userProfileDto.Name;
+            string firstName = generateCoverLetterDto.FirstName;
+            string lastName = generateCoverLetterDto.LastName;
 
             //If UserInterestTags is not null, this joins the list items into a single string, separated by ", ".
-            string userInterests = userProfileDto.UserInterestTags != null ? string.Join(", ", userProfileDto.UserInterestTags) : string.Empty;
-            string userDescriptiveWords = userProfileDto.DescriptiveWords != null ? string.Join(", ", userProfileDto.DescriptiveWords) : string.Empty;
+            string userInterests = generateCoverLetterDto.UserInterestTags != null ? string.Join(", ", generateCoverLetterDto.UserInterestTags) : string.Empty;
+            string userDescriptiveWords = generateCoverLetterDto.DescriptiveWords != null ? string.Join(", ", generateCoverLetterDto.DescriptiveWords) : string.Empty;
+
+            float temperature = generateCoverLetterDto.Temperature;
 
 
-            if (string.IsNullOrEmpty(cvContentText))
-            {
+            //OBS LÄGG TILL MER FELHANTERING!!!
+            //if (string.IsNullOrEmpty(cvContentText))
+            //{
                
-                throw new Exception("CV content is empty");
-            }
+            //    throw new Exception("CV content is empty");
+            //}
 
             var chat = api.Chat.CreateConversation();
             chat.Model = Model.ChatGPTTurbo;
-            chat.RequestParameters.Temperature = temperature;
+            //chat.RequestParameters.Temperature = temperature;
 
             int desiredLength = 500;
 
             // Prepare the prompt using CV text and user info
-            string prompt = $"Based on my CV:\n{cvContentText}\n\nJob Advertisement:\n{jobAd}\n\nUser Info:\nInterests: {userInterests}\nDescriptive Words: {userDescriptiveWords}\nWith disired lenght:{desiredLength}\nand temperature: {temperature}\n\nGenerate a cover letter:";
+            string prompt = $"Generera ett personligt brev baserat på mitt CV:\n{cvContentText}\nJobb Annonsen:\n{jobAd}\n\nmin användarinformation:\nIntressen: {userInterests}\nbeskrivande ord: {userDescriptiveWords}\nmed önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n:";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
