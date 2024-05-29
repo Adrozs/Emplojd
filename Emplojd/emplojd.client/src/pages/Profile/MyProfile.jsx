@@ -27,11 +27,16 @@ function MyProfile() {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const authToken = "1bfa402d-b033-45eb-be9a-c84828a98077"
+      const authToken = localStorage.getItem("authToken");
+
+      if (!authToken) {
+        console.error("No auth token found");
+        return;
+      }
 
       try {
         const response = await fetch(
-          "https://localhost:54686/api/UserProfile/GetUserProfile",
+          `https://localhost:54686/api/UserProfile/GetUserProfile`,
           {
             method: "GET",
             headers: {
@@ -42,19 +47,25 @@ function MyProfile() {
         );
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorText = await response.text();
+          console.error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`
+          );
+          throw new Error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`
+          );
         }
 
         const data = await response.json();
         setValues({
-          email: data.email,
-          firstname: data.firstname,
-          lastname: data.lastname,
-          isMember: data.isMember,
+          email: data.email || "",
+          firstname: data.firstname || "",
+          lastname: data.lastname || "",
+          isMember: data.isMember || false,
         });
-        setProfilePic(data.profilePic);
+        setProfilePic(data.profilePic || "");
         setInterests(data.interests || []);
-        setDescriptiveWords(data["descriptive-words"] || []);
+        setDescriptiveWords(data.descriptiveWords || []);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -84,7 +95,7 @@ function MyProfile() {
   const handleListFormChange = (type, value) => {
     if (type === "interests") {
       setInterests(value);
-    } else if (type === "descriptive-words") {
+    } else if (type === "descriptiveWords") {
       setDescriptiveWords(value);
     }
     setUnsavedChanges(true);
@@ -101,16 +112,16 @@ function MyProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const authToken = "1bfa402d-b033-45eb-be9a-c84828a98077"
+    const authToken = localStorage.getItem("authToken");
 
     const interestsArray = interests || [];
     const descriptiveWordsArray = descriptiveWords || [];
 
     const data = {
-      id: authToken,
-      name: `${values.firstname.trim()} ${values.lastname.trim()}`,
+      firstname: values.firstname,
+      lastname: values.lastname,
       interests: interestsArray,
-      "descriptive-words": descriptiveWordsArray,
+      descriptiveWords: descriptiveWordsArray,
     };
 
     console.log("Data being sent:", data);
@@ -122,15 +133,27 @@ function MyProfile() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
           body: JSON.stringify(data),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const responseText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${responseText}`
+        );
       }
-      const result = await response.json();
+
+      let result;
+      try {
+        const responseText = await response.text(); 
+        result = responseText ? JSON.parse(responseText) : {}; 
+      } catch (error) {
+        throw new Error("Invalid JSON response");
+      }
+
       console.log("Success:", result);
     } catch (error) {
       console.error("Error:", error);
@@ -248,12 +271,14 @@ function MyProfile() {
                 type="firstname"
                 labelText="Förnamn"
                 name="firstname"
+                value={values.firstname}
                 handleChange={handleChange}
               />
               <FormRow
                 type="lastname"
                 labelText="Efternamn"
                 name="lastname"
+                value={values.lastname}
                 handleChange={handleChange}
               />
               <FormRow
@@ -275,9 +300,9 @@ function MyProfile() {
               />
               <ListForm
                 name="Beskrivning av mig"
-                type="descriptive-words"
+                type="descriptiveWords"
                 onChange={(value) =>
-                  handleListFormChange("descriptive-words", value)
+                  handleListFormChange("descriptiveWords", value)
                 }
                 value={descriptiveWords}
               />
