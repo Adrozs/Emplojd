@@ -34,7 +34,6 @@ namespace Emplojd
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
-            builder.Services.AddScoped<UserProfileService>(); // Register UserProfileService
 
             if (builder.Environment.IsProduction())
             {
@@ -182,6 +181,8 @@ namespace Emplojd
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
+            builder.Services.AddScoped<UserProfileService>(); // Register UserProfileService
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
