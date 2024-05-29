@@ -30,7 +30,15 @@ namespace Emplojd.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedJobAdId"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Employer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Employment_Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -38,8 +46,28 @@ namespace Emplojd.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlatsbankenJobId")
+                    b.Property<string>("Logo_Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Occupation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlatsbankenJobAdId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Publication_Date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Working_Hours_Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Workplace_Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SavedJobAdId");
 
@@ -71,14 +99,17 @@ namespace Emplojd.Server.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -158,31 +189,7 @@ namespace Emplojd.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CvManuallys");
-                });
-
-            modelBuilder.Entity("Emplojd.Server.Models.JobAd", b =>
-                {
-                    b.Property<int>("JobAdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobAdId"));
-
-                    b.Property<string>("Employer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Headline")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PlatsbankenJobId")
-                        .HasColumnType("int");
-
-                    b.HasKey("JobAdId");
-
-                    b.ToTable("JobAd");
+                    b.ToTable("CvManually");
                 });
 
             modelBuilder.Entity("Emplojd.Server.Models.SavedCoverLetter", b =>
@@ -201,9 +208,6 @@ namespace Emplojd.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlatsbankenId")
-                        .HasColumnType("int");
-
                     b.Property<float>("Temperature")
                         .HasColumnType("real");
 
@@ -215,21 +219,6 @@ namespace Emplojd.Server.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CoverLetters");
-                });
-
-            modelBuilder.Entity("JobAdUser", b =>
-                {
-                    b.Property<int>("SavedJobAdJobAdId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("SavedJobAdJobAdId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("JobAdUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -370,12 +359,12 @@ namespace Emplojd.Server.Migrations
                     b.Property<int>("SavedJobAdsSavedJobAdId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("SavedJobAdsSavedJobAdId", "UserId");
+                    b.HasKey("SavedJobAdsSavedJobAdId", "UsersId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UsersId");
 
                     b.ToTable("UserJobAds", (string)null);
                 });
@@ -396,21 +385,6 @@ namespace Emplojd.Server.Migrations
                     b.HasOne("Emplojd.Models.User", null)
                         .WithMany("SavedCoverLetters")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("JobAdUser", b =>
-                {
-                    b.HasOne("Emplojd.Server.Models.JobAd", null)
-                        .WithMany()
-                        .HasForeignKey("SavedJobAdJobAdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Emplojd.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -474,7 +448,7 @@ namespace Emplojd.Server.Migrations
 
                     b.HasOne("Emplojd.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

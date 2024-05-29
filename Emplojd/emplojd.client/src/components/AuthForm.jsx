@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
-import { addUserToLocalStorage } from "../utils/localStorage";
 import customFetch from "../utils/axios";
 import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
 
@@ -20,38 +19,55 @@ const AuthForm = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const createUserMutation = useMutation(
-    (user) => customFetch.post("/create-account", user),
-    {
-      onSuccess: (data) => {
-        toast.success("Registrering lyckades!");
-        console.log("Skapad användare:", data);
-        login();
-        addUserToLocalStorage(values);
-        navigate("/profile");
-      },
-      onError: (error) => {
-        toast.error(error.response.data.detail);
-        console.error("Error creating user:", error);
-      },
-    }
-  );
-  const signInUserMutation = useMutation(
-    (user) => customFetch.post("/login", user),
-    {
-      onSuccess: (data) => {
-        toast.success("Välkommen in!");
-        console.log("Inloggning lyckades:", data);
-        login();
-        addUserToLocalStorage(values);
-        navigate("/profile");
-      },
-      onError: (error) => {
-        toast.error(error.response.data.detail);
-        console.error("Error signing in:", error);
-      },
-    }
-  );
+ const createUserMutation = useMutation(
+   async (user) => {
+     const authToken = localStorage.getItem("authToken");
+     const response = await customFetch.post("/create-account", user, {
+       headers: {
+         Authorization: `Bearer ${authToken}`,
+       },
+     });
+     return response.data;
+   },
+   {
+     onSuccess: (data) => {
+       toast.success("Registrering lyckades!");
+       console.log("Skapad användare:", data);
+       const { token } = data;
+       login(token, { ...values, isMember: false });
+       navigate("/createprofile");
+     },
+     onError: (error) => {
+       toast.error(error.response.data.detail);
+       console.error("Error creating user:", error);
+     },
+   }
+ );
+
+ const signInUserMutation = useMutation(
+   async (user) => {
+     const authToken = localStorage.getItem("authToken");
+     const response = await customFetch.post("/login", user, {
+       headers: {
+         Authorization: `Bearer ${authToken}`,
+       },
+     });
+     return response.data;
+   },
+   {
+     onSuccess: (data) => {
+       toast.success("Välkommen in!");
+       console.log("Inloggning lyckades:", data);
+       const { token } = data;
+       login(token, { ...values, isMember: true });
+       navigate("/joblist");
+     },
+     onError: (error) => {
+       toast.error(error.response.data.detail);
+       console.error("Error signing in:", error);
+     },
+   }
+ );
 
   const handleChange = (e) => {
     const { name, value } = e.target;

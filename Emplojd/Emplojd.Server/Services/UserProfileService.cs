@@ -1,10 +1,14 @@
-﻿using Emplojd.Data;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Emplojd.Data;
 using Emplojd.Models;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.UserProfile;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Emplojd.Server.Services
@@ -18,18 +22,19 @@ namespace Emplojd.Server.Services
             _context = context;
         }
 
-        public async Task AddUserProfileAsync(UserProfileDto userProfileDto)
+        public async Task AddUserProfileAsync(UserProfileDto userProfileDto, ClaimsPrincipal currentUser)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == userProfileDto.Id);
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            var user = await _context.Users 
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
                 user = new User
                 {
-                    Id = userProfileDto.Id,
-                    UserName = userProfileDto.Id,
-                    Name = userProfileDto.Name,
+                    FirstName = userProfileDto.FirstName,
+                    LastName = userProfileDto.LastName,
                     UserInterestTags = userProfileDto.UserInterestTags,
                     DescriptiveWords = userProfileDto.DescriptiveWords,
                 };
@@ -38,7 +43,8 @@ namespace Emplojd.Server.Services
             }
             else
             {
-                user.Name = userProfileDto.Name;
+                user.FirstName = userProfileDto.FirstName;
+                user.LastName = userProfileDto.LastName;
                 user.UserInterestTags = userProfileDto.UserInterestTags;
                 user.DescriptiveWords = userProfileDto.DescriptiveWords;
             }
@@ -46,11 +52,13 @@ namespace Emplojd.Server.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserProfileDto> GetUserProfileAsync(string userId)
+        public async Task<UserProfileDto> GetUserProfileAsync(ClaimsPrincipal currentUser)
         {
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
             var user = await _context.Users
                 .Include(u => u.CvManually)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -59,17 +67,21 @@ namespace Emplojd.Server.Services
 
             return new UserProfileDto
             {
-                Id = user.Id,
-                Name = user.Name,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 UserInterestTags = user.UserInterestTags,
                 DescriptiveWords = user.DescriptiveWords,
             };
         }
 
 
-        public async Task<List<CvManuallyDto>> GetUserCvManuallyAsync(string userId)
+        public async Task<List<CvManuallyDto>> GetUserCvManuallyAsync(ClaimsPrincipal currentUser)
         {
-            var user = await _context.Users.Include(u => u.CvManually).FirstOrDefaultAsync(u => u.Id == userId);
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            var user = await _context.Users
+                .Include(u => u.CvManually)
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null || user.CvManually == null)
             {
@@ -78,7 +90,6 @@ namespace Emplojd.Server.Services
 
             return user.CvManually.Select(c => new CvManuallyDto
             {
-                CvManuallyId = c.CvManuallyId,
                 PositionEducation = c.PositionEducation,
                 StartDate = c.StartDate,
                 EndDate = c.EndDate,
@@ -87,18 +98,21 @@ namespace Emplojd.Server.Services
             }).ToList();
         }
 
-        public async Task AddUserCvManuallyAsync(string userId, CvManuallyDto cvManuallyDtos)
+        public async Task AddUserCvManuallyAsync(ClaimsPrincipal currentUser, CvManuallyDto cvManuallyDtos)
         {
             try
             {
-                var user = await _context.Users.Include(u => u.CvManually).FirstOrDefaultAsync(u => u.Id == userId);
+                string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+                var user = await _context.Users
+                    .Include(u => u.CvManually)
+                    .FirstOrDefaultAsync(u => u.Email == email);
 
                 if (user != null)
                 {
                     var newCvManually =
                         new CvManually
                         {
-                            CvManuallyId = cvManuallyDtos.CvManuallyId,
                             PositionEducation = cvManuallyDtos.PositionEducation,
                             StartDate = cvManuallyDtos.StartDate,
                             EndDate = cvManuallyDtos.EndDate,

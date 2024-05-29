@@ -27,7 +27,7 @@ using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Azure.Security.KeyVault.Secrets;
 
 namespace Emplojd
-{
+{ 
     public class Program
     {
         public static void Main(string[] args)
@@ -72,54 +72,59 @@ namespace Emplojd
                     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
                 })
-    .AddOAuth("LinkedIn", options =>
-    {
-        options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
-        options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
-        options.CallbackPath = new PathString("/signin-linkedin");
+                .AddOAuth("LinkedIn", options =>
+                {
+                    options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+                    options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                    options.CallbackPath = new PathString("/signin-linkedin");
 
-        options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
-        options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
-        options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
+                    options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
+                    options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
+                    options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
 
-        options.Scope.Add("openid");
-        options.Scope.Add("profile");
-        options.Scope.Add("email");
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
 
-        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
-        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
-        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
 
-        options.Events = new OAuthEvents
-        {
-            OnCreatingTicket = async context =>
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
-                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
+                    options.Events = new OAuthEvents
+                    {
+                        OnCreatingTicket = async context =>
+                        {
+                            var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
 
-                var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                response.EnsureSuccessStatusCode();
+                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                            response.EnsureSuccessStatusCode();
 
-                var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+                            var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
 
-                context.RunClaimActions(user);
+                            context.RunClaimActions(user);
 
-            }
-        };
+                        }
+                    };
 
-    });
+                });
 
             ConfigurationManager configuration = builder.Configuration;
 
             // Add services to the container.
+            builder.Services.AddControllers();
+
 
             DotNetEnv.Env.Load();
+
+            // Setup database context and connection string here
+            builder.Services.AddDbContext<ApplicationContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             // Add CORS services
             builder.Services.AddCors();
-
-
 
 
             // Adding Microsoft identity with config settings
@@ -145,10 +150,10 @@ namespace Emplojd
             // Add Mailkit email config
             builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
 
-
             // Adding authentication
             builder.Services.AddAuthentication(options =>
             {
+                // JWT options
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -157,7 +162,7 @@ namespace Emplojd
                 .AddJwtBearer(options =>
                 {
                     options.SaveToken = true; // Allows the server to save the token for the duration of the request
-                    options.RequireHttpsMetadata = false; // Enforces HTTPS so tokens aren't transfered over unsecure connections (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
+                    options.RequireHttpsMetadata = true; // Enforces HTTPS so tokens aren't transfered over unsecure connections
                     options.TokenValidationParameters = new TokenValidationParameters // The rules of which authorization will check
                     {
                         ValidateIssuer = true,
@@ -176,12 +181,13 @@ namespace Emplojd
             // Add to scope
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobAdRepository, JobAdRepository>();
+            builder.Services.AddScoped<IChatGPTRepository, ChatGPTRepository>();
             builder.Services.AddSingleton(provider =>
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
-            builder.Services.AddScoped<UserProfileService>(); // Register UserProfileService
+            builder.Services.AddScoped<UserProfileService>();
 
 
 
@@ -226,6 +232,7 @@ namespace Emplojd
 
             var app = builder.Build();
 
+            // Used for the controllers configuration
             app.UseRouting();
 
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
@@ -250,7 +257,7 @@ namespace Emplojd
             app.UseSwaggerUI();
 
 
-            //app.UseHttpsRedirection(); // (THIS IS SET TO FALSE TEMPORARILY DURING PRODUCTION FOR TESTING PURPOSES)
+            app.UseHttpsRedirection();
 
 
             // Apply the CORS policy
@@ -281,8 +288,10 @@ namespace Emplojd
 
 
             // Cover letter
-            app.MapGet("/GetPersonalLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
-
+            app.MapPost("/GetCoverLetter", ChatGPTService.GenerateLetterAsync).RequireAuthorization();
+            app.MapGet("/saved-letter", ChatGPTService.GetCoverLettersAsync).RequireAuthorization();
+            app.MapPost("/save-letter", ChatGPTService.SaveCoverLetterAsync).RequireAuthorization();
+            app.MapDelete("/saved-letter", ChatGPTService.RemoveSavedCoverLettersAsync).RequireAuthorization();
 
             // JobAd search
             // Made the URI flexible to be able to omit parameters that aren't search from the query
