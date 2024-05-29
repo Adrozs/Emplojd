@@ -61,7 +61,8 @@ namespace Emplojd.Controller
                 user = new User
                 {
                     UserName = email,
-                    Email = email
+                    Email = email,
+                    EmailConfirmed = true
                 };
 
                 var createResult = await _userManager.CreateAsync(user);
@@ -84,7 +85,6 @@ namespace Emplojd.Controller
                 }
             }
 
-            _userManager.ConfirmEmailAsync(user, email);
             return Ok(new { token });
         }
 
