@@ -13,12 +13,12 @@ namespace Emplojd.Services
 {
     public class ChatGPTService
     {
-        public static async Task<IResult> GenerateLetterAsync([FromBody] UserProfileDto userProfileDto, [FromServices]JobChatGptDto jobChatGptDto, int jobId, int temperature, IChatGPTRepository chatGPTRepository)
+        public static async Task<IResult> GenerateLetterAsync([FromBody] GenerateCoverLetterDto generateCoverLetterDto, [FromServices] int jobId, IChatGPTRepository chatGPTRepository)
         {
             try
             {
                 // Generate the personalized letter
-                var letter = await chatGPTRepository.GenerateLetterAsync(userProfileDto, jobChatGptDto, jobId, temperature);
+                var letter = await chatGPTRepository.GenerateLetterAsync(generateCoverLetterDto, jobId);
 
                 // Return the generated letter
                 return Results.Ok(letter);
