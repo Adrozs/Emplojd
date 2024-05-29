@@ -13,7 +13,6 @@ using Microsoft.OpenApi.Models;
 using Emplojd.Helpers;
 using Emplojd.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
@@ -22,7 +21,6 @@ using AuthenticationService = Emplojd.Services.AuthenticationService;
 using AspNet.Security.OAuth.LinkedIn;
 using Emplojd.Server.Services;
 using Azure.Identity;
-using Microsoft.Azure.KeyVault;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Azure.Security.KeyVault.Secrets;
 

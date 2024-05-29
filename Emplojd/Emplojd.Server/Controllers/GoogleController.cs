@@ -1,16 +1,12 @@
-﻿using Emplojd.Data;
-using Emplojd.Models;
-using Emplojd.Repository;
+﻿using Emplojd.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Emplojd.Controller
 {

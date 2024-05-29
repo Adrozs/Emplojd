@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using OpenAI_API.Models;
+﻿using OpenAI_API.Models;
 using OpenAI_API;
 using Emplojd.Server.ViewModels___DTOs.CoverLetter;
 using System.Security.Claims;
@@ -9,7 +8,6 @@ using Emplojd.Exceptions.JobAdExceptions;
 using Microsoft.EntityFrameworkCore;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
-using Emplojd.Services;
 using Emplojd.ViewModels;
 
 namespace Emplojd.Repositories
@@ -38,25 +36,17 @@ namespace Emplojd.Repositories
         {
             ArgumentNullException.ThrowIfNull(userProfileDto);
 
-            // hämta CV content
-            string cvContentText = userProfileDto.CvContentText;
+
 
             // hämta job ad
             string jobAd = jobChatGptDto.Headline + jobChatGptDto.Description;
 
-            // Hämta name, interests, and descriptive words
-            string userName = userProfileDto.Name;
 
             //If UserInterestTags is not null, this joins the list items into a single string, separated by ", ".
             string userInterests = userProfileDto.UserInterestTags != null ? string.Join(", ", userProfileDto.UserInterestTags) : string.Empty;
             string userDescriptiveWords = userProfileDto.DescriptiveWords != null ? string.Join(", ", userProfileDto.DescriptiveWords) : string.Empty;
 
 
-            if (string.IsNullOrEmpty(cvContentText))
-            {
-               
-                throw new Exception("CV content is empty");
-            }
 
             var chat = api.Chat.CreateConversation();
             chat.Model = Model.ChatGPTTurbo;
@@ -65,7 +55,7 @@ namespace Emplojd.Repositories
             int desiredLength = 500;
 
             // Prepare the prompt using CV text and user info
-            string prompt = $"Based on my CV:\n{cvContentText}\n\nJob Advertisement:\n{jobAd}\n\nUser Info:\nInterests: {userInterests}\nDescriptive Words: {userDescriptiveWords}\nWith disired lenght:{desiredLength}\nand temperature: {temperature}\n\nGenerate a cover letter:";
+            string prompt = $"Based on my CV:\n\nJob Advertisement:\n{jobAd}\n\nUser Info:\nInterests: {userInterests}\nDescriptive Words: {userDescriptiveWords}\nWith disired lenght:{desiredLength}\nand temperature: {temperature}\n\nGenerate a cover letter:";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
