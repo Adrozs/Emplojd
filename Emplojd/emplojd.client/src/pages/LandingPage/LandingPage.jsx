@@ -59,7 +59,7 @@ export default function LandingPage() {
   return (
     <>
       <section
-        className="bg-gradient-to-b from-[#CA81ED] to-[#4086C6] bg-cover bg-no-repeat lg:pb-20"
+        className="bg-gradient-to-b from-[#CA81ED] to-[#4086C6] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat lg:pb-20"
         id="hero"
       >
         <Header> </Header>
@@ -67,7 +67,7 @@ export default function LandingPage() {
           <div className="flex flex-col items-center justify-center mt-44 space-y-12 sm:mt-48  text-white">
             <h1 className="text-3xl">
               Välkommen till <br />
-              <span className="text-7xl font-Glockenspiel uppercase ">
+              <span className="text-7xl font-Glockenspiel uppercase">
                 Emplojd
               </span>
             </h1>
@@ -104,7 +104,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="flex flex-col ">
+      <section className="flex flex-col dark:bg-gray-800 ">
         <div className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
           <svg
             viewBox="0 0 360 81"
@@ -116,13 +116,14 @@ export default function LandingPage() {
               clipRule="evenodd"
               d="M140.276 59.1272C117.122 52.1522 92.7316 50.2797 68.7843 53.6387L21.4314 60.2807L-19.8566 65.3092L-26.1433 13.6907L14.6759 8.7192L61.5612 2.14278C92.9521 -2.26029 124.924 0.194269 155.275 9.33735L178.054 16.1993C231.376 32.2622 288.259 32.1796 341.534 15.962C346.896 14.3296 352.471 13.4999 358.076 13.4999H360V65.4999H358.076C357.602 65.4999 357.131 65.5701 356.677 65.7081C293.58 84.916 226.208 85.0137 163.055 65.9892L140.276 59.1272Z"
               fill="#eceef0"
+              className="dark:fill-gray-800"
             />
           </svg>
         </div>
         <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
           <div className=" flex justify-center">
-            <h6 className="font-semi-bold mb-5 text-center text-2xl font-bold">
-              Hitta <span className="text-customBlue">rätt</span> jobb för dig
+            <h6 className="font-semi-bold mb-5 text-center text-2xl font-bold dark:text-white">
+              Hitta <span className="text-customBlue dark:text-sky-500">rätt</span> jobb för dig
             </h6>
           </div>
           <div className="max-w-[800px] mx-auto pb-10">
