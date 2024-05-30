@@ -262,15 +262,32 @@ namespace Emplojd.Repository
                 return IdentityResult.Failed(new IdentityError { Description = "Invalid login credentials." });
 
 
-
             // Begin db transaction and delete everything connected to a user - rollback if something fails
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 // Remove all user data from connected tables
-                _context.SavedJobAds.RemoveRange(user.SavedJobAds);
                 _context.CoverLetters.RemoveRange(user.SavedCoverLetters);
                 _context.CvManually.RemoveRange(user.CvManually);
+
+                // Remove job ads from this user but not from other users
+                var jobAdsToCheck = user.SavedJobAds;
+
+                // Clear the users saved job ads
+                user.SavedJobAds.Clear();
+
+                // Save before proceeding
+                await _context.SaveChangesAsync();
+
+                // Check if any other user has saved the same job ad - if not delete if from the context
+                foreach (var jobAd in jobAdsToCheck)
+                {
+                    if (!_context.Users.Any(u => u.SavedJobAds.Contains(jobAd)))
+                    {
+                        _context.SavedJobAds.Remove(jobAd);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
 
 
