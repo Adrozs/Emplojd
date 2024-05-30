@@ -5,7 +5,8 @@ import Footer from "../../components/Footer";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 import Header from "../../components/Header/HeaderLandingpage";
-
+import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
+import { FaEnvelope } from "react-icons/fa";
 const ConfirmEmail = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState("");
@@ -37,30 +38,51 @@ const ConfirmEmail = () => {
   }, [searchParams]);
 
   return (
-    <div className=" ">
-      <section className="bg-gradient-to-b from-[#CA81ED] to-[#4086C6] bg-cover bg-no-repeat lg:pb-20 h-[75vh] ">
-        <Header> </Header>
-        <div className="container flex flex-col-reverse items-center px-6 mx-auto space-y-0 mt-[-100px] md:space-y-0 flex-grow md:flex-grow sm:mt-[-75px] md:mt-[-75px]">
-          <div className="flex flex-col items-center justify-center mt-44 space-y-12 sm:mt-48  text-white">
-            <h1 className="text-3xl">
-              Bekräfta din e-postadress <br />
+    <>
+      <div className="flex flex-col h-screen pb-12">
+        <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
+          <Header>
+            {" "}
+            <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
+              EMPLOJD
             </h1>
-            <p className="max-w-sm  md:text-left pl-4 pr-4 text-center">
-              <p>{status}</p>
+          </Header>
+          <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 mt-14">
+            <h1 className="text-4xl font-semibold text-center mb-10">
+              Skapa konto
+            </h1>
+            <h2 className="text-2xl mb-4">Bekräfta din e-postadress</h2>
+            <p>
+              E-mail registreringen lyckades! <br />
             </p>
-            <div className="flex justify-center flex-col">
-              <Link
-                to="/signin"
-                className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl gap-4"
-              >
-                Logga in!
-              </Link>
-            </div>
+            <p> Logga in för att komma igång.</p>
           </div>
         </div>
-      </section>
+        <form className="m-5 my-12">
+          <div className="flex flex-col gap-4">
+            <Link
+              to="/signin"
+              className="w-full bg-sky-500 h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 justify-between items-center font-semibold "
+            >
+              Logga in <LoginRightArrow />
+            </Link>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() =>
+                  toast(
+                    "Nytt email har skickats, kontrollera även din skräppostmapp om du inte hittar mejlet"
+                  )
+                }
+                className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center"
+              >
+                Skicka igen <FaEnvelope size={22} />
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

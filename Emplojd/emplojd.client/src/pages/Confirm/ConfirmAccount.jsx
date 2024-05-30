@@ -4,13 +4,12 @@ import Header from "../../components/Header/HeaderLandingpage";
 import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
 import { FaEnvelope } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Footer from "../../components/Footer";
 
 const ConfirmAccount = () => {
-  const navigate = useNavigate();
-
   return (
     <>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen pb-12">
         <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
           <Header>
             {" "}
@@ -57,6 +56,7 @@ const ConfirmAccount = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </>
   );
 };
