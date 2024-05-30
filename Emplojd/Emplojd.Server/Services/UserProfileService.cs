@@ -133,6 +133,45 @@ namespace Emplojd.Server.Services
                 throw; // Re-throw the exception to propagate it upwards
             }
         }
+        public async Task CoverLetterSignature(ClaimsPrincipal currentUser)
+        {
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return;
+            }
+
+            string signature = $"Med vänliga hälsningar,\n{user.FirstName} {user.LastName}";
+            Console.WriteLine(signature);
+        }
+
+        public async Task CustomSignature(ClaimsPrincipal currentUser, string customSignature)
+        {
+            const int MaxSignatureLength = 100;
+            if (customSignature.Length > MaxSignatureLength)
+            {
+                Console.WriteLine($"Din signatur är för lång, Max antal bokstäver: {MaxSignatureLength} ");
+                return;
+            }
+
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return;
+            }
+
+            string signature = $"{customSignature}\n{user.FirstName} {user.LastName}";
+            Console.WriteLine(signature);
+        }
     }
 }
