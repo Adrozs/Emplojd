@@ -27,10 +27,8 @@ function JobInfo() {
         const likedJobs = await getLikeDataBackend();
         const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
         if (liked.includes(parseInt(job.id))) {
-          console.log("det är samma id");
           setIsLiked(true);
         } else {
-          console.log("det är ej samma id");
           setIsLiked(false);
         }
       } catch (error) {
