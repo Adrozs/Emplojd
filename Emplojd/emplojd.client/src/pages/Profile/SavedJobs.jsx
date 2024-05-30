@@ -117,8 +117,8 @@ function SavedJobs() {
                     <Link
                       className="items-center justify-center flex mt-2 w-full py-2 h-9 bg-sky-500 rounded-[12px] text-white text-lg gap-4"
                       to={{
-                        pathname: `/saved/${data.id}`,
-                        state: { jobId: data.id },
+                        pathname: `/saved/${data.platsbankenId}`,
+                        state: { jobId: data.platsbankenId },
                       }}
                     >
                       Läs mer <FaArrowRight size={16} />
