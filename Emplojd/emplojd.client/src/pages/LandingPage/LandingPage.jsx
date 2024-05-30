@@ -43,7 +43,7 @@ export default function LandingPage() {
         console.error("Error fetching jobs:", error);
       }
     } else {
-      toast.error("Du måste vara inloggad för att kunna söka jobb.");
+      toast.error("Du måste vara inloggad för att söka jobb.");
       navigate("/signin");
     }
   };
