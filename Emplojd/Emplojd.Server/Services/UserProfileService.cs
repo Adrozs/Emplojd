@@ -32,6 +32,7 @@ namespace Emplojd.Server.Services
                     Name = userProfileDto.Name,
                     UserInterestTags = userProfileDto.UserInterestTags,
                     DescriptiveWords = userProfileDto.DescriptiveWords,
+                    CvContentText = userProfileDto.CvContentText
                 };
 
                 _context.Users.Add(user);
@@ -41,6 +42,7 @@ namespace Emplojd.Server.Services
                 user.Name = userProfileDto.Name;
                 user.UserInterestTags = userProfileDto.UserInterestTags;
                 user.DescriptiveWords = userProfileDto.DescriptiveWords;
+                user.CvContentText = userProfileDto.CvContentText;
             }
 
             await _context.SaveChangesAsync();
@@ -63,6 +65,7 @@ namespace Emplojd.Server.Services
                 Name = user.Name,
                 UserInterestTags = user.UserInterestTags,
                 DescriptiveWords = user.DescriptiveWords,
+                CvContentText = user.CvContentText
             };
         }
 
