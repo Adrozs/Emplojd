@@ -1,6 +1,7 @@
 ﻿using Emplojd.Data;
 using Emplojd.Helpers;
 using Emplojd.Models;
+using Emplojd.Server.ResultObjects;
 using Emplojd.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
