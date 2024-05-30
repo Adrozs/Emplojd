@@ -2,7 +2,7 @@
   "name": "Emplojd",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://Emplojd.github.io/Emplojd",
+  "homepage": "https://adrozs.github.io/Emplojd",
   "type": "module",
   "scripts": {
     "dev": "vite",
