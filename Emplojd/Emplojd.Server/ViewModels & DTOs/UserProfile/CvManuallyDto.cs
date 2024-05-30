@@ -4,8 +4,6 @@ namespace Emplojd.Server.ViewModels___DTOs.UserProfile
 {
     public class CvManuallyDto
     {
-        //[JsonPropertyName("CvManuallyId")]
-        public int CvManuallyId { get; set; }
         //[JsonPropertyName("Position")]
         public string PositionEducation { get; set; }
 
@@ -20,12 +18,5 @@ namespace Emplojd.Server.ViewModels___DTOs.UserProfile
 
         //[JsonPropertyName("Is the user a student")]
         public bool IsEducation { get; set; }
-
-
-        public class CvFileDto
-        {
-            [JsonPropertyName("cv-from-file")]
-            public string? CvContentText { get; set; }
-        }
     }
 }
