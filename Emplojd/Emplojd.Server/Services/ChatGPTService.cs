@@ -1,5 +1,6 @@
 ﻿using Emplojd.Helpers;
 using Emplojd.Repositories;
+using Emplojd.Server.ResultObjects;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.CoverLetter;
 using Emplojd.ViewModels;
