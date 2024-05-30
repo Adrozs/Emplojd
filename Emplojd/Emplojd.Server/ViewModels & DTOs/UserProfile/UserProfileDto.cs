@@ -15,5 +15,6 @@ namespace Emplojd.Server.ViewModels___DTOs
 
         [JsonPropertyName("descriptiveWords")]
         public List<string>? DescriptiveWords { get; set; }
+        public string? CvContentText { get; set; }
     }
 }
