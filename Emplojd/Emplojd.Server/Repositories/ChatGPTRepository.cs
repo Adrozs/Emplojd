@@ -14,7 +14,7 @@ namespace Emplojd.Repositories
 {
     public interface IChatGPTRepository
     {
-        public Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId);
+        public Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto);
         Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser);
         Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser);
@@ -32,7 +32,7 @@ namespace Emplojd.Repositories
         }
 
 
-        public async Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId)
+        public async Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto)
         {
             // hämta CV content
             string cvContentText = generateCoverLetterDto.CvText;
@@ -62,10 +62,18 @@ namespace Emplojd.Repositories
             chat.Model = Model.ChatGPTTurbo;
             //chat.RequestParameters.Temperature = temperature;
 
-            int desiredLength = 500;
+            int desiredLength = 300;
 
             // Prepare the prompt using CV text and user info
-            string prompt = $"Generera ett personligt brev baserat på mitt CV:\n{cvContentText}\nJobb Annonsen:\n{jobAd}\n\nmin användarinformation:\nIntressen: {userInterests}\nbeskrivande ord: {userDescriptiveWords}\nmed önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n:";
+            string prompt = $"Jag söker jobbet som {generateCoverLetterDto.JobTitle}. " +
+            $"Du ska skriva ett personligt brev åt mig, använd inte allt för formella ord utan mer avslappnat, dock fortfarande i arbetssammanhang. " +
+            $"Du behöver inte använda all information utan det som är relevant att ta med för jobbet." +
+            $"Här är lite info om mig. Mitt CV:\n{cvContentText}\n" +
+            $"Några av mina intressen: {userInterests}\n" +
+            $"Ord jag tycker beskriver mig: {userDescriptiveWords}\n" +
+            $"Ta in den informationen ovan om mig och läs av denna jobbannons och skriv ett personligt brev enligt instruktionerna du har fått." +
+            $"Med önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n." +
+            $"Jobbanonsen: {jobAd}";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
