@@ -73,7 +73,7 @@ function JobInfo() {
         <img src="/LogoEmplojd.png" className="w-[45px]" />
       </HeaderOtherPages>
 
-      <main className="m-2 max-w-7xl mx-auto px-2">
+      <main className="m-2 max-w-7xl mx-auto px-2 md:mt-24">
         {job && (
           <>
             <div className="bg-white  py-3 mt-8 px-1 rounded-[10px]">
