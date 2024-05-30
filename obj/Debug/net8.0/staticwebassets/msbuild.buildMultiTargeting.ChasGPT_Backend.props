@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\ChasGPT_Backend.props" />
+</Project>

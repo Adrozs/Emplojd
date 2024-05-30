@@ -1,7 +1,10 @@
-﻿using Emplojd.Helpers;
+﻿using Emplojd.Data;
+using Emplojd.Helpers;
 using Emplojd.Models;
 using Emplojd.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 
 namespace Emplojd.Repository
@@ -15,7 +18,7 @@ namespace Emplojd.Repository
         public Task<IdentityResult> EmailVerificationAsync(string userId, string code);
         public Task<IdentityResult> GeneratePasswordResetCodeAsync(string email);
         public Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
-
+        public Task<IdentityResult> DeleteAccountAsync(string password, ClaimsPrincipal currentUser);
     }
 
     public class UserRepository : IUserRepository
@@ -24,13 +27,16 @@ namespace Emplojd.Repository
         private readonly SignInManager<User> _signInManager;
         private readonly AuthenticationService _authService;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationContext _context;
 
-        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, AuthenticationService authService, IEmailSender emailSender)
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, AuthenticationService authService, 
+            IEmailSender emailSender, ApplicationContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _authService = authService;
             _emailSender = emailSender;
+            _context = context;
         }
 
 
@@ -49,12 +55,17 @@ namespace Emplojd.Repository
                 Email = email
             };
 
+            await Console.Out.WriteLineAsync("Created user");
+
             // Creates and hashes password for user in db - All MS Identity methods have build it validation and error handling
             IdentityResult createUserResult = await _userManager.CreateAsync(user, password);
+
+            await Console.Out.WriteLineAsync("user manager created user");
 
             if (!createUserResult.Succeeded)
                 return IdentityResult.Failed(new IdentityError { Description = string.Join(", ", createUserResult.Errors.Select(e => e.Description)) });
 
+            await Console.Out.WriteLineAsync("generating email token");
 
             string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -73,7 +84,12 @@ namespace Emplojd.Repository
                 $"{callbackUrl}<br><br><br>" +
                 $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>" +
                 $"All the best,<br>" +
-                $"Emplojd</p>";
+                $"Emplojd</p>" +
+                // Remove this when not testing anymore
+                $"<p><br>TEMP REMOVE LATER <br> CODE: {Uri.EscapeDataString(emailConfirmationToken)} <br> USERID: {user.Id} </p>";
+
+
+            await Console.Out.WriteLineAsync("trying to send email");
 
 
             // Send email to users email with message and confirmaton link
@@ -218,6 +234,82 @@ namespace Emplojd.Repository
                 // Rethrow the unexpected exception to be handled further up
                 throw;
             }
+        }
+
+        public async Task<IdentityResult> DeleteAccountAsync(string password, ClaimsPrincipal currentUser)
+        {
+            // Get valid user with all its info
+
+            // Get the email from the JWT claims
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                return IdentityResult.Failed(new IdentityError { Description = "No matching user found with the provided email." });
+
+            // Get user along with its connected tables
+            User? user = await _context.Users
+                .Include(u => u.SavedJobAds)
+                .Include(u => u.SavedCoverLetters)
+                .Include(u => u.CvManually)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "No matching user found." });
+
+            // Validate password
+            if (!await _userManager.CheckPasswordAsync(user, password))
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid login credentials." });
+
+
+            // Begin db transaction and delete everything connected to a user - rollback if something fails
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // Remove all user data from connected tables
+                _context.CoverLetters.RemoveRange(user.SavedCoverLetters);
+                _context.CvManually.RemoveRange(user.CvManually);
+
+                // Remove job ads from this user but not from other users
+                var jobAdsToCheck = user.SavedJobAds;
+
+                // Clear the users saved job ads
+                user.SavedJobAds.Clear();
+
+                // Save before proceeding
+                await _context.SaveChangesAsync();
+
+                // Check if any other user has saved the same job ad - if not delete if from the context
+                foreach (var jobAd in jobAdsToCheck)
+                {
+                    if (!_context.Users.Any(u => u.SavedJobAds.Contains(jobAd)))
+                    {
+                        _context.SavedJobAds.Remove(jobAd);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+
+                // Finally delete the account and its identity propertiees
+                IdentityResult deleteAccountResult = await _userManager.DeleteAsync(user);
+                await _context.SaveChangesAsync();
+
+                if (!deleteAccountResult.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return IdentityResult.Failed(new IdentityError { Description = "Something went wrong while attempting to delete the account." });
+                }
+
+                await transaction.CommitAsync();
+                return IdentityResult.Success;
+            }
+            // If exception occurred rollback any changes and rethrow the exception to the service
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
         }
     }
 }

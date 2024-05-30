@@ -18,5 +18,10 @@ namespace Emplojd.Server.ViewModels___DTOs.UserProfile
 
         //[JsonPropertyName("Is the user a student")]
         public bool IsEducation { get; set; }
+
+        public class CvFileDto
+        {
+            public string? CvContentText { get; set; }
+        }
     }
 }

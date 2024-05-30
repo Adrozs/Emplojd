@@ -1,16 +1,21 @@
 import { Link, useLoaderData } from "react-router-dom";
-import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useState } from "react";
 
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 
 import { FaRegHeart, FaArrowRight, FaHeart } from "react-icons/fa6";
 
+// import {
+//   sendLikeData,
+//   getLikeData,
+//   deleteLikeData,
+// } from "../../utils/jsonserver";
+import { getOneBackendJob } from "../../utils/backendserver";
 import {
-  sendLikeData,
-  getLikeData,
-  deleteLikeData,
-} from "../../utils/jsonserver";
+  deleteLikeDataBackend,
+  getLikeDataBackend,
+  sendLikeDataBackend,
+} from "../../utils/savedAds";
 
 function JobInfo() {
   const job = useLoaderData();
@@ -18,9 +23,17 @@ function JobInfo() {
 
   useEffect(() => {
     const fetchLikedJobs = async () => {
-      const likedJobs = await getLikeData();
-      const liked = likedJobs.some((likedJob) => likedJob.id === job.id);
-      setIsLiked(liked);
+      try {
+        const likedJobs = await getLikeDataBackend();
+        const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
+        if (liked.includes(parseInt(job.id))) {
+          setIsLiked(true);
+        } else {
+          setIsLiked(false);
+        }
+      } catch (error) {
+        console.error("Error fetching liked jobs:", error);
+      }
     };
     fetchLikedJobs();
   }, [job]);
@@ -28,13 +41,6 @@ function JobInfo() {
   const isHTML = (str) => {
     const doc = new DOMParser().parseFromString(str, "text/html");
     return Array.from(doc.body.childNodes).some((node) => node.nodeType === 1);
-  };
-
-  const makeLinksClickable = (text) => {
-    return text.replace(
-      /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g,
-      ' <a class="regular-url" href="$1" target="_blank">$1</a>'
-    );
   };
 
   const handleBack = () => {
@@ -55,15 +61,9 @@ function JobInfo() {
   const handleLike = () => {
     setIsLiked((like) => !like);
     if (!isLiked) {
-      sendLikeData(
-        job.id,
-        job.headline,
-        job.employer.name,
-        job.occupation.label,
-        job.logo_url
-      );
+      sendLikeDataBackend(job.id, job.headline, job.employer.name);
     } else if (isLiked) {
-      deleteLikeData(job.id);
+      deleteLikeDataBackend(job.id);
     }
   };
 
@@ -73,7 +73,7 @@ function JobInfo() {
         <img src="/LogoEmplojd.png" className="w-[45px]" />
       </HeaderOtherPages>
 
-      <main className="m-2 max-w-7xl mx-auto px-2">
+      <main className="m-2 max-w-7xl mx-auto px-2 md:mt-24">
         {job && (
           <>
             <div className="bg-white  py-3 mt-8 px-1 rounded-[10px]">
@@ -103,30 +103,26 @@ function JobInfo() {
                 </div>
               </div>
             </div>
-            {job.logo_url && (
+            {job.logo_Url && (
               <div className="w-full flex items-center justify-center py-2 m-3 ">
                 <img
-                  src={job.logo_url}
+                  src={job.logo_Url}
                   alt="logo"
                   className="h-[100px] max-w-[200px]"
                 />
               </div>
             )}
-            {isHTML(job.description.text_formatted) ? (
+            {isHTML(job.description.text_Formatted) ? (
               <div
                 className=" p-2 max-w-4xl mx-auto mt-3"
                 dangerouslySetInnerHTML={{
-                  __html: job.description.text_formatted,
+                  __html: job.description.text_Formatted,
                 }}
               />
             ) : (
-              <p
-                className=" p-2 max-w-4xl mx-auto mt-3"
-                style={{ whiteSpace: "pre-line" }}
-                dangerouslySetInnerHTML={{
-                  __html: makeLinksClickable(job.description.text_formatted),
-                }}
-              />
+              <div className="p-2 max-w-4xl mx-auto mt-3">
+                {job.description.text}
+              </div>
             )}
             <div className="w-full my-3 text-center ">
               <div className="w-[95%] flex items-center justify-center mx-auto">
@@ -146,7 +142,7 @@ function JobInfo() {
 }
 
 export async function loader({ params }) {
-  const job = getOneJob(params.jobId);
+  const job = getOneBackendJob(params.jobId);
   return job;
 }
 

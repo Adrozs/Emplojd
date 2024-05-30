@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
-import { addUserToLocalStorage } from "../utils/localStorage";
 import customFetch from "../utils/axios";
 import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
+import ThirdPartyLogin from "./ThirdPartyLogin";
 
 const initialState = {
   email: "",
@@ -21,14 +21,22 @@ const AuthForm = () => {
   const { login } = useAuth();
 
   const createUserMutation = useMutation(
-    (user) => customFetch.post("/create-account", user),
+    async (user) => {
+      const authToken = localStorage.getItem("authToken");
+      const response = await customFetch.post("/create-account", user, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      return response.data;
+    },
     {
       onSuccess: (data) => {
         toast.success("Registrering lyckades!");
         console.log("Skapad användare:", data);
-        login();
-        addUserToLocalStorage(values);
-        navigate("/profile");
+        const { token } = data;
+        login(token, { ...values, isMember: false });
+        navigate("/confirm-account");
       },
       onError: (error) => {
         toast.error(error.response.data.detail);
@@ -36,15 +44,24 @@ const AuthForm = () => {
       },
     }
   );
+
   const signInUserMutation = useMutation(
-    (user) => customFetch.post("/login", user),
+    async (user) => {
+      const authToken = localStorage.getItem("authToken");
+      const response = await customFetch.post("/login", user, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      return response.data;
+    },
     {
       onSuccess: (data) => {
         toast.success("Välkommen in!");
         console.log("Inloggning lyckades:", data);
-        login();
-        addUserToLocalStorage(values);
-        navigate("/profile");
+        const { token } = data;
+        login(token, { ...values, isMember: true });
+        navigate("/joblist");
       },
       onError: (error) => {
         toast.error(error.response.data.detail);
@@ -139,6 +156,7 @@ const AuthForm = () => {
           Glömt ditt konto?
         </div>
       </div>
+      <div className="mb-8">{values.isMember && <ThirdPartyLogin />}</div>
       <div className="flex flex-col gap-4">
         <button
           className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 justify-between items-center"

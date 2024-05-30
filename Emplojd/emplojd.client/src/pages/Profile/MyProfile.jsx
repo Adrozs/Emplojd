@@ -9,19 +9,70 @@ import { FaPlus } from "react-icons/fa";
 function MyProfile() {
   const initialState = {
     email: "",
-    emailConfirmed: "",
-    password: "",
-    passwordConfirmed: "",
     isMember: true,
+    firstname: "",
+    lastname: "",
   };
 
   const [values, setValues] = useState(initialState);
   const [selectedOption, setSelectedOption] = useState("none");
   const [profilePic, setProfilePic] = useState("");
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [interests, setInterests] = useState([]);
+  const [descriptiveWords, setDescriptiveWords] = useState([]);
   const prevValues = useRef(values);
   const prevProfilePic = useRef(profilePic);
   const prevSelectedOption = useRef(selectedOption);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const authToken = localStorage.getItem("authToken");
+
+      if (!authToken) {
+        console.error("No auth token found");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://localhost:54686/api/UserProfile/GetUserProfile`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`
+          );
+          throw new Error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`
+          );
+        }
+
+        const data = await response.json();
+        setValues({
+          email: data.email || "",
+          firstname: data.firstname || "",
+          lastname: data.lastname || "",
+          isMember: data.isMember || false,
+        });
+        setProfilePic(data.profilePic || "");
+        setInterests(data.interests || []);
+        setDescriptiveWords(data.descriptiveWords || []);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleProfilePicChange = (event) => {
     const file = event.target.files[0];
@@ -41,7 +92,12 @@ function MyProfile() {
     setUnsavedChanges(true);
   };
 
-  const handleListFormChange = () => {
+  const handleListFormChange = (type, value) => {
+    if (type === "interests") {
+      setInterests(value);
+    } else if (type === "descriptiveWords") {
+      setDescriptiveWords(value);
+    }
     setUnsavedChanges(true);
   };
 
@@ -50,10 +106,58 @@ function MyProfile() {
     setUnsavedChanges(true);
   };
 
-  const fileInputRef = React.createRef();
-
   const triggerFileInput = () => {
     fileInputRef.current.click();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const authToken = localStorage.getItem("authToken");
+
+    const interestsArray = interests || [];
+    const descriptiveWordsArray = descriptiveWords || [];
+
+    const data = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      interests: interestsArray,
+      descriptiveWords: descriptiveWordsArray,
+    };
+
+    console.log("Data being sent:", data);
+
+    try {
+      const response = await fetch(
+        "https://localhost:54686/api/UserProfile/CreateUserProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${responseText}`
+        );
+      }
+
+      let result;
+      try {
+        const responseText = await response.text(); 
+        result = responseText ? JSON.parse(responseText) : {}; 
+      } catch (error) {
+        throw new Error("Invalid JSON response");
+      }
+
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   useEffect(() => {
@@ -83,7 +187,7 @@ function MyProfile() {
           <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
             <div className="grid z-10 bg-gradient-to-r-custom text-white p-4 w-48 rounded-xl">
               <h2 className="font-semibold">Min Profil</h2>
-              <h3 className="row-start-2 text-xs text-">
+              <h3 className="row-start-2 text-xs">
                 {unsavedChanges
                   ? "Ej sparade ändringar"
                   : "Inga ändringar att spara"}
@@ -166,14 +270,16 @@ function MyProfile() {
               <FormRow
                 type="firstname"
                 labelText="Förnamn"
+                name="firstname"
+                value={values.firstname}
                 handleChange={handleChange}
-                labelBgColor="bg-purple-100"
               />
               <FormRow
                 type="lastname"
                 labelText="Efternamn"
+                name="lastname"
+                value={values.lastname}
                 handleChange={handleChange}
-                labelBgColor="bg-purple-100"
               />
               <FormRow
                 type="email"
@@ -182,24 +288,28 @@ function MyProfile() {
                 value={values.email}
                 handleChange={handleChange}
                 placeholder="your.email@email.com"
-                labelBgColor="bg-purple-100"
               />
             </div>
             <div>
               <ListForm
                 wordBgColor="bg-sky-100"
                 name="Mina intressen"
-                labelBgColor="bg-sky-100"
-                onChange={handleListFormChange}
+                type="interests"
+                onChange={(value) => handleListFormChange("interests", value)}
+                value={interests}
               />
               <ListForm
                 name="Beskrivning av mig"
-                onChange={handleListFormChange}
+                type="descriptiveWords"
+                onChange={(value) =>
+                  handleListFormChange("descriptiveWords", value)
+                }
+                value={descriptiveWords}
               />
             </div>
             <div className="pb-6 rounded-lg max-w-md">
               <div className="flex items-center mb-4">
-                <div className="text-line mb-2 font-semibold flex items-center top-1 relative bg-sky-100 px-2 py-1 rounded-lg">
+                <div className="text-line mb-2 font-semibold flex items-center top-1 relative px-2 py-1 rounded-lg">
                   Signatur
                 </div>
                 <div className="ml-2 bg-purple-400 px-2.5 py-1 rounded-full text-sm text-white font-semibold flex items-center justify-center">
@@ -249,6 +359,7 @@ function MyProfile() {
               }`}
               type="submit"
               disabled={!unsavedChanges}
+              onClick={handleSubmit}
             >
               Spara ändringar <LoginRightArrow />
             </button>

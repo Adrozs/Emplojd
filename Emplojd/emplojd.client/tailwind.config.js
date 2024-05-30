@@ -1,11 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        customBlue: "#0783F6",
-        customCyan: 'rgb(202, 129, 237)',
+        customBlue: "#0EA5E9",
+        customCyan: "rgb(202, 129, 237)",
+        customDarkBg: "#2C3135",
       },
       fontFamily: {
         Glockenspiel: ["Glockenspiel", "Inter"],
@@ -19,8 +21,7 @@ export default {
         xxl: "2400px",
       },
       backgroundImage: {
-        "gradient-to-r-custom":
-          "linear-gradient(140deg, #4086C6, #CA81ED)",
+        "gradient-to-r-custom": "linear-gradient(140deg, #4086C6, #CA81ED)",
       },
     },
   },

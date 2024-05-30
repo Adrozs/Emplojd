@@ -1,22 +1,21 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { getJobs } from "../../services/apiJobs";
+
 //icons
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { FaBullhorn } from "react-icons/fa";
 // uuid
 import { v4 as uuidv4 } from "uuid";
 import Tooltip from "../../components/Tooltip";
+import { getJobsBackend } from "../../utils/backendserver";
+import { toast } from "react-toastify";
+
 function JobSearchForm() {
   const navigate = useNavigate();
   const [city, setCity] = useState("");
   const [job, setJob] = useState("");
   const [jobsData, setJobsData] = useState(null);
-
-  // const inputEl = useRef(null);
-  // useEffect(() => {
-  //   inputEl.current.focus();
-  // }, []);
 
   // Flytta initialiseringen av latest utanför useState
   let initialLatest = [];
@@ -26,33 +25,38 @@ function JobSearchForm() {
   }
 
   const [latest, setLatest] = useState(initialLatest);
+  const token = localStorage.getItem("authToken");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      let data;
-      if (city && job) {
-        data = await getJobs(city + "+" + job);
-        setLatest((items) => [...items, { id: uuidv4(), city, job }]);
-        setCity("");
-        setJob("");
-      } else if (city && !job) {
-        data = await getJobs(city);
-        setLatest((items) => [...items, { id: uuidv4(), city }]);
-        setCity("");
-      } else if (!city && job) {
-        data = await getJobs(job);
-        setLatest((items) => [...items, { id: uuidv4(), job }]);
-        setJob("");
-      } else {
-        return;
+    if (token) {
+      try {
+        let data;
+        if (city && job) {
+          data = await getJobsBackend(city + "+" + job);
+          setLatest((items) => [...items, { id: uuidv4(), city, job }]);
+          setCity("");
+          setJob("");
+        } else if (city && !job) {
+          data = await getJobsBackend(city);
+          setLatest((items) => [...items, { id: uuidv4(), city }]);
+          setCity("");
+        } else if (!city && job) {
+          data = await getJobsBackend(job);
+          setLatest((items) => [...items, { id: uuidv4(), job }]);
+          setJob("");
+        } else {
+          return;
+        }
+        setJobsData(data);
+        navigate("/jobsearch", {
+          state: { jobsData: data, query: { city, job } },
+        });
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
       }
-      setJobsData(data);
-      navigate("/jobsearch", {
-        state: { jobsData: data, query: { city, job } },
-      });
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
+    } else {
+      toast.error("Du måste vara inloggad för att söka jobb.");
     }
   };
 
@@ -69,7 +73,7 @@ function JobSearchForm() {
     setLatest((latest) => latest.filter((search) => search.id !== id));
   }
   return (
-    <div className="p-3 bg-white pb-12 rounded-[20px] max-w-lg mx-auto">
+    <div className="p-3 bg-white pb-12 rounded-[20px] max-w-lg mx-auto md:mb-52">
       <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
         Hitta rätt jobb för dig
       </h2>
@@ -91,7 +95,7 @@ function JobSearchForm() {
       </div>
       {latest.length !== 0 && (
         <div className="mt-4 max-w-sm mx-auto text-sm">
-          <p>Dina senaste sökningar:</p>
+          <p className="mx-6">Dina senaste sökningar:</p>
           <ul className="mt-2">
             {latest.reverse().map((search, index) => (
               <Items
@@ -119,29 +123,29 @@ export function SearchForm({
 }) {
   return (
     <form
-      className="mx-6 bg-white p-3 rounded-[10px]"
+      className="mx-6 bg-white p-3 rounded-[10px] dark:bg-stone-900 "
       onSubmit={handleSubmit}
     >
       <div className="mb-5">
-        <label className="block mb-2 font-medium text-stone-400 dark:text-white">
+        <label className="block mb-2 font-medium text-gray-900 dark:text-white">
           Ange title, företag, nyckelord
         </label>
         <input
           type="text"
           value={job}
           onChange={(e) => setJob(e.target.value)}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
           placeholder="...."
         />
       </div>
       <div className="mb-5">
-        <label className="block mb-2  font-medium text-stone-400 dark:text-white">
+        <label className="block mb-2  font-medium text-gray-900 dark:text-white">
           Ange stad
         </label>
         <select
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 "
+          className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
           placeholder="...."
         >
           <option value=" ">Hela landet</option>
@@ -161,8 +165,9 @@ export function SearchForm({
 
       <button
         type="submit"
-        className="text-white bg-customBlue hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-[4px]  px-5 py-2 text-center w-full text-lg"
+        className=" flex items-center justify-center  text-white bg-customBlue hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-stone-300 rounded-[12px]  px-5 py-2 text-center w-full gap-2"
       >
+        <FaMagnifyingGlass size={15} />
         Sök
       </button>
     </form>
@@ -182,10 +187,10 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   };
 
   return (
-    <div className="flex gap-2 justify-between bg-white mb-3 p-1 border-2">
-      <div className="flex gap-5">
+    <div className="flex gap-2 justify-between items-center bg-white mb-3 border-2 mx-6 p-2.5 rounded-xl">
+      <div className="flex gap-5 ">
         <button onClick={handleClickForSearchAgain}>
-          <PiClockCounterClockwiseBold size={18} className="text-customBlue" />
+          <PiClockCounterClockwiseBold size={20} className="text-customBlue" />
         </button>
         {search.city && !search.job && (
           <div onClick={handleClickForSearchAgain}>{search.city} </div>
@@ -201,7 +206,7 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
       </div>
       <Tooltip tooltip="Ta bort">
         <button onClick={onDelete}>
-          <img src="/trash.png" alt="papperskorg" className="h-[14px]" />
+          <img src="/trash.png" alt="papperskorg" className="h-[16px]" />
         </button>
       </Tooltip>
     </div>

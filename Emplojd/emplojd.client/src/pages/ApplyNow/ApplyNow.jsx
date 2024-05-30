@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import { getOneJob } from "../../services/apiJobs";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
@@ -14,6 +13,7 @@ import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { RiCheckboxCircleFill } from "react-icons/ri";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
+import { getOneBackendJob } from "../../utils/backendserver";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -24,7 +24,7 @@ function ApplyNow() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const jobData = await getOneJob(jobId);
+        const jobData = await getOneBackendJob(jobId);
         setJob(jobData);
       } catch (error) {
         console.error("Error fetching job:", error.message);
@@ -34,9 +34,9 @@ function ApplyNow() {
   }, [jobId]);
 
   useEffect(() => {
-    if (job && job.application_deadline) {
+    if (job && job.application_Deadline) {
       const todaysDate = new Date();
-      const jobPosted = new Date(job.publication_date);
+      const jobPosted = new Date(job.publication_Date);
       const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
       const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
       setDaySincePosted(differenceInDays);
@@ -123,15 +123,15 @@ function ApplyNow() {
                 <p className="text-lg">{job.employer.name}</p>
                 <div>
                   <p className="text-sm my-2">
-                    {job.workplace_address.municipality} - {daySincePosted}{" "}
+                    {job.workplace_Address.municipality} - {daySincePosted}{" "}
                     dagar sen
                   </p>
                 </div>
               </div>
               <div className="flex gap-2 text-[12px]">
-                {job.working_hours_type.label ? (
+                {job.working_Hours_Type.label ? (
                   <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
-                    {job.working_hours_type.label}
+                    {job.working_Hours_Type.label}
                   </span>
                 ) : (
                   <span className="bg-purple-300 px-2 py-1">
@@ -224,7 +224,6 @@ function ApplySideTwo({ job, page, setPage }) {
             <input
               type="range"
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-              value="10"
             />
             <div className="flex justify-between text-sm">
               <span>Lite självständig</span>
@@ -264,6 +263,9 @@ function ApplySideThree({ job, page, setPage }) {
   const [editable, setEditable] = useState(false);
   const editEl = useRef(null);
   const [copied, setCopied] = useState(false);
+  const [letterContent, setLetterContent] = useState(
+    `Hej där,\n\nJag hoppas att detta brev når er i god hälsa och högmod. Mitt namn är Fady och jag skriver till er med en genuin passion för .NET-utveckling och en stark önskan att bidra till ert team.\n\nJag har nyligen stött på er annonsering för en .NET-utvecklare och jag kunde inte motstå att söka. Efter att ha granskat er verksamhet och era projekt, är jag imponerad av den nivå av innovation och engagemang ni visar. Att få möjlighet att arbeta med er och bidra till era framgångar skulle vara en ära för mig.\n\nMed en gedigen erfarenhet inom .NET-utveckling och en passion för att lösa komplexa problem, tror jag att jag kan vara en tillgång för ert team. Jag har arbetat med olika projekt inom området och har en djup förståelse för ramverket och dess möjligheter. Jag är van vid att arbeta både självständigt och i team och har en stark vilja att lära och växa.\n\nDet är min övertygelse att genom att kombinera min tekniska expertis med min förmåga att tänka kreativt och problemlösningsorienterat, kan jag bidra till att driva era projekt framåt och uppnå era mål.\n\nJag ser fram emot möjligheten att diskutera hur jag kan bidra till ert team ytterligare. Tack för er tid och övervägande.\n\nMed vänliga hälsningar,\nFady`
+  );
 
   useEffect(() => {
     if (editable) {
@@ -271,13 +273,17 @@ function ApplySideThree({ job, page, setPage }) {
     }
   }, [editable]);
 
+  const handleInput = (e) => {
+    setLetterContent(e.currentTarget.innerText);
+  };
+
   const copyTextToClipboard = () => {
-    const textToCopy = editEl.current.innerText;
     navigator.clipboard
-      .writeText(textToCopy)
+      .writeText(letterContent)
       .then(() => setCopied(true))
       .catch((error) => console.error("Could not copy text: ", error));
   };
+
   const saveAsPdf = () => {
     const confirmDownload = window.confirm("Vill du ladda ner brevet som PDF?");
     if (confirmDownload) {
@@ -289,13 +295,13 @@ function ApplySideThree({ job, page, setPage }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto pb-12">
+    <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
       <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
-            <h2 className=" ml-10 text-2xl font-semibold">{page}.</h2>
+            <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
             <div className="flex justify-center">
-              <p className="text-sm ">Kontrollera brevet</p>
+              <p className="text-sm">Kontrollera brevet</p>
             </div>
           </div>
           <div className="w-full flex items-center justify-center mt-1 py-1">
@@ -319,44 +325,11 @@ function ApplySideThree({ job, page, setPage }) {
         </div>
         <div
           className="p-4"
-          contentEditable={editable ? "true" : "false"}
+          contentEditable={editable}
           ref={editEl}
-        >
-          <h3> Hej där,</h3>
-          <br />
-          <p>
-            Jag hoppas att detta brev når er i god hälsa och högmod. Mitt namn
-            är Fady och jag skriver till er med en genuin passion för
-            .NET-utveckling och en stark önskan att bidra till ert team.
-            <br />
-            <br />
-            Jag har nyligen stött på er annonsering för en .NET-utvecklare och
-            jag kunde inte motstå att söka. Efter att ha granskat er verksamhet
-            och era projekt, är jag imponerad av den nivå av innovation och
-            engagemang ni visar. Att få möjlighet att arbeta med er och bidra
-            till era framgångar skulle vara en ära för mig.
-            <br />
-            <br />
-            Med en gedigen erfarenhet inom .NET-utveckling och en passion för
-            att lösa komplexa problem, tror jag att jag kan vara en tillgång för
-            ert team. Jag har arbetat med olika projekt inom området och har en
-            djup förståelse för ramverket och dess möjligheter. Jag är van vid
-            att arbeta både självständigt och i team och har en stark vilja att
-            lära och växa.
-            <br />
-            <br /> Det är min övertygelse att genom att kombinera min tekniska
-            expertis med min förmåga att tänka kreativt och
-            problemlösningsorienterat, kan jag bidra till att driva era projekt
-            framåt och uppnå era mål.
-            <br />
-            <br />
-            Jag ser fram emot möjligheten att diskutera hur jag kan bidra till
-            ert team ytterligare. Tack för er tid och övervägande. <br />
-            <br />
-            Med vänliga hälsningar, <br />
-            Fady
-          </p>
-        </div>
+          onInput={handleInput}
+          dangerouslySetInnerHTML={{ __html: letterContent }}
+        />
       </aside>
       <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
@@ -416,9 +389,13 @@ function ApplySideFour({ job, page, setPage }) {
           >
             Gå till sparade brev
           </Link>
-          <button className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3">
+          <a
+            href={job.application_Details.url}
+            target="_blank"
+            className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3"
+          >
             Ansök här <FaArrowRight />
-          </button>
+          </a>
 
           <Link className="text-sm underline" to="/joblist">
             Sök fler jobb

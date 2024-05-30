@@ -7,14 +7,13 @@ namespace Emplojd.Data
 {
     public class ApplicationContext : IdentityDbContext<User>
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
-
         public DbSet<User> Users { get; set; }
-        public DbSet<JobAd> JobAd { get; set; }
         public DbSet<SavedCoverLetter> CoverLetters { get; set; }
         public DbSet<SavedJobAd> SavedJobAds { get; set; }
-        public DbSet<CvManually> CvManuallys { get; set; }
+        public DbSet<CvManually> CvManually { get; set; }
 
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -22,7 +21,7 @@ namespace Emplojd.Data
             // User and SavedJobAds relationship
             modelBuilder.Entity<User>()
                 .HasMany(p => p.SavedJobAds)
-                .WithMany(j => j.User)
+                .WithMany(j => j.Users)
                 .UsingEntity(j => j.ToTable("UserJobAds"));
 
             // User and CvManually relationship

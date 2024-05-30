@@ -8,6 +8,12 @@
 /.vs/ProjectEvaluation
 /.vs/Emplojd/FileContentIndex
 /.vs/Emplojd/DesignTimeBuild
+/.vs/ChasGPT_Backend/v17
+/.vs/ChasGPT_Backend/FileContentIndex
+/.vs/ChasGPT_Backend/DesignTimeBuild
+/.vs/ChasGPT/v17
+/.vs/ChasGPT/FileContentIndex
+/.vs/ChasGPT/DesignTimeBuild
 /obj/Debug/net8.0
 /obj
 
@@ -138,5 +144,3 @@ artifacts/
 /obj/Emplojd.csproj.nuget.g.targets
 /obj/project.assets.json
 /obj/project.nuget.cache
-message.txt
-/.env

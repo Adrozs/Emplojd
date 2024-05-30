@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import JobItem from "./JobItem";
 import { Link, useLocation } from "react-router-dom";
-import { getJobs } from "../../services/apiJobs";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-
+import { getJobs } from "../../services/apiJobs";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import Footer from "../../components/Footer";
 
@@ -46,11 +45,11 @@ function JobSearch() {
     let sorted = [...jobs];
     if (sortBy === "date") {
       sorted.sort(
-        (a, b) => new Date(b.publication_date) - new Date(a.publication_date)
+        (a, b) => new Date(b.publication_Date) - new Date(a.publication_Date)
       );
     } else if (sortBy === "dateold") {
       sorted.sort(
-        (a, b) => new Date(a.publication_date) - new Date(b.publication_date)
+        (a, b) => new Date(a.publication_Date) - new Date(b.publication_Date)
       );
     } else if (sortBy === "a-z") {
       sorted.sort((a, b) => {
@@ -81,14 +80,14 @@ function JobSearch() {
       <HeaderOtherPages>
         <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
       </HeaderOtherPages>
-      <main className="flex flex-col items-center max-w-4xl mx-auto">
+      <main className="flex flex-col items-center max-w-4xl mx-auto md:mt-24 ">
         <div className="w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">
           <p className="font-semibold text-stone-500">
             <span className="font-semibold text-stone-800">
               Sökresultat för
             </span>
             <br />
-            <span className="text-[#0783F6]">{searchWord}</span>
+            <span className="text-sky-500">{searchWord}</span>
           </p>
         </div>
         <div className="w-[90%] flex justify-between my-3">
@@ -112,7 +111,7 @@ function JobSearch() {
           {sortedJobs.map((job) => (
             <JobItem job={job} key={job.id}>
               <Link
-                className="items-center justify-center flex mt-2 w-full py-2 h-7 bg-customBlue rounded-[4px] text-white text-lg"
+                className="items-center justify-center flex mt-2 w-full py-2 h-9 bg-sky-500 rounded-[12px] text-white text-lg gap-4"
                 to={{
                   pathname: `/job/${job.id}`,
                   state: { jobId: job.id },
