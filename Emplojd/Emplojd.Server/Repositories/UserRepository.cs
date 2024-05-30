@@ -270,7 +270,7 @@ namespace Emplojd.Repository
                 _context.CvManually.RemoveRange(user.CvManually);
 
                 // Remove job ads from this user but not from other users
-                var jobAdsToCheck = user.SavedJobAds;
+                var jobAdsToCheck = new List<SavedJobAd>(user.SavedJobAds);
 
                 // Clear the users saved job ads
                 user.SavedJobAds.Clear();
