@@ -1,7 +1,6 @@
 ﻿using Emplojd.Data;
 using Emplojd.Exceptions.JobAdExceptions;
 using Emplojd.Models;
-using Emplojd.Server.Models;
 using Emplojd.ViewModels;
 using Emplojd.ViewModels___DTOs.JobAds;
 using Microsoft.EntityFrameworkCore;

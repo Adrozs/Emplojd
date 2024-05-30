@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using OpenAI_API.Models;
+﻿using OpenAI_API.Models;
 using OpenAI_API;
 using Emplojd.Server.ViewModels___DTOs.CoverLetter;
 using System.Security.Claims;
@@ -9,7 +8,6 @@ using Emplojd.Exceptions.JobAdExceptions;
 using Microsoft.EntityFrameworkCore;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
-using Emplojd.Services;
 using Emplojd.ViewModels;
 
 namespace Emplojd.Repositories
@@ -36,12 +34,12 @@ namespace Emplojd.Repositories
 
         public async Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId)
         {
-
             // hämta CV content
             string cvContentText = generateCoverLetterDto.CvText;
-
+            
             // hämta job ad
             string jobAd = generateCoverLetterDto.JobTitle + generateCoverLetterDto.JobDescription;
+
 
             // Hämta name, interests, and descriptive words
             string firstName = generateCoverLetterDto.FirstName;
@@ -52,7 +50,6 @@ namespace Emplojd.Repositories
             string userDescriptiveWords = generateCoverLetterDto.DescriptiveWords != null ? string.Join(", ", generateCoverLetterDto.DescriptiveWords) : string.Empty;
 
             float temperature = generateCoverLetterDto.Temperature;
-
 
             //OBS LÄGG TILL MER FELHANTERING!!!
             //if (string.IsNullOrEmpty(cvContentText))

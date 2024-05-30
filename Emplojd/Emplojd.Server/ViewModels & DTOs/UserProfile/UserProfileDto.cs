@@ -1,6 +1,4 @@
-﻿using Emplojd.Server.ViewModels___DTOs.UserProfile;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Emplojd.Server.ViewModels___DTOs
 {
