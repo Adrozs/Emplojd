@@ -58,7 +58,6 @@ function sendLikeDataBackend(
       console.log("Gillad annons", response.data);
     })
     .catch((error) => {
-      // Log the error response for debugging
       if (error.response) {
         console.error("Error response:", error.response.data);
       } else {

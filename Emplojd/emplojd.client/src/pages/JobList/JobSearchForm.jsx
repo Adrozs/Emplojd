@@ -2,6 +2,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 
 //icons
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import { FaBullhorn } from "react-icons/fa";
 // uuid
@@ -92,7 +93,7 @@ function JobSearchForm() {
       </div>
       {latest.length !== 0 && (
         <div className="mt-4 max-w-sm mx-auto text-sm">
-          <p>Dina senaste sökningar:</p>
+          <p className="mx-6">Dina senaste sökningar:</p>
           <ul className="mt-2">
             {latest.reverse().map((search, index) => (
               <Items
@@ -121,7 +122,7 @@ export function SearchForm({
   return (
     <form className="mx-6 bg-white p-3 rounded-[10px]" onSubmit={handleSubmit}>
       <div className="mb-5">
-        <label className="block mb-2 font-medium text-stone-400 dark:text-white">
+        <label className="block mb-2 font-medium text-gray-900 ">
           Ange title, företag, nyckelord
         </label>
         <input
@@ -133,7 +134,7 @@ export function SearchForm({
         />
       </div>
       <div className="mb-5">
-        <label className="block mb-2  font-medium text-stone-400 dark:text-white">
+        <label className="block mb-2  font-medium text-gray-900">
           Ange stad
         </label>
         <select
@@ -159,8 +160,9 @@ export function SearchForm({
 
       <button
         type="submit"
-        className="text-white bg-customBlue hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-stone-300 font-medium rounded-[4px]  px-5 py-2 text-center w-full text-lg"
+        className=" flex items-center justify-center  text-white bg-customBlue hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-stone-300 rounded-[12px]  px-5 py-2 text-center w-full gap-2"
       >
+        <FaMagnifyingGlass size={15} />
         Sök
       </button>
     </form>
@@ -180,10 +182,10 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   };
 
   return (
-    <div className="flex gap-2 justify-between bg-white mb-3 p-1 border-2">
-      <div className="flex gap-5">
+    <div className="flex gap-2 justify-between items-center bg-white mb-3 border-2 mx-6 p-2.5 rounded-xl">
+      <div className="flex gap-5 ">
         <button onClick={handleClickForSearchAgain}>
-          <PiClockCounterClockwiseBold size={18} className="text-customBlue" />
+          <PiClockCounterClockwiseBold size={20} className="text-customBlue" />
         </button>
         {search.city && !search.job && (
           <div onClick={handleClickForSearchAgain}>{search.city} </div>
@@ -199,7 +201,7 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
       </div>
       <Tooltip tooltip="Ta bort">
         <button onClick={onDelete}>
-          <img src="/trash.png" alt="papperskorg" className="h-[14px]" />
+          <img src="/trash.png" alt="papperskorg" className="h-[16px]" />
         </button>
       </Tooltip>
     </div>

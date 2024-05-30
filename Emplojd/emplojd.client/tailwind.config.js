@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        customBlue: "#0783F6",
-        customCyan: 'rgb(202, 129, 237)',
+        customBlue: "#0EA5E9",
+        customCyan: "rgb(202, 129, 237)",
       },
       fontFamily: {
         Glockenspiel: ["Glockenspiel", "Inter"],
@@ -19,8 +19,7 @@ export default {
         xxl: "2400px",
       },
       backgroundImage: {
-        "gradient-to-r-custom":
-          "linear-gradient(140deg, #4086C6, #CA81ED)",
+        "gradient-to-r-custom": "linear-gradient(140deg, #4086C6, #CA81ED)",
       },
     },
   },
