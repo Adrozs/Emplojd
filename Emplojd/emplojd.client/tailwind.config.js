@@ -1,11 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         customBlue: "#0EA5E9",
         customCyan: "rgb(202, 129, 237)",
+        customDarkBg: "#2C3135",
       },
       fontFamily: {
         Glockenspiel: ["Glockenspiel", "Inter"],
