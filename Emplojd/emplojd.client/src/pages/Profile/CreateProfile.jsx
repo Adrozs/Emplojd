@@ -250,31 +250,31 @@ function CreateProfile() {
 										disabled={!manualInputEnabled}
 									/>
 								</div>
-								<div className="flex">
-									<div className="flex">
+
+								<p>Studieperiod (från - till)</p>
+								<div>
+									<div className="flex justify-center">
 										<label>
-											Datum
 											<div className=" items-center p-1">
-												<div className="relative flex items-center text-gray-400 p-">
+												<div className="relative flex items-center text-gray-400">
 													<DatePicker
 														selected={startdate}
 														onChange={(date) => setStartDate(date)}
 														className="rounded-xl border-2 flex-grow out-sky800 hover:border-gray-400 px-4 py-2"
 													/>
-													<FaCalendarDays className=" right-20 -top-8 relative" />
+													<FaCalendarDays className="right-9  relative" />
 												</div>
 											</div>
 										</label>
 
 										<label>
-											Från
-											<div className="styling p-1">
+											<div className="p-1 text-gray-400">
 												<DatePicker
 													selected={enddate}
 													onChange={(date) => setEndDate(date)}
 													className="rounded-xl border-2 flex-grow out-sky800 hover:border-gray-400 px-4 py-2"
 												/>
-												<FaCalendarDays className=" left-40 -top-8 relative" />
+												<FaCalendarDays className=" left-40 -top-7 relative" />
 											</div>
 										</label>
 									</div>
