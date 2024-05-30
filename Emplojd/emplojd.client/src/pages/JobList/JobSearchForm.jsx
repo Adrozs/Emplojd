@@ -122,27 +122,27 @@ export function SearchForm({
   latest,
 }) {
   return (
-    <form className="mx-6 bg-white p-3 rounded-[10px]" onSubmit={handleSubmit}>
+    <form className="mx-6 bg-white p-3 rounded-[10px] dark:bg-stone-900 " onSubmit={handleSubmit}>
       <div className="mb-5">
-        <label className="block mb-2 font-medium text-gray-900 ">
+        <label className="block mb-2 font-medium text-gray-900 dark:text-white">
           Ange title, företag, nyckelord
         </label>
         <input
           type="text"
           value={job}
           onChange={(e) => setJob(e.target.value)}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 "
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
           placeholder="...."
         />
       </div>
       <div className="mb-5">
-        <label className="block mb-2  font-medium text-gray-900">
+        <label className="block mb-2  font-medium text-gray-900 dark:text-white">
           Ange stad
         </label>
         <select
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 "
+          className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
           placeholder="...."
         >
           <option value=" ">Hela landet</option>

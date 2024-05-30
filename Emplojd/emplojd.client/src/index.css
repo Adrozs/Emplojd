@@ -51,6 +51,13 @@ a {
   justify-content: center;
 }
 
+.dark .swiper-pagination-bullet {
+  background-color: white; 
+}
+
+.dark .swiper-pagination-bullet-active {
+  background-color: #0783F6; 
+}
 
 .file-selected {
   background-color: rgb(120 113 108);
