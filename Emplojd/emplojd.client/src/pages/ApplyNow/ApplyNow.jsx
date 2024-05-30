@@ -34,9 +34,9 @@ function ApplyNow() {
   }, [jobId]);
 
   useEffect(() => {
-    if (job && job.application_deadline) {
+    if (job && job.application_Deadline) {
       const todaysDate = new Date();
-      const jobPosted = new Date(job.publication_date);
+      const jobPosted = new Date(job.publication_Date);
       const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
       const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
       setDaySincePosted(differenceInDays);
@@ -123,8 +123,8 @@ function ApplyNow() {
                 <p className="text-lg">{job.employer.name}</p>
                 <div>
                   <p className="text-sm my-2">
-                    {/*  {job.workplace_address.municipality}  */}-{" "}
-                    {daySincePosted} dagar sen
+                    {job.workplace_Address.municipality} - {daySincePosted}{" "}
+                    dagar sen
                   </p>
                 </div>
               </div>
