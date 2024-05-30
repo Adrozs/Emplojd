@@ -47,6 +47,15 @@ export default function LandingPage() {
       navigate("/signin");
     }
   };
+
+  const handleGetStarted = () => {
+    if (token) {
+      navigate("/MyProfile");
+    } else {
+      navigate("/signin");
+    }
+  };
+
   return (
     <>
       <section
@@ -68,13 +77,13 @@ export default function LandingPage() {
               För att <strong>det ska vara enkelt att söka jobb</strong>
             </p>
             <div className="flex justify-center flex-col">
-              <Link
-                to="/signin"
+              <button
+                onClick={handleGetStarted}
                 className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl gap-4"
               >
                 Kom igång helt kostnadsfritt
                 <FaArrowRight size={16} />
-              </Link>
+              </button>
               <div className="text-center md:text-center">
                 <p>Hitta din nya tjänst</p>
                 <div className="flex justify-center md:justify-center">
