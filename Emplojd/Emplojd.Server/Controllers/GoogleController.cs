@@ -23,10 +23,10 @@ namespace Emplojd.Controller
             _userManager = userManager;
         }
 
-        [HttpGet("/login-google")]
+        [HttpGet("login-google")]
         public IActionResult GoogleLogin()
         {
-            var redirectUri = Url.Action("GoogleResponse");
+            var redirectUri = Url.Action(nameof(GoogleResponse));
             var properties = new AuthenticationProperties
             {
                 RedirectUri = redirectUri
@@ -35,7 +35,7 @@ namespace Emplojd.Controller
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("/googleresponse")]
+        [HttpGet("googleresponse")]
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
@@ -44,14 +44,12 @@ namespace Emplojd.Controller
             if (claimsPrincipal == null)
                 return BadRequest("Failed to login with Google");
 
-
             var claims = claimsPrincipal.Claims;
             var token = GenerateJwtToken(claims);
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             var user = await _userManager.FindByEmailAsync(email);
 
-            // If user doesn't exist create a new one
             if (user == null)
             {
                 user = new User
@@ -81,7 +79,9 @@ namespace Emplojd.Controller
                 }
             }
 
-            return Ok(new { token });
+            // Redirect to frontend with token as query parameter
+            var frontendRedirectUri = $"{_configuration["Frontend:RedirectUri"]}?token={token}";
+            return Redirect(frontendRedirectUri);
         }
 
         private string GenerateJwtToken(IEnumerable<Claim> claims)
