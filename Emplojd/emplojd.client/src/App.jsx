@@ -17,6 +17,7 @@ import {
   MyProfile,
   SavedJobsReadMore,
   ConfirmEmail,
+  ConfirmAccount,
 } from "./pages/index";
 import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
       {
         path: "/confirm-email",
         element: <ConfirmEmail />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/confirm-account",
+        element: <ConfirmAccount />,
         errorElement: <Error />,
       },
       {
