@@ -4,9 +4,8 @@ import CvFileSelecter from '../../components/CvFileSelecter';
 import Footer from '../../components/Footer';
 import FormRow from '../../components/FormRow';
 import ListForm from '../../components/ListForm';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { FaCalendarDays } from 'react-icons/fa6';
+import DatePick from '../../components/DatePick';
 
 function CreateProfile() {
 	const initialState = {
@@ -26,8 +25,6 @@ function CreateProfile() {
 	const [values, setValues] = useState(initialState);
 	const [interests, setInterests] = useState([]);
 	const [descriptiveWords, setDescriptiveWords] = useState([]);
-	const [startdate, setStartDate] = useState(new Date());
-	const [enddate, setEndDate] = useState(new Date());
 
 	const messages = [
 		'Börja hitta jobb direkt efter du har skapat din jobbprofil!',
@@ -233,6 +230,8 @@ function CreateProfile() {
 										disabled={!manualInputEnabled}
 									/>
 								</div>
+								<p className="font-bold">Studieperiod (från - till)</p>
+								<DatePick />
 
 								<div className="mb-6">
 									<FormRow
@@ -251,34 +250,8 @@ function CreateProfile() {
 									/>
 								</div>
 
-								<p>Studieperiod (från - till)</p>
-								<div>
-									<div className="flex justify-center">
-										<label>
-											<div className=" items-center p-1">
-												<div className="relative flex items-center text-gray-400">
-													<DatePicker
-														selected={startdate}
-														onChange={(date) => setStartDate(date)}
-														className="rounded-xl border-2 flex-grow out-sky800 hover:border-gray-400 px-4 py-2"
-													/>
-													<FaCalendarDays className="right-9  relative" />
-												</div>
-											</div>
-										</label>
-
-										<label>
-											<div className="p-1 text-gray-400">
-												<DatePicker
-													selected={enddate}
-													onChange={(date) => setEndDate(date)}
-													className="rounded-xl border-2 flex-grow out-sky800 hover:border-gray-400 px-4 py-2"
-												/>
-												<FaCalendarDays className=" left-40 -top-7 relative" />
-											</div>
-										</label>
-									</div>
-								</div>
+								<p className="font-bold">Anställningsperiod (från - till)</p>
+								<DatePick />
 							</div>
 						)}
 					</div>
