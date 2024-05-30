@@ -7,8 +7,6 @@ using System.Net;
 using System.Text;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Emplojd.Server.Models;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Emplojd.Server.ViewModels___DTOs;
 
 namespace Emplojd.Repositories
