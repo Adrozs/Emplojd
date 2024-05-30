@@ -114,8 +114,8 @@ const LetterSVG = () => {
             y2="29.2248"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#A78BFA" />
-            <stop offset="1" stop-color="#0EA5E9" />
+            <stop stopColor="#A78BFA" />
+            <stop offset="1" stopColor="#0EA5E9" />
           </linearGradient>
         </defs>
       </svg>
@@ -145,8 +145,8 @@ const MyCvSVG = () => {
             y2="24"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#A78BFA" />
-            <stop offset="1" stop-color="#0EA5E9" />
+            <stop stopColor="#A78BFA" />
+            <stop offset="1" stopColor="#0EA5E9" />
           </linearGradient>
         </defs>
       </svg>
@@ -310,8 +310,8 @@ const GradientGearSVG = () => (
         y2="1.03119"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.25" stop-color="#A78BFA" />
-        <stop offset="1" stop-color="#0EA5E9" />
+        <stop offset="0.25" stopColor="#A78BFA" />
+        <stop offset="1" stopColor="#0EA5E9" />
       </linearGradient>
     </defs>
   </svg>
@@ -337,8 +337,8 @@ const GradientMoonSVG = () => (
         y2="3.43856"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.25" stop-color="#A78BFA" />
-        <stop offset="1" stop-color="#0EA5E9" />
+        <stop offset="0.25" stopColor="#A78BFA" />
+        <stop offset="1" stopColor="#0EA5E9" />
       </linearGradient>
     </defs>
   </svg>
