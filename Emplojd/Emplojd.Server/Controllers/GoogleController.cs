@@ -23,7 +23,7 @@ namespace Emplojd.Controller
             _userManager = userManager;
         }
 
-        [HttpGet("login-google")]
+        [HttpGet("/login-google")]
         public IActionResult GoogleLogin()
         {
             var redirectUri = Url.Action(nameof(GoogleResponse));
@@ -35,7 +35,7 @@ namespace Emplojd.Controller
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("googleresponse")]
+        [HttpGet("/googleresponse")]
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
