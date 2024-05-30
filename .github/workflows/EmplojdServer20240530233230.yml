@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App EmplojdServer20240525201259
+name: Build and deploy .NET Core application to Web App EmplojdServer20240530233230
 on:
   push:
     branches:
     - main
 env:
-  AZURE_WEBAPP_NAME: EmplojdServer20240525201259
+  AZURE_WEBAPP_NAME: EmplojdServer20240530233230
   AZURE_WEBAPP_PACKAGE_PATH: Emplojd\Emplojd.Server\publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.EmplojdServer20240525201259_4A68 }}
+        publish-profile: ${{ secrets.EmplojdServer20240530233230_A47C }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
