@@ -389,9 +389,13 @@ function ApplySideFour({ job, page, setPage }) {
           >
             Gå till sparade brev
           </Link>
-          <button className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3">
+          <a
+            href={job.application_Details.url}
+            target="_blank"
+            className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3"
+          >
             Ansök här <FaArrowRight />
-          </button>
+          </a>
 
           <Link className="text-sm underline" to="/joblist">
             Sök fler jobb

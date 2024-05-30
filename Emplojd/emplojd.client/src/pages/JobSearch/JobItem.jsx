@@ -14,20 +14,18 @@ function JobItem({ job, children }) {
     const fetchLikedJobs = async () => {
       try {
         const likedJobs = await getLikeDataBackend();
-        if (likedJobs && likedJobs.length > 0) {
-          const platsbankenIds = likedJobs.map(
-            (likedJob) => likedJob.platsbankenId
-          );
-
-          const liked = platsbankenIds.includes(job.id);
-          setIsLiked(liked);
+        const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
+        if (liked.includes(parseInt(job.id))) {
+          setIsLiked(true);
+        } else {
+          setIsLiked(false);
         }
       } catch (error) {
-        console.error("Failed to fetch liked jobs:", error);
+        console.error("Error fetching liked jobs:", error);
       }
     };
     fetchLikedJobs();
-  }, [job, getLikeDataBackend]);
+  }, [job]);
 
   useEffect(() => {
     const todaysDate = new Date();

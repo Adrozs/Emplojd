@@ -75,7 +75,7 @@ function SavedJobs() {
               return (
                 <li
                   key={data.platsbankenId}
-                  className="h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 "
+                  className="min-h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 "
                 >
                   <div className="flex justify-end">
                     <FaHeart

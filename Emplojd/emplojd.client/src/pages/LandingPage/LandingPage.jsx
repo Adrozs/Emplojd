@@ -1,12 +1,61 @@
 import { BsArrowDownCircle } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SearchForm } from "../JobList/JobSearchForm";
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
 import { FaArrowRight } from "react-icons/fa6";
+import { useState } from "react";
+import { getJobsBackend } from "../../utils/backendserver";
+import { toast } from "react-toastify";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const [city, setCity] = useState("");
+  const [job, setJob] = useState("");
+  const [jobsData, setJobsData] = useState(null);
+
+  const token = localStorage.getItem("authToken");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (token) {
+      try {
+        let data;
+        if (city && job) {
+          data = await getJobsBackend(city + "+" + job);
+          setCity("");
+          setJob("");
+        } else if (city && !job) {
+          data = await getJobsBackend(city);
+          setCity("");
+        } else if (!city && job) {
+          data = await getJobsBackend(job);
+          setJob("");
+        } else {
+          return;
+        }
+        setJobsData(data);
+        navigate("/jobsearch", {
+          state: { jobsData: data, query: { city, job } },
+        });
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    } else {
+      toast.error("Du måste vara inloggad för att söka jobb.");
+      navigate("/signin");
+    }
+  };
+
+  const handleGetStarted = () => {
+    if (token) {
+      navigate("/MyProfile");
+    } else {
+      navigate("/signin");
+    }
+  };
+
   return (
     <>
       <section
@@ -28,13 +77,13 @@ export default function LandingPage() {
               För att <strong>det ska vara enkelt att söka jobb</strong>
             </p>
             <div className="flex justify-center flex-col">
-              <Link
-                to="/signin"
+              <button
+                onClick={handleGetStarted}
                 className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl gap-4"
               >
                 Kom igång helt kostnadsfritt
                 <FaArrowRight size={16} />
-              </Link>
+              </button>
               <div className="text-center md:text-center">
                 <p>Hitta din nya tjänst</p>
                 <div className="flex justify-center md:justify-center">
@@ -78,7 +127,14 @@ export default function LandingPage() {
           </div>
           <div className="max-w-[800px] mx-auto pb-10">
             {" "}
-            <SearchForm />
+            <SearchForm
+              handleSubmit={handleSubmit}
+              setCity={setCity}
+              setJob={setJob}
+              job={job}
+              city={city}
+              // latest={latest}
+            />
           </div>
 
           <ActiveSlider />

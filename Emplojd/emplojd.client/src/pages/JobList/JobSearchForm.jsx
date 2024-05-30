@@ -9,16 +9,13 @@ import { FaBullhorn } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 import Tooltip from "../../components/Tooltip";
 import { getJobsBackend } from "../../utils/backendserver";
+import { toast } from "react-toastify";
+
 function JobSearchForm() {
   const navigate = useNavigate();
   const [city, setCity] = useState("");
   const [job, setJob] = useState("");
   const [jobsData, setJobsData] = useState(null);
-
-  // const inputEl = useRef(null);
-  // useEffect(() => {
-  //   inputEl.current.focus();
-  // }, []);
 
   // Flytta initialiseringen av latest utanför useState
   let initialLatest = [];
@@ -28,33 +25,38 @@ function JobSearchForm() {
   }
 
   const [latest, setLatest] = useState(initialLatest);
+  const token = localStorage.getItem("authToken");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      let data;
-      if (city && job) {
-        data = await getJobsBackend(city + "+" + job);
-        setLatest((items) => [...items, { id: uuidv4(), city, job }]);
-        setCity("");
-        setJob("");
-      } else if (city && !job) {
-        data = await getJobsBackend(city);
-        setLatest((items) => [...items, { id: uuidv4(), city }]);
-        setCity("");
-      } else if (!city && job) {
-        data = await getJobsBackend(job);
-        setLatest((items) => [...items, { id: uuidv4(), job }]);
-        setJob("");
-      } else {
-        return;
+    if (token) {
+      try {
+        let data;
+        if (city && job) {
+          data = await getJobsBackend(city + "+" + job);
+          setLatest((items) => [...items, { id: uuidv4(), city, job }]);
+          setCity("");
+          setJob("");
+        } else if (city && !job) {
+          data = await getJobsBackend(city);
+          setLatest((items) => [...items, { id: uuidv4(), city }]);
+          setCity("");
+        } else if (!city && job) {
+          data = await getJobsBackend(job);
+          setLatest((items) => [...items, { id: uuidv4(), job }]);
+          setJob("");
+        } else {
+          return;
+        }
+        setJobsData(data);
+        navigate("/jobsearch", {
+          state: { jobsData: data, query: { city, job } },
+        });
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
       }
-      setJobsData(data);
-      navigate("/jobsearch", {
-        state: { jobsData: data, query: { city, job } },
-      });
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
+    } else {
+      toast.error("Du måste vara inloggad för att söka jobb.");
     }
   };
 
