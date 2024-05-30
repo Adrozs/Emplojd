@@ -31,7 +31,7 @@ function JobItem({ job, children }) {
 
   useEffect(() => {
     const todaysDate = new Date();
-    const jobPosted = new Date(job.publication_date);
+    const jobPosted = new Date(job.publication_Date);
     const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     setDaySincePosted(differenceInDays);
@@ -41,7 +41,18 @@ function JobItem({ job, children }) {
     setIsLiked((prevIsLiked) => !prevIsLiked);
     if (!isLiked) {
       try {
-        await sendLikeDataBackend(job.id, job.headline, job.employer.name);
+        await sendLikeDataBackend(
+          job.id,
+          job.headline,
+          job.employer.name,
+          job.description,
+          job.employment_Type,
+          job.working_Hours_Type,
+          job.occupation,
+          job.workplace_Address,
+          job.publication_Date,
+          job.logo_Url
+        );
       } catch (error) {
         console.error("Failed to send like data:", error);
       }
@@ -55,37 +66,45 @@ function JobItem({ job, children }) {
   };
 
   return (
-    <li className="h-[300px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[10px]">
+    <li
+      key={job.id}
+      className="min-h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] mb-4 "
+    >
       <div className="flex justify-between">
-        <div className="bg-stone-100 flex items-center rounded-full p-1 h-[55px]">
-          <img
-            src={job.logo_Url ? job.logo_Url : "exempelbild1.png"}
-            alt="bild"
-            className="object-contain w-[50px] h-[50px] p-1 rounded-full"
-          />
-        </div>
+        <div className="flex items-center rounded-full p-1 "></div>
         <div onClick={handleLike}>
           {isLiked ? (
-            <FaHeart className="text-customBlue" size={24} />
+            <FaHeart className="text-blue-300" size={24} />
           ) : (
-            <FaRegHeart className="text-customBlue" size={24} />
+            <FaRegHeart className="text-blue-300" size={24} />
           )}
         </div>
       </div>
       <div>
-        <h3 className="font-semibold text-xl text-stone-900">{job.headline}</h3>
-        <p className="text-lg">{job.employer.name}</p>
-        <div>
-          <p className="text-sm my-2">"STAD" - {daySincePosted} dagar sen</p>
-        </div>
+        <h3 className="font-[700] text-[20px] text-stone-900">
+          {job.headline}
+        </h3>
+
+        <p className="text-[16px] font-[600]">{job.employer.name}</p>
+      </div>
+      <div>
+        <p className="text-sm my-2 py-2">
+          {job.workplace_Address.municipality} - {daySincePosted} dagar sen
+        </p>
       </div>
       <div className="flex gap-2 text-[12px]">
-        <span className="bg-purple-300 rounded-[2px] px-2 py-1">
-          {job.working_Hours_Type.label}
-        </span>
+        {job.working_Hours_Type.label ? (
+          <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
+            {job.working_Hours_Type.label}
+          </span>
+        ) : (
+          <span className="bg-purple-300 px-2 py-1">
+            {job.employment_Type.label}
+          </span>
+        )}
 
-        <span className="bg-[#C3E7F3] rounded-[2px] px-2 py-1">
-          {job.occupation.label}
+        <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
+          {job.occupation.label} text
         </span>
       </div>
 

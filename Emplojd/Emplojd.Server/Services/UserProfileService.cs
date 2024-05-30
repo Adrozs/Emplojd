@@ -1,15 +1,10 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Emplojd.Data;
+﻿using Emplojd.Data;
 using Emplojd.Models;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.UserProfile;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Emplojd.Server.Services
 {

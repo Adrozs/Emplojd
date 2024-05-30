@@ -26,10 +26,12 @@ export default function Footer({ children }) {
               </h2>
             </div>
             <div className="flex flex-col text-center pb-20">
-              <h2 className="inline mb-5 font-bold text-xl z-10">Hitta hos oss</h2>
-              <div className="flex flex-col gap-3 text-blue-600 underline underline-offset-2">
+              <h2 className="inline mb-5 font-bold text-xl z-10">
+                Hitta hos oss
+              </h2>
+              <div className="flex flex-col gap-3  ">
                 <Link className="inline z-10" to="/myProfile">
-                  <span >Min sida</span>
+                  <span>Min sida</span>
                 </Link>
                 <Link className="inline z-10" to="/joblist">
                   <span>Sök jobb</span>

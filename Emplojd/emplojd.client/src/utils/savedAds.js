@@ -18,29 +18,51 @@ function getLikeDataBackend() {
     });
 }
 
-function sendLikeDataBackend(platsbankenJobAdId, headline, employer) {
+function sendLikeDataBackend(
+  platsbankenJobAdId,
+  headline,
+  employer,
+  description,
+  employment_Type,
+  working_Hours_Type,
+  occupation,
+  workplace_Address,
+  publication_Date,
+  logo_Url
+) {
   const token = localStorage.getItem("authToken");
 
+  const postData = {
+    platsbankenJobAdId: platsbankenJobAdId || "",
+    headline: headline || "",
+    employer: employer || "",
+    description: description?.text_formatted || "",
+    employment_Type: employment_Type.label || "",
+    working_Hours_Type: working_Hours_Type.label || "",
+    occupation: occupation.label || "", //
+    workplace_Address: workplace_Address.municipality || "",
+    publication_Date: publication_Date || "",
+    logo_Url: logo_Url || "",
+  };
+
+  console.log("Sending cleaned data to backend:", postData);
+
   axios
-    .post(
-      "https://localhost:54686/save-ad",
-      {
-        platsbankenJobAdId: platsbankenJobAdId,
-        headline: headline,
-        employer: employer,
+    .post("https://localhost:54686/save-ad", postData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    })
     .then((response) => {
       console.log("Gillad annons", response.data);
     })
     .catch((error) => {
-      console.error("Error", error);
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+      } else {
+        console.error("Error", error.message);
+      }
     });
 }
 
