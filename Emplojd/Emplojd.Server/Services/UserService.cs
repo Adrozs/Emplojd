@@ -6,6 +6,8 @@ using Emplojd.ViewModels___DTOs;
 using Emplojd.ViewModels___DTOs.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Emplojd.Server.ViewModels___DTOs.Account;
+using System.Security.Claims;
 
 namespace Emplojd.Services
 {
@@ -120,12 +122,27 @@ namespace Emplojd.Services
                 IdentityResult result = await userRepository.ResetPasswordAsync(userId, code, request.NewPassword, request.NewPasswordConfirm);
 
                 // Returns status code and message depending on result value
-                return ResultHandler.HandleIdentityResult(result, "Password successfully changed", "Failed to change password:");
+                return ResultHandler.HandleIdentityResult(result, "Password successfully changed.", "Failed to change password:");
             }
             catch (Exception ex)
             {
                 return ExceptionHandler.HandleException(ex);
             }
+        }
+
+        public static async Task<IResult> DeleteAccountAsync([FromBody] DeleteAccountRequest request, [FromServices] IUserRepository userRepository, ClaimsPrincipal currentUser)
+        {
+            try
+            {
+                IdentityResult result = await userRepository.DeleteAccountAsync(request.Password, currentUser);    
+
+                return ResultHandler.HandleIdentityResult(result, "Account successfully deleted.", "Failed to delete account:");
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
+            }
+
         }
     }
 }

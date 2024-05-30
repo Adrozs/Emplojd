@@ -248,6 +248,7 @@ namespace Emplojd
             app.MapGet("/confirm-email", UserService.EmailVerificationAsync).AllowAnonymous();
             app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
             app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
+            app.MapDelete("/delete-account", UserService.DeleteAccountAsync).RequireAuthorization();
 
             // Is this even necessary anymore when we have /reset-password ??? - only difference with this one is it changed password without email verification
             //app.MapPost("/change-password", UserService.ChangePasswordAsync).RequireAuthorization();
