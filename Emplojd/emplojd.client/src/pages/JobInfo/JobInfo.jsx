@@ -23,11 +23,19 @@ function JobInfo() {
 
   useEffect(() => {
     const fetchLikedJobs = async () => {
-      const likedJobs = await getLikeDataBackend();
-      const liked = likedJobs.some(
-        (likedJob) => likedJob.platsbankenId === job.id
-      );
-      setIsLiked(liked);
+      try {
+        const likedJobs = await getLikeDataBackend();
+        const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
+        if (liked.includes(parseInt(job.id))) {
+          console.log("det är samma id");
+          setIsLiked(true);
+        } else {
+          console.log("det är ej samma id");
+          setIsLiked(false);
+        }
+      } catch (error) {
+        console.error("Error fetching liked jobs:", error);
+      }
     };
     fetchLikedJobs();
   }, [job]);
