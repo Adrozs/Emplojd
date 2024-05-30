@@ -1,12 +1,9 @@
 ﻿using Emplojd.Helpers;
-using Emplojd.Models;
 using Emplojd.Repositories;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.CoverLetter;
 using Emplojd.ViewModels;
-using Emplojd.ViewModels___DTOs.JobAds;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Security.Claims;
 
 namespace Emplojd.Services

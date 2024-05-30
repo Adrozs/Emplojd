@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Emplojd.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Emplojd.Controller
 {
@@ -15,10 +15,12 @@ namespace Emplojd.Controller
     public class GoogleController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
 
-        public GoogleController(IConfiguration configuration)
+        public GoogleController(IConfiguration configuration, UserManager<User> userManager)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _userManager = userManager;
         }
 
         [HttpGet("/login-google")]
@@ -39,16 +41,47 @@ namespace Emplojd.Controller
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             var claimsPrincipal = result.Principal;
 
-            if (claimsPrincipal != null)
-            {
-                var claims = claimsPrincipal.Claims;
-                var token = GenerateJwtToken(claims);
-                var email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            if (claimsPrincipal == null)
+                return BadRequest("Failed to login with Google");
 
-                return Ok(new { token, email });
+
+            var claims = claimsPrincipal.Claims;
+            var token = GenerateJwtToken(claims);
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            // If user doesn't exist create a new one
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true
+                };
+
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                {
+                    return BadRequest("Failed to create user");
+                }
             }
 
-            return BadRequest("Failed to authenticate with Google.");
+            var loginInfo = new UserLoginInfo(GoogleDefaults.AuthenticationScheme, result.Principal.FindFirstValue(ClaimTypes.NameIdentifier), GoogleDefaults.AuthenticationScheme);
+
+            var userLogins = await _userManager.GetLoginsAsync(user);
+            if (!userLogins.Any(l => l.LoginProvider == loginInfo.LoginProvider && l.ProviderKey == loginInfo.ProviderKey))
+            {
+                var addLoginResult = await _userManager.AddLoginAsync(user, loginInfo);
+
+                if (!addLoginResult.Succeeded)
+                {
+                    return BadRequest("Failed to associate Google login with user");
+                }
+            }
+
+            return Ok(new { token });
         }
 
         private string GenerateJwtToken(IEnumerable<Claim> claims)
