@@ -237,7 +237,7 @@ namespace Emplojd
             app.UseCors(builder =>
             {
                 builder
-                      .WithOrigins("https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173")
+                      .WithOrigins("https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173")
                       .SetIsOriginAllowedToAllowWildcardSubdomains()
                       .AllowAnyHeader()
                       .AllowCredentials()
