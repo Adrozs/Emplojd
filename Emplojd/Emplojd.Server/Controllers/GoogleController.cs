@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Emplojd.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Security.Claims;
+using System.Text;
 
 namespace Emplojd.Controller
 {
@@ -15,50 +15,89 @@ namespace Emplojd.Controller
     public class GoogleController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
 
-        //Config with errorhandling
-        public GoogleController(IConfiguration configuration)
+        public GoogleController(IConfiguration configuration, UserManager<User> userManager)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _userManager = userManager;
         }
+
         [HttpGet("/login-google")]
         public IActionResult GoogleLogin()
         {
-            //here we construct the redirectUri based on the applications Configuration(!!)
-            var redirectUri = "https://emplojdserver20240525201259.azurewebsites.net/googleresponse";
-            var property = new AuthenticationProperties
+            var redirectUri = Url.Action("GoogleResponse");
+            var properties = new AuthenticationProperties
             {
-                RedirectUri = Url.Action("GoogleResponse", new { redirectUri })
+                RedirectUri = redirectUri
             };
 
-            return Challenge(property, GoogleDefaults.AuthenticationScheme);
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
         [HttpGet("/googleresponse")]
-        public async Task<IActionResult> GoogleResponse(string redirectUri)
+        public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            var claimsPrincipal = result.Principal;
 
-            var claims = result.Principal?.Identities.FirstOrDefault()?.Claims.ToList();
+            if (claimsPrincipal == null)
+                return BadRequest("Failed to login with Google");
 
+
+            var claims = claimsPrincipal.Claims;
             var token = GenerateJwtToken(claims);
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            // If user doesn't exist create a new one
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true
+                };
+
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                {
+                    return BadRequest("Failed to create user");
+                }
+            }
+
+            var loginInfo = new UserLoginInfo(GoogleDefaults.AuthenticationScheme, result.Principal.FindFirstValue(ClaimTypes.NameIdentifier), GoogleDefaults.AuthenticationScheme);
+
+            var userLogins = await _userManager.GetLoginsAsync(user);
+            if (!userLogins.Any(l => l.LoginProvider == loginInfo.LoginProvider && l.ProviderKey == loginInfo.ProviderKey))
+            {
+                var addLoginResult = await _userManager.AddLoginAsync(user, loginInfo);
+
+                if (!addLoginResult.Succeeded)
+                {
+                    return BadRequest("Failed to associate Google login with user");
+                }
+            }
 
             return Ok(new { token });
         }
 
         private string GenerateJwtToken(IEnumerable<Claim> claims)
         {
-            var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
-            var credentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+            var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
+            var tokenOptions = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(3),
-                signingCredentials: credentials);
+                signingCredentials: signingCredentials
+            );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
     }
 }

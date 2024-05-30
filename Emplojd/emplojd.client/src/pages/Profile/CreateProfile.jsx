@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import CvFileSelecter from "../../components/CvFileSelecter";
 import Footer from "../../components/Footer";
@@ -7,8 +7,8 @@ import ListForm from "../../components/ListForm";
 
 function CreateProfile() {
   const initialState = {
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     email: "",
     emailConfirmed: "",
     password: "",
@@ -21,11 +21,13 @@ function CreateProfile() {
   const [manualInputEnabled, setManualInputEnabled] = useState(false);
   const fileInputRef = useRef(null);
   const [values, setValues] = useState(initialState);
+  const [interests, setInterests] = useState([]);
+  const [descriptiveWords, setDescriptiveWords] = useState([]);
 
   const messages = [
     "Börja hitta jobb direkt efter du har skapat din jobbprofil!",
     <>
-      <span className="font-semibold">Snyggt {values.firstName}!</span> <br />{" "}
+      <span className="font-semibold">Snyggt {values.firstname}!</span> <br />{" "}
       Nu behöver vi bara fråga några saker till!
     </>,
     "Nu är du nästan färdig med din jobbprofil! Använd dig av ditt CV för att få ännu bättre personliga brev!",
@@ -65,12 +67,62 @@ function CreateProfile() {
     fileInputRef.current.click();
   };
 
-  const handleListFormChange = () => {
-    setUnsavedChanges(true);
+  const handleListFormChange = (type, value) => {
+    if (type === "interests") {
+      setInterests(value);
+    } else if (type === "descriptiveWords") {
+      setDescriptiveWords(value);
+    }
   };
 
-  const toggleManualInput = () => {
-    setManualInputEnabled((prev) => !prev);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const authToken = localStorage.getItem("authToken");
+
+    const interestsArray = interests || [];
+    const descriptiveWordsArray = descriptiveWords || [];
+
+    const data = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      interests: interestsArray,
+      descriptiveWords: descriptiveWordsArray,
+    };
+
+    console.log("Data being sent:", data);
+
+    try {
+      const response = await fetch(
+        "https://localhost:54686/api/UserProfile/CreateUserProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${responseText}`
+        );
+      }
+
+      let result;
+      try {
+        const responseText = await response.text();
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch (error) {
+        throw new Error("Invalid JSON response");
+      }
+
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -98,19 +150,19 @@ function CreateProfile() {
             {currentStep === 1 && (
               <div className="mx-4">
                 <FormRow
-                  type="firstName"
-                  name="firstName"
+                  type="text"
+                  name="firstname"
                   labelText="Förnamn"
-                  value={values.firstName}
+                  value={values.firstname}
                   placeholder="Ange ditt förnamn"
                   handleChange={handleChange}
                 />
                 <FormRow
-                  type="lastname"
-                  name="lastName"
+                  type="text"
+                  name="lastname"
                   labelText="Efternamn"
                   placeholder="Ange ditt efternamn"
-                  value={values.lastName}
+                  value={values.lastname}
                   handleChange={handleChange}
                 />
               </div>
@@ -122,12 +174,16 @@ function CreateProfile() {
                   wordBgColor="bg-sky-100"
                   name="Vad är dina intressen?"
                   labelBgColor="none"
-                  onChange={handleListFormChange}
+                  onChange={(value) => handleListFormChange("interests", value)}
+                  value={interests}
                 />
                 <ListForm
                   name="Beskriv dig själv med några ord"
                   labelBgColor="none"
-                  onChange={handleListFormChange}
+                  onChange={(value) =>
+                    handleListFormChange("descriptiveWords", value)
+                  }
+                  value={descriptiveWords}
                 />
               </div>
             )}
@@ -149,7 +205,7 @@ function CreateProfile() {
                     name="manualInput"
                     className="mr-2"
                     checked={manualInputEnabled}
-                    onChange={toggleManualInput}
+                    onChange={() => setManualInputEnabled((prev) => !prev)}
                   />
                   <label htmlFor="manualInput" className="text-gray-700">
                     Ange information manuellt
@@ -159,14 +215,14 @@ function CreateProfile() {
                 <div className="mb-6">
                   <FormRow
                     type="text"
-                    name="Utbildningstitel"
+                    name="educationTitle"
                     placeholder="Ange namn på utbildning"
                     handleChange={handleChange}
                     disabled={!manualInputEnabled}
                   />
                   <FormRow
                     type="text"
-                    name="Skolan namn"
+                    name="schoolName"
                     placeholder="Ange namn på skolan/lärosäte"
                     handleChange={handleChange}
                     disabled={!manualInputEnabled}
@@ -176,14 +232,14 @@ function CreateProfile() {
                 <div className="mb-6">
                   <FormRow
                     type="text"
-                    name="Jobbtitel"
+                    name="jobTitle"
                     placeholder="Ange jobbtitel"
                     handleChange={handleChange}
                     disabled={!manualInputEnabled}
                   />
                   <FormRow
                     type="text"
-                    name="Företagsnamn"
+                    name="companyName"
                     placeholder="Ange företagsnamn"
                     handleChange={handleChange}
                     disabled={!manualInputEnabled}
@@ -215,10 +271,12 @@ function CreateProfile() {
             </button>
             <button
               className="bg-sky-500 h-16 rounded-xl text-white text-lg hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 items-center"
-              onClick={nextStep}
-              disabled={currentStep === 3}
+              onClick={currentStep === 3 ? handleSubmit : nextStep}
+              disabled={
+                currentStep === 3 && (!values.firstname || !values.lastname)
+              }
             >
-              Spara och fortsätt
+              {currentStep === 3 ? "Spara och avsluta" : "Spara och fortsätt"}
               <svg
                 width="24"
                 height="24"

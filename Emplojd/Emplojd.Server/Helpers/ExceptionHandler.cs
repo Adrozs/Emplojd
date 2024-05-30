@@ -1,6 +1,4 @@
-﻿//using Emplojd.Exceptions.JobAdExceptions;
-//using Emplojd.Exceptions.LoginExceptions;
-using Emplojd.Exceptions;
+﻿using Emplojd.Exceptions;
 using Newtonsoft.Json;
 
 namespace Emplojd.Helpers

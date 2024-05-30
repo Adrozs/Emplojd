@@ -1,22 +1,21 @@
 ﻿using Emplojd.Helpers;
-using Emplojd.Models;
 using Emplojd.Repositories;
+using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.CoverLetter;
-using Emplojd.ViewModels___DTOs.JobAds;
+using Emplojd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Security.Claims;
 
 namespace Emplojd.Services
 {
     public class ChatGPTService
     {
-        public static async Task<IResult> GenerateLetterAsync(int userId, int jobId, [FromQuery]int temperature, [FromQuery]bool job, [FromServices]IChatGPTRepository chatGPTRepository)
+        public static async Task<IResult> GenerateLetterAsync([FromBody] GenerateCoverLetterDto generateCoverLetterDto, [FromServices] int jobId, IChatGPTRepository chatGPTRepository)
         {
             try
             {
                 // Generate the personalized letter
-                var letter = await chatGPTRepository.GenerateLetterAsync(userId, jobId, temperature, job);
+                var letter = await chatGPTRepository.GenerateLetterAsync(generateCoverLetterDto, jobId);
 
                 // Return the generated letter
                 return Results.Ok(letter);

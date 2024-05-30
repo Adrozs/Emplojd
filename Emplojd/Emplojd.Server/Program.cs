@@ -13,13 +13,16 @@ using Microsoft.OpenApi.Models;
 using Emplojd.Helpers;
 using Emplojd.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Text.Json;
 using AuthenticationService = Emplojd.Services.AuthenticationService;
 using AspNet.Security.OAuth.LinkedIn;
+using Emplojd.Server.Services;
+using Azure.Identity;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
+using Azure.Security.KeyVault.Secrets;
 
 namespace Emplojd
 { 
@@ -29,7 +32,34 @@ namespace Emplojd
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
-            builder.Services.AddAuthentication(options =>
+
+            if (builder.Environment.IsProduction())
+            {
+                var keyVaultUrl = builder.Configuration.GetSection("KeyVault:KeyVaultURL");
+                var keyVaultClientId = builder.Configuration.GetSection("KeyVault:ClientId");
+                var keyVaultClientSecret = builder.Configuration.GetSection("KeyVault:ClientSecret");
+                var keyVaultDirectoryID = builder.Configuration.GetSection("KeyVault:DirectoryID");
+
+
+                var credential = new ClientSecretCredential(keyVaultDirectoryID.Value!.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString());
+                builder.Configuration.AddAzureKeyVault(keyVaultUrl.Value.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString(), new DefaultKeyVaultSecretManager());
+
+                var client = new SecretClient(new Uri(keyVaultUrl.Value!.ToString()), credential);
+
+                builder.Services.AddDbContext<ApplicationContext>(options =>
+                {
+                    options.UseSqlServer(client.GetSecret("ProdConnection").Value.Value.ToString());
+                });
+            }
+            if (builder.Environment.IsDevelopment())
+            {
+                // Setup database context and connection string here
+                builder.Services.AddDbContext<ApplicationContext>(options =>
+                {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+        }
+        builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
@@ -155,6 +185,8 @@ namespace Emplojd
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
+            builder.Services.AddScoped<UserProfileService>();
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -255,7 +287,7 @@ namespace Emplojd
 
 
             // Cover letter
-            app.MapGet("/GetCoverLetter/{userId}/{jobId}/{temperature}/{job}", ChatGPTService.GenerateLetterAsync);
+            app.MapPost("/GetCoverLetter", ChatGPTService.GenerateLetterAsync).RequireAuthorization();
             app.MapGet("/saved-letter", ChatGPTService.GetCoverLettersAsync).RequireAuthorization();
             app.MapPost("/save-letter", ChatGPTService.SaveCoverLetterAsync).RequireAuthorization();
             app.MapDelete("/saved-letter", ChatGPTService.RemoveSavedCoverLettersAsync).RequireAuthorization();

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import JobItem from "./JobItem";
 import { Link, useLocation } from "react-router-dom";
-import { getJobs } from "../../services/apiJobs";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-
+import { getJobs } from "../../services/apiJobs";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import Footer from "../../components/Footer";
 

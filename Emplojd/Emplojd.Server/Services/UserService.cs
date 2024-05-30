@@ -1,7 +1,5 @@
 using Emplojd.Helpers;
 ﻿using Emplojd.Repository;
-﻿using Azure.Core;
-using Emplojd.Repositories;
 using Emplojd.ViewModels___DTOs;
 using Emplojd.ViewModels___DTOs.Account;
 using Microsoft.AspNetCore.Identity;

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using OpenAI_API.Models;
+﻿using OpenAI_API.Models;
 using OpenAI_API;
 using Emplojd.Server.ViewModels___DTOs.CoverLetter;
 using System.Security.Claims;
@@ -8,12 +7,14 @@ using Emplojd.Models;
 using Emplojd.Exceptions.JobAdExceptions;
 using Microsoft.EntityFrameworkCore;
 using Emplojd.Server.Models;
+using Emplojd.Server.ViewModels___DTOs;
+using Emplojd.ViewModels;
 
 namespace Emplojd.Repositories
 {
     public interface IChatGPTRepository
     {
-        public Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job);
+        public Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId);
         Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser);
         Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser);
@@ -22,6 +23,7 @@ namespace Emplojd.Repositories
     {
         private readonly OpenAIAPI api;
         private readonly ApplicationContext _context;
+        
 
         public ChatGPTRepository(OpenAIAPI openAIApi, ApplicationContext context)
         {
@@ -30,43 +32,50 @@ namespace Emplojd.Repositories
         }
 
 
-        public async Task<string> GenerateLetterAsync(int userId, int jobId, float temperature, bool job)
+        public async Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto, int jobId)
         {
+            // hämta CV content
+            string cvContentText = generateCoverLetterDto.CvText;
+            
+            // hämta job ad
+            string jobAd = generateCoverLetterDto.JobTitle + generateCoverLetterDto.JobDescription;
 
-            //Här hämtas CV från databasen
-            string cvText = "test";
 
-            //använd Adrians metod för att hämta jobbannonsen
-            string jobAd = "test";
+            // Hämta name, interests, and descriptive words
+            string firstName = generateCoverLetterDto.FirstName;
+            string lastName = generateCoverLetterDto.LastName;
 
-            //Hämta från databas med userId för att få användarens namn, intressen och nyckelord
-            string userInfo = "test";
+            //If UserInterestTags is not null, this joins the list items into a single string, separated by ", ".
+            string userInterests = generateCoverLetterDto.UserInterestTags != null ? string.Join(", ", generateCoverLetterDto.UserInterestTags) : string.Empty;
+            string userDescriptiveWords = generateCoverLetterDto.DescriptiveWords != null ? string.Join(", ", generateCoverLetterDto.DescriptiveWords) : string.Empty;
 
-            if (string.IsNullOrEmpty(cvText))
-            {
-                // Handle case where cvText is missing or empty (Behöver vi ha detta om användaren måste ha ett CV inlagt?)
-                throw new Exception("Cv is empty");
-            }
+            float temperature = generateCoverLetterDto.Temperature;
+
+            //OBS LÄGG TILL MER FELHANTERING!!!
+            //if (string.IsNullOrEmpty(cvContentText))
+            //{
+               
+            //    throw new Exception("CV content is empty");
+            //}
 
             var chat = api.Chat.CreateConversation();
             chat.Model = Model.ChatGPTTurbo;
-            chat.RequestParameters.Temperature = temperature; //Om användaren väljer tepearatur så skickar frontend tillbaka svaraet i en variabel som heter temperature. 
+            //chat.RequestParameters.Temperature = temperature;
 
             int desiredLength = 500;
 
-            // Prepare the prompt using CV text (ha en promt för jobb och en annan för praktik. Ändra sen!!!)
-            string prompt = $"Based on my CV:\n{cvText}\n\nGenerate a personalized letter:"; //Lägg till jobbannonsen och använder info här också! ish {job.id} OBS:Ändra till svenska
-
+            // Prepare the prompt using CV text and user info
+            string prompt = $"Generera ett personligt brev baserat på mitt CV:\n{cvContentText}\nJobb Annonsen:\n{jobAd}\n\nmin användarinformation:\nIntressen: {userInterests}\nbeskrivande ord: {userDescriptiveWords}\nmed önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n:";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
-            // and get the response
+            // Get the response
             string response = await chat.GetResponseFromChatbotAsync();
 
+            // Save the response to the database if needed
+            // await SaveGeneratedLetterAsync(userProfile.Id, response);
+
             return response;
-
-            //Spara till databasen i en separat tabell tillsammans med userId
-
         }
 
 
@@ -183,6 +192,5 @@ namespace Emplojd.Repositories
 
             return user;
         }
-
     }
 }

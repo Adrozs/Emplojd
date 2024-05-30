@@ -13,7 +13,7 @@ export async function getJobs(query) {
     throw Error("Failed to fetch jobs data: " + error.message);
   }
 }
-
+/* 
 export async function getOneJob(id) {
   const res = await fetch(`${API_URL}?q=${id}`);
   if (!res.ok) throw Error(`Couldn't find job #${id}`);
@@ -56,3 +56,4 @@ export async function updateLetter(id, updateObj) {
     throw Error("Failed updating your cv");
   }
 }
+ */
