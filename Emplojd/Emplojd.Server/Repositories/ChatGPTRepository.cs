@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.ViewModels;
+using Emplojd.Server.ResultObjects;
 
 namespace Emplojd.Repositories
 {
