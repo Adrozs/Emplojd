@@ -13,7 +13,6 @@ function SavedJobsReadMore() {
     try {
       const token = localStorage.getItem("authToken");
 
-      // Formatera URL med adId som en parameter
       const url = `https://localhost:54686/ad/${id}?adId=${id}`;
       console.log("Fetching URL:", url);
 
@@ -31,6 +30,11 @@ function SavedJobsReadMore() {
     } catch (error) {
       console.error("Error fetching job data:", error);
     }
+  };
+
+  const isHTML = (str) => {
+    const doc = new DOMParser().parseFromString(str, "text/html");
+    return Array.from(doc.body.childNodes).some((node) => node.nodeType === 1);
   };
 
   useEffect(() => {
@@ -91,11 +95,11 @@ function SavedJobsReadMore() {
                 />
               </div>
             )}
-            {job.description.text ? (
+            {job.description.text_Formatted ? (
               <div className="p-4 max-w-4xl mx-auto mt-3 pb-28 bg-white">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: job.description.text,
+                    __html: job.description.text_Formatted,
                   }}
                 />
                 <Link
