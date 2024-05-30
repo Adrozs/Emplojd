@@ -187,7 +187,7 @@ function MyProfile() {
           <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
             <div className="grid z-10 bg-gradient-to-r-custom text-white p-4 w-48 rounded-xl">
               <h2 className="font-semibold">Min Profil</h2>
-              <h3 className="row-start-2 text-xs text-">
+              <h3 className="row-start-2 text-xs">
                 {unsavedChanges
                   ? "Ej sparade ändringar"
                   : "Inga ändringar att spara"}
