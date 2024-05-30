@@ -1,12 +1,52 @@
 import { BsArrowDownCircle } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SearchForm } from "../JobList/JobSearchForm";
 import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
 import { FaArrowRight } from "react-icons/fa6";
+import { useState } from "react";
+import { getJobsBackend } from "../../utils/backendserver";
+import { toast } from "react-toastify";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const [city, setCity] = useState("");
+  const [job, setJob] = useState("");
+  const [jobsData, setJobsData] = useState(null);
+
+  const token = localStorage.getItem("authToken");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (token) {
+      try {
+        let data;
+        if (city && job) {
+          data = await getJobsBackend(city + "+" + job);
+          setCity("");
+          setJob("");
+        } else if (city && !job) {
+          data = await getJobsBackend(city);
+          setCity("");
+        } else if (!city && job) {
+          data = await getJobsBackend(job);
+          setJob("");
+        } else {
+          return;
+        }
+        setJobsData(data);
+        navigate("/jobsearch", {
+          state: { jobsData: data, query: { city, job } },
+        });
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    } else {
+      toast.error("Du behöver logga in för att kunna söka jobb");
+      navigate("/signin");
+    }
+  };
   return (
     <>
       <section
@@ -78,7 +118,14 @@ export default function LandingPage() {
           </div>
           <div className="max-w-[800px] mx-auto pb-10">
             {" "}
-            <SearchForm />
+            <SearchForm
+              handleSubmit={handleSubmit}
+              setCity={setCity}
+              setJob={setJob}
+              job={job}
+              city={city}
+              // latest={latest}
+            />
           </div>
 
           <ActiveSlider />
