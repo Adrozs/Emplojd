@@ -18,6 +18,8 @@ import {
   SavedJobsReadMore,
   ConfirmEmail,
   ConfirmAccount,
+  ForgotPassword,
+  ResetPassword,
 } from "./pages/index";
 import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
@@ -48,6 +50,16 @@ const router = createBrowserRouter([
       {
         path: "/confirm-account",
         element: <ConfirmAccount />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPassword />,
         errorElement: <Error />,
       },
       {

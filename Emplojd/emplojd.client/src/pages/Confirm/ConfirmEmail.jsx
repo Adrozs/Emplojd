@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Footer from "../../components/Footer";
-import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
-import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 import Header from "../../components/Header/HeaderLandingpage";
 import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
 import { FaEnvelope } from "react-icons/fa";
@@ -67,14 +65,7 @@ const ConfirmEmail = () => {
               Logga in <LoginRightArrow />
             </Link>
             <div className="flex justify-center gap-4">
-              <button
-                onClick={() =>
-                  toast(
-                    "Nytt email har skickats, kontrollera även din skräppostmapp om du inte hittar mejlet"
-                  )
-                }
-                className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center"
-              >
+              <button className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center">
                 Skicka igen <FaEnvelope size={22} />
               </button>
             </div>

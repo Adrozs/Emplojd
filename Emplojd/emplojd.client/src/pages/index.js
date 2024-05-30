@@ -12,6 +12,8 @@ import NoEarlierCoverLetter from "./Profile/NoEarlierCoverLetter";
 import Profile from "./Profile/Profile";
 import SavedJobs from "./Profile/SavedJobs";
 import SavedJobsReadMore from "./Profile/SavedJobsReadMore";
+import ForgotPassword from "./Reset/ForgotPassword";
+import ResetPassword from "./Reset/ResetPassword";
 import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
 
@@ -31,4 +33,6 @@ export {
   SavedJobsReadMore,
   ConfirmEmail,
   ConfirmAccount,
+  ForgotPassword,
+  ResetPassword,
 };

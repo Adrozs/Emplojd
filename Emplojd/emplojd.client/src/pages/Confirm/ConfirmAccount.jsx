@@ -42,14 +42,7 @@ const ConfirmAccount = () => {
               Logga in <LoginRightArrow />
             </Link>
             <div className="flex justify-center gap-4">
-              <button
-                onClick={() =>
-                  toast(
-                    "Nytt email har skickats, kontrollera även din skräppostmapp om du inte hittar mejlet"
-                  )
-                }
-                className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center"
-              >
+              <button className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center">
                 Skicka igen <FaEnvelope size={22} />
               </button>
             </div>
