@@ -81,9 +81,9 @@ namespace Emplojd.Repository
                 $"All the best,<br>" +
                 $"Emplojd</p>" +
                 // Remove this when not testing anymore
-                $"<p><br>TEMP REMOVE LATER <br> CODE: {Uri.EscapeDataString(emailConfirmationToken)} <br> USERID: {user.Id} </p>";
+                $"<p><br><br>TEMP REMOVE LATER <br> CODE: {Uri.EscapeDataString(emailConfirmationToken)} <br> USERID: {user.Id} </p>";
 
-            // Send email to users email with message and confirmaton link
+            // Attempt to send email to user
             var sendEmailResult = await _emailSender.SendEmailAsync(email, emailSubject, emailBody);
 
             if (!sendEmailResult.Success)
@@ -153,6 +153,7 @@ namespace Emplojd.Repository
 
         public async Task<IdentityResult> EmailVerificationAsync(string userId, string code)
         {
+            // Check and validate input and user
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
                 return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or verification code." });
 
@@ -160,14 +161,13 @@ namespace Emplojd.Repository
             if (user == null)
                 return IdentityResult.Failed(new IdentityError { Description = "No user found." });
 
-
+            // Attempt to confirm email
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, Uri.UnescapeDataString(code));
             
-            // If the result wasn't successful throw exception with details as to why
             if (!result.Succeeded)
                 return IdentityResult.Failed(new IdentityError { Description = "Failed to confirm email: " + string.Join(", ", result.Errors.Select(e => e.Description)) });
 
-            // Set the users email confirmation status
+            // Set email confirmation
             user.EmailConfirmed = true;
 
             return result;
@@ -186,7 +186,12 @@ namespace Emplojd.Repository
             string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(passwordResetToken)}";
 
             string emailSubject = "Password reset request";
-            string emailBody = $"Please reset your password by clicking <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>here</a>. If you did not request a password reset, please ignore this email.";
+            string emailBody = $"Please reset your password by clicking <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>here</a>. <br>" +
+                $"If you did not request a password reset, please ignore this email. <br><br>" +
+                $"If you're having trouble clicking the link, copy and paste the URL below into your browser: <br>" +
+                $"{callbackUrl}<br><br><br>" +
+                $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>";
+
 
             // Attempt to send email
             EmailResult sendEmailResult = await _emailSender.SendEmailAsync(user.Email, emailSubject, emailBody);
@@ -199,7 +204,7 @@ namespace Emplojd.Repository
 
         public async Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm)
         {
-            // Check input 
+            // Check and validate input 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
                 return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or verification code." });
 
@@ -222,7 +227,7 @@ namespace Emplojd.Repository
             }
             catch (Exception) 
             {
-                // Rethrow the unexpected exception to be handled further up
+                // Rethrow the unexpected exception to be handled further up the chain
                 throw;
             }
         }
@@ -260,10 +265,10 @@ namespace Emplojd.Repository
                 _context.CoverLetters.RemoveRange(user.SavedCoverLetters);
                 _context.CvManually.RemoveRange(user.CvManually);
 
-                // Remove job ads from this user but not from other users
+                // Save users job ads to a new list to ensure we have a separate independent copy when we clear the user job ad relation 
                 var jobAdsToCheck = new List<SavedJobAd>(user.SavedJobAds);
 
-                // Clear the users saved job ads
+                // Clear the users saved job ad relations
                 user.SavedJobAds.Clear();
 
                 // Save before proceeding
