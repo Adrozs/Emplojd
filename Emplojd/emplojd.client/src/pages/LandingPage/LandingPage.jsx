@@ -76,25 +76,28 @@ export default function LandingPage() {
               Hitta <span className="text-customBlue">rätt</span> jobb för dig
             </h6>
           </div>
+          <div className="max-w-[800px] mx-auto pb-10">
+            {" "}
+            <SearchForm />
+          </div>
 
-          <SearchForm />
           <ActiveSlider />
           <div className="flex justify-center sm:mt-8">
             <Link
               to="/signin"
-              className="flex items-center gap-3 rounded-[4px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
+              className="flex items-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
             >
               Logga In <FaArrowRight size={14} />
             </Link>
           </div>
         </div>
       </section>
-      <p className="relative ms-10 mr-10 mb-28 md:mb-20 lg:mb-10 -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-80 text-center xxl:mb-40">
+      {/* <p className="relative ms-10 mr-10 mb-28 md:mb-20 lg:mb-10 -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-80 text-center xxl:mb-40">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
         commodo consequat.
-      </p>
+      </p> */}
       <Footer />
     </>
   );
