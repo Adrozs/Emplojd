@@ -105,35 +105,18 @@ namespace Emplojd.Repositories
         {
             User user = await GetUserAndJobAdsAsync(currentUser);
 
+            // Get all the saved job ads info and save it into a dto
             List<SavedJobAdDto>? savedJobAds = user.SavedJobAds.Select(j => new SavedJobAdDto
             {
                 PlatsbankenId = j.PlatsbankenJobAdId,
                 Headline = j.Headline,
                 Publication_Date = j.Publication_Date,
-                Description = new DescriptionDto
-                {
-                    Text_Formatted = j.Description
-                },
-                Employment_Type = new EmploymentTypeDto
-                {
-                    Label = j.Employment_Type
-                },
-                Working_Hours_Type = new WorkingHoursTypeDto
-                {
-                    Label = j.Working_Hours_Type
-                },
-                Employer = new EmployerDto
-                {
-                    Name = j.Employer
-                },
-                Occupation = new OccupationDto
-                {
-                    Label = j.Occupation
-                },
-                Workplace_Address = new WorkplaceAddressDto
-                {
-                    Municipality = j.Workplace_Address
-                }
+                Description = new DescriptionDto { Text_Formatted = j.Description },
+                Employment_Type = new EmploymentTypeDto { Label = j.Employment_Type },
+                Working_Hours_Type = new WorkingHoursTypeDto { Label = j.Working_Hours_Type },
+                Employer = new EmployerDto { Name = j.Employer },
+                Occupation = new OccupationDto { Label = j.Occupation },
+                Workplace_Address = new WorkplaceAddressDto { Municipality = j.Workplace_Address }
             }).ToList();
 
             return savedJobAds;
