@@ -112,5 +112,4 @@ export {
   sendLikeDataBackend,
   getLikeDataBackend,
   deleteLikeDataBackend,
-  getCoverLetter,
 };

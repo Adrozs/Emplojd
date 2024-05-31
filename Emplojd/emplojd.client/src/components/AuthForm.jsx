@@ -162,7 +162,7 @@ const AuthForm = () => {
           Glömt ditt konto?
         </Link>
       </div>
-      <div className="mb-8">{values.isMember && <ThirdPartyLogin />}</div>
+      
       <div className="flex flex-col gap-4">
         <button
           className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 mb-2 flex px-8 justify-between items-center"
@@ -178,7 +178,9 @@ const AuthForm = () => {
             </>
           )}
         </button>
-        <div className="flex justify-center gap-4">
+      </div>
+      <div className="my-8">{values.isMember && <ThirdPartyLogin />}</div>
+      <div className="flex justify-center gap-4">
           <div>
             {!values.isMember
               ? "Har du redan ett konto?"
@@ -192,7 +194,6 @@ const AuthForm = () => {
             {!values.isMember ? "Logga In" : "Skapa konto"}
           </button>
         </div>
-      </div>
     </form>
   );
 };
