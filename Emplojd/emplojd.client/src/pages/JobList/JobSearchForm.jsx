@@ -189,9 +189,15 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   return (
     <div className="flex gap-2 justify-between items-center bg-white mb-3 border-2 mx-6 p-2.5 rounded-xl">
       <div className="flex gap-5 ">
-        <button onClick={handleClickForSearchAgain}>
-          <PiClockCounterClockwiseBold size={20} className="text-customBlue" />
-        </button>
+        <Tooltip tooltip="Sök igen">
+          <button onClick={handleClickForSearchAgain}>
+            {" "}
+            <PiClockCounterClockwiseBold
+              size={20}
+              className="text-customBlue"
+            />
+          </button>
+        </Tooltip>
         {search.city && !search.job && (
           <div onClick={handleClickForSearchAgain}>{search.city} </div>
         )}
