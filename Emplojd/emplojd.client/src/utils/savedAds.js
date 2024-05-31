@@ -88,4 +88,28 @@ function deleteLikeDataBackend(platsbankenJobAdId) {
     });
 }
 
-export { sendLikeDataBackend, getLikeDataBackend, deleteLikeDataBackend };
+/* Saved coverletters */
+// function getCoverLetter() {
+//   const token = localStorage.getItem("authToken");
+
+//   return axios
+//     .get("https://localhost:54686/saved-letters", {
+//       headers: {
+//         Accept: "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     })
+//     .then((response) => {
+//       console.log(response.data);
+//       return response;
+//     })
+//     .catch((error) => {
+//       return null;
+//     });
+// }
+
+export {
+  sendLikeDataBackend,
+  getLikeDataBackend,
+  deleteLikeDataBackend,
+};

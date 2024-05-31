@@ -2,38 +2,55 @@ import React, { useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import { FaCalendarDays } from 'react-icons/fa6';
 
-const DatePick = () => {
+const DatePick = ({ name, labelText, disabled = false }) => {
 	const [startdate, setStartDate] = useState(new Date());
 	const [enddate, setEndDate] = useState(new Date());
 
-	return (
-		<div>
-			<div className="flex justify-center">
-				<label>
-					<div className=" items-center p-1">
-						<div className="relative flex items-center text-gray-400">
-							<ReactDatePicker
-								selected={startdate}
-								onChange={(date) => setStartDate(date)}
-								className="rounded-xl border-2 flex-grow out-sky800 hover:border-gray-400 px-4 py-2"
-							/>
-							<FaCalendarDays className="right-9  relative" />
-						</div>
-					</div>
-				</label>
+	const inputClassName = () => {
+		let baseClass = 'w-full rounded-xl border-2 outline-sky-800 px-4 py-2';
+		if (disabled) {
+			return baseClass + ' border-gray-300 bg-gray-100 cursor-not-allowed';
+		} else {
+			return baseClass + ' flex-grow hover:border-gray-400';
+		}
+	};
 
-				<label>
-					<div className="p-1 text-gray-400">
-						<ReactDatePicker
-							selected={enddate}
-							onChange={(date) => setEndDate(date)}
-							className="rounded-xl border-2 flex-grow out-sky800 hover:border-gray-400 px-4 py-2"
-						/>
-						<FaCalendarDays className=" left-40 -top-7 relative" />
-					</div>
-				</label>
+	return (
+		<>
+			{' '}
+			<label
+				htmlFor={name}
+				className={`text-lg mb-2 font-semibold px-2 inline-block py-1 rounded-lg`}
+			>
+				{' '}
+				{labelText}
+			</label>
+			<div className="flex justify-between pb-4">
+				<div className="relative flex items-center text-gray-400 w-full max-w-xs">
+					<ReactDatePicker
+						id={name}
+						name={name}
+						selected={startdate}
+						onChange={(date) => setStartDate(date)}
+						className={inputClassName()}
+						disabled={disabled}
+						popperPlacement="top-end"
+					/>
+					<FaCalendarDays className="absolute right-4 text-gray-400" />
+				</div>
+
+				<div className="relative flex items-center text-gray-400 w-full max-w-xs ml-4">
+					<ReactDatePicker
+						selected={enddate}
+						onChange={(date) => setEndDate(date)}
+						className={inputClassName()}
+						disabled={disabled}
+						popperPlacement="top-end"
+					/>
+					<FaCalendarDays className="absolute right-4 text-gray-400" />
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

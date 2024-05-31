@@ -8,6 +8,8 @@ export default {
         customBlue: "#0EA5E9",
         customCyan: "rgb(202, 129, 237)",
         customDarkBg: "#2C3135",
+        typingColor: '#075985',
+        typingColorDark: '#059669',
       },
       fontFamily: {
         Glockenspiel: ["Glockenspiel", "Inter"],
@@ -21,7 +23,8 @@ export default {
         xxl: "2400px",
       },
       backgroundImage: {
-        "gradient-to-r-custom": "linear-gradient(140deg, #4086C6, #CA81ED)",
+        'gradient-to-140-sky-violet': 'linear-gradient(140deg, #4086C6, #CA81ED)', 
+        'dark-gradient-to-140-purple-slate': 'linear-gradient(140deg, #5B21B6, #6B7280)', 
       },
     },
   },

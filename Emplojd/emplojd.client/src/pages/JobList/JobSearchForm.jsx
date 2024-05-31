@@ -88,7 +88,7 @@ function JobSearchForm() {
       <div className="mt-3 max-w-sm mx-auto text-sm text-center border-0 mb-6">
         <div className="flex items-center justify-center gap-2">
           <FaBullhorn className="mt-1" />
-          <Link className="text-[13px] underline " to={"/profile"}>
+          <Link className="text-[13px] underline " to={"/myprofile"}>
             Har du laddat upp ditt cv än?
           </Link>
         </div>
@@ -135,7 +135,7 @@ export function SearchForm({
           value={job}
           onChange={(e) => setJob(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
-          placeholder="...."
+          placeholder="Sök"
         />
       </div>
       <div className="mb-5">
@@ -146,7 +146,7 @@ export function SearchForm({
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
-          placeholder="...."
+          placeholder="Sök"
         >
           <option value=" ">Hela landet</option>
           <option value="Stockholm">Stockholm</option>
@@ -189,9 +189,15 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   return (
     <div className="flex gap-2 justify-between items-center bg-white mb-3 border-2 mx-6 p-2.5 rounded-xl">
       <div className="flex gap-5 ">
-        <button onClick={handleClickForSearchAgain}>
-          <PiClockCounterClockwiseBold size={20} className="text-customBlue" />
-        </button>
+        <Tooltip tooltip="Sök igen">
+          <button onClick={handleClickForSearchAgain}>
+            {" "}
+            <PiClockCounterClockwiseBold
+              size={20}
+              className="text-customBlue"
+            />
+          </button>
+        </Tooltip>
         {search.city && !search.job && (
           <div onClick={handleClickForSearchAgain}>{search.city} </div>
         )}

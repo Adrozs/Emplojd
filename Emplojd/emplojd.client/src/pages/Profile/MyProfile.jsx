@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
 import ListForm from "../../components/ListForm";
 import { FaPlus } from "react-icons/fa";
+import { useDarkMode } from "../../components/Icons/DarkModeHook";
 
 function MyProfile() {
   const initialState = {
@@ -24,6 +25,7 @@ function MyProfile() {
   const prevProfilePic = useRef(profilePic);
   const prevSelectedOption = useRef(selectedOption);
   const fileInputRef = useRef(null);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -58,7 +60,6 @@ function MyProfile() {
 
         const data = await response.json();
         setValues({
-          email: data.email || "",
           firstname: data.firstname || "",
           lastname: data.lastname || "",
           isMember: data.isMember || false,
@@ -148,8 +149,8 @@ function MyProfile() {
 
       let result;
       try {
-        const responseText = await response.text(); 
-        result = responseText ? JSON.parse(responseText) : {}; 
+        const responseText = await response.text();
+        result = responseText ? JSON.parse(responseText) : {};
       } catch (error) {
         throw new Error("Invalid JSON response");
       }
@@ -179,13 +180,25 @@ function MyProfile() {
     prevSelectedOption.current = selectedOption;
   }, [values, profilePic, selectedOption]);
 
+  const wordBgColorInterests = isDarkMode ? "bg-indigo-500" : "bg-sky-100";
+  const wordBgColorDescriptiveWords = isDarkMode
+    ? "bg-indigo-500"
+    : "bg-purple-100";
+
+  const baseClasses =
+    "w-full h-16 rounded-xl text-white text-xl mb-32 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-9";
+  const enabledClasses =
+    "bg-[#0783F6] hover:bg-[#045199] active:bg-[#066DCC] dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:active:bg-indigo-700";
+  const disabledClasses =
+    "bg-gray-300 hover:bg-gray-300 active:bg-gray-300 cursor-not-allowed dark:bg-gray-500 dark:hover:bg-gray-400 dark:active:bg-gray-400";
+
   return (
     <>
       <HeaderOtherPages />
-      <div className="flex flex-col h-screen justify-between">
-        <div className="mx-4">
+      <div className="flex flex-col h-screen justify-between dark:bg-gray-800">
+        <div className="px-4 dark:bg-gray-800">
           <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
-            <div className="grid z-10 bg-gradient-to-r-custom text-white p-4 w-48 rounded-xl">
+            <div className="grid z-10 bg-gradient-to-140-sky-violet dark:bg-dark-gradient-to-140-purple-slate text-white p-4 w-48 rounded-xl">
               <h2 className="font-semibold">Min Profil</h2>
               <h3 className="row-start-2 text-xs">
                 {unsavedChanges
@@ -255,7 +268,7 @@ function MyProfile() {
                 src={profilePic || "path_to_default_image.jpg"}
                 className="rounded-full w-full h-full object-cover"
               />
-              <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-0 hover:bg-opacity-30 opacity-0 hover:opacity-75 transition-opacity duration-300 cursor-pointer">
+              <div className="absolute inset-0 flex justify-center items-center bg-white dark:bg-slate-900 bg-opacity-0 hover:bg-opacity-30 opacity-0 hover:opacity-75 transition-opacity duration-300 cursor-pointer">
                 <FaPlus onClick={triggerFileInput} size="2rem" fill="white" />
               </div>
               <input
@@ -266,7 +279,7 @@ function MyProfile() {
             </div>
           </div>
           <div>
-            <div className="mb-4">
+            <div className="mb-4 dark:text-white">
               <FormRow
                 type="firstname"
                 labelText="Förnamn"
@@ -281,24 +294,17 @@ function MyProfile() {
                 value={values.lastname}
                 handleChange={handleChange}
               />
-              <FormRow
-                type="email"
-                name="email"
-                labelText="Email"
-                value={values.email}
-                handleChange={handleChange}
-                placeholder="your.email@email.com"
-              />
             </div>
-            <div>
+            <div className="dark:text-white">
               <ListForm
-                wordBgColor="bg-sky-100"
+                wordBgColor={wordBgColorInterests}
                 name="Mina intressen"
                 type="interests"
                 onChange={(value) => handleListFormChange("interests", value)}
                 value={interests}
               />
               <ListForm
+                wordBgColor={wordBgColorDescriptiveWords}
                 name="Beskrivning av mig"
                 type="descriptiveWords"
                 onChange={(value) =>
@@ -309,7 +315,7 @@ function MyProfile() {
             </div>
             <div className="pb-6 rounded-lg max-w-md">
               <div className="flex items-center mb-4">
-                <div className="text-line mb-2 font-semibold flex items-center top-1 relative px-2 py-1 rounded-lg">
+                <div className="text-line mb-2 font-semibold flex items-center top-1 relative px-2 py-1 rounded-lg dark:text-white">
                   Signatur
                 </div>
                 <div className="ml-2 bg-purple-400 px-2.5 py-1 rounded-full text-sm text-white font-semibold flex items-center justify-center">
@@ -324,7 +330,9 @@ function MyProfile() {
                     checked={selectedOption === "none"}
                     onChange={() => handleRadioChange("none")}
                   />
-                  <span className="ml-2 text-gray-700">Ingen signatur</span>
+                  <span className="ml-2 text-gray-700 dark:text-white">
+                    Ingen signatur
+                  </span>
                 </label>
                 <label className="inline-flex items-center mb-2">
                   <input
@@ -333,7 +341,7 @@ function MyProfile() {
                     checked={selectedOption === "ai"}
                     onChange={() => handleRadioChange("ai")}
                   />
-                  <span className="ml-2 text-gray-700">
+                  <span className="ml-2 text-gray-700 dark:text-white">
                     Låt AI generera signaturer i mina brev
                   </span>
                 </label>
@@ -344,7 +352,7 @@ function MyProfile() {
                     checked={selectedOption === "custom"}
                     onChange={() => handleRadioChange("custom")}
                   />
-                  <span className="ml-2 text-gray-700">
+                  <span className="ml-2 text-gray-700 dark:text-white">
                     Skapa egen signatur
                   </span>
                 </label>
@@ -352,15 +360,14 @@ function MyProfile() {
             </div>
 
             <button
-              className={`w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-32 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-96 ${
-                !unsavedChanges
-                  ? "bg-gray-300 hover:bg-gray-300 active:bg-gray-300 cursor-not-allowed"
-                  : ""
-              }`}
               type="submit"
               disabled={!unsavedChanges}
               onClick={handleSubmit}
+              className={`${baseClasses} ${
+                unsavedChanges ? enabledClasses : disabledClasses
+              }`}
             >
+              {" "}
               Spara ändringar <LoginRightArrow />
             </button>
           </div>

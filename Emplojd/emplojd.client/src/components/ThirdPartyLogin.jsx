@@ -78,21 +78,21 @@ const ThirdPartyLogin = () => {
   return (
     <div>
       <div className="flex items-center mb-6">
-        <span className="flex-grow h-[2px] bg-gray-300"></span>
+        <span className="flex-grow h-[2px] bg-gray-300 dark:bg-slate-500"></span>
         <div className="mx-4">Eller</div>
-        <span className="flex-grow h-[2px] bg-gray-300"></span>
+        <span className="flex-grow h-[2px] bg-gray-300 dark:bg-slate-500"></span>
       </div>
       <div className="flex flex-col items-center gap-2 text-gray-800 font-medium">
         <button
           onClick={handleGoogleLogin}
-          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100"
+          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-sky-900 dark:text-white dark:border-slate-500"
         >
           <GoogleSvg />
           Logga in med Google
         </button>
         <button
           onClick={handleLinkedInLogin}
-          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100"
+          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-sky-900 dark:text-white dark:border-slate-500"
         >
           <LinkedInSvg />
           Logga in med LinkedIn

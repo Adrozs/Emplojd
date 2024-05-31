@@ -52,3 +52,69 @@ export async function getOneBackendJob(id) {
 
   return jobs;
 }
+
+export async function getProfileInfo() {
+  const token = localStorage.getItem("authToken");
+
+  const res = await fetch(
+    `https://localhost:54686/api/UserProfile/GetUserProfile`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!res.ok) throw Error(`Couldn't find job #${id}`);
+
+  const profile = await res.json();
+  console.log(profile);
+
+  return profile;
+}
+
+// function sendLikeDataBackend(
+//   firstName,
+//   lastName,
+//   userInterestTags,
+//   descriptiveWords,
+//   jobId,
+//   jobTitle,
+//   jobDescription,
+//   cvText,
+//   temperature
+// ) {
+//   const token = localStorage.getItem("authToken");
+
+//   const postData = {
+//     firstname: firstname || "",
+//     lastname: lastname || "",
+//     userInterestTags: descriptiveWords || "",
+//     descriptiveWords: interests || "",
+//     jobId: job.id || "",
+//     jobTitle: job.headline || "",
+//     jobDescription: job.description.text || "",
+//     cvText: null,
+//     temperature: 1,
+//   };
+
+//   console.log("Sending cleaned data to backend:", postData);
+
+//   axios
+//     .post("https://localhost:54686/save-ad", postData, {
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     })
+//     .then((response) => {
+//       console.log("Gillad annons", response.data);
+//     })
+//     .catch((error) => {
+//       if (error.response) {
+//         console.error("Error response:", error.response.data);
+//       } else {
+//         console.error("Error", error.message);
+//       }
+//     });
+// }

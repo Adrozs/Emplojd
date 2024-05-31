@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -18,11 +18,17 @@ function Modal({ onClose, menu }) {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
   const handleSignOut = () => {
     removeUserFromLocalStorage();
     logout();
     navigate("/signin");
     console.log("User signed out.");
+  };
+
+  const handleToggle = () => {
+      setIsDarkMode(!isDarkMode);
   };
 
   useEffect(() => {
@@ -60,38 +66,42 @@ function Modal({ onClose, menu }) {
                     className="flex items-end gap-4 text-gray-700 dark:text-white"
                   >
                     {" "}
-                    <LogOutSVG />
+                    <LogOutSVG isDarkMode={isDarkMode}/>
                     <span> Logga ut</span>
                   </button>
                 ) : (
                   <button className="flex items-center gap-4 text-gray-700 dark:text-white">
                     {" "}
-                    <LogInSVG />
+                    <LogInSVG isDarkMode={isDarkMode}/>
                     <Link to="/signin">
                       <span> Logga in</span>
                     </Link>
                   </button>
                 )}
                 <button onClick={() => onClose(!menu)} className="self-end">
-                  <CancelSVG className="bg-white bg-clip-border"/>
+                  <CancelSVG className="bg-white bg-clip-border" isDarkMode={isDarkMode}/>
                 </button>
               </div>
               <div className="flex flex-col  mx-auto">
                 <NavItem>
-                  <SearchSVG />{" "}
+                  <SearchSVG isDarkMode={isDarkMode}/>{" "}
                   <Link to="/joblist">
-                    <span className="text-gray-700 font-medium dark:text-white">Sök Jobb</span>
+                    <span className="text-gray-700 font-medium dark:text-white">
+                      Sök Jobb
+                    </span>
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <ProfileSVG />
+                  <ProfileSVG isDarkMode={isDarkMode}/>
                   <Link to="/MyProfile">
-                    <span className="text-gray-700 font-medium dark:text-white">Min Profil</span>
+                    <span className="text-gray-700 font-medium dark:text-white">
+                      Min Profil
+                    </span>
                   </Link>
                 </NavItem>
                 <div className="flex flex-col">
                   <NavItem>
-                    <HeartSVG />
+                    <HeartSVG isDarkMode={isDarkMode}/>
                     {isLoggedIn ? (
                       <Link to="/saved">
                         <span className="text-gray-700 font-medium dark:text-white">
@@ -105,7 +115,7 @@ function Modal({ onClose, menu }) {
                     )}
                   </NavItem>
                   <NavItem>
-                    <LetterSVG />
+                    <LetterSVG isDarkMode={isDarkMode}/>
                     {isLoggedIn ? (
                       <Link to="/NoEarlierCoverLetter">
                         <span className="text-gray-700 font-medium dark:text-white">
@@ -119,10 +129,12 @@ function Modal({ onClose, menu }) {
                     )}
                   </NavItem>
                   <NavItem>
-                    <MyCvSVG />
+                    <MyCvSVG isDarkMode={isDarkMode}/>
                     {isLoggedIn ? (
                       <Link to="/NoEarlierCoverLetter">
-                        <span className="text-gray-700 font-medium dark:text-white">Mitt CV</span>
+                        <span className="text-gray-700 font-medium dark:text-white">
+                          Mitt CV
+                        </span>
                       </Link>
                     ) : (
                       <span className="text-gray-400 font-medium">Mitt CV</span>
@@ -134,7 +146,7 @@ function Modal({ onClose, menu }) {
                 <div className="font-Glockenspiel text-gray-700 text-2xl text-center dark:text-white">
                   EMPLOJD
                 </div>
-                <DarkModeToggleSwitch />
+                <DarkModeToggleSwitch onToggle={handleToggle}/>
               </div>
             </div>
           </div>

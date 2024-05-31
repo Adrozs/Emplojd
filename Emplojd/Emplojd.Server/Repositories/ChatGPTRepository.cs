@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Emplojd.Repositories
 {
@@ -96,7 +97,10 @@ namespace Emplojd.Repositories
                 CoverLetterId = c.SavedCoverLetterId,
                 Temperature = c.Temperature,
                 CoverLetterTitle = c.CoverLetterTitle,
-                CoverLetterContent = c.CoverLetterContent
+                CoverLetterContent = c.CoverLetterContent,
+                CompanyName = c.CompanyName,
+                Date = c.Date
+                
             })
             .ToList();
 
@@ -126,6 +130,8 @@ namespace Emplojd.Repositories
                         CoverLetterTitle = request.CoverLetterTitle,
                         CoverLetterContent = request.CoverLetterContent,
                         Temperature = request.Temperature,
+                        CompanyName = request.CompanyName,
+                        Date = request.Date,
                     };
 
                     // Add cover letter to user and the context
@@ -136,6 +142,8 @@ namespace Emplojd.Repositories
                     coverLetter.CoverLetterTitle = request.CoverLetterTitle;
                     coverLetter.CoverLetterContent = request.CoverLetterContent;
                     coverLetter.Temperature = request.Temperature;
+                    coverLetter.CompanyName = request.CompanyName;
+                    coverLetter.Date = request.Date;
 
                     _context.CoverLetters.Update(coverLetter);
                 }
