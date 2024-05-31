@@ -13,7 +13,9 @@ import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { RiCheckboxCircleFill } from "react-icons/ri";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-import { getOneBackendJob } from "../../utils/backendserver";
+import { getOneBackendJob, getProfileInfo } from "../../utils/backendserver";
+import axios from "axios";
+import { useMutation } from "react-query";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -263,9 +265,64 @@ function ApplySideThree({ job, page, setPage }) {
   const [editable, setEditable] = useState(false);
   const editEl = useRef(null);
   const [copied, setCopied] = useState(false);
-  const [letterContent, setLetterContent] = useState(
-    `Hej där,\n\nJag hoppas att detta brev når er i god hälsa och högmod. Mitt namn är Fady och jag skriver till er med en genuin passion för .NET-utveckling och en stark önskan att bidra till ert team.\n\nJag har nyligen stött på er annonsering för en .NET-utvecklare och jag kunde inte motstå att söka. Efter att ha granskat er verksamhet och era projekt, är jag imponerad av den nivå av innovation och engagemang ni visar. Att få möjlighet att arbeta med er och bidra till era framgångar skulle vara en ära för mig.\n\nMed en gedigen erfarenhet inom .NET-utveckling och en passion för att lösa komplexa problem, tror jag att jag kan vara en tillgång för ert team. Jag har arbetat med olika projekt inom området och har en djup förståelse för ramverket och dess möjligheter. Jag är van vid att arbeta både självständigt och i team och har en stark vilja att lära och växa.\n\nDet är min övertygelse att genom att kombinera min tekniska expertis med min förmåga att tänka kreativt och problemlösningsorienterat, kan jag bidra till att driva era projekt framåt och uppnå era mål.\n\nJag ser fram emot möjligheten att diskutera hur jag kan bidra till ert team ytterligare. Tack för er tid och övervägande.\n\nMed vänliga hälsningar,\nFady`
-  );
+  const [letterContent, setLetterContent] = useState("");
+
+  const [profil, setProfile] = useState("");
+
+  const { mutate, isLoading, error, data } = useMutation(async (postData) => {
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      "https://localhost:54686/GetCoverLetter",
+      postData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  });
+
+  useEffect(() => {
+    const fetchProfileInfo = async () => {
+      try {
+        const profile = await getProfileInfo();
+        setProfile(profile);
+        console.log(profile);
+      } catch (error) {
+        console.error("Error fetching profile info:", error);
+      }
+    };
+    fetchProfileInfo();
+  }, []);
+
+  useEffect(() => {
+    if (profil && job) {
+      const postData = {
+        firstname: profil.firstname || "",
+        lastname: profil.lastname || "",
+        userInterestTags: profil.userInterestTags || [],
+        descriptiveWords: profil.descriptiveWords || [],
+        jobId: job.id || 0,
+        jobTitle: job.headline || "",
+        jobDescription: job.description?.text || "",
+        cvText: letterContent,
+        temperature: 0.7,
+      };
+
+      console.log("Sending data to backend:", postData);
+      mutate(postData);
+    }
+  }, [profil, job, mutate]);
+
+  useEffect(() => {
+    if (data) {
+      setLetterContent(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (editable) {
@@ -281,7 +338,7 @@ function ApplySideThree({ job, page, setPage }) {
     navigator.clipboard
       .writeText(letterContent)
       .then(() => setCopied(true))
-      .catch((error) => console.error("Could not copy text: ", error));
+      .catch((error) => console.error("Could not copy text:", error));
   };
 
   const saveAsPdf = () => {
@@ -316,20 +373,26 @@ function ApplySideThree({ job, page, setPage }) {
         </div>
       </div>
       <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px]">
-        <div className="self-end">
-          <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
-            <button onClick={copyTextToClipboard}>
-              <FiCopy size={22} />
-            </button>
-          </Tooltip>
-        </div>
-        <div
-          className="p-4"
-          contentEditable={editable}
-          ref={editEl}
-          onInput={handleInput}
-          dangerouslySetInnerHTML={{ __html: letterContent }}
-        />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="self-end">
+              <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
+                <button onClick={copyTextToClipboard}>
+                  <FiCopy size={22} />
+                </button>
+              </Tooltip>
+            </div>
+            <div
+              className="p-4"
+              contentEditable={editable}
+              ref={editEl}
+              onInput={handleInput}
+              dangerouslySetInnerHTML={{ __html: letterContent }}
+            />
+          </>
+        )}
       </aside>
       <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
         <div>
@@ -368,6 +431,8 @@ function ApplySideThree({ job, page, setPage }) {
           </button>
         </div>
       </div>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
     </div>
   );
 }
