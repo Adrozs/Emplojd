@@ -304,7 +304,7 @@ function ApplySideThree({ job, page, setPage }) {
       const postData = {
         firstname: profil.firstname || "",
         lastname: profil.lastname || "",
-        userInterestTags: profil.userInterestTags || [],
+        userInterestTags: profil.interests || [],
         descriptiveWords: profil.descriptiveWords || [],
         jobId: job.id || 0,
         jobTitle: job.headline || "",
@@ -431,8 +431,6 @@ function ApplySideThree({ job, page, setPage }) {
           </button>
         </div>
       </div>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
     </div>
   );
 }
