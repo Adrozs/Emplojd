@@ -10,6 +10,7 @@ using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Emplojd.Repositories
 {
@@ -160,11 +161,22 @@ namespace Emplojd.Repositories
                 }
                 else
                 {
-                    coverLetter.CoverLetterTitle = request.CoverLetterTitle;
-                    coverLetter.CoverLetterContent = request.CoverLetterContent;
-                    coverLetter.Temperature = request.Temperature;
-                    coverLetter.CompanyName = request.CompanyName;
-                    coverLetter.Date = request.Date;
+                    // if sent in values are default (meaning no change was made) ignore them
+                    if (!string.IsNullOrEmpty(request.CoverLetterTitle))
+                        coverLetter.CoverLetterTitle = request.CoverLetterTitle;
+                    
+                    if (!string.IsNullOrEmpty(request.CoverLetterContent))
+                        coverLetter.CoverLetterContent = request.CoverLetterContent;
+
+                    if (request.Temperature != 0.0f)
+                        coverLetter.Temperature = request.Temperature;
+
+                    if (!string.IsNullOrEmpty(request.CompanyName))
+                        coverLetter.CompanyName = request.CompanyName;
+
+                    if (request.Date != default(DateTime))
+                        coverLetter.Date = request.Date;
+
 
                     _context.CoverLetters.Update(coverLetter);
                 }
