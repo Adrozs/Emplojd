@@ -7,6 +7,8 @@ import ListForm from '../../components/ListForm';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePick from '../../components/DatePick';
 
+import AddNewButton from '../../components/AddNewButton';
+
 function CreateProfile() {
 	const initialState = {
 		firstname: '',
@@ -25,6 +27,8 @@ function CreateProfile() {
 	const [values, setValues] = useState(initialState);
 	const [interests, setInterests] = useState([]);
 	const [descriptiveWords, setDescriptiveWords] = useState([]);
+
+	const [focusedInput, setFocusedInput] = useState(null);
 
 	const messages = [
 		'Börja hitta jobb direkt efter du har skapat din jobbprofil!',
@@ -213,45 +217,67 @@ function CreateProfile() {
 										Ange information manuellt
 									</label>
 								</div>
-
+								<h2 className="text-xl font-bold ml-2">Utbildning</h2>
 								<div className="mb-6">
 									<FormRow
 										type="text"
-										name="educationTitle"
+										name="Utbildningstitel"
 										placeholder="Ange namn på utbildning"
 										handleChange={handleChange}
 										disabled={!manualInputEnabled}
 									/>
 									<FormRow
 										type="text"
-										name="schoolName"
+										name="Skolans namn"
 										placeholder="Ange namn på skolan/lärosäte"
 										handleChange={handleChange}
 										disabled={!manualInputEnabled}
 									/>
 								</div>
-								<p className="font-bold">Studieperiod (från - till)</p>
-								<DatePick />
+								<DatePick
+									name="Studieperiod"
+									labelText="Studieperiod (från - till)"
+									disabled={!manualInputEnabled}
+								/>
 
-								<div className="mb-6">
+								<AddNewButton />
+
+								<h2 className="text-xl font-bold ml-2 mt-14">
+									Arbetslivserfarenhet
+								</h2>
+								<div className="mb-6 mt-2">
 									<FormRow
 										type="text"
-										name="jobTitle"
+										name="Jobbtitel"
 										placeholder="Ange jobbtitel"
 										handleChange={handleChange}
 										disabled={!manualInputEnabled}
 									/>
 									<FormRow
 										type="text"
-										name="companyName"
+										name="Företagsnamn"
 										placeholder="Ange företagsnamn"
 										handleChange={handleChange}
 										disabled={!manualInputEnabled}
 									/>
+									<FormRow
+										type="textarea"
+										name="Arbetsuppgifter (max 500 tecken)"
+										placeholder="Beskriv dina arbetsuppgifter"
+										handleChange={handleChange}
+										disabled={!manualInputEnabled}
+										maxLength={500}
+										rows={5}
+									/>
 								</div>
 
-								<p className="font-bold">Anställningsperiod (från - till)</p>
-								<DatePick />
+								<DatePick
+									name="Anställningsperiod"
+									labelText="Anställningsperiod (från - till)"
+									disabled={!manualInputEnabled}
+								/>
+
+								<AddNewButton />
 							</div>
 						)}
 					</div>
