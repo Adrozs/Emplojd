@@ -66,3 +66,20 @@ a {
 .inner-shadow-bottom {
   box-shadow: inset 0px -6px 10px -10px rgba(0, 0, 0, 0.4);
 }
+
+.custom-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #4086C6, #CA81ED);
+  cursor: pointer;
+}
+
+.custom-slider::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(140deg,  #4086C6, #CA81ED);
+  cursor: pointer;
+}

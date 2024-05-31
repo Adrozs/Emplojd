@@ -60,7 +60,6 @@ function MyProfile() {
 
         const data = await response.json();
         setValues({
-          email: data.email || "",
           firstname: data.firstname || "",
           lastname: data.lastname || "",
           isMember: data.isMember || false,
@@ -287,14 +286,6 @@ function MyProfile() {
                 name="lastname"
                 value={values.lastname}
                 handleChange={handleChange}
-              />
-              <FormRow
-                type="email"
-                name="email"
-                labelText="Email"
-                value={values.email}
-                handleChange={handleChange}
-                placeholder="your.email@email.com"
               />
             </div>
             <div className="dark:text-white">
