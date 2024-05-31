@@ -33,15 +33,14 @@ namespace Emplojd
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
 
-            if (builder.Environment.IsDevelopment())
+        
+            // Setup database context and connection string here
+            builder.Services.AddDbContext<ApplicationContext>(options =>
             {
-                // Setup database context and connection string here
-                builder.Services.AddDbContext<ApplicationContext>(options =>
-                {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-        }
-        builder.Services.AddAuthentication(options =>
+        
+            builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
