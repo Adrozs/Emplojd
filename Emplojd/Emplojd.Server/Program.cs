@@ -33,24 +33,6 @@ namespace Emplojd
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
 
-            if (builder.Environment.IsProduction())
-            {
-                var keyVaultUrl = builder.Configuration.GetSection("KeyVault:KeyVaultURL");
-                var keyVaultClientId = builder.Configuration.GetSection("KeyVault:ClientId");
-                var keyVaultClientSecret = builder.Configuration.GetSection("KeyVault:ClientSecret");
-                var keyVaultDirectoryID = builder.Configuration.GetSection("KeyVault:DirectoryID");
-
-
-                var credential = new ClientSecretCredential(keyVaultDirectoryID.Value!.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString());
-                builder.Configuration.AddAzureKeyVault(keyVaultUrl.Value.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString(), new DefaultKeyVaultSecretManager());
-
-                var client = new SecretClient(new Uri(keyVaultUrl.Value!.ToString()), credential);
-
-                builder.Services.AddDbContext<ApplicationContext>(options =>
-                {
-                    options.UseSqlServer(client.GetSecret("ProdConnection").Value.Value.ToString());
-                });
-            }
             if (builder.Environment.IsDevelopment())
             {
                 // Setup database context and connection string here
