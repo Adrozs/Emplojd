@@ -22,8 +22,12 @@ namespace Emplojd.Server.Controllers
         {
             ClaimsPrincipal currentUser = User;
 
-            await _userProfileService.AddUserProfileAsync(userProfileDto, currentUser);
-            return Ok();
+            var result = await _userProfileService.AddUserProfileAsync(userProfileDto, currentUser);
+
+            if (result.Success)
+                return Ok("Profile successfully updated.");
+            
+             return BadRequest($"Failed to update profile: {result.ErrorMessage}");
         }
 
         [HttpPost("CreateUserCvManually")]
@@ -31,8 +35,12 @@ namespace Emplojd.Server.Controllers
         {
             ClaimsPrincipal currentUser = User;
 
-            await _userProfileService.AddUserCvManuallyAsync(currentUser, cvManuallyDtos);
-            return Ok();
+            var result = await _userProfileService.AddUserCvManuallyAsync(currentUser, cvManuallyDtos);
+
+            if (result.Success)
+                return Ok("CV successfully updated.");
+
+            return BadRequest($"Failed to update profile: {result.ErrorMessage}");
         }
 
         [HttpGet("GetUserProfile")]
@@ -42,9 +50,8 @@ namespace Emplojd.Server.Controllers
 
             var userProfile = await _userProfileService.GetUserProfileAsync(currentUser);
             if (userProfile == null)
-            {
-                return NotFound();
-            }
+                return NotFound("No matching user found.");
+
             return Ok(userProfile);
         }
 
@@ -55,9 +62,8 @@ namespace Emplojd.Server.Controllers
 
             var cvManually = await _userProfileService.GetUserCvManuallyAsync(currentUser);
             if (cvManually == null)
-            {
-                return NotFound();
-            }
+                return NotFound("No CV found for this user.");
+
             return Ok(cvManually);
         }
     }

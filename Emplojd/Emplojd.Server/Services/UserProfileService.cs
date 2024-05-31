@@ -1,6 +1,8 @@
 ﻿using Emplojd.Data;
+using Emplojd.Helpers;
 using Emplojd.Models;
 using Emplojd.Server.Models;
+using Emplojd.Server.ResultObjects;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.UserProfile;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +19,7 @@ namespace Emplojd.Server.Services
             _context = context;
         }
 
-        public async Task AddUserProfileAsync(UserProfileDto userProfileDto, ClaimsPrincipal currentUser)
+        public async Task<UserProfileResult> AddUserProfileAsync(UserProfileDto userProfileDto, ClaimsPrincipal currentUser)
         {
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
@@ -25,26 +27,24 @@ namespace Emplojd.Server.Services
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
-            {
-                user = new User
-                {
-                    FirstName = userProfileDto.FirstName,
-                    LastName = userProfileDto.LastName,
-                    UserInterestTags = userProfileDto.UserInterestTags,
-                    DescriptiveWords = userProfileDto.DescriptiveWords,
-                };
+                return UserProfileResult.Failed("No matching user found.");
 
-                _context.Users.Add(user);
-            }
-            else
+            try
             {
                 user.FirstName = userProfileDto.FirstName;
                 user.LastName = userProfileDto.LastName;
                 user.UserInterestTags = userProfileDto.UserInterestTags;
                 user.DescriptiveWords = userProfileDto.DescriptiveWords;
-            }
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+
+                return UserProfileResult.Successful() ;
+            }
+            catch (Exception ex)
+            {
+                var exResult = ExceptionHandler.HandleException(ex);
+                return UserProfileResult.Failed($"Failed to create or update profile: {exResult}");
+            }
         }
 
         public async Task<UserProfileDto> GetUserProfileAsync(ClaimsPrincipal currentUser)
@@ -52,13 +52,10 @@ namespace Emplojd.Server.Services
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
             var user = await _context.Users
-                .Include(u => u.CvManually)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
-            {
                 return null;
-            }
 
             return new UserProfileDto
             {
@@ -79,9 +76,7 @@ namespace Emplojd.Server.Services
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null || user.CvManually == null)
-            {
                 return null;
-            }
 
             return user.CvManually.Select(c => new CvManuallyDto
             {
@@ -93,7 +88,7 @@ namespace Emplojd.Server.Services
             }).ToList();
         }
 
-        public async Task AddUserCvManuallyAsync(ClaimsPrincipal currentUser, CvManuallyDto cvManuallyDtos)
+        public async Task<UserProfileResult> AddUserCvManuallyAsync(ClaimsPrincipal currentUser, CvManuallyDto cvManuallyDtos)
         {
             try
             {
@@ -103,36 +98,30 @@ namespace Emplojd.Server.Services
                     .Include(u => u.CvManually)
                     .FirstOrDefaultAsync(u => u.Email == email);
 
-                if (user != null)
-                {
-                    var newCvManually =
-                        new CvManually
-                        {
-                            PositionEducation = cvManuallyDtos.PositionEducation,
-                            StartDate = cvManuallyDtos.StartDate,
-                            EndDate = cvManuallyDtos.EndDate,
-                            SchoolWorkplace = cvManuallyDtos.SchoolWorkplace,
-                            IsEducation = cvManuallyDtos.IsEducation,
-                        };
+                if (user == null)
+                    return UserProfileResult.Failed("No matching user found.");
+               
+                var newCvManually =
+                    new CvManually
+                    {
+                        PositionEducation = cvManuallyDtos.PositionEducation,
+                        StartDate = cvManuallyDtos.StartDate,
+                        EndDate = cvManuallyDtos.EndDate,
+                        SchoolWorkplace = cvManuallyDtos.SchoolWorkplace,
+                        IsEducation = cvManuallyDtos.IsEducation,
+                    };
 
-                    //foreach (var cv in newCvManually)
-                    //{
-                    //    user.CvManually.Add(cv);
-                    //}
+                user.CvManually.Add(newCvManually);
 
-                    user.CvManually.Add(newCvManually);
+                await _context.SaveChangesAsync();
 
-                    await _context.SaveChangesAsync();
-                }
+                return UserProfileResult.Successful();
             }
             catch (Exception ex)
             {
-                // Handle the exception appropriately (log, throw, etc.)
-                // For now, let's log the exception
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                throw; // Re-throw the exception to propagate it upwards
+                var exResult = ExceptionHandler.HandleException(ex);
+                return UserProfileResult.Failed($"Failed to create or update profile: {exResult}");
             }
         }
-
     }
 }
