@@ -135,7 +135,7 @@ export function SearchForm({
           value={job}
           onChange={(e) => setJob(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
-          placeholder="...."
+          placeholder="Sök"
         />
       </div>
       <div className="mb-5">
@@ -146,7 +146,7 @@ export function SearchForm({
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
-          placeholder="...."
+          placeholder="Sök"
         >
           <option value=" ">Hela landet</option>
           <option value="Stockholm">Stockholm</option>
