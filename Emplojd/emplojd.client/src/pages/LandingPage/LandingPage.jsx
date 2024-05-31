@@ -5,7 +5,7 @@ import Footer from "../../components/Footer";
 import ActiveSlider from "../../components/Carousel/ActiveSlider";
 import Header from "../../components/Header/HeaderLandingpage";
 import { FaArrowRight } from "react-icons/fa6";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { getJobsBackend } from "../../utils/backendserver";
 import { toast } from "react-toastify";
 
@@ -56,6 +56,8 @@ export default function LandingPage() {
     }
   };
 
+  const learnMoreRef = useRef(null);
+
   return (
     <>
       <section
@@ -90,7 +92,7 @@ export default function LandingPage() {
                   <button
                     className="px-6 pt-2"
                     onClick={() => {
-                      learnMore.current?.scrollIntoView({
+                      learnMoreRef.current?.scrollIntoView({
                         behavior: "smooth",
                       });
                     }}
@@ -105,7 +107,7 @@ export default function LandingPage() {
       </section>
 
       <section className="flex flex-col dark:bg-gray-800 ">
-        <div className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
+        <div ref={learnMoreRef} className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
           <svg
             viewBox="0 0 360 81"
             fill="none"
@@ -120,8 +122,8 @@ export default function LandingPage() {
             />
           </svg>
         </div>
-        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
-          <div className=" flex justify-center">
+        <div  className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
+          <div  className=" flex justify-center">
             <h6 className="font-semi-bold mb-5 text-center text-2xl font-bold dark:text-white">
               Hitta <span className="text-customBlue dark:text-sky-500">rätt</span> jobb för dig
             </h6>

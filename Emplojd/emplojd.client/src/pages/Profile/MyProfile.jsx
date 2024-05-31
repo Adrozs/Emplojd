@@ -185,6 +185,13 @@ function MyProfile() {
     ? "bg-indigo-500"
     : "bg-purple-100";
 
+  const baseClasses =
+    "w-full h-16 rounded-xl text-white text-xl mb-32 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-9";
+  const enabledClasses =
+    "bg-[#0783F6] hover:bg-[#045199] active:bg-[#066DCC] dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:active:bg-indigo-700";
+  const disabledClasses =
+    "bg-gray-300 hover:bg-gray-300 active:bg-gray-300 cursor-not-allowed dark:bg-gray-500 dark:hover:bg-gray-400 dark:active:bg-gray-400";
+
   return (
     <>
       <HeaderOtherPages />
@@ -353,15 +360,14 @@ function MyProfile() {
             </div>
 
             <button
-              className={`w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-32 flex px-8 justify-between items-center md:mb-12 ls:mb-28 lg:mb-52 xl:mb-80 xxl:mb-9 dark:bg-indigo-500 dark:hover:bg-indigo-600  dark:active:bg-indigo-700 ${
-                !unsavedChanges
-                  ? "bg-gray-300 hover:bg-gray-300 active:bg-gray-300 cursor-not-allowed dark:bg-gray-500 dark:hover:bg-gray-400"
-                  : ""
-              }`}
               type="submit"
               disabled={!unsavedChanges}
               onClick={handleSubmit}
+              className={`${baseClasses} ${
+                unsavedChanges ? enabledClasses : disabledClasses
+              }`}
             >
+              {" "}
               Spara ändringar <LoginRightArrow />
             </button>
           </div>
