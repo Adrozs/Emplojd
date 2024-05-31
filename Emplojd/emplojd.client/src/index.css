@@ -6,7 +6,7 @@
 
 @font-face {
   font-family: "Glockenspiel";
-  src: url("./font/Glockenspiel.ttf");
+  src: url("/Glockenspiel.ttf");
 }
 
 body {
@@ -52,11 +52,11 @@ a {
 }
 
 .dark .swiper-pagination-bullet {
-  background-color: white; 
+  background-color: white;
 }
 
 .dark .swiper-pagination-bullet-active {
-  background-color: #0783F6; 
+  background-color: #0783f6;
 }
 
 .file-selected {
