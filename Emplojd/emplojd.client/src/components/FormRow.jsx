@@ -72,16 +72,16 @@ function FormRow({
 
   const inputClassName = () => {
     let baseClass =
-      "px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800";
+      "px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800 dark:bg-slate-700 dark:text-white";
     if (disabled) {
       return baseClass + " border-gray-300 bg-gray-100 cursor-not-allowed";
     }
     if (!isTouched) {
-      return baseClass + " hover:border-gray-400";
+      return baseClass + " hover:border-gray-400 dark:border-slate-500";
     } else if (isValid) {
-      return baseClass + " border-sky-800";
+      return baseClass + " border-sky-800 dark:border-emerald-600";
     } else {
-      return baseClass + " border-red-400";
+      return baseClass + " border-red-400 dark:border-red-600";
     }
   };
 
@@ -93,7 +93,7 @@ function FormRow({
       >
         {labelText || name}
       </label>
-      <div className="relative flex items-center text-gray-400">
+      <div className="relative flex items-center text-gray-400 dark:text-white">
         <input
           type={type}
           id={name}
@@ -120,7 +120,7 @@ function FormRow({
         )}
       </div>
       {(matchError || validationError) && (
-        <div className="text-red-400 text-sm mt-1 pl-2">
+        <div className="text-red-400 dark:text-red-500 text-sm mt-1 pl-2">
           &bull; {matchError || validationError}
         </div>
       )}

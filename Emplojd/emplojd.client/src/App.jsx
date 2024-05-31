@@ -29,6 +29,8 @@ import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { DarkModeProvider } from "./components/Icons/DarkModeHook";
+
 
 const router = createBrowserRouter([
   {
@@ -111,8 +113,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
-      <ToastContainer position="top-center" />
+      <DarkModeProvider>
+        <RouterProvider router={router} />
+        <ToastContainer position="top-center" />
+      </DarkModeProvider>
     </AuthProvider>
   );
 }

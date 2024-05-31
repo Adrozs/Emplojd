@@ -7,9 +7,9 @@ function SignIn() {
   return (
     <>
       <div
-        className="flex flex-col h-screen"
+        className="flex flex-col h-screen dark:bg-gray-800"
       >
-        <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
+        <div className="flex-grow bg-gradient-to-140-sky-violet dark:bg-dark-gradient-to-140-purple-slate inner-shadow-bottom">
           <Header>
             {" "}
             <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
@@ -17,7 +17,7 @@ function SignIn() {
             </h1>
           </Header>
         </div>
-          <LoginPage />
+          <LoginPage/>
       </div>
     </>
   );

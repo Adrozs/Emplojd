@@ -112,7 +112,7 @@ const AuthForm = () => {
   };
 
   return (
-    <form className="m-5 my-12" onSubmit={onSubmit}>
+    <form className="m-5 my-12 dark:bg-gray-800 dark:text-white" onSubmit={onSubmit}>
       <FormRow
         type="email"
         name="email"
@@ -152,14 +152,14 @@ const AuthForm = () => {
         />
       )}
       <div className="flex justify-end pb-6">
-        <div className="underline underline-offset-2 text-[#045199]">
+        <div className="underline underline-offset-2 text-[#045199] dark:text-sky-600">
           Glömt ditt konto?
         </div>
       </div>
       <div className="mb-8">{values.isMember && <ThirdPartyLogin />}</div>
       <div className="flex flex-col gap-4">
         <button
-          className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 justify-between items-center"
+          className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 mb-2 flex px-8 justify-between items-center"
           type="submit"
         >
           {values.isMember ? (
@@ -179,7 +179,7 @@ const AuthForm = () => {
               : "Har du inget konto?"}
           </div>
           <button
-            className="text-[#066DCC] underline underline-offset-2"
+            className="text-[#066DCC] dark:text-sky-600 underline underline-offset-2"
             type="button"
             onClick={toggleForm}
           >

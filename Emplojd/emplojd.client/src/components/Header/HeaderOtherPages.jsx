@@ -79,7 +79,7 @@ const HeaderOtherPages = () => {
 
         <div className="flex absolute w-full pt-2">
           <nav className="flex justify-between w-full items-center">
-            <div className="p-2">
+            <div className="p-4">
               <Link to="/">
                 <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
                   EMPLOJD

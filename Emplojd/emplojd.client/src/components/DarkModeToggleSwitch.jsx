@@ -1,31 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   GradientGearSVG,
   GradientMoonSVG,
   GrayGearSVG,
   GrayMoonSVG,
 } from "./Icons/MenySvg";
+import { useDarkMode } from "./Icons/DarkModeHook";
 
 const DarkModeToggleSwitch = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const displayMode = localStorage.getItem("theme");
-    return displayMode === "dark";
-  });
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (isDarkMode) {
-      html.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      html.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDarkMode]);
+  const { isDarkMode, setIsDarkMode } = useDarkMode();
 
   const toggleSwitch = () => {
-    setIsDarkMode(!isDarkMode);
+    setIsDarkMode((prevMode) => !prevMode);
   };
+
   return (
     <div className="flex justify-center items-center space-x-4">
       <span className="text-2xl">
@@ -34,7 +22,9 @@ const DarkModeToggleSwitch = () => {
       <div
         onClick={toggleSwitch}
         className={`relative inline-block w-16 h-8 rounded-full cursor-pointer transition-colors duration-300 ${
-          isDarkMode ? "bg-sky-800" : "bg-sky-500"
+          isDarkMode
+            ? "bg-dark-gradient-to-140-purple-slate"
+            : "bg-gradient-to-140-sky-violet"
         }`}
       >
         <div
