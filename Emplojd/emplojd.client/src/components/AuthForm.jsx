@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FormRow from "./FormRow";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
 import customFetch from "../utils/axios";
@@ -112,7 +112,10 @@ const AuthForm = () => {
   };
 
   return (
-    <form className="m-5 my-12 dark:bg-gray-800 dark:text-white" onSubmit={onSubmit}>
+    <form
+      className="m-5 my-12 dark:bg-gray-800 dark:text-white"
+      onSubmit={onSubmit}
+    >
       <FormRow
         type="email"
         name="email"
@@ -152,9 +155,12 @@ const AuthForm = () => {
         />
       )}
       <div className="flex justify-end pb-6">
-        <div className="underline underline-offset-2 text-[#045199] dark:text-sky-600">
+        <Link
+          to="/forgot-password"
+          className="underline underline-offset-2 text-[#045199] dark:text-sky-600"
+        >
           Glömt ditt konto?
-        </div>
+        </Link>
       </div>
       <div className="mb-8">{values.isMember && <ThirdPartyLogin />}</div>
       <div className="flex flex-col gap-4">

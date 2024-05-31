@@ -88,7 +88,7 @@ function JobSearchForm() {
       <div className="mt-3 max-w-sm mx-auto text-sm text-center border-0 mb-6">
         <div className="flex items-center justify-center gap-2">
           <FaBullhorn className="mt-1" />
-          <Link className="text-[13px] underline " to={"/profile"}>
+          <Link className="text-[13px] underline " to={"/myprofile"}>
             Har du laddat upp ditt cv än?
           </Link>
         </div>
