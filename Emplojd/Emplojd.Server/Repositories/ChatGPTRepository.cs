@@ -17,6 +17,7 @@ namespace Emplojd.Repositories
     {
         public Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto);
         Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser);
+        Task<SavedCoverLetterDto> GetSavedCoverLetterAsync(int coverLetterId, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser);
     }
@@ -105,6 +106,26 @@ namespace Emplojd.Repositories
             .ToList();
 
             return savedCoverLetters;
+        }
+
+        public async Task<SavedCoverLetterDto> GetSavedCoverLetterAsync(int coverLetterId, ClaimsPrincipal currentUser)
+        {
+            User user = await GetUserAndCoverLettersAsync(currentUser);
+
+            SavedCoverLetterDto? savedCoverLetter = user.SavedCoverLetters
+            .Where(c => c.SavedCoverLetterId == coverLetterId)
+            .Select(c => new SavedCoverLetterDto
+            {
+                CoverLetterId = c.SavedCoverLetterId,
+                Temperature = c.Temperature,
+                CoverLetterTitle = c.CoverLetterTitle,
+                CoverLetterContent = c.CoverLetterContent,
+                CompanyName = c.CompanyName,
+                Date = c.Date
+            })
+            .SingleOrDefault();
+
+            return savedCoverLetter;
         }
 
         public async Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser)

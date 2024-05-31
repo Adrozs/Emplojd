@@ -44,6 +44,23 @@ namespace Emplojd.Services
                 return ExceptionHandler.HandleException(ex);
             }
         }
+        
+        public static async Task<IResult> GetCoverLetterAsync([FromQuery] int coverLetterId, ClaimsPrincipal currentUser, [FromServices] IChatGPTRepository chatGptRepository)
+        {
+            try
+            {
+                SavedCoverLetterDto? coverLetter = await chatGptRepository.GetSavedCoverLetterAsync(coverLetterId, currentUser);
+
+                if (coverLetter == null)
+                    return Results.NotFound($"No cover letter with id \"{coverLetterId}\" was found.");
+
+                return Results.Json(coverLetter);
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
+            }
+        }
 
         public static async Task<IResult> SaveCoverLetterAsync([FromBody] SaveCoverLetterRequest request, ClaimsPrincipal currentUser, [FromServices] IChatGPTRepository chatGptRepository)
         {
