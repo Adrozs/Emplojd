@@ -38,7 +38,7 @@ const ConfirmEmail = () => {
   return (
     <>
       <div className="flex flex-col h-screen pb-12">
-        <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
+        <div className="flex-grow inner-shadow-bottom bg-gradient-to-br to-[#CA81ED] from-[#4086C6] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat">
           <Header>
             {" "}
             <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
