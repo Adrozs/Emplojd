@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
+import { useDarkMode } from "../components/Icons/DarkModeHook";
 
 function AccountForm({
   type,
@@ -24,6 +25,7 @@ function AccountForm({
   const [isTyping, setIsTyping] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     if (inputState) {
@@ -72,13 +74,15 @@ function AccountForm({
 
   const inputClassName = () => {
     if (!isTouched) {
-      return `px-2 pt-4 rounded-xl border-2 flex-grow bg-white ${
-        isFocused ? "border-sky-800" : "hover:border-gray-400"
+      return `px-2 pt-4 rounded-xl border-2 flex-grow bg-white dark:bg-slate-700 dark:text-white ${
+        isFocused
+          ? "border-sky-800 dark:border-gray-400"
+          : "hover:border-gray-400 dark:border-slate-500"
       }`;
     } else if (isValid) {
-      return "px-2 pt-4 rounded-xl border-sky-800 border-2 flex-grow bg-white";
+      return "px-2 pt-4 rounded-xl border-sky-800 border-2 bg-white flex-grow dark:border-emerald-600 dark:bg-slate-700 ";
     } else {
-      return "px-2 pt-4 rounded-xl border-red-400 border-2 flex-grow bg-white";
+      return "px-2 pt-4 rounded-xl border-red-400 border-2 bg-white flex-grow dark:border-red-600 dark:bg-slate-700 ";
     }
   };
 
@@ -107,23 +111,33 @@ function AccountForm({
                 setIsTouched(false);
               }}
               placeholder={placeholder}
-              className="appearance-none border-none w-full text-gray-700 px-2 leading-tight focus:outline-none"
+              className="appearance-none border-none w-full text-gray-700 px-2 leading-tight focus:outline-none dark:bg-slate-700 dark:text-white"
             />
             <button
               type="button"
               onClick={handleSubmit}
               className={`relative text-sm rounded -top-[6px] p-2 h-2 ${
                 !isValid && isTouched
-                  ? "text-red-400"
+                  ? isDarkMode
+                    ? "text-red-600"
+                    : "text-red-400"
                   : isValid && isTouched
-                  ? "text-sky-800"
+                  ? isDarkMode
+                    ? "text-emerald-600"
+                    : "text-sky-800"
+                  : isDarkMode
+                  ? "text-gray-600"
                   : "text-gray-400"
               }`}
             >
-              <FaPlus fill={isTyping ? "#075985" : "currentColor"} />
+              <FaPlus
+                fill={
+                  isDarkMode && isTyping  ? "#9ca3af" : isTyping ? "#075985" : "currentColor"
+                }
+              />
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 bg-white m-2">
+          <div className="flex flex-wrap gap-2 bg-white m-2 dark:bg-slate-700">
             {words.map((word, index) => (
               <div
                 key={index}

@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HamburgerMenySVG } from "../Icons/MenySvg";
+import { useDarkMode } from "../Icons/DarkModeHook";
 
 import Modal from "../Modal";
 
 const HeaderOtherPages = () => {
   const [menu, setMenu] = useState(false);
+  const { isDarkMode } = useDarkMode();
+
+  const WaveFillColor = isDarkMode ? "#7C3AED" : "#0EA5E9";
+  const WaveFillColor2 = isDarkMode ? "#A78BFA" : "#A78BFA";
 
   function handleMenu() {
     setMenu(!menu);
   }
   return (
-    <header className="flex justify-between w-full h-24 items-start">
+    <header className="flex justify-between w-full h-24 items-start dark:bg-gray-800">
       <div className="w-full">
         <svg
           viewBox="0 0 360 108"
@@ -71,8 +76,8 @@ const HeaderOtherPages = () => {
               y2="136.714"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0.145906" stopColor="#A78BFA" />
-              <stop offset="1" stopColor="#0EA5E9" />
+              <stop offset="0.145906" stopColor={WaveFillColor2} />
+              <stop offset="1" stopColor={WaveFillColor} />
             </linearGradient>
           </defs>
         </svg>
