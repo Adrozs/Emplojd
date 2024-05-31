@@ -64,9 +64,6 @@ namespace Emplojd.Services
 
         public static async Task<IResult> SaveCoverLetterAsync([FromBody] SaveCoverLetterRequest request, ClaimsPrincipal currentUser, [FromServices] IChatGPTRepository chatGptRepository)
         {
-            if (string.IsNullOrEmpty(request.CoverLetterTitle) || string.IsNullOrEmpty(request.CoverLetterContent))
-                return Results.BadRequest("Invalid request data. Cover letter text must be submitted.");
-
             try
             {
                 CoverLetterResult result = await chatGptRepository.SaveCoverLetterAsync(request, currentUser);
