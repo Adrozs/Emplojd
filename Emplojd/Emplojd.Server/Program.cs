@@ -259,7 +259,7 @@ namespace Emplojd
             app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
             app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
             app.MapGet("/confirm-email", UserService.ConfirmEmailAsync).AllowAnonymous();
-            app.MapPost("/resend-confirm-email", UserService.ResendEmailConfirmation).AllowAnonymous();
+            app.MapPost("/resend-confirm-email", UserService.ResendEmailConfirmationAsync).AllowAnonymous();
             app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
             app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
             app.MapDelete("/delete-account", UserService.DeleteAccountAsync).RequireAuthorization();

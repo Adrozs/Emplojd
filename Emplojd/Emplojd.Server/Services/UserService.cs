@@ -84,7 +84,7 @@ namespace Emplojd.Services
         //    }
         //}
 
-        public static async Task<IResult> EmailVerificationAsync([FromQuery] string userId, [FromQuery] string code, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code, [FromServices] IUserRepository userRepository)
         {
             try 
             {
@@ -99,7 +99,7 @@ namespace Emplojd.Services
             }
         }
 
-        public static async Task<IResult> ResendEmailConfirmation([FromBody] ResendEmailConfirmationRequest request, [FromServices] IUserRepository userRepository)
+        public static async Task<IResult> ResendEmailConfirmationAsync([FromBody] ResendEmailConfirmationRequest request, [FromServices] IUserRepository userRepository)
         {
             try
             {
