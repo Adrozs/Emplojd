@@ -25,7 +25,7 @@ export default function ApplySideThree({ job, page, setPage }) {
     const token = localStorage.getItem("authToken");
 
     const response = await axios.post(
-      "https://localhost:54686/GetCoverLetter",
+      "https://emplojdserver20240531231628.azurewebsites.net/GetCoverLetter",
       postData,
       {
         headers: {
@@ -81,10 +81,14 @@ export default function ApplySideThree({ job, page, setPage }) {
   const clickToSave = async () => {
     const token = localStorage.getItem("authToken");
 
+    const todaysDate = new Date().toISOString();
+
     const postLetter = {
-      coverLetterId: Math.floor(Math.random() * 1000000), // Random integer ID
+      coverLetterId: Math.floor(Math.random() * 1000000),
       coverLetterTitle: job.headline || "",
       coverLetterContent: letterContent,
+      companyName: job.employer.name,
+      date: todaysDate,
       temperature: 0.7,
     };
 
@@ -92,7 +96,7 @@ export default function ApplySideThree({ job, page, setPage }) {
 
     try {
       const response = await axios.post(
-        "https://localhost:54686/save-letter",
+        "https://emplojdserver20240531231628.azurewebsites.net/save-letter",
         postLetter,
         {
           headers: {

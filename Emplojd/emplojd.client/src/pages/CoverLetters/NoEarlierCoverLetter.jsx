@@ -13,12 +13,15 @@ function NoEarlierCoverLetter() {
       const token = localStorage.getItem("authToken");
 
       return axios
-        .get("https://localhost:54686/saved-letter", {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(
+          "https://emplojdserver20240531231628.azurewebsites.net/saved-letter",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
           setCoverLetters(response.data);
@@ -60,7 +63,7 @@ function NoEarlierCoverLetter() {
                 </p>
                 <div>
                   <p>till</p>
-                  <p className="font-semibold">Spotify</p>
+                  <p className="font-semibold">{letter.companyName}</p>
                 </div>
                 <div className="flex justify-between items-center mr-3 text-[14px]">
                   <p>Skapad den 1 juni 2024</p>
