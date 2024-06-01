@@ -7,6 +7,7 @@ import AddNewButton from "./AddNewButton";
 const CvManager = () => {
   const [fileName, setFileName] = useState("INGEN FIL ÄR VALD");
   const [manualInputEnabled, setManualInputEnabled] = useState(false);
+  const [values, setValues] = useState();
   const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -48,11 +49,17 @@ const CvManager = () => {
           checked={manualInputEnabled}
           onChange={() => setManualInputEnabled((prev) => !prev)}
         />
-        <label htmlFor="manualInput" className="text-gray-700">
+        <label htmlFor="manualInput" className="text-gray-700 dark:text-white">
           Ange information manuellt
         </label>
       </div>
-      <h2 className="text-xl font-bold ml-2">Utbildning</h2>
+      <h2
+        className={`text-xl font-bold ml-2 dark:text-white ${
+          !manualInputEnabled ? "cursor-not-allowed text-gray-300 dark:text-black" : ""
+        }`}
+      >
+        Utbildning
+      </h2>
       <div className="mb-6">
         <FormRow
           type="text"
@@ -77,7 +84,13 @@ const CvManager = () => {
 
       <AddNewButton />
 
-      <h2 className="text-xl font-bold ml-2 mt-14">Arbetslivserfarenhet</h2>
+      <h2
+        className={`text-xl font-bold ml-2 mt-14 ${
+          !manualInputEnabled ? "cursor-not-allowed text-gray-300 dark:text-black" : ""
+        }`}
+      >
+        Arbetslivserfarenhet
+      </h2>
       <div className="mb-6 mt-2">
         <FormRow
           type="text"

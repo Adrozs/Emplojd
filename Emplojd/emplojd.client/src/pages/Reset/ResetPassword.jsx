@@ -25,7 +25,7 @@ function ResetPassword() {
       }
 
       const response = await axios.post(
-        "https://localhost:54686/reset-password",
+        "https://emplojdserver20240531231628.azurewebsites.net/reset-password",
         {
           newPassword: password,
           newPasswordConfirm: passwordConfirm,
