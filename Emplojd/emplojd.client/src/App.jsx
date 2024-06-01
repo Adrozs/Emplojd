@@ -20,6 +20,7 @@ import {
   ConfirmAccount,
   ForgotPassword,
   ResetPassword,
+  SavedCV,
 } from "./pages/index";
 import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "/MyProfile",
         element: <MyProfile />,
+      },
+      {
+        path: "/SavedCV",
+        element: <SavedCV />,
       },
       {
         path: "/CreateProfile",
