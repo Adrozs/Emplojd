@@ -1,4 +1,3 @@
-import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useMutation } from "react-query";
@@ -107,11 +106,7 @@ export default function ApplySideThree({ job, page, setPage }) {
       );
       console.log("Response from backend:", response.data);
     } catch (error) {
-      if (error.response) {
-        console.error("Error response:", error.response.data);
-      } else {
-        console.error("Error:", error.message);
-      }
+      console.error("Error:", error);
     }
   };
 

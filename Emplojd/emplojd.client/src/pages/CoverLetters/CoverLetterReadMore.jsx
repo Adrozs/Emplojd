@@ -120,6 +120,13 @@ function CoverLetterReadMore() {
     console.log(newText);
   };
 
+  const copyTextToClipboard = () => {
+    navigator.clipboard
+      .writeText(text || letter.coverLetterContent)
+      .then(() => toast.success("Texten har kopierats."))
+      .catch((error) => toast.error("Kunde inte kopiera text."));
+  };
+
   /* save new lettter */
   const clickToSave = async () => {
     const token = localStorage.getItem("authToken");
@@ -216,7 +223,10 @@ function CoverLetterReadMore() {
                   >
                     <FaRegPenToSquare /> Redigera
                   </button>
-                  <button className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-2">
+                  <button
+                    onClick={copyTextToClipboard}
+                    className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-2"
+                  >
                     <FaRegCopy /> Kopiera
                   </button>{" "}
                 </>
@@ -239,7 +249,7 @@ function CoverLetterReadMore() {
             </div>
             <div className="p-4 max-w-4xl mx-auto  pb-28 bg-white">
               <div
-                className="p-2"
+                className="p-2 editable-content"
                 contentEditable={editable}
                 ref={editEl}
                 onInput={handleTextChange}
