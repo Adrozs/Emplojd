@@ -208,7 +208,7 @@ function ApplySideTwo({ job, page, setPage }) {
 
       try {
         const response = await fetch(
-          `https://localhost:54686/api/UserProfile/GetUserProfile`,
+          `https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/GetUserProfile`,
           {
             method: "GET",
             headers: {

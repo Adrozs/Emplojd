@@ -16,9 +16,12 @@ const ConfirmEmail = () => {
     if (userId && code) {
       console.log("Kod till backend", { userId, code });
       axios
-        .get("https://localhost:54686/confirm-email", {
-          params: { userId, code },
-        })
+        .get(
+          "https://emplojdserver20240531231628.azurewebsites.net/confirm-email",
+          {
+            params: { userId, code },
+          }
+        )
         .then((response) => {
           console.log("Response:", response);
           setStatus(

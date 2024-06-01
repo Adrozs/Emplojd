@@ -91,7 +91,7 @@ function Modal({ onClose, menu }) {
                   <SearchSVG isDarkMode={isDarkMode} />{" "}
                   <Link to="/joblist">
                     <span className="text-gray-700 font-medium dark:text-white">
-                      Sök Jobb
+                      Sök jobb
                     </span>
                   </Link>
                 </NavItem>
@@ -99,7 +99,7 @@ function Modal({ onClose, menu }) {
                   <ProfileSVG isDarkMode={isDarkMode} />
                   <Link to="/MyProfile">
                     <span className="text-gray-700 font-medium dark:text-white">
-                      Min Profil
+                      Min profil
                     </span>
                   </Link>
                 </NavItem>

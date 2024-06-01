@@ -15,7 +15,7 @@ function ForgotPassword() {
   const forgotPasswordMutation = useMutation(
     async () => {
       const response = await axios.post(
-        "https://localhost:54686/forgot-password",
+        "https://emplojdserver20240531231628.azurewebsites.net/forgot-password",
         {
           email: email,
         }
@@ -48,7 +48,7 @@ function ForgotPassword() {
       <div className="flex flex-col h-screen pb-12 md:pb-52">
         <div className="flex-grow inner-shadow-bottom bg-gradient-to-br to-[#CA81ED] from-[#4086C6] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat">
           <Header>
-          <EmplojdLogo className="w-28 fill-white" />
+            <EmplojdLogo className="w-28 fill-white" />
           </Header>
           <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 mt-14">
             <h1 className="text-4xl font-semibold text-center mb-10">

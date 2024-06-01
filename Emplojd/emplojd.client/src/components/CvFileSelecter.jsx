@@ -22,7 +22,7 @@ export default function CvFileSelecter() {
   return (
     <>
       <div className="mb-2">
-        <label className="font-semibold pl-1">
+        <label className="font-semibold pl-1 dark:text-white">
           Ladda upp ditt CV (pdf, docx)
         </label>
       </div>
@@ -30,7 +30,7 @@ export default function CvFileSelecter() {
         className={`flex-col border-2 rounded-2xl justify-center items-center bg-gradient-to-r-custom h-22 w-auto`}
         onClick={handleFileButtonClick}
       >
-        <div className="flex text-gray-400 pl-3 bg-gray-100 p-3 rounded-xl m-[2px] cursor-pointer relative">
+        <div className="flex text-gray-400 pl-3 bg-white dark:bg-slate-700 p-3 rounded-xl m-[2px] cursor-pointer relative">
           {selectedFile ? (
             <>
               <span>{selectedFile}</span>
