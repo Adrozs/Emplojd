@@ -16,6 +16,7 @@ import ForgotPassword from "./Reset/ForgotPassword";
 import ResetPassword from "./Reset/ResetPassword";
 import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
+import CoverLetterReadMore from "./CoverLetters/CoverLetterReadMore";
 
 export {
   ApplyNow,
@@ -35,4 +36,5 @@ export {
   ConfirmAccount,
   ForgotPassword,
   ResetPassword,
+  CoverLetterReadMore,
 };

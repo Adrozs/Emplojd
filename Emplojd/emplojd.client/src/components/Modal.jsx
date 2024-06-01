@@ -121,7 +121,7 @@ function Modal({ onClose, menu }) {
                   <NavItem>
                     <LetterSVG isDarkMode={isDarkMode} />
                     {isLoggedIn ? (
-                      <Link to="/NoEarlierCoverLetter">
+                      <Link to="/coverletter">
                         <span className="text-gray-700 font-medium dark:text-white">
                           Sparade brev
                         </span>

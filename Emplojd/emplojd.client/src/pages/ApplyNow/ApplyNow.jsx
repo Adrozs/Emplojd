@@ -373,7 +373,7 @@ function ApplySideFour({ job, page, setPage }) {
         <div className="px-10">Ditt personliga brev är sparat.</div>
         <div className="flex flex-col items-center gap-4">
           <Link
-            to="/NoEarlierCoverLetter"
+            to="/coverletter"
             className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
           >
             Gå till sparade brev

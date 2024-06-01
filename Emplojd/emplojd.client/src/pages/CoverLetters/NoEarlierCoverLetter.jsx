@@ -4,6 +4,7 @@ import { FaFileSignature, FaChevronRight } from "react-icons/fa";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function NoEarlierCoverLetter() {
   const [coverLetters, setCoverLetters] = useState([]);
@@ -67,9 +68,12 @@ function NoEarlierCoverLetter() {
                 </div>
                 <div className="flex justify-between items-center mr-3 text-[14px]">
                   <p>Skapad den 1 juni 2024</p>
-                  <button className="flex items-center gap-2 text-customBlue underline">
+                  <Link
+                    to={`/coverletter/${letter.coverLetterId}`}
+                    className="flex items-center gap-2 text-customBlue underline"
+                  >
                     Visa brev <FaChevronRight size={22} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))
