@@ -1,4 +1,5 @@
-﻿using Emplojd.Data;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Emplojd.Data;
 using Emplojd.Helpers;
 using Emplojd.Models;
 using Emplojd.Services;
@@ -16,6 +17,7 @@ namespace Emplojd.Repository
         public Task<LoginResult> LoginAsync(string email, string password);
         //public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string newPasswordConfirm, ClaimsPrincipal currentUser);
         public Task<IdentityResult> EmailVerificationAsync(string userId, string code);
+        public Task<IdentityResult> ResendEmailVerificationAsync(string email);
         public Task<IdentityResult> GeneratePasswordResetCodeAsync(string email);
         public Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
         public Task<IdentityResult> DeleteAccountAsync(string password, ClaimsPrincipal currentUser);
@@ -170,6 +172,40 @@ namespace Emplojd.Repository
             user.EmailConfirmed = true;
 
             return result;
+        }
+
+        public async Task<IdentityResult> ResendEmailVerificationAsync(string email)
+        {
+            User? user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "Could not find matching user." });
+
+            string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            // Create the redirect url to send in the email
+            string websiteUrl = $"{_baseEmplojdUrl}/confirm-email";
+            string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(emailConfirmationToken)}";
+
+            string emailSubject = "Emplojd - Just one more step!";
+            string emailBody =
+                $"<h2>Welcome to Emplojd!</h2>" +
+                $"<p>We're so excited to have you on board and will be happy to help you set everything up.<br>" +
+                $"Please click the link below to verify your email address.<br>" +
+                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click here to verify your email.</a>.<br><br>" +
+                $"If you're having trouble clicking the link, copy and paste the URL below into your browser: <br>" +
+                $"{callbackUrl}<br><br><br>" +
+                $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>" +
+                $"All the best,<br>" +
+                $"Emplojd</p>";
+
+
+            // Send email to users email with message and confirmaton link
+            var sendEmailResult = await _emailSender.SendEmailAsync(email, emailSubject, emailBody);
+
+            if (!sendEmailResult.Success)
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to send email: " + string.Join(", ", sendEmailResult.ErrorMessage) });
+
+            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> GeneratePasswordResetCodeAsync(string email)
