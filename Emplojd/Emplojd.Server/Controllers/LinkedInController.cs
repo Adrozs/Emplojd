@@ -15,6 +15,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Identity;
+using Emplojd.Models;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Emplojd.Server.Controllers
 {
@@ -23,11 +26,15 @@ namespace Emplojd.Server.Controllers
     public class LinkedInController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
+        private readonly ILogger<LinkedInController> _logger;
 
         // Config constructor
-        public LinkedInController(IConfiguration configuration)
+        public LinkedInController(IConfiguration configuration, UserManager<User> userManager, ILogger<LinkedInController> logger)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpGet("/login-linkedin")]
@@ -35,6 +42,7 @@ namespace Emplojd.Server.Controllers
         {
             try
             {
+
                 var state = Guid.NewGuid().ToString("N");
                 HttpContext.Session.SetString("LinkedInOAuthState", state);
 
@@ -56,36 +64,86 @@ namespace Emplojd.Server.Controllers
         [HttpGet("/linkedinresponse")]
         public async Task<IActionResult> LinkedInResponse()
         {
-            try
+            var state = HttpContext.Session.GetString("LinkedInOAuthState");
+
+            var receivedState = HttpContext.Request.Query["state"];
+            if (state != receivedState)
             {
-                var state = HttpContext.Session.GetString("LinkedInOAuthState");
-                var authenticateResult = await HttpContext.AuthenticateAsync();
-                if (!authenticateResult.Succeeded)
-                {
-                    return BadRequest("LinkedIn authentication failed.");
-                }
-
-                var receivedState = HttpContext.Request.Query["state"];
-                if (state != receivedState)
-                {
-                    return BadRequest("Invalid OAuth state.");
-                }
-
-                // Remove state after verifying it
-                HttpContext.Session.Remove("LinkedInOAuthState");
-
-                var claimsIdentity = (ClaimsIdentity)authenticateResult.Principal.Identity;
-
-                // Generate JWT token
-                var token = LinkedInJwtToken(claimsIdentity.Claims);
-                return Ok(new { Token = token });
+                return BadRequest("Invalid OAuth state.");
             }
-            catch (Exception ex)
+
+            var result = await HttpContext.AuthenticateAsync(OpenIdConnectDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
             {
-                Console.WriteLine($"Exception during LinkedIn authentication: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return BadRequest("LinkedIn authentication failed.");
             }
+
+            var claimsPrincipal = result.Principal;
+            if (claimsPrincipal == null)
+            {
+                _logger.LogWarning("Authentication failed: result or principal is null.");
+                return BadRequest("Failed to login with LinkedIn");
+            }
+
+            var claims = claimsPrincipal.Claims.ToList();
+            string email = claimsPrincipal?.FindFirstValue(ClaimTypes.Email);
+
+            // Logging claims (writing them out)
+            _logger.LogInformation("User claims:");
+            foreach (var claim in claims)
+            {
+                _logger.LogInformation($"{claim.Type}: {claim.Value}");
+            }
+            _logger.LogInformation($"Email: {email}");
+
+            if (string.IsNullOrEmpty(email))
+            {
+                _logger.LogWarning("Email is empty.");
+                return BadRequest("Email is empty");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            // If user doesn't exist create a new one
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true
+                };
+
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                {
+                    _logger.LogError("Failed to create user.");
+                    return BadRequest("Failed to create user");
+                }
+            }
+
+            var loginInfo = new UserLoginInfo(OpenIdConnectDefaults.AuthenticationScheme, result.Principal.FindFirstValue(ClaimTypes.NameIdentifier), OpenIdConnectDefaults.AuthenticationScheme);
+
+            var userLogins = await _userManager.GetLoginsAsync(user);
+            if (!userLogins.Any(l => l.LoginProvider == loginInfo.LoginProvider && l.ProviderKey == loginInfo.ProviderKey))
+            {
+                var addLoginResult = await _userManager.AddLoginAsync(user, loginInfo);
+
+                if (!addLoginResult.Succeeded)
+                {
+                    _logger.LogError("Failed to associate LinkedIn login with user.");
+                    return BadRequest("Failed to associate LinkedIn login with user");
+                }
+            }
+
+            // Remove state after verifying it
+            HttpContext.Session.Remove("LinkedInOAuthState");
+
+            var token = LinkedInJwtToken(claims);
+
+            return Ok(new { token, email, claims = claims.Select(c => new { c.Type, c.Value }) });
         }
+
 
         private string LinkedInJwtToken(IEnumerable<Claim> claims)
         {

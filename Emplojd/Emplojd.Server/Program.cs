@@ -47,9 +47,7 @@ namespace Emplojd
 
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
             .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
@@ -58,30 +56,37 @@ namespace Emplojd
                 options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
             })
 
-                        .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
-                        {
-                            options.ClientId = builder.Configuration.GetSection("Authentication:LinkedInKeys:ClientId").Value;
-                            options.ClientSecret = builder.Configuration.GetSection("Authentication:LinkedInKeys:ClientSecret").Value;
-                            options.ResponseType = OpenIdConnectResponseType.Code;
-                            options.Configuration = new OpenIdConnectConfiguration
-                            {
-                                AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization",
-                                TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken",
-                                UserInfoEndpoint = "https://api.linkedin.com/v2/userinfo"
-                            };
+                                    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                                    {
+                                        options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+                                        options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                                        options.ResponseType = OpenIdConnectResponseType.Code;
 
-                            options.TokenValidationParameters = new TokenValidationParameters
-                            {
-                                ValidateIssuer = true
-                            };
+                                        options.Configuration = new OpenIdConnectConfiguration
+                                        {
+                                            AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization",
+                                            TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken",
+                                            UserInfoEndpoint = "https://api.linkedin.com/v2/userinfo"
+                                        };
 
-                            options.Scope.Clear();
-                            options.Scope.Add("openid");
-                            options.Scope.Add("profile");
-                            options.Scope.Add("email");
-                            options.GetClaimsFromUserInfoEndpoint = true;
-                            options.CallbackPath = "/signin-linkedin";
-                        });
+                                        options.TokenValidationParameters = new TokenValidationParameters
+                                        {
+                                            ValidateIssuer = true
+                                        };
+
+                                        options.Scope.Clear();
+                                        options.Scope.Add("openid");
+                                        options.Scope.Add("profile");
+                                        options.Scope.Add("email");
+
+                                        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
+                                        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
+                                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+
+                                        options.GetClaimsFromUserInfoEndpoint = true;
+                                        options.CallbackPath = "/signin-linkedin";
+                                    });
 
 
             ConfigurationManager configuration = builder.Configuration;
