@@ -24,7 +24,7 @@ export default function Footer({ children }) {
           <div className="bg-white xxl:pb-42 dark:bg-stone-900">
             <div className="flex justify-center items-center">
               <h2 className="mt-14 mb-10 dark:text-white">
-                <EmplojdLogo width="12rem" className="dark:fill-white"/>
+                <EmplojdLogo width="12rem" className="dark:fill-white relative z-10" />
               </h2>
             </div>
             <div className="flex flex-col text-center pb-20">
