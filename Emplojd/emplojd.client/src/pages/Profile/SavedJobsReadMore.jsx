@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import { FaChevronLeft, FaArrowRight } from "react-icons/fa";
 import Footer from "../../components/Footer";
+import EmplojdLogo from "../../components/Icons/EmplojdLogoSVG";
 
 function SavedJobsReadMore() {
   const { jobId } = useParams();
@@ -55,9 +56,7 @@ function SavedJobsReadMore() {
 
   return (
     <>
-      <HeaderOtherPages>
-        <img src="/LogoEmplojd.png" className="w-[45px]" />
-      </HeaderOtherPages>
+      <HeaderOtherPages />
       <main className="max-w-7xl mx-auto px-2">
         {job && (
           <>

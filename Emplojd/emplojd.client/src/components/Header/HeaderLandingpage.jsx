@@ -12,7 +12,7 @@ const Header = ({ children }) => {
   return (
     <header className="flex justify-between w-full  h-[65px] py-2 items-center">
       <nav className="flex justify-between w-full items-center">
-        <div className="p-2">
+        <div className="p-4">
           <Link to="/">{children}</Link>
         </div>
         <div className="flex items-center cursor-pointer pr-5">

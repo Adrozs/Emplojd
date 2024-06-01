@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HamburgerMenySVG } from "../Icons/MenySvg";
 import { useDarkMode } from "../Icons/DarkModeHook";
+import EmplojdLogo from "../Icons/EmplojdLogoSVG";
 
 import Modal from "../Modal";
 
@@ -86,9 +87,7 @@ const HeaderOtherPages = () => {
           <nav className="flex justify-between w-full items-center">
             <div className="p-4">
               <Link to="/">
-                <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
-                  EMPLOJD
-                </h1>
+              <EmplojdLogo className="w-28 fill-white" />
               </Link>
             </div>
             <div className="flex items-center cursor-pointer pr-5">

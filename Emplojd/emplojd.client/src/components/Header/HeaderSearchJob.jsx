@@ -15,7 +15,7 @@ const HeaderSearchJob = ({ children }) => {
     <header className="flex justify-between w-full  h-[65px] py-2 items-center flex-col relative  mb-12 lg:mb-[96px]">
       <div className="w-full relative">
         <nav className="flex justify-between w-full items-center ">
-          <div className=" p-2 text-white">
+          <div className=" p-4 text-white">
             <Link to="/">{children}</Link>
           </div>
           <div className="flex items-center cursor-pointer pr-5 text-white">

@@ -13,6 +13,7 @@ import {
 } from "./Icons/MenySvg";
 import { removeUserFromLocalStorage } from "../utils/localStorage";
 import DarkModeToggleSwitch from "./DarkModeToggleSwitch";
+import EmplojdLogo from "./Icons/EmplojdLogoSVG";
 
 function Modal({ onClose, menu }) {
   const { isLoggedIn, logout } = useAuth();
@@ -28,7 +29,7 @@ function Modal({ onClose, menu }) {
   };
 
   const handleToggle = () => {
-      setIsDarkMode(!isDarkMode);
+    setIsDarkMode(!isDarkMode);
   };
 
   useEffect(() => {
@@ -66,25 +67,28 @@ function Modal({ onClose, menu }) {
                     className="flex items-end gap-4 text-gray-700 dark:text-white"
                   >
                     {" "}
-                    <LogOutSVG isDarkMode={isDarkMode}/>
+                    <LogOutSVG isDarkMode={isDarkMode} />
                     <span> Logga ut</span>
                   </button>
                 ) : (
                   <button className="flex items-center gap-4 text-gray-700 dark:text-white">
                     {" "}
-                    <LogInSVG isDarkMode={isDarkMode}/>
+                    <LogInSVG isDarkMode={isDarkMode} />
                     <Link to="/signin">
                       <span> Logga in</span>
                     </Link>
                   </button>
                 )}
                 <button onClick={() => onClose(!menu)} className="self-end">
-                  <CancelSVG className="bg-white bg-clip-border" isDarkMode={isDarkMode}/>
+                  <CancelSVG
+                    className="bg-white bg-clip-border"
+                    isDarkMode={isDarkMode}
+                  />
                 </button>
               </div>
               <div className="flex flex-col  mx-auto">
                 <NavItem>
-                  <SearchSVG isDarkMode={isDarkMode}/>{" "}
+                  <SearchSVG isDarkMode={isDarkMode} />{" "}
                   <Link to="/joblist">
                     <span className="text-gray-700 font-medium dark:text-white">
                       Sök Jobb
@@ -92,7 +96,7 @@ function Modal({ onClose, menu }) {
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <ProfileSVG isDarkMode={isDarkMode}/>
+                  <ProfileSVG isDarkMode={isDarkMode} />
                   <Link to="/MyProfile">
                     <span className="text-gray-700 font-medium dark:text-white">
                       Min Profil
@@ -101,7 +105,7 @@ function Modal({ onClose, menu }) {
                 </NavItem>
                 <div className="flex flex-col">
                   <NavItem>
-                    <HeartSVG isDarkMode={isDarkMode}/>
+                    <HeartSVG isDarkMode={isDarkMode} />
                     {isLoggedIn ? (
                       <Link to="/saved">
                         <span className="text-gray-700 font-medium dark:text-white">
@@ -115,7 +119,7 @@ function Modal({ onClose, menu }) {
                     )}
                   </NavItem>
                   <NavItem>
-                    <LetterSVG isDarkMode={isDarkMode}/>
+                    <LetterSVG isDarkMode={isDarkMode} />
                     {isLoggedIn ? (
                       <Link to="/NoEarlierCoverLetter">
                         <span className="text-gray-700 font-medium dark:text-white">
@@ -129,7 +133,7 @@ function Modal({ onClose, menu }) {
                     )}
                   </NavItem>
                   <NavItem>
-                    <MyCvSVG isDarkMode={isDarkMode}/>
+                    <MyCvSVG isDarkMode={isDarkMode} />
                     {isLoggedIn ? (
                       <Link to="/NoEarlierCoverLetter">
                         <span className="text-gray-700 font-medium dark:text-white">
@@ -143,10 +147,10 @@ function Modal({ onClose, menu }) {
                 </div>
               </div>
               <div className="flex flex-col gap-6">
-                <div className="font-Glockenspiel text-gray-700 text-2xl text-center dark:text-white">
-                  EMPLOJD
+                <div className="flex justify-center">
+                  <EmplojdLogo className="w-28 dark:fill-white" />
                 </div>
-                <DarkModeToggleSwitch onToggle={handleToggle}/>
+                <DarkModeToggleSwitch onToggle={handleToggle} />
               </div>
             </div>
           </div>
