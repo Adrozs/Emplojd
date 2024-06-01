@@ -135,7 +135,7 @@ function Modal({ onClose, menu }) {
                   <NavItem>
                     <MyCvSVG isDarkMode={isDarkMode} />
                     {isLoggedIn ? (
-                      <Link to="/NoEarlierCoverLetter">
+                      <Link to="/SavedCV">
                         <span className="text-gray-700 font-medium dark:text-white">
                           Mitt CV
                         </span>
