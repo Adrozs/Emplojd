@@ -23,6 +23,7 @@ namespace Emplojd.Repository
 
     public class UserRepository : IUserRepository
     {
+        private readonly string _baseEmplojdUrl = "https://emplojd.com";
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly AuthenticationService _authService;
@@ -55,23 +56,17 @@ namespace Emplojd.Repository
                 Email = email
             };
 
-            await Console.Out.WriteLineAsync("Created user");
-
             // Creates and hashes password for user in db - All MS Identity methods have build it validation and error handling
             IdentityResult createUserResult = await _userManager.CreateAsync(user, password);
 
-            await Console.Out.WriteLineAsync("user manager created user");
-
             if (!createUserResult.Succeeded)
                 return IdentityResult.Failed(new IdentityError { Description = string.Join(", ", createUserResult.Errors.Select(e => e.Description)) });
-
-            await Console.Out.WriteLineAsync("generating email token");
 
             string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
 
             // Create the redirect url to send in the email
-            string websiteUrl = "https://localhost:5173/confirm-email";
+            string websiteUrl = $"{_baseEmplojdUrl}/confirm-email";
             string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(emailConfirmationToken)}";
 
             string emailSubject = "Emplojd - Just one more step!";
@@ -84,12 +79,7 @@ namespace Emplojd.Repository
                 $"{callbackUrl}<br><br><br>" +
                 $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>" +
                 $"All the best,<br>" +
-                $"Emplojd</p>" +
-                // Remove this when not testing anymore
-                $"<p><br>TEMP REMOVE LATER <br> CODE: {Uri.EscapeDataString(emailConfirmationToken)} <br> USERID: {user.Id} </p>";
-
-
-            await Console.Out.WriteLineAsync("trying to send email");
+                $"Emplojd</p>";
 
 
             // Send email to users email with message and confirmaton link
@@ -191,7 +181,7 @@ namespace Emplojd.Repository
             string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             // Create the redirect url to send in the email
-            string websiteUrl = "https://localhost:5173/reset-password";
+            string websiteUrl = $"{_baseEmplojdUrl}/reset-password";
             string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(passwordResetToken)}";
 
             string emailSubject = "Password reset request";

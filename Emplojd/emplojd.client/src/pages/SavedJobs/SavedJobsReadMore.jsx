@@ -14,7 +14,7 @@ function SavedJobsReadMore() {
     try {
       const token = localStorage.getItem("authToken");
 
-      const url = `https://localhost:54686/ad/${id}?adId=${id}`;
+      const url = `https://emplojdserver20240531231628.azurewebsites.net/ad/${id}?adId=${id}`;
       console.log("Fetching URL:", url);
 
       const res = await fetch(url, {
