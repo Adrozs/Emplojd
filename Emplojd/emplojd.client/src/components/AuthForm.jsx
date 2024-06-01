@@ -128,7 +128,7 @@ const AuthForm = () => {
         <FormRow
           type="email"
           name="emailConfirmed"
-          labelText="Bekräfta Email"
+          labelText="Bekräfta email"
           value={values.emailConfirmed}
           handleChange={handleChange}
           placeholder="confirm.email@email.com"
@@ -147,7 +147,7 @@ const AuthForm = () => {
         <FormRow
           type="password"
           name="passwordConfirmed"
-          labelText="Bekräfta Lösenord"
+          labelText="Bekräfta lösenord"
           value={values.passwordConfirmed}
           handleChange={handleChange}
           placeholder="●●●●●●●●●●●●"
@@ -162,7 +162,7 @@ const AuthForm = () => {
           Glömt ditt konto?
         </Link>
       </div>
-      
+
       <div className="flex flex-col gap-4">
         <button
           className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 mb-2 flex px-8 justify-between items-center"
@@ -181,19 +181,17 @@ const AuthForm = () => {
       </div>
       <div className="my-8">{values.isMember && <ThirdPartyLogin />}</div>
       <div className="flex justify-center gap-4">
-          <div>
-            {!values.isMember
-              ? "Har du redan ett konto?"
-              : "Har du inget konto?"}
-          </div>
-          <button
-            className="text-[#066DCC] dark:text-sky-600 underline underline-offset-2"
-            type="button"
-            onClick={toggleForm}
-          >
-            {!values.isMember ? "Logga In" : "Skapa konto"}
-          </button>
+        <div>
+          {!values.isMember ? "Har du redan ett konto?" : "Har du inget konto?"}
         </div>
+        <button
+          className="text-[#066DCC] dark:text-sky-600 underline underline-offset-2"
+          type="button"
+          onClick={toggleForm}
+        >
+          {!values.isMember ? "Logga In" : "Skapa konto"}
+        </button>
+      </div>
     </form>
   );
 };

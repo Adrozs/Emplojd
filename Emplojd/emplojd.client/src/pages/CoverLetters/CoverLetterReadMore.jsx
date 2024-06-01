@@ -1,16 +1,21 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import Footer from "../../components/Footer";
 import { FaChevronLeft, FaTrash, FaFileSignature } from "react-icons/fa";
-import { FaRegPenToSquare, FaRegCopy } from "react-icons/fa6";
+import { FaRegPenToSquare, FaRegCopy, FaCircleCheck } from "react-icons/fa6";
 import Loader from "../../ui/Loader";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 function CoverLetterReadMore() {
   const { jobId } = useParams();
   const [letter, setLetter] = useState(null);
+  const [editable, setEditable] = useState(false);
   const navigate = useNavigate();
+  const editEl = useRef(null);
+  const [text, setText] = useState("");
+  const [savedText, setSavedTest] = useState(false);
 
   const fetchJobData = async (id) => {
     try {
@@ -18,9 +23,7 @@ function CoverLetterReadMore() {
       if (!token) {
         throw new Error("No auth token found");
       }
-
       const url = `https://emplojdserver20240531231628.azurewebsites.net/saved-letter/${id}?coverLetterId=${id}`;
-      console.log("Fetching URL:", url);
 
       const res = await fetch(url, {
         headers: {
@@ -104,6 +107,58 @@ function CoverLetterReadMore() {
     }
   };
 
+  /* Edit text */
+  useEffect(() => {
+    if (editable) {
+      editEl.current.focus();
+    }
+  }, [editable]);
+
+  const handleTextChange = (e) => {
+    const newText = e.currentTarget.innerText;
+    setText(newText);
+    console.log(newText);
+  };
+
+  /* save new lettter */
+  const clickToSave = async () => {
+    const token = localStorage.getItem("authToken");
+
+    const postLetter = {
+      coverLetterId: letter.coverLetterId,
+      coverLetterTitle: letter.headline,
+      coverLetterContent: text,
+      companyName: letter.companyName,
+      date: letter.date,
+      temperature: 0.7,
+    };
+
+    console.log("Sending new letter to backend:", postLetter);
+
+    try {
+      const response = await axios.post(
+        "https://emplojdserver20240531231628.azurewebsites.net/save-letter",
+        postLetter,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response from backend:", response.data);
+      setEditable(false);
+      setSavedTest(true);
+      toast("Det nya brevet har sparats");
+    } catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
   return (
     <>
       <HeaderOtherPages />
@@ -135,26 +190,60 @@ function CoverLetterReadMore() {
                 </div>
               </div>
             </div>
-
+            <div>
+              {savedText && (
+                <p className="flex items-center gap-2 my-3 mb-[-5px] text-sm">
+                  Dina ändringar har sparats.
+                  <span className="text-lime-500">
+                    <FaCircleCheck />
+                  </span>{" "}
+                </p>
+              )}
+            </div>
             <div className="p-3 max-w-4xl mx-auto mt-3 pb-14 bg-gradient-to-t from-white to-blue-100 flex items-center justify-center gap-2 text-sm">
-              <button
-                onClick={() => clickToDelete(letter.coverLetterId)}
-                className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-2"
-              >
-                <FaTrash /> Ta bort
-              </button>
-              <button className="px-[16px] py-[12px] rounded-[8px] bg-purple-400 text-white flex items-center gap-2">
-                <FaRegPenToSquare /> Redigera
-              </button>
-              <button className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-2">
-                <FaRegCopy /> Kopiera
-              </button>
+              {!editable ? (
+                <>
+                  {" "}
+                  <button
+                    onClick={() => clickToDelete(letter.coverLetterId)}
+                    className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-2"
+                  >
+                    <FaTrash /> Ta bort
+                  </button>
+                  <button
+                    onClick={() => setEditable(!editable)}
+                    className="px-[16px] py-[12px] rounded-[8px] bg-purple-400 text-white flex items-center gap-2"
+                  >
+                    <FaRegPenToSquare /> Redigera
+                  </button>
+                  <button className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-2">
+                    <FaRegCopy /> Kopiera
+                  </button>{" "}
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setEditable(false)}
+                    className="px-[16px] py-[12px] rounded-[8px] bg-red-400 text-white flex items-center gap-2 mr-2"
+                  >
+                    <FaRegCopy /> Ångra ändringar
+                  </button>
+                  <button
+                    onClick={() => clickToSave()}
+                    className="px-[16px] py-[12px] rounded-[8px] bg-lime-500 text-white flex items-center gap-2 ml-2"
+                  >
+                    <FaRegCopy /> Spara ändringar
+                  </button>
+                </>
+              )}
             </div>
             <div className="p-4 max-w-4xl mx-auto  pb-28 bg-white">
               <div
-                dangerouslySetInnerHTML={{
-                  __html: letter.coverLetterContent,
-                }}
+                className="p-2"
+                contentEditable={editable}
+                ref={editEl}
+                onInput={handleTextChange}
+                dangerouslySetInnerHTML={{ __html: letter.coverLetterContent }}
               />
             </div>
           </>
