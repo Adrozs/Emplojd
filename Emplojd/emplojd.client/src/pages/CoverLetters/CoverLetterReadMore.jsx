@@ -96,21 +96,19 @@ function CoverLetterReadMore() {
                     </a>
                   </div>
 
-                  <p className="text-sm">
-                    Skapad den {formatDate(letter.date)}
-                  </p>
+                  <p className="text-sm">Skapad {formatDate(letter.date)}</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 max-w-4xl mx-auto mt-3 pb-14 bg-gradient-to-t from-white to-blue-100 flex items-center justify-center gap-2">
-              <button className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-1">
+            <div className="p-3 max-w-4xl mx-auto mt-3 pb-14 bg-gradient-to-t from-white to-blue-100 flex items-center justify-center gap-2 text-sm">
+              <button className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-2">
                 <FaTrash /> Ta bort
               </button>
-              <button className="px-[16px] py-[12px] rounded-[8px] bg-purple-400 text-white flex items-center gap-1">
+              <button className="px-[16px] py-[12px] rounded-[8px] bg-purple-400 text-white flex items-center gap-2">
                 <FaRegPenToSquare /> Redigera
               </button>
-              <button className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-1">
+              <button className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-2">
                 <FaRegCopy /> Kopiera
               </button>
             </div>

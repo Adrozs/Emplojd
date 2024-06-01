@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { HamburgerMenySVG } from "../Icons/MenySvg";
-
+import { FaBars } from "react-icons/fa";
 import Modal from "../Modal";
 import { Link } from "react-router-dom";
 
@@ -19,7 +18,7 @@ const HeaderSearchJob = ({ children }) => {
             <Link to="/">{children}</Link>
           </div>
           <div className="flex items-center cursor-pointer pr-5 text-white">
-            <HamburgerMenySVG onClick={handleMenu} />
+            <FaBars size={30} onClick={handleMenu} />
             {menu && <Modal onClose={setMenu} menu={menu} />}
           </div>
         </nav>
