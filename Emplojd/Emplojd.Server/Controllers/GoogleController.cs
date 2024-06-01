@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Logging;
+
 
 namespace Emplojd.Controller
 {
@@ -16,11 +18,13 @@ namespace Emplojd.Controller
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<GoogleController> _logger;
 
-        public GoogleController(IConfiguration configuration, UserManager<User> userManager)
+        public GoogleController(IConfiguration configuration, UserManager<User> userManager, ILogger<GoogleController> logger)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpGet("/login-google")]
@@ -44,10 +48,23 @@ namespace Emplojd.Controller
             if (claimsPrincipal == null)
                 return BadRequest("Failed to login with Google");
 
-
             var claims = claimsPrincipal.Claims;
             var token = GenerateJwtToken(claims);
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            // Logging claims (writing them out)
+            _logger.LogInformation("User claims:");
+            foreach (var claim in claims)
+            {
+                _logger.LogInformation($"{claim.Type}: {claim.Value}");
+            }
+            _logger.LogInformation($"Email: {email}");
+
+            if (string.IsNullOrEmpty(email))
+            {
+                _logger.LogWarning("Email is empty.");
+                return BadRequest("Email is empty");
+            }
 
             var user = await _userManager.FindByEmailAsync(email);
 

@@ -42,7 +42,6 @@ namespace Emplojd
         
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
                 .AddCookie()
@@ -70,6 +69,7 @@ namespace Emplojd
                     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
 
+
                     options.Events = new OAuthEvents
                     {
                         OnCreatingTicket = async context =>
@@ -87,7 +87,6 @@ namespace Emplojd
 
                         }
                     };
-
                 });
 
             ConfigurationManager configuration = builder.Configuration;
