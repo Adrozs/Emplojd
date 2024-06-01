@@ -99,6 +99,21 @@ namespace Emplojd.Services
             }
         }
 
+        public static async Task<IResult> ResendEmailConfirmation([FromBody] ResendEmailConfirmationRequest request, [FromServices] IUserRepository userRepository)
+        {
+            try
+            {
+                IdentityResult result = await userRepository.ResendEmailVerificationAsync(request.Email);
+
+                // Returns status code and message depending on result value
+                return ResultHandler.HandleIdentityResult(result, "Successfully sent confirmation email. Please check your email to verify your account.", "Failed to send confirmation email:");
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.HandleException(ex);
+            }
+        }
+
         public static async Task<IResult> GeneratePasswordResetTokenAsync([FromBody] GeneratePasswordResetTokenRequest request, [FromServices] IUserRepository userRepository)
         {
             try
