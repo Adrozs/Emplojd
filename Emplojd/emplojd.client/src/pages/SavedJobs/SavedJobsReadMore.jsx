@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import { FaChevronLeft, FaArrowRight } from "react-icons/fa";
 import Footer from "../../components/Footer";
-import EmplojdLogo from "../../components/Icons/EmplojdLogoSVG";
+import { FaHeart } from "react-icons/fa6";
+import Loader from "../../ui/Loader";
 
 function SavedJobsReadMore() {
   const { jobId } = useParams();
@@ -57,8 +58,12 @@ function SavedJobsReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <main className="max-w-7xl mx-auto px-2">
-        {job && (
+      <div className="bg-gradient-to-tl from-purple-400 to-sky-500 p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
+        <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
+        <FaHeart size={22} className="text-white mr-2" />
+      </div>
+      {job ? (
+        <main className="max-w-7xl mx-auto px-2">
           <>
             <div className="bg-white py-3 mt-8 px-1 rounded-[10px]">
               <div className="w-full flex flex-col text-center justify-center ">
@@ -112,8 +117,12 @@ function SavedJobsReadMore() {
               <p>Något gick fel</p>
             )}
           </>
-        )}
-      </main>
+        </main>
+      ) : (
+        <main className="min-w-7xl mx-auto px-2 h-[40vh]">
+          <Loader />
+        </main>
+      )}
       <Footer />
     </>
   );

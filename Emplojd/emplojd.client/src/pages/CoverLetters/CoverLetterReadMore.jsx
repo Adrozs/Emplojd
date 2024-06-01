@@ -1,14 +1,16 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import Footer from "../../components/Footer";
 import { FaChevronLeft, FaTrash, FaFileSignature } from "react-icons/fa";
 import { FaRegPenToSquare, FaRegCopy } from "react-icons/fa6";
 import Loader from "../../ui/Loader";
-
+import axios from "axios";
+import { toast } from "react-toastify";
 function CoverLetterReadMore() {
   const { jobId } = useParams();
   const [letter, setLetter] = useState(null);
+  const navigate = useNavigate();
 
   const fetchJobData = async (id) => {
     try {
@@ -61,12 +63,45 @@ function CoverLetterReadMore() {
     const date = new Date(dateString);
     const localDate = new Date(
       date.getTime() + date.getTimezoneOffset() * 60000
-    ); // Konvertera till lokal tid
+    );
     return new Intl.DateTimeFormat("sv-SE", {
       year: "numeric",
       month: "long",
       day: "numeric",
     }).format(localDate);
+  };
+
+  /* Delete cover letter */
+  const clickToDelete = async (id) => {
+    const token = localStorage.getItem("authToken");
+
+    const postLetter = {
+      coverLetterId: id,
+    };
+
+    console.log("Sending cover letter to backend:", postLetter);
+
+    try {
+      const response = await axios.delete(
+        "https://emplojdserver20240531231628.azurewebsites.net/saved-letter",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          data: postLetter,
+        }
+      );
+      console.log("Successfully deleted:", response.data);
+      toast("Personligt brev har raderats.");
+      navigate("/coverletter");
+    } catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
   };
 
   return (
@@ -102,7 +137,10 @@ function CoverLetterReadMore() {
             </div>
 
             <div className="p-3 max-w-4xl mx-auto mt-3 pb-14 bg-gradient-to-t from-white to-blue-100 flex items-center justify-center gap-2 text-sm">
-              <button className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-2">
+              <button
+                onClick={() => clickToDelete(letter.coverLetterId)}
+                className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-2"
+              >
                 <FaTrash /> Ta bort
               </button>
               <button className="px-[16px] py-[12px] rounded-[8px] bg-purple-400 text-white flex items-center gap-2">
