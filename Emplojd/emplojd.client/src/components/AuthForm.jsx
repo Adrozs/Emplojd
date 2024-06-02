@@ -7,6 +7,7 @@ import { useMutation } from "react-query";
 import customFetch from "../utils/axios";
 import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
 import ThirdPartyLogin from "./ThirdPartyLogin";
+import Loader from "../ui/Loader";
 
 const initialState = {
   email: "",
@@ -17,6 +18,7 @@ const initialState = {
 };
 const AuthForm = () => {
   const [values, setValues] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
   const location = useLocation();
@@ -30,12 +32,14 @@ const AuthForm = () => {
 
   const createUserMutation = useMutation(
     async (user) => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
       const response = await customFetch.post("/create-account", user, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
+      setIsLoading(false);
       return response.data;
     },
     {
@@ -70,12 +74,14 @@ const AuthForm = () => {
 
   const signInUserMutation = useMutation(
     async (user) => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
       const response = await customFetch.post("/login", user, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
+      setIsLoading(false);
       return response.data;
     },
     {
@@ -197,7 +203,7 @@ const AuthForm = () => {
           Glömt ditt konto?
         </Link>
       </div>
-
+      <>{isLoading && <Loader />}</>
       <div className="flex flex-col gap-2">
         <button
           className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 flex px-8 justify-between items-center"

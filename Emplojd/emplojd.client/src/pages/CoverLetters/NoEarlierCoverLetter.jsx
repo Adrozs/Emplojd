@@ -5,14 +5,16 @@ import { FaFileSignature, FaChevronRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Loader from "../../ui/Loader";
 
 function NoEarlierCoverLetter() {
   const [coverLetters, setCoverLetters] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     function getCoverLetter() {
       const token = localStorage.getItem("authToken");
-
+      setIsLoading(true);
       return axios
         .get(
           "https://emplojdserver20240531231628.azurewebsites.net/saved-letter",
@@ -25,11 +27,13 @@ function NoEarlierCoverLetter() {
         )
         .then((response) => {
           console.log(response.data);
+          setIsLoading(false);
           setCoverLetters(response.data);
           return response;
         })
         .catch((error) => {
           console.error("Error fetching cover letters:", error);
+          setIsLoading(false);
           return null;
         });
     }
@@ -63,6 +67,7 @@ function NoEarlierCoverLetter() {
               Här har du full åtkomst till dina sparade personliga brev.
             </p>
           </div>
+          <>{isLoading && <Loader />}</>
           <ul className="flex flex-col items-center justify-center my-10 max-w-lg mx-4 pb-10">
             {coverLetters.length > 0 ? (
               coverLetters.map((letter, index) => (

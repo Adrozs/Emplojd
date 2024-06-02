@@ -8,13 +8,17 @@ import {
   getLikeDataBackend,
   deleteLikeDataBackend,
 } from "../../utils/savedAds";
+import Loader from "../../ui/Loader";
 
 function SavedJobs() {
   const [likes, setLikes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [daySincePosted, setDaySincePosted] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     getLikeDataBackend().then((data) => {
+      setIsLoading(false);
       setLikes(data);
       const todaysDate = new Date();
       const updatedLikes = data.map((job) => {
@@ -54,6 +58,7 @@ function SavedJobs() {
               Här har du åtkomst till alla jobbannonser du har valt att spara.
             </p>
           </div>
+          <>{isLoading && <Loader />}</>
           <ul className="flex flex-col items-center my-10 mx-4">
             {likes <= 0 ? (
               <>
@@ -105,9 +110,7 @@ function SavedJobs() {
                           <span className="bg-[#CFEBD4] dark:bg-fuchsia-600 px-2 py-1 rounded-[2px]">
                             {data.working_Hours_Type.label}
                           </span>
-                          {/* <span className="bg-purple-300 px-2 py-1">
-                          {data.employment_Type.label}
-                        </span> */}
+
                           <span className="bg-[#C3E7F3] dark:bg-teal-600 px-2 py-1 rounded-[2px]">
                             {data.occupation.label}
                           </span>
