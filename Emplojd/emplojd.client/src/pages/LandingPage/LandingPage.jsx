@@ -106,7 +106,10 @@ export default function LandingPage() {
       </section>
 
       <section className="flex flex-col dark:bg-gray-800 ">
-        <div ref={learnMoreRef} className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80">
+        <div
+          ref={learnMoreRef}
+          className="w-full relative -top-10 md:-top-16 ls:-top-24 lg:-top-32 xl:-top-48 xxl:-top-80"
+        >
           <svg
             viewBox="0 0 360 81"
             fill="none"
@@ -121,10 +124,12 @@ export default function LandingPage() {
             />
           </svg>
         </div>
-        <div  className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
-          <div  className=" flex justify-center">
+        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
+          <div className=" flex justify-center">
             <h6 className="font-semi-bold mb-5 text-center text-2xl font-bold dark:text-white">
-              Hitta <span className="text-customBlue dark:text-sky-500">rätt</span> jobb för dig
+              Hitta{" "}
+              <span className="text-customBlue dark:text-sky-500">rätt</span>{" "}
+              jobb för dig
             </h6>
           </div>
           <div className="max-w-[750px] mx-6 ls:mx-auto pb-10">
@@ -144,7 +149,7 @@ export default function LandingPage() {
           <div className="flex justify-center sm:mt-8">
             <Link
               to="/signin"
-              className="flex items-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
+              className="w-[290px] flex items-center justify-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
             >
               Logga In <FaArrowRight size={14} />
             </Link>
