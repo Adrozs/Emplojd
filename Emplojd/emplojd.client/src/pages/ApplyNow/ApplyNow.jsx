@@ -19,6 +19,7 @@ function ApplyNow() {
   const [job, setJob] = useState(null);
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [page, setPage] = useState(1);
+  const [temp, setTemp] = useState(0.5);
 
   useEffect(() => {
     async function fetchData() {
@@ -159,12 +160,20 @@ function ApplyNow() {
             </ul>
           </>
         )}
-        {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
+        {page === 2 && (
+          <ApplySideTwo
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            setTemp={setTemp}
+          />
+        )}
         {page === 3 && (
-          <ApplySideThree job={job} page={page} setPage={setPage} />
+          <ApplySideThree job={job} page={page} setPage={setPage} temp={temp} />
         )}
         {page === 4 && (
-          <ApplySideFour job={job} page={page} setPage={setPage} />
+          <ApplySideFour job={job} page={page} setPage={setPage} temp={temp} />
         )}
       </main>
       <Footer />
@@ -172,7 +181,7 @@ function ApplyNow() {
   );
 }
 
-function ApplySideTwo({ job, page, setPage }) {
+function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
   const initialState = {
     email: "",
     isMember: true,
@@ -333,6 +342,14 @@ function ApplySideTwo({ job, page, setPage }) {
             <input
               type="range"
               className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer custom-slider"
+              min="0.5"
+              max="1"
+              step="0.1"
+              value={temp}
+              onChange={(e) => {
+                console.log(temp);
+                setTemp(e.target.value);
+              }}
             />
             <div className="flex justify-between text-sm">
               <span>Lite självständig</span>

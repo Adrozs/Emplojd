@@ -12,7 +12,7 @@ import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
-export default function ApplySideThree({ job, page, setPage }) {
+export default function ApplySideThree({ job, page, setPage, temp }) {
   const [editable, setEditable] = useState(false);
   const editEl = useRef(null);
   const [copied, setCopied] = useState(false);
@@ -61,7 +61,7 @@ export default function ApplySideThree({ job, page, setPage }) {
         jobTitle: job.headline || "",
         jobDescription: job.description?.text || "",
         cvText: letterContent,
-        temperature: 0.7,
+        temperature: temp,
       };
 
       console.log("Sending data to backend:", postData);
@@ -88,7 +88,7 @@ export default function ApplySideThree({ job, page, setPage }) {
       coverLetterContent: letterContent,
       companyName: job.employer.name,
       date: todaysDate,
-      temperature: 0.7,
+      temperature: temp,
     };
 
     console.log("Sending cover letter to backend:", postLetter);
