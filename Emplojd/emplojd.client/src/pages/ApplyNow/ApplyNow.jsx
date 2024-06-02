@@ -1,19 +1,18 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
-import Tooltip from "../../components/Tooltip";
-
-import html2pdf from "html2pdf.js";
+import ApplySideThree from "./ApplySideThree";
+import FormRow from "../../components/FormRow";
+import ListForm from "../../components/ListForm";
+import { useDarkMode } from "../../components/Icons/DarkModeHook";
 //Icons
-import { FiCopy } from "react-icons/fi";
-import { FaEdit } from "react-icons/fa";
-import { IoMdRefresh } from "react-icons/io";
+
 import { RiCheckboxCircleFill } from "react-icons/ri";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-import { getOneBackendJob } from "../../utils/backendserver";
+import { getOneBackendJob, getProfileInfo } from "../../utils/backendserver";
 
 function ApplyNow() {
   const { jobId } = useParams();
@@ -34,9 +33,9 @@ function ApplyNow() {
   }, [jobId]);
 
   useEffect(() => {
-    if (job && job.application_deadline) {
+    if (job && job.application_Deadline) {
       const todaysDate = new Date();
-      const jobPosted = new Date(job.publication_date);
+      const jobPosted = new Date(job.publication_Date);
       const differenceInTime = todaysDate.getTime() - jobPosted.getTime();
       const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
       setDaySincePosted(differenceInDays);
@@ -123,8 +122,8 @@ function ApplyNow() {
                 <p className="text-lg">{job.employer.name}</p>
                 <div>
                   <p className="text-sm my-2">
-                    {/*  {job.workplace_address.municipality}  */}-{" "}
-                    {daySincePosted} dagar sen
+                    {job.workplace_Address.municipality} - {daySincePosted}{" "}
+                    dagar sen
                   </p>
                 </div>
               </div>
@@ -168,9 +167,108 @@ function ApplyNow() {
 }
 
 function ApplySideTwo({ job, page, setPage }) {
+  const initialState = {
+    email: "",
+    isMember: true,
+    firstname: "",
+    lastname: "",
+  };
+
+  const [values, setValues] = useState(initialState);
+  const [interests, setInterests] = useState([]);
+  const [descriptiveWords, setDescriptiveWords] = useState([]);
+  const { isDarkMode } = useDarkMode();
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("none");
+  const prevValues = useRef(values);
+  const prevSelectedOption = useRef(selectedOption);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+    setUnsavedChanges(true);
+  };
+  const handleListFormChange = (type, value) => {
+    if (type === "interests") {
+      setInterests(value);
+    } else if (type === "descriptiveWords") {
+      setDescriptiveWords(value);
+    }
+    setUnsavedChanges(true);
+  };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const authToken = localStorage.getItem("authToken");
+
+      if (!authToken) {
+        console.error("No auth token found");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/GetUserProfile`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`
+          );
+          throw new Error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`
+          );
+        }
+
+        const data = await response.json();
+        setValues({
+          firstname: data.firstname || "",
+          lastname: data.lastname || "",
+          isMember: data.isMember || false,
+        });
+        setInterests(data.interests || []);
+        setDescriptiveWords(data.descriptiveWords || []);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  useEffect(() => {
+    const isDifferent = (prev, current) =>
+      JSON.stringify(prev) !== JSON.stringify(current);
+
+    if (
+      isDifferent(prevValues.current, values) ||
+      isDifferent(prevSelectedOption.current, selectedOption)
+    ) {
+      setUnsavedChanges(true);
+    } else {
+      setUnsavedChanges(false);
+    }
+
+    prevValues.current = values;
+    prevSelectedOption.current = selectedOption;
+  }, [values, selectedOption]);
+
+  const wordBgColorInterests = isDarkMode ? "bg-indigo-500" : "bg-sky-100";
+  const wordBgColorDescriptiveWords = isDarkMode
+    ? "bg-indigo-500"
+    : "bg-purple-100";
+
   return (
-    <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
-      <div className=" w-[90%] bg-white p-4 pb-10 flex flex-col text-stone-800 rounded-[20px] ">
+    <ul className="flex justify-center my-14 max-w-lg mx-auto pb-12">
+      <div className=" w-[90%] bg-white p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] ">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -191,46 +289,52 @@ function ApplySideTwo({ job, page, setPage }) {
         </div>
         <div>
           <p>Arbetstitle</p>
-          <p className="text-xl font-semibold">{job.headline}</p>
+          <p className="text-lg font-semibold">{job.headline}</p>
         </div>
-        <form className="max-w-sm my-4">
-          <label className="flex flex-col text-sm mb-6">
-            <span>Fullständingt namn</span>
-            <input
-              className="p-1 bg-stone-100 h-[52px] px-3 rounded-[20px]"
-              type="text"
-              placeholder="Namn Efternamnsson"
-            />
-          </label>
-          <label className="flex flex-col text-sm my-4 mb-6">
-            <span>Intressen (separerat med kommatecken)</span>
-            <input
-              className="p-1 mt-1 bg-stone-100 h-[52px] px-3 rounded-[20px]"
-              type="text"
-              placeholder="Fiske, odling, bilar"
-            />
-          </label>
 
-          <label className="flex flex-col text-sm my-4 mb-6">
-            <span>Beskrivande ord (separerat med kommatecken)</span>
-            <input
-              className="p-1 mt-1 bg-stone-100 h-[52px] px-3 rounded-[20px]"
-              type="text"
-              placeholder="Problemlösare, snabblärd"
+        <div className="my-8">
+          <div className="dark:text-white">
+            <FormRow
+              type="firstname"
+              labelText="Fullständigt namn"
+              name="firstname"
+              value={`${values.firstname} ${values.lastname}`}
+              handleChange={handleChange}
             />
-          </label>
-          <label className='text-sm"'>
+          </div>
+          <div className="dark:text-white">
+            <ListForm
+              wordBgColor={wordBgColorInterests}
+              name="Mina intressen"
+              type="interests"
+              onChange={(value) => handleListFormChange("interests", value)}
+              value={interests}
+            />
+            <ListForm
+              wordBgColor={wordBgColorDescriptiveWords}
+              name="Beskrivning av mig"
+              type="descriptiveWords"
+              onChange={(value) =>
+                handleListFormChange("descriptiveWords", value)
+              }
+              value={descriptiveWords}
+            />
+          </div>
+        </div>
+        <label className='text-sm"'>
+          <div className="flex flex-col gap-8">
             <span>Hur självständig ska AI:n vara?</span>
             <input
               type="range"
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+              className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer custom-slider"
             />
             <div className="flex justify-between text-sm">
               <span>Lite självständig</span>
               <span>Mycket självständig</span>
             </div>
-          </label>
-        </form>
+          </div>
+        </label>
+
         <div className="flex justify-between items-center mt-4">
           <Link to="/joblist" className="text-sm">
             Avbryt
@@ -259,119 +363,6 @@ function ApplySideTwo({ job, page, setPage }) {
   );
 }
 
-function ApplySideThree({ job, page, setPage }) {
-  const [editable, setEditable] = useState(false);
-  const editEl = useRef(null);
-  const [copied, setCopied] = useState(false);
-  const [letterContent, setLetterContent] = useState(
-    `Hej där,\n\nJag hoppas att detta brev når er i god hälsa och högmod. Mitt namn är Fady och jag skriver till er med en genuin passion för .NET-utveckling och en stark önskan att bidra till ert team.\n\nJag har nyligen stött på er annonsering för en .NET-utvecklare och jag kunde inte motstå att söka. Efter att ha granskat er verksamhet och era projekt, är jag imponerad av den nivå av innovation och engagemang ni visar. Att få möjlighet att arbeta med er och bidra till era framgångar skulle vara en ära för mig.\n\nMed en gedigen erfarenhet inom .NET-utveckling och en passion för att lösa komplexa problem, tror jag att jag kan vara en tillgång för ert team. Jag har arbetat med olika projekt inom området och har en djup förståelse för ramverket och dess möjligheter. Jag är van vid att arbeta både självständigt och i team och har en stark vilja att lära och växa.\n\nDet är min övertygelse att genom att kombinera min tekniska expertis med min förmåga att tänka kreativt och problemlösningsorienterat, kan jag bidra till att driva era projekt framåt och uppnå era mål.\n\nJag ser fram emot möjligheten att diskutera hur jag kan bidra till ert team ytterligare. Tack för er tid och övervägande.\n\nMed vänliga hälsningar,\nFady`
-  );
-
-  useEffect(() => {
-    if (editable) {
-      editEl.current.focus();
-    }
-  }, [editable]);
-
-  const handleInput = (e) => {
-    setLetterContent(e.currentTarget.innerText);
-  };
-
-  const copyTextToClipboard = () => {
-    navigator.clipboard
-      .writeText(letterContent)
-      .then(() => setCopied(true))
-      .catch((error) => console.error("Could not copy text: ", error));
-  };
-
-  const saveAsPdf = () => {
-    const confirmDownload = window.confirm("Vill du ladda ner brevet som PDF?");
-    if (confirmDownload) {
-      const element = editEl.current;
-      const tempDiv = document.createElement("div");
-      tempDiv.appendChild(element.cloneNode(true));
-      html2pdf().from(tempDiv).save();
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
-      <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
-        <div>
-          <div className="grid grid-cols-2 w-[70%] items-center">
-            <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
-            <div className="flex justify-center">
-              <p className="text-sm">Kontrollera brevet</p>
-            </div>
-          </div>
-          <div className="w-full flex items-center justify-center mt-1 py-1">
-            <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
-          </div>
-        </div>
-        <div>
-          <p className="text-sm">Ansökan för</p>
-          <h3 className="font-semibold text-xl text-stone-900">
-            {job.headline}
-          </h3>
-        </div>
-      </div>
-      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px]">
-        <div className="self-end">
-          <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
-            <button onClick={copyTextToClipboard}>
-              <FiCopy size={22} />
-            </button>
-          </Tooltip>
-        </div>
-        <div
-          className="p-4"
-          contentEditable={editable}
-          ref={editEl}
-          onInput={handleInput}
-          dangerouslySetInnerHTML={{ __html: letterContent }}
-        />
-      </aside>
-      <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
-        <div>
-          <div className="flex justify-between">
-            <button
-              className="underline text-sm ml-3 flex items-center gap-1"
-              onClick={() => {
-                setPage(2);
-                window.scrollTo(0, 0);
-              }}
-            >
-              <FaArrowLeft /> Tillbaka till innehållet
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mx-3">
-          <button
-            onClick={() => setEditable(!editable)}
-            className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 text-[13px]"
-          >
-            Redigera brev <FaEdit size={15} />
-          </button>
-          <button className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px]">
-            Generera brev <IoMdRefresh size={18} />
-          </button>
-        </div>
-        <div className="flex justify-center flex-col">
-          <button
-            className="bg-customBlue rounded-[4px] text-white p-1 w-[100%] h-[40px] flex items-center justify-center gap-3"
-            onClick={() => setPage(4)}
-          >
-            Spara personligt brev <FaArrowRight />
-          </button>
-          <button className="text-sm mt-2 underline" onClick={saveAsPdf}>
-            Ladda ner som pdf
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ApplySideFour({ job, page, setPage }) {
   return (
     <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto pb-12">
@@ -379,19 +370,21 @@ function ApplySideFour({ job, page, setPage }) {
         <div className="mx-auto">
           <RiCheckboxCircleFill size={36} />
         </div>
-        <div className="px-10">
-          Ditt personliga brev är nu sparat och lorem ipsum lorem ipsum
-        </div>
+        <div className="px-10">Ditt personliga brev är sparat.</div>
         <div className="flex flex-col items-center gap-4">
           <Link
-            to="/NoEarlierCoverLetter"
+            to="/coverletter"
             className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
           >
             Gå till sparade brev
           </Link>
-          <button className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3">
+          <a
+            href={job.application_Details.url}
+            target="_blank"
+            className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3"
+          >
             Ansök här <FaArrowRight />
-          </button>
+          </a>
 
           <Link className="text-sm underline" to="/joblist">
             Sök fler jobb

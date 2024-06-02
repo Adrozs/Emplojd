@@ -1,4 +1,5 @@
 import ApplyNow from "./ApplyNow/ApplyNow";
+import ConfirmAccount from "./Confirm/ConfirmAccount";
 import ConfirmEmail from "./Confirm/ConfirmEmail";
 
 import JobInfo from "./JobInfo/JobInfo";
@@ -7,12 +8,16 @@ import JobSearch from "./JobSearch/JobSearch";
 import LandingPage from "./LandingPage/LandingPage";
 import CreateProfile from "./Profile/CreateProfile";
 import MyProfile from "./Profile/MyProfile";
-import NoEarlierCoverLetter from "./Profile/NoEarlierCoverLetter";
+import NoEarlierCoverLetter from "./CoverLetters/NoEarlierCoverLetter";
 import Profile from "./Profile/Profile";
-import SavedJobs from "./Profile/SavedJobs";
-import SavedJobsReadMore from "./Profile/SavedJobsReadMore";
+import SavedJobs from "./SavedJobs/SavedJobs";
+import SavedJobsReadMore from "./SavedJobs/SavedJobsReadMore";
+import ForgotPassword from "./Reset/ForgotPassword";
+import ResetPassword from "./Reset/ResetPassword";
 import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
+import SavedCV from "./Profile/SavedCV";
+import CoverLetterReadMore from "./CoverLetters/CoverLetterReadMore";
 
 export {
   ApplyNow,
@@ -29,4 +34,9 @@ export {
   MyProfile,
   SavedJobsReadMore,
   ConfirmEmail,
+  ConfirmAccount,
+  ForgotPassword,
+  ResetPassword,
+  SavedCV,
+  CoverLetterReadMore,
 };

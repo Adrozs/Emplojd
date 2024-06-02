@@ -13,18 +13,20 @@ namespace Emplojd.Server.Services
     public class UserProfileService
     {
         private readonly ApplicationContext _context;
+        private readonly BlobStorageService _blobStorageService;
 
-        public UserProfileService(ApplicationContext context)
+        public UserProfileService(ApplicationContext context, BlobStorageService blobStorageService)
         {
             _context = context;
+            _blobStorageService = blobStorageService;
+
         }
 
         public async Task<UserProfileResult> AddUserProfileAsync(UserProfileDto userProfileDto, ClaimsPrincipal currentUser)
         {
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
-            var user = await _context.Users 
-                .FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
                 return UserProfileResult.Failed("No matching user found.");
@@ -33,10 +35,22 @@ namespace Emplojd.Server.Services
             {
                 user.FirstName = userProfileDto.FirstName;
                 user.LastName = userProfileDto.LastName;
-                user.UserInterestTags = userProfileDto.UserInterestTags;
-                user.DescriptiveWords = userProfileDto.DescriptiveWords;
+                user.UserInterestTags = userProfileDto.UserInterestTags?.Take(5).ToList();
+                user.DescriptiveWords = userProfileDto.DescriptiveWords?.Take(5).ToList();
+            
 
                 await _context.SaveChangesAsync();
+
+                if (userProfileDto.ImageFile != null && userProfileDto.ImageFile.Length > 0)
+                {
+                    // Upload image to Azure Blob Storage
+                    var imageUrl = await _blobStorageService.UploadBlobAsync(userProfileDto.ImageFile);
+
+                    // Update user's image file path
+                    user.ImageFilePath = imageUrl;
+
+                    await _context.SaveChangesAsync();
+                }
 
                 return UserProfileResult.Successful() ;
             }
@@ -51,8 +65,7 @@ namespace Emplojd.Server.Services
         {
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
                 return null;
@@ -63,6 +76,7 @@ namespace Emplojd.Server.Services
                 LastName = user.LastName,
                 UserInterestTags = user.UserInterestTags,
                 DescriptiveWords = user.DescriptiveWords,
+                ImageFilePath = user.ImageFilePath
             };
         }
 
@@ -117,11 +131,51 @@ namespace Emplojd.Server.Services
 
                 return UserProfileResult.Successful();
             }
-            catch (Exception ex)
+            catch (Exception exResult)
             {
                 var exResult = ExceptionHandler.HandleException(ex);
                 return UserProfileResult.Failed($"Failed to create or update profile: {exResult}");
             }
+        }
+        public async Task CoverLetterSignature(ClaimsPrincipal currentUser)
+        {
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return;
+            }
+
+            string signature = $"Med vänliga hälsningar,\n{user.FirstName} {user.LastName}";
+            Console.WriteLine(signature);
+        }
+
+        public async Task CustomSignature(ClaimsPrincipal currentUser, string customSignature)
+        {
+            const int MaxSignatureLength = 100;
+            if (customSignature.Length > MaxSignatureLength)
+            {
+                Console.WriteLine($"Din signatur är för lång, Max antal bokstäver: {MaxSignatureLength} ");
+                return;
+            }
+
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return;
+            }
+
+            string signature = $"{customSignature}\n{user.FirstName} {user.LastName}";
+            Console.WriteLine(signature);
         }
     }
 }

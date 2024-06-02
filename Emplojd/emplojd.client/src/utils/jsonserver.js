@@ -1,4 +1,4 @@
-import axios from "axios";
+/* import axios from "axios";
 
 function sendLikeData(
   id,
@@ -70,3 +70,4 @@ function deleteLikeData(id) {
 }
 
 export { sendLikeData, getLikeData, deleteLikeData, getOneLikeData };
+ */

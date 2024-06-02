@@ -102,6 +102,9 @@ namespace Emplojd.Server.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageFilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +136,9 @@ namespace Emplojd.Server.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UserImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserInterestTags")
                         .HasColumnType("nvarchar(max)");
@@ -200,6 +206,10 @@ namespace Emplojd.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedCoverLetterId"));
 
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CoverLetterContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -207,6 +217,9 @@ namespace Emplojd.Server.Migrations
                     b.Property<string>("CoverLetterTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<float>("Temperature")
                         .HasColumnType("real");

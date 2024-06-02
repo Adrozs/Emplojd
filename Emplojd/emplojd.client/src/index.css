@@ -6,7 +6,7 @@
 
 @font-face {
   font-family: "Glockenspiel";
-  src: url("./font/Glockenspiel.ttf");
+  src: url("/Glockenspiel.ttf");
 }
 
 body {
@@ -46,11 +46,38 @@ a {
   }
 }
 
+.swiper-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .swiper-backface-hidden .swiper-slide {
   display: flex;
   justify-content: center;
 }
 
+.dark .swiper-pagination-bullet {
+  background-color: white;
+}
+
+.dark .swiper-pagination-bullet-active {
+  background-color: #0783f6;
+}
 
 .file-selected {
   background-color: rgb(120 113 108);
@@ -58,4 +85,25 @@ a {
 
 .inner-shadow-bottom {
   box-shadow: inset 0px -6px 10px -10px rgba(0, 0, 0, 0.4);
+}
+
+.custom-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #4086C6, #CA81ED);
+  cursor: pointer;
+}
+
+.custom-slider::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(140deg,  #4086C6, #CA81ED);
+  cursor: pointer;
+}
+
+html.dark main {
+  background-color: #1f2937;
 }

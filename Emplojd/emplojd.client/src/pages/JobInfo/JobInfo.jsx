@@ -23,11 +23,17 @@ function JobInfo() {
 
   useEffect(() => {
     const fetchLikedJobs = async () => {
-      const likedJobs = await getLikeDataBackend();
-      const liked = likedJobs.some(
-        (likedJob) => likedJob.platsbankenId === job.id
-      );
-      setIsLiked(liked);
+      try {
+        const likedJobs = await getLikeDataBackend();
+        const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
+        if (liked.includes(parseInt(job.id))) {
+          setIsLiked(true);
+        } else {
+          setIsLiked(false);
+        }
+      } catch (error) {
+        console.error("Error fetching liked jobs:", error);
+      }
     };
     fetchLikedJobs();
   }, [job]);
@@ -67,7 +73,7 @@ function JobInfo() {
         <img src="/LogoEmplojd.png" className="w-[45px]" />
       </HeaderOtherPages>
 
-      <main className="m-2 max-w-7xl mx-auto px-2">
+      <main className="m-2 max-w-7xl mx-auto px-2 md:mt-24">
         {job && (
           <>
             <div className="bg-white  py-3 mt-8 px-1 rounded-[10px]">

@@ -8,13 +8,15 @@ namespace Emplojd.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserProfileController : ControllerBase 
+    public class UserProfileController : ControllerBase
     {
         private readonly UserProfileService _userProfileService;
+        private readonly BlobStorageService _blobStorageService;
 
-        public UserProfileController(UserProfileService userProfileService)
+        public UserProfileController(UserProfileService userProfileService, BlobStorageService blobStorageService)
         {
             _userProfileService = userProfileService;
+            _blobStorageService = blobStorageService;
         }
 
         [HttpPost("CreateUserProfile")]
@@ -31,7 +33,7 @@ namespace Emplojd.Server.Controllers
         }
 
         [HttpPost("CreateUserCvManually")]
-         public async Task<IActionResult> CreateUserCvManually([FromBody] CvManuallyDto cvManuallyDtos)
+        public async Task<IActionResult> CreateUserCvManually([FromBody] CvManuallyDto cvManuallyDtos)
         {
             ClaimsPrincipal currentUser = User;
 
@@ -65,6 +67,19 @@ namespace Emplojd.Server.Controllers
                 return NotFound("No CV found for this user.");
 
             return Ok(cvManually);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadUserProfile([FromForm] UserProfileDto userProfileDto)
+        {
+            if (userProfileDto.ImageFile != null && userProfileDto.ImageFile.Length > 0)
+            {
+                var imageUrl = await _blobStorageService.UploadBlobAsync(userProfileDto.ImageFile);
+                userProfileDto.ImageFilePath = imageUrl;
+            }
+
+            await _userProfileService.AddUserProfileAsync(userProfileDto, User);
+            return Ok();
         }
     }
 }

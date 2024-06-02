@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Emplojd.Server.Models;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.IdentityModel.Tokens;
 using Emplojd.Server.ResultObjects;
 
 namespace Emplojd.Repositories
@@ -17,6 +19,7 @@ namespace Emplojd.Repositories
     {
         public Task<string> GenerateLetterAsync(GenerateCoverLetterDto generateCoverLetterDto);
         Task<List<SavedCoverLetterDto>> GetSavedCoverLettersAsync(ClaimsPrincipal currentUser);
+        Task<SavedCoverLetterDto> GetSavedCoverLetterAsync(int coverLetterId, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> RemoveSavedCoverLettersAsync(RemoveCoverLetterRequest request, ClaimsPrincipal currentUser);
         Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser);
     }
@@ -63,18 +66,18 @@ namespace Emplojd.Repositories
             chat.Model = Model.ChatGPTTurbo;
             //chat.RequestParameters.Temperature = temperature;
 
-            int desiredLength = 500;
+            int desiredLength = 300;
 
             // Prepare the prompt using CV text and user info
             string prompt = $"Jag söker jobbet som {generateCoverLetterDto.JobTitle}. " +
-                $"Du ska skriva ett personligt brev åt mig, använd inte allt för formella ord utan mer avslappnat, dock fortfarande i arbetssammanhang. " +
-                $"Du behöver inte använda all information utan det som är relevant att ta med för jobbet." +
-                $"Här är lite info om mig. Mitt CV:\n{cvContentText}\n" +
-                $"Några av mina intressen: {userInterests}\n" +
-                $"Ord jag tycker beskriver mig: {userDescriptiveWords}\n" +
-                $"Ta in den informationen ovan om mig och läs av denna jobbannons och skriv ett personligt brev enligt instruktionerna du har fått." +
-                $"Med önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n." +
-                $"Jobbanonsen: {jobAd}";
+            $"Du ska skriva ett personligt brev åt mig, använd inte allt för formella ord utan mer avslappnat, dock fortfarande i arbetssammanhang. " +
+            $"Du behöver inte använda all information utan det som är relevant att ta med för jobbet." +
+            $"Här är lite info om mig. Mitt CV:\n{cvContentText}\n" +
+            $"Några av mina intressen: {userInterests}\n" +
+            $"Ord jag tycker beskriver mig: {userDescriptiveWords}\n" +
+            $"Ta in den informationen ovan om mig och läs av denna jobbannons och skriv ett personligt brev enligt instruktionerna du har fått." +
+            $"Med önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n." +
+            $"Jobbanonsen: {jobAd}";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
@@ -97,11 +100,34 @@ namespace Emplojd.Repositories
                 CoverLetterId = c.SavedCoverLetterId,
                 Temperature = c.Temperature,
                 CoverLetterTitle = c.CoverLetterTitle,
-                CoverLetterContent = c.CoverLetterContent
+                CoverLetterContent = c.CoverLetterContent,
+                CompanyName = c.CompanyName,
+                Date = c.Date
+                
             })
             .ToList();
 
             return savedCoverLetters;
+        }
+
+        public async Task<SavedCoverLetterDto> GetSavedCoverLetterAsync(int coverLetterId, ClaimsPrincipal currentUser)
+        {
+            User user = await GetUserAndCoverLettersAsync(currentUser);
+
+            SavedCoverLetterDto? savedCoverLetter = user.SavedCoverLetters
+            .Where(c => c.SavedCoverLetterId == coverLetterId)
+            .Select(c => new SavedCoverLetterDto
+            {
+                CoverLetterId = c.SavedCoverLetterId,
+                Temperature = c.Temperature,
+                CoverLetterTitle = c.CoverLetterTitle,
+                CoverLetterContent = c.CoverLetterContent,
+                CompanyName = c.CompanyName,
+                Date = c.Date
+            })
+            .SingleOrDefault();
+
+            return savedCoverLetter;
         }
 
         public async Task<CoverLetterResult> SaveCoverLetterAsync(SaveCoverLetterRequest request, ClaimsPrincipal currentUser)
@@ -127,6 +153,8 @@ namespace Emplojd.Repositories
                         CoverLetterTitle = request.CoverLetterTitle,
                         CoverLetterContent = request.CoverLetterContent,
                         Temperature = request.Temperature,
+                        CompanyName = request.CompanyName,
+                        Date = request.Date,
                     };
 
                     // Add cover letter to user and the context
@@ -134,9 +162,22 @@ namespace Emplojd.Repositories
                 }
                 else
                 {
-                    coverLetter.CoverLetterTitle = request.CoverLetterTitle;
-                    coverLetter.CoverLetterContent = request.CoverLetterContent;
-                    coverLetter.Temperature = request.Temperature;
+                    // if sent in values are default (meaning no change was made) ignore them
+                    if (!string.IsNullOrEmpty(request.CoverLetterTitle))
+                        coverLetter.CoverLetterTitle = request.CoverLetterTitle;
+                    
+                    if (!string.IsNullOrEmpty(request.CoverLetterContent))
+                        coverLetter.CoverLetterContent = request.CoverLetterContent;
+
+                    if (request.Temperature != 0.0f)
+                        coverLetter.Temperature = request.Temperature;
+
+                    if (!string.IsNullOrEmpty(request.CompanyName))
+                        coverLetter.CompanyName = request.CompanyName;
+
+                    if (request.Date != default(DateTime))
+                        coverLetter.Date = request.Date;
+
 
                     _context.CoverLetters.Update(coverLetter);
                 }

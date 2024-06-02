@@ -4,7 +4,7 @@ function getLikeDataBackend() {
   const token = localStorage.getItem("authToken");
 
   return axios
-    .get("https://localhost:54686/saved-ads", {
+    .get("https://emplojdserver20240531231628.azurewebsites.net/saved-ads", {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
@@ -48,17 +48,20 @@ function sendLikeDataBackend(
   console.log("Sending cleaned data to backend:", postData);
 
   axios
-    .post("https://localhost:54686/save-ad", postData, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post(
+      "https://emplojdserver20240531231628.azurewebsites.net/save-ad",
+      postData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     .then((response) => {
       console.log("Gillad annons", response.data);
     })
     .catch((error) => {
-      // Log the error response for debugging
       if (error.response) {
         console.error("Error response:", error.response.data);
       } else {
@@ -70,7 +73,7 @@ function sendLikeDataBackend(
 function deleteLikeDataBackend(platsbankenJobAdId) {
   const token = localStorage.getItem("authToken");
   return axios
-    .delete("https://localhost:54686/saved-ad", {
+    .delete("https://emplojdserver20240531231628.azurewebsites.net/saved-ad", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -88,5 +91,25 @@ function deleteLikeDataBackend(platsbankenJobAdId) {
       return null;
     });
 }
+
+/* Saved coverletters */
+// function getCoverLetter() {
+//   const token = localStorage.getItem("authToken");
+
+//   return axios
+//     .get("https://localhost:54686/saved-letters", {
+//       headers: {
+//         Accept: "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     })
+//     .then((response) => {
+//       console.log(response.data);
+//       return response;
+//     })
+//     .catch((error) => {
+//       return null;
+//     });
+// }
 
 export { sendLikeDataBackend, getLikeDataBackend, deleteLikeDataBackend };

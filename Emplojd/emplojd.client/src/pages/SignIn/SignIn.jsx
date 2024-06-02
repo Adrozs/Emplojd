@@ -1,23 +1,20 @@
 import AuthForm from "../../components/AuthForm";
 import Header from "../../components/Header/HeaderLandingpage";
+import EmplojdLogo from "../../components/Icons/EmplojdLogoSVG";
 
 const LoginPage = () => <AuthForm type="login" />;
 
 function SignIn() {
   return (
     <>
-      <div
-        className="flex flex-col h-screen"
-      >
-        <div className="flex-grow bg-gradient-to-r-custom inner-shadow-bottom">
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-grow bg-gradient-to-140-sky-violet dark:bg-dark-gradient-to-140-purple-slate inner-shadow-bottom">
           <Header>
             {" "}
-            <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
-              EMPLOJD
-            </h1>
+            <EmplojdLogo className="w-28 fill-white" />
           </Header>
         </div>
-          <LoginPage />
+        <LoginPage/>
       </div>
     </>
   );

@@ -144,5 +144,3 @@ artifacts/
 /obj/Emplojd.csproj.nuget.g.targets
 /obj/project.assets.json
 /obj/project.nuget.cache
-message.txt
-/.env

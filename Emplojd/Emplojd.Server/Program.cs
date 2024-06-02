@@ -23,91 +23,82 @@ using Emplojd.Server.Services;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Azure.Security.KeyVault.Secrets;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.Extensions.Configuration;
 
 namespace Emplojd
-{ 
+{
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
-
-            if (builder.Environment.IsProduction())
+            builder.Services.AddScoped<BlobStorageService>(provider =>
             {
-                var keyVaultUrl = builder.Configuration.GetSection("KeyVault:KeyVaultURL");
-                var keyVaultClientId = builder.Configuration.GetSection("KeyVault:ClientId");
-                var keyVaultClientSecret = builder.Configuration.GetSection("KeyVault:ClientSecret");
-                var keyVaultDirectoryID = builder.Configuration.GetSection("KeyVault:DirectoryID");
+                var connectionString = builder.Configuration.GetConnectionString("AzureBlobStorageConnection");
+                var containerName = builder.Configuration.GetConnectionString("AzureBlobStorageContainerName");
+                return new BlobStorageService(connectionString, containerName);
+            });
+            builder.Services.AddScoped<UserProfileService>();
 
-
-                var credential = new ClientSecretCredential(keyVaultDirectoryID.Value!.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString());
-                builder.Configuration.AddAzureKeyVault(keyVaultUrl.Value.ToString(), keyVaultClientId.Value!.ToString(), keyVaultClientSecret.Value!.ToString(), new DefaultKeyVaultSecretManager());
-
-                var client = new SecretClient(new Uri(keyVaultUrl.Value!.ToString()), credential);
-
-                builder.Services.AddDbContext<ApplicationContext>(options =>
-                {
-                    options.UseSqlServer(client.GetSecret("ProdConnection").Value.Value.ToString());
-                });
-            }
             if (builder.Environment.IsDevelopment())
             {
                 // Setup database context and connection string here
                 builder.Services.AddDbContext<ApplicationContext>(options =>
                 {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-        }
-        builder.Services.AddAuthentication(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                });
+            }
+            builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
-                .AddCookie()
-                .AddGoogle(options =>
-                {
-                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                })
-                .AddOAuth("LinkedIn", options =>
-                {
-                    options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
-                    options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
-                    options.CallbackPath = new PathString("/signin-linkedin");
-
-                    options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
-                    options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
-                    options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
-
-                    options.Scope.Add("openid");
-                    options.Scope.Add("profile");
-                    options.Scope.Add("email");
-
-                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
-
-                    options.Events = new OAuthEvents
+                    .AddCookie()
+                    .AddGoogle(options =>
                     {
-                        OnCreatingTicket = async context =>
+                        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                    })
+                    .AddOAuth("LinkedIn", options =>
+                    {
+                        options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+                        options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                        options.CallbackPath = new PathString("/signin-linkedin");
+
+                        options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
+                        options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
+                        options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
+
+                        options.Scope.Add("openid");
+                        options.Scope.Add("profile");
+                        options.Scope.Add("email");
+
+                        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+
+                        options.Events = new OAuthEvents
                         {
-                            var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
-                            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
+                            OnCreatingTicket = async context =>
+                            {
+                                var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
 
-                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                            response.EnsureSuccessStatusCode();
+                                var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                                response.EnsureSuccessStatusCode();
 
-                            var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+                                var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
 
-                            context.RunClaimActions(user);
+                                context.RunClaimActions(user);
 
-                        }
-                    };
+                            }
+                        };
 
-                });
+                    });
 
             ConfigurationManager configuration = builder.Configuration;
 
@@ -184,7 +175,7 @@ namespace Emplojd
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
+            builder.Services.AddSingleton(sp => new OpenAIAPI(configuration["OPENAI_API_KEY"]));
             builder.Services.AddScoped<UserProfileService>();
 
 
@@ -229,6 +220,7 @@ namespace Emplojd
             });
 
             var app = builder.Build();
+            app.UseStaticFiles();
 
             // Used for the controllers configuration
             app.UseRouting();
@@ -237,7 +229,7 @@ namespace Emplojd
             app.UseCors(builder =>
             {
                 builder
-                      .WithOrigins("https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173")
+                      .WithOrigins("emplojdserver20240531231628.azurewebsites.net", "https://www.emplojdserver20240531231628.azurewebsites.net", "https://emplojdserver20240531231628.azurewebsites.net", "https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173", "https://www.emplojd.com", "https://emplojd.com")
                       .SetIsOriginAllowedToAllowWildcardSubdomains()
                       .AllowAnyHeader()
                       .AllowCredentials()
@@ -277,7 +269,8 @@ namespace Emplojd
             // .AllowAnonymous() to explicitly say that this doesn't require token auth
             app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
             app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
-            app.MapGet("/confirm-email", UserService.EmailVerificationAsync).AllowAnonymous();
+            app.MapGet("/confirm-email", UserService.ConfirmEmailAsync).AllowAnonymous();
+            app.MapPost("/resend-confirm-email", UserService.ResendEmailConfirmationAsync).AllowAnonymous();
             app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
             app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
             app.MapDelete("/delete-account", UserService.DeleteAccountAsync).RequireAuthorization();

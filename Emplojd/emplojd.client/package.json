@@ -1,14 +1,17 @@
 {
-  "name": "chasgpt",
+  "name": "Emplojd",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://adrozs.github.io/Emplojd",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "server": "json-server --watch data.json --port 3001"
+    "server": "json-server --watch data.json --port 3001",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.9",
@@ -18,13 +21,14 @@
     "html2pdf.js": "^0.10.1",
     "json-server": "^1.0.0-alpha.23",
     "react": "^18.2.0",
+    "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-query": "^3.39.3",
     "react-redux": "^9.1.1",
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
-    "swiper": "^11.1.1",
+    "swiper": "^11.1.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -36,6 +40,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "vite": "^5.2.0"

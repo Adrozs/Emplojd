@@ -62,7 +62,7 @@ const ThirdPartyLogin = () => {
       width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g fill="none" fill-rule="evenodd">
+      <g fill="none" fillRule="evenodd">
         <path
           d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z"
           fill="#007EBB"
@@ -77,18 +77,22 @@ const ThirdPartyLogin = () => {
 
   return (
     <div>
-      <div className="mb-6">Eller</div>
+      <div className="flex items-center mb-4">
+        <span className="flex-grow h-[2px] bg-gray-300 dark:bg-slate-500"></span>
+        <div className="mx-4">Eller</div>
+        <span className="flex-grow h-[2px] bg-gray-300 dark:bg-slate-500"></span>
+      </div>
       <div className="flex flex-col items-center gap-2 text-gray-800 font-medium">
         <button
           onClick={handleGoogleLogin}
-          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100"
+          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-sky-900 dark:text-white dark:border-slate-500"
         >
           <GoogleSvg />
           Logga in med Google
         </button>
         <button
           onClick={handleLinkedInLogin}
-          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100"
+          className="flex w-full h-16 items-center justify-center px-4 py-2 gap-3 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-sky-900 dark:text-white dark:border-slate-500"
         >
           <LinkedInSvg />
           Logga in med LinkedIn
