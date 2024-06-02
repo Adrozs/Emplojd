@@ -11,6 +11,7 @@ using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.IdentityModel.Tokens;
+using Emplojd.Server.ResultObjects;
 
 namespace Emplojd.Repositories
 {

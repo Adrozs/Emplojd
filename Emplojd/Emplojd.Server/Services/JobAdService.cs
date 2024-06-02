@@ -12,6 +12,9 @@ namespace Emplojd.Services
     {
         public static async Task<IResult> SearchJob([FromServices] IJobAdRepository jobAdRepository, [FromQuery] string search, [FromQuery] int? region, [FromQuery] int page = 1)
         {
+            if (string.IsNullOrEmpty(search))
+                return Results.BadRequest("Invalid request data. No search was made.");
+
             try
             {
                 List<JobDto> result = await jobAdRepository.GetJobAdsAsync(search, region, page);
@@ -29,6 +32,9 @@ namespace Emplojd.Services
 
         public static async Task<IResult> GetJobFromId([FromQuery] int adId, [FromServices] IJobAdRepository jobAdRepository)
         {
+            if (adId == 0)
+                return Results.BadRequest("Invalid request data. Id must be filled out.");
+
             try
             {
                 JobDto result = await jobAdRepository.GetJobAdFromIdAsync(adId);
