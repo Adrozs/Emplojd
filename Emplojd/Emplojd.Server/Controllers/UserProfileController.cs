@@ -32,17 +32,30 @@ namespace Emplojd.Server.Controllers
              return BadRequest($"Failed to update profile: {result.ErrorMessage}");
         }
 
-        [HttpPost("CreateUserCvManually")]
-        public async Task<IActionResult> CreateUserCvManually([FromBody] CvManuallyDto cvManuallyDtos)
+        [HttpPost("AddCvManually")]
+        public async Task<IActionResult> CreateUserCvManually([FromBody] SaveCvManuallyRequest request)
         {
             ClaimsPrincipal currentUser = User;
 
-            var result = await _userProfileService.AddUserCvManuallyAsync(currentUser, cvManuallyDtos);
+            var result = await _userProfileService.AddUserCvManuallyAsync(currentUser, request);
 
             if (result.Success)
                 return Ok("CV successfully updated.");
 
-            return BadRequest($"Failed to update profile: {result.ErrorMessage}");
+            return BadRequest($"Failed to update or create cv: {result.ErrorMessage}");
+        }
+
+        [HttpDelete("DeleteCvManually")]
+        public async Task<IActionResult> DeleteCvManuallyAsync([FromBody] DeleteCvManualRequest request)
+        {
+            ClaimsPrincipal currentUser = User;
+
+            var result = await _userProfileService.DeleteCvManuallyAsync(currentUser, request.CvManuallyId);
+
+            if (result.Success)
+                return Ok("CV successfully deleted.");
+
+            return BadRequest($"Failed to delete cv: {result.ErrorMessage}");
         }
 
         [HttpGet("GetUserProfile")]
