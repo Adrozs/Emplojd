@@ -23,72 +23,82 @@ using Emplojd.Server.Services;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Azure.Security.KeyVault.Secrets;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.Extensions.Configuration;
 
 namespace Emplojd
-{ 
+{
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
-
-        
-            // Setup database context and connection string here
-            builder.Services.AddDbContext<ApplicationContext>(options =>
+            builder.Services.AddScoped<BlobStorageService>(provider =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                var connectionString = builder.Configuration.GetConnectionString("AzureBlobStorageConnection");
+                var containerName = builder.Configuration.GetConnectionString("AzureBlobStorageContainerName");
+                return new BlobStorageService(connectionString, containerName);
             });
-        
+            builder.Services.AddScoped<UserProfileService>();
+
+            if (builder.Environment.IsDevelopment())
+            {
+                // Setup database context and connection string here
+                builder.Services.AddDbContext<ApplicationContext>(options =>
+                {
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                });
+            }
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
-                .AddCookie()
-                .AddGoogle(options =>
-                {
-                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                })
-                .AddOAuth("LinkedIn", options =>
-                {
-                    options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
-                    options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
-                    options.CallbackPath = new PathString("/signin-linkedin");
-
-                    options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
-                    options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
-                    options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
-
-                    options.Scope.Add("openid");
-                    options.Scope.Add("profile");
-                    options.Scope.Add("email");
-
-                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
-
-                    options.Events = new OAuthEvents
+                    .AddCookie()
+                    .AddGoogle(options =>
                     {
-                        OnCreatingTicket = async context =>
+                        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                    })
+                    .AddOAuth("LinkedIn", options =>
+                    {
+                        options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+                        options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                        options.CallbackPath = new PathString("/signin-linkedin");
+
+                        options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
+                        options.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
+                        options.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
+
+                        options.Scope.Add("openid");
+                        options.Scope.Add("profile");
+                        options.Scope.Add("email");
+
+                        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+
+                        options.Events = new OAuthEvents
                         {
-                            var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
-                            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
+                            OnCreatingTicket = async context =>
+                            {
+                                var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
 
-                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                            response.EnsureSuccessStatusCode();
+                                var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                                response.EnsureSuccessStatusCode();
 
-                            var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+                                var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
 
-                            context.RunClaimActions(user);
+                                context.RunClaimActions(user);
 
-                        }
-                    };
+                            }
+                        };
 
-                });
+                    });
 
             ConfigurationManager configuration = builder.Configuration;
 
@@ -210,6 +220,7 @@ namespace Emplojd
             });
 
             var app = builder.Build();
+            app.UseStaticFiles();
 
             // Used for the controllers configuration
             app.UseRouting();
@@ -270,7 +281,6 @@ namespace Emplojd
 
             // Cover letter
             app.MapPost("/GetCoverLetter", ChatGPTService.GenerateLetterAsync).RequireAuthorization();
-            app.MapGet("/saved-letter/{coverLetterId}", ChatGPTService.GetCoverLetterAsync).RequireAuthorization();
             app.MapGet("/saved-letter", ChatGPTService.GetCoverLettersAsync).RequireAuthorization();
             app.MapPost("/save-letter", ChatGPTService.SaveCoverLetterAsync).RequireAuthorization();
             app.MapDelete("/saved-letter", ChatGPTService.RemoveSavedCoverLettersAsync).RequireAuthorization();

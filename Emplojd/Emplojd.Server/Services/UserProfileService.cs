@@ -11,18 +11,20 @@ namespace Emplojd.Server.Services
     public class UserProfileService
     {
         private readonly ApplicationContext _context;
+        private readonly BlobStorageService _blobStorageService;
 
-        public UserProfileService(ApplicationContext context)
+        public UserProfileService(ApplicationContext context, BlobStorageService blobStorageService)
         {
             _context = context;
+            _blobStorageService = blobStorageService;
+
         }
 
         public async Task AddUserProfileAsync(UserProfileDto userProfileDto, ClaimsPrincipal currentUser)
         {
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
-            var user = await _context.Users 
-                .FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -30,9 +32,8 @@ namespace Emplojd.Server.Services
                 {
                     FirstName = userProfileDto.FirstName,
                     LastName = userProfileDto.LastName,
-                    UserInterestTags = userProfileDto.UserInterestTags,
-                    DescriptiveWords = userProfileDto.DescriptiveWords,
-                    CvContentText = userProfileDto.CvContentText
+                    UserInterestTags = userProfileDto.UserInterestTags?.Take(5).ToList(),
+                    DescriptiveWords = userProfileDto.DescriptiveWords?.Take(5).ToList(),
                 };
 
                 _context.Users.Add(user);
@@ -41,21 +42,29 @@ namespace Emplojd.Server.Services
             {
                 user.FirstName = userProfileDto.FirstName;
                 user.LastName = userProfileDto.LastName;
-                user.UserInterestTags = userProfileDto.UserInterestTags;
-                user.DescriptiveWords = userProfileDto.DescriptiveWords;
-                user.CvContentText = userProfileDto.CvContentText;
+                user.UserInterestTags = userProfileDto.UserInterestTags?.Take(5).ToList();
+                user.DescriptiveWords = userProfileDto.DescriptiveWords?.Take(5).ToList();
             }
 
             await _context.SaveChangesAsync();
+
+            if (userProfileDto.ImageFile != null && userProfileDto.ImageFile.Length > 0)
+            {
+                // Upload image to Azure Blob Storage
+                var imageUrl = await _blobStorageService.UploadBlobAsync(userProfileDto.ImageFile);
+
+                // Update user's image file path
+                user.ImageFilePath = imageUrl;
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<UserProfileDto> GetUserProfileAsync(ClaimsPrincipal currentUser)
         {
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
-            var user = await _context.Users
-                .Include(u => u.CvManually)
-                .FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -68,7 +77,7 @@ namespace Emplojd.Server.Services
                 LastName = user.LastName,
                 UserInterestTags = user.UserInterestTags,
                 DescriptiveWords = user.DescriptiveWords,
-                CvContentText = user.CvContentText
+                ImageFilePath = user.ImageFilePath
             };
         }
 
