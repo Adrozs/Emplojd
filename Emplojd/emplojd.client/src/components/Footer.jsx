@@ -20,6 +20,7 @@ export default function Footer({ children }) {
             />
           </g>
         </svg>
+
         <div className="z-10">
           <div className="bg-white xxl:pb-42 dark:bg-stone-900">
             <div className="flex justify-center items-center">

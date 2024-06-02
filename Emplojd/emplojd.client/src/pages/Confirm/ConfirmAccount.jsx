@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 const ConfirmAccount = () => {
   return (
     <>
-      <div className="flex flex-col h-screen pb-12">
+      <div className="flex flex-col h-screen pb-12 md:mb-40">
         <div className="flex-grow inner-shadow-bottom bg-gradient-to-br to-[#CA81ED] from-[#4086C6] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat">
           <Header>
             {" "}
@@ -17,7 +17,7 @@ const ConfirmAccount = () => {
               EMPLOJD
             </h1>
           </Header>
-          <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 mt-10">
+          <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 ">
             <h1 className="text-4xl font-semibold text-center mb-8">
               Skapa konto
             </h1>
