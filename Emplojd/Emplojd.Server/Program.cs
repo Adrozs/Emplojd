@@ -44,7 +44,6 @@ namespace Emplojd
             {
                 options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
-                .AddCookie()
                 .AddGoogle(options =>
                 {
                     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
