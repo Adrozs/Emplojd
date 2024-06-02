@@ -162,9 +162,11 @@ function ApplyNow() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <button onClick={handleBack}>Avbryt</button>
+                  <button className="cursor-pointer" onClick={handleBack}>
+                    Avbryt
+                  </button>
                   <button
-                    className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3"
+                    className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3 cursor-pointer"
                     onClick={() => {
                       setPage(2);
                       window.scrollTo(0, 0);
@@ -391,7 +393,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
             Avbryt
           </Link>
           <button
-            className=" w-[35%] text-customBlue py-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 "
+            className=" w-[35%] text-customBlue py-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 cursor-pointer"
             onClick={() => {
               setPage(1);
               window.scrollTo(0, 0);
@@ -457,7 +459,7 @@ function ApplySideFour({ job, page, setPage, copyText }) {
             )}
             <button
               onClick={copyTextToClipboard}
-              className="text-sm bg-customBlue text-white w-[156px] rounded-[4px] text-[13px] flex items-center justify-center gap-3 py-2"
+              className="text-sm bg-customBlue text-white w-[156px] rounded-[4px] text-[13px] flex items-center justify-center gap-3 py-2 cursor-pointer"
             >
               <FaRegCopy size={18} /> Kopiera brev
             </button>

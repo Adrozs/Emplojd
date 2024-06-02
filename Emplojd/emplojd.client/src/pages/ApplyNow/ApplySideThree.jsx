@@ -195,7 +195,11 @@ export default function ApplySideThree({
           <>
             <div className="self-end">
               <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
-                <button onClick={copyTextToClipboard}>
+                <button
+                  aria-label="Kopiera text"
+                  className="cursor-pointer"
+                  onClick={copyTextToClipboard}
+                >
                   <FiCopy size={22} />
                 </button>
               </Tooltip>
@@ -214,6 +218,7 @@ export default function ApplySideThree({
         <div>
           <div className="flex justify-between">
             <button
+              aria-label="Tillbaka knapp"
               className="underline text-sm ml-3 flex items-center gap-1"
               onClick={() => {
                 setPage(2);
