@@ -77,7 +77,9 @@ namespace Emplojd.Repositories
             $"Ord jag tycker beskriver mig: {userDescriptiveWords}\n" +
             $"Ta in den informationen ovan om mig och läs av denna jobbannons och skriv ett personligt brev enligt instruktionerna du har fått." +
             $"Med önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n." +
-            $"Jobbanonsen: {jobAd}";
+            $"Jobbanonsen: {jobAd}" +
+            $"Jag vill inte ha en" +
+            $" signatur eller hälsning i slutet av brevet";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
