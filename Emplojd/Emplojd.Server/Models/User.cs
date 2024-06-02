@@ -14,6 +14,9 @@ namespace Emplojd.Models
         public string? UserImage { get; set; }
         public string? ImageFilePath { get; set; }
 
+        public string? UserResume {  get; set; }
+        public string? ResumeFilePath { get; set; }
+
 
         public virtual ICollection<CvManually> CvManually { get; set; }
         public virtual ICollection<SavedCoverLetter> SavedCoverLetters { get; set; }
