@@ -47,7 +47,22 @@ const AuthForm = () => {
         navigate("/confirm-account");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail);
+        if (
+          error.response.data.includes("Failed to create account: Username")
+        ) {
+          toast.error("Epostadressen är upptagen");
+        } else if (
+          error.response.data.includes(
+            "Failed to create account: Passwords must be at least 8 characters., Passwords must have at least one non alphanumeric character."
+          )
+        ) {
+          toast.error(
+            "Lösenordet måste vara minst 8 tecken långt och inkludera en icke bokstav"
+          );
+        } else {
+          toast.error("Något gick fel vid skapandet av konto");
+        }
+
         console.error("Error creating user:", error);
       },
     }
@@ -72,7 +87,19 @@ const AuthForm = () => {
         navigate("/joblist");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail);
+        if (
+          error.response.data.includes(
+            "Failed to login: Invalid login attempt."
+          )
+        ) {
+          toast.error("Felaktigt lösenord");
+        } else if (
+          error.response.data.includes("Failed to login: No user found.")
+        ) {
+          toast.error("Ingen användare hittades på epostadressen");
+        } else {
+          toast.error("Något gick fel vid inloggningen");
+        }
         console.error("Error signing in:", error);
       },
     }

@@ -15,7 +15,7 @@ import SavedJobsReadMore from "./SavedJobs/SavedJobsReadMore";
 import ForgotPassword from "./Reset/ForgotPassword";
 import ResetPassword from "./Reset/ResetPassword";
 import SignIn from "./SignIn/SignIn";
-import SignUp from "./SignUp/SignUp";
+
 import SavedCV from "./Profile/SavedCV";
 import CoverLetterReadMore from "./CoverLetters/CoverLetterReadMore";
 
@@ -27,7 +27,6 @@ export {
   LandingPage,
   Profile,
   SignIn,
-  SignUp,
   SavedJobs,
   NoEarlierCoverLetter,
   CreateProfile,

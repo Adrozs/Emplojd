@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 // Pages
 import {
   SignIn,
-  SignUp,
   Profile,
   JobList,
   LandingPage,
