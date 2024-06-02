@@ -43,6 +43,7 @@ namespace Emplojd.Server.Controllers
         public async Task<IActionResult> LinkedInResponse()
         {
             var result = await HttpContext.AuthenticateAsync(LinkedInAuthenticationDefaults.AuthenticationScheme);
+            _logger.LogInformation($"LinkedInAuthentica: {LinkedInAuthenticationDefaults.AuthenticationScheme}");
 
             var claimsPrincipal = result.Principal;
             if (claimsPrincipal == null)
@@ -52,6 +53,7 @@ namespace Emplojd.Server.Controllers
             }
 
             var claims = claimsPrincipal.Claims.ToList();
+            _logger.LogInformation($"Claims: {claims}");
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             // Logging claims (writing them out)

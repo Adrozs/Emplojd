@@ -39,16 +39,17 @@ namespace Emplojd
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-        
+
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
             })
                 .AddGoogle(options =>
                 {
                     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
                 })
+
                 .AddOAuth("LinkedIn", options =>
                 {
                     options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
