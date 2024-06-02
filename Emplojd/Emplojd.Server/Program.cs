@@ -34,6 +34,7 @@ namespace Emplojd
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
+            builder.Services.AddScoped<ResumeService>();
             builder.Services.AddScoped<BlobStorageService>(provider =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("AzureBlobStorageConnection");
