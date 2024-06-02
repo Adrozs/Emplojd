@@ -131,12 +131,13 @@ namespace Emplojd.Server.Services
 
                 return UserProfileResult.Successful();
             }
-            catch (Exception exResult)
+            catch (Exception ex)
             {
                 var exResult = ExceptionHandler.HandleException(ex);
                 return UserProfileResult.Failed($"Failed to create or update profile: {exResult}");
             }
         }
+
         public async Task CoverLetterSignature(ClaimsPrincipal currentUser)
         {
             string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
