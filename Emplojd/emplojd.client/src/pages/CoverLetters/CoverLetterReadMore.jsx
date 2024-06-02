@@ -169,27 +169,32 @@ function CoverLetterReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
-        <h6 className="text-[20px] ml-2 text-white">Sparade personliga brev</h6>
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl">
+        <h6 className=" text-xl ml-2 text-white">Sparade personliga brev</h6>
         <FaFileSignature size={22} className="text-white mr-2" />
       </div>
       {letter ? (
-        <main className="max-w-7xl mx-auto px-2">
+        <main className="max-w-7xl mx-auto px-6">
           <>
-            <div className="bg-white py-3 mt-8 px-1 rounded-[10px]">
-              <div className="w-full flex flex-col justify-center ">
-                <h1 className="text-xl font-semibold text-stone-700">
+            <div className="bg-white py-3 my-5 px-1 rounded-xl dark:text-white dark:bg-stone-900">
+              <div className="w-full flex flex-col justify-center p-4">
+                <h1 className="text-xl font-semibold text-stone-700 dark:text-white">
                   {letter.coverLetterTitle}
                 </h1>
                 <div className="self-start px-1 py-2 ">
-                  <p className="text-left">till</p>
                   <p className="text-sm">{letter.companyName}</p>
                 </div>
-                <div className="w-full flex items-center justify-between mx-auto mt-3 px-2">
-                  <div className="flex items-center underline text-sky-800">
-                    <FaChevronLeft size={20} />
-                    <a className="ml-1 text-sm" onClick={handleBack}>
-                      Tillbaka till överblick
+                <div className="w-full flex items-center justify-between mx-auto mt-3">
+                  <div className="flex items-center underline">
+                    <FaChevronLeft
+                      size={20}
+                      className="fill-sky-800 dark:fill-indigo-400"
+                    />
+                    <a
+                      className="ml-2 text-sm dark:text-indigo-400"
+                      onClick={handleBack}
+                    >
+                      Tillbaka
                     </a>
                   </div>
 
@@ -199,7 +204,7 @@ function CoverLetterReadMore() {
             </div>
             <div>
               {savedText && (
-                <p className="flex items-center gap-2 my-3 mb-[-5px] text-sm">
+                <p className="flex items-center gap-2 pl-2 my-4 text-sm dark:text-white">
                   Dina ändringar har sparats.
                   <span className="text-lime-500">
                     <FaCircleCheck />
@@ -207,54 +212,60 @@ function CoverLetterReadMore() {
                 </p>
               )}
             </div>
-            <div className="p-3 max-w-4xl mx-auto mt-3 pb-14 bg-gradient-to-t from-white to-blue-100 flex items-center justify-center gap-2 text-sm">
-              {!editable ? (
-                <>
-                  {" "}
-                  <button
-                    onClick={() => clickToDelete(letter.coverLetterId)}
-                    className="px-[16px] py-[12px] rounded-[8px] bg-white flex items-center gap-2"
-                  >
-                    <FaTrash /> Ta bort
-                  </button>
-                  <button
-                    onClick={() => setEditable(!editable)}
-                    className="px-[16px] py-[12px] rounded-[8px] bg-purple-400 text-white flex items-center gap-2"
-                  >
-                    <FaRegPenToSquare /> Redigera
-                  </button>
-                  <button
-                    onClick={copyTextToClipboard}
-                    className="px-[16px] py-[12px] rounded-[8px] bg-sky-500 text-white flex items-center gap-2"
-                  >
-                    <FaRegCopy /> Kopiera
-                  </button>{" "}
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => setEditable(false)}
-                    className="px-[16px] py-[12px] rounded-[8px] bg-red-400 text-white flex items-center gap-2 mr-2"
-                  >
-                    <FaRegCopy /> Ångra ändringar
-                  </button>
-                  <button
-                    onClick={() => clickToSave()}
-                    className="px-[16px] py-[12px] rounded-[8px] bg-lime-500 text-white flex items-center gap-2 ml-2"
-                  >
-                    <FaRegCopy /> Spara ändringar
-                  </button>
-                </>
-              )}
-            </div>
-            <div className="p-4 max-w-4xl mx-auto  pb-28 bg-white">
-              <div
-                className="p-2 editable-content"
-                contentEditable={editable}
-                ref={editEl}
-                onInput={handleTextChange}
-                dangerouslySetInnerHTML={{ __html: letter.coverLetterContent }}
-              />
+
+            <div className="bg-white rounded-2xl mb-24 dark:text-white dark:bg-stone-900">
+              <div className="px-3 pt-10 pb-6 max-w-4xl mx-auto mt-3 bg-gradient-to-t from-white to-blue-100 dark:from-stone-900 dark:to-slate-800 rounded-2xl flex items-center justify-center gap-2 text-sm ">
+                {!editable ? (
+                  <>
+                    {" "}
+                    <button
+                      onClick={() => clickToDelete(letter.coverLetterId)}
+                      className="p-3 rounded-xl bg-white flex items-center gap-2 dark:text-black"
+                    >
+                      <FaTrash /> Ta bort
+                    </button>
+                    <button
+                      onClick={() => setEditable(!editable)}
+                      className="p-3 rounded-xl bg-purple-400 text-white flex items-center gap-2"
+                    >
+                      <FaRegPenToSquare /> Redigera
+                    </button>
+                    <button
+                      onClick={copyTextToClipboard}
+                      className="p-3 rounded-xl bg-sky-500 text-white flex items-center gap-2"
+                    >
+                      <FaRegCopy /> Kopiera
+                    </button>{" "}
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setEditable(false)}
+                      className="px-4 py-3 rounded-lg bg-red-400 text-white flex items-center gap-2 mr-2"
+                    >
+                      <FaRegCopy /> Ångra ändringar
+                    </button>
+                    <button
+                      onClick={() => clickToSave()}
+                      className="px-[16px] py-[12px] rounded-[8px] bg-lime-500 text-white flex items-center gap-2 ml-2"
+                    >
+                      <FaRegCopy /> Spara ändringar
+                    </button>
+                  </>
+                )}
+              </div>
+
+              <div className="p-4 pb-12 max-w-4xl">
+                <div
+                  className="p-2 editable-content"
+                  contentEditable={editable}
+                  ref={editEl}
+                  onInput={handleTextChange}
+                  dangerouslySetInnerHTML={{
+                    __html: letter.coverLetterContent,
+                  }}
+                />
+              </div>
             </div>
           </>
         </main>

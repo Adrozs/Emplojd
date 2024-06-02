@@ -58,31 +58,37 @@ function SavedJobsReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl">
+        {" "}
         <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
         <FaHeart size={22} className="text-white mr-2" />
       </div>
       {job ? (
         <main className="max-w-7xl mx-auto px-2">
           <>
-            <div className="bg-white py-3 mt-8 px-1 rounded-[10px]">
-              <div className="w-full flex flex-col text-center justify-center ">
-                <h1 className="text-xl font-semibold text-stone-700">
+            <div className="bg-white py-3 m-5 px-1 rounded-xl dark:text-white dark:bg-stone-900">
+              <div className="w-full flex flex-col justify-center p-4">
+                <h1 className="text-xl font-semibold text-stone-700 dark:text-white">
                   {job.headline}
                 </h1>
-                <div className="self-start px-2 py-2 ">
-                  <p className="text-left">till</p>
+                <div className="self-start px-1 py-2 ">
                   <p className="font-semibold">{job.employer.name}</p>
                 </div>
                 <div className="w-full flex items-center justify-center mx-auto px-2 mt-3 gap-1">
-                  <div className="flex w-full items-center text-m underline text-sky-800">
-                    <FaChevronLeft size={20} />
-                    <a className="ml-1" onClick={handleBack}>
+                  <div className="flex w-full items-center text-m underline ">
+                    <FaChevronLeft
+                      size={20}
+                      className="fill-sky-800 dark:fill-indigo-400"
+                    />
+                    <a
+                      className="ml-1 text-sm dark:text-indigo-400"
+                      onClick={handleBack}
+                    >
                       Tillbaka till resultaten
                     </a>
                   </div>
                   <Link
-                    className="w-[80%] bg-sky-500 rounded-[8px] text-white py-1 gap-1 max-w-lg flex justify-evenly items-center"
+                    className="bg-sky-500 dark:bg-indigo-600 rounded-xl text-white whitespace-nowrap px-4 py-2 tex text-sm gap-1 flex justify-evenly items-center"
                     to={`/job/${job.id}/apply`}
                   >
                     Ansök nu <FaArrowRight size={20} />
@@ -90,32 +96,25 @@ function SavedJobsReadMore() {
                 </div>
               </div>
             </div>
-            {job.logo_Url && (
-              <div className="w-full flex items-center justify-center py-2 m-3 bg-white">
-                <img
-                  src={job.logo_Url}
-                  alt="logo"
-                  className="h-[100px] max-w-[200px]"
-                />
-              </div>
-            )}
-            {job.description.text_Formatted ? (
-              <div className="p-4 max-w-4xl mx-auto mt-3 pb-28 bg-white">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: job.description.text_Formatted,
-                  }}
-                />
-                <Link
-                  className="w-[100%] bg-sky-500 rounded-[8px] text-white py-1 gap-1 max-w-lg flex justify-center items-center mt-4"
-                  to={`/job/${job.id}/apply`}
-                >
-                  Ansök nu <FaArrowRight size={20} />
-                </Link>
-              </div>
-            ) : (
-              <p>Något gick fel</p>
-            )}
+            <div className="bg-white rounded-2xl mb-24 dark:text-white dark:bg-stone-900 m-5">
+              {job.description.text_Formatted ? (
+                <div className="px-6 py-10 rounded-2xl">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: job.description.text_Formatted,
+                    }}
+                  />
+                  <Link
+                    className="bg-sky-500 dark:bg-indigo-600 rounded-xl text-white py-1 mt-7 mx-5 flex gap-3 justify-center items-center"
+                    to={`/job/${job.id}/apply`}
+                  >
+                    Ansök nu <FaArrowRight size={20} />
+                  </Link>
+                </div>
+              ) : (
+                <p>Något gick fel</p>
+              )}
+            </div>
           </>
         </main>
       ) : (

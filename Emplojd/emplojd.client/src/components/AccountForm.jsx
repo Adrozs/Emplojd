@@ -16,14 +16,12 @@ function AccountForm({
   handleRemoveWord,
   wordTextColor = "text-gray-800",
   wordBgColor = "bg-purple-100",
-  errorTextColor = "text-red-800",
   errorBgColor = "bg-red-200",
   labelBgColor = "bg-purple-100",
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [validationError, setValidationError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const { isDarkMode } = useDarkMode();
 
@@ -168,11 +166,6 @@ function AccountForm({
           </div>
         </div>
       </div>
-      {(validationError || error) && (
-        <div className={`text-sm mt-1 pl-2 ${errorTextColor}`}>
-          &bull; {validationError || error}
-        </div>
-      )}
     </div>
   );
 }

@@ -77,7 +77,7 @@ const ThirdPartyLogin = () => {
 
   return (
     <div>
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mb-4">
         <span className="flex-grow h-[2px] bg-gray-300 dark:bg-slate-500"></span>
         <div className="mx-4">Eller</div>
         <span className="flex-grow h-[2px] bg-gray-300 dark:bg-slate-500"></span>
