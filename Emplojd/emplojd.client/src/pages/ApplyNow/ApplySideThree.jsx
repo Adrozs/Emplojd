@@ -1,4 +1,3 @@
-import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useMutation } from "react-query";
@@ -25,7 +24,7 @@ export default function ApplySideThree({ job, page, setPage }) {
     const token = localStorage.getItem("authToken");
 
     const response = await axios.post(
-      "https://localhost:54686/GetCoverLetter",
+      "https://emplojdserver20240531231628.azurewebsites.net/GetCoverLetter",
       postData,
       {
         headers: {
@@ -81,10 +80,14 @@ export default function ApplySideThree({ job, page, setPage }) {
   const clickToSave = async () => {
     const token = localStorage.getItem("authToken");
 
+    const todaysDate = new Date().toISOString();
+
     const postLetter = {
-      coverLetterId: Math.floor(Math.random() * 1000000), // Random integer ID
+      coverLetterId: Math.floor(Math.random() * 1000000),
       coverLetterTitle: job.headline || "",
       coverLetterContent: letterContent,
+      companyName: job.employer.name,
+      date: todaysDate,
       temperature: 0.7,
     };
 
@@ -92,7 +95,7 @@ export default function ApplySideThree({ job, page, setPage }) {
 
     try {
       const response = await axios.post(
-        "https://localhost:54686/save-letter",
+        "https://emplojdserver20240531231628.azurewebsites.net/save-letter",
         postLetter,
         {
           headers: {
@@ -103,11 +106,7 @@ export default function ApplySideThree({ job, page, setPage }) {
       );
       console.log("Response from backend:", response.data);
     } catch (error) {
-      if (error.response) {
-        console.error("Error response:", error.response.data);
-      } else {
-        console.error("Error:", error.message);
-      }
+      console.error("Error:", error);
     }
   };
 

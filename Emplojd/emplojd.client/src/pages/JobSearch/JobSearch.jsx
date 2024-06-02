@@ -5,6 +5,7 @@ import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import { getJobs } from "../../services/apiJobs";
 import HeaderOtherPages from "../../components/Header/HeaderOtherPages";
 import Footer from "../../components/Footer";
+import EmplojdLogo from "../../components/Icons/EmplojdLogoSVG";
 
 function JobSearch() {
   const { state } = useLocation();
@@ -78,7 +79,7 @@ function JobSearch() {
   return (
     <>
       <HeaderOtherPages>
-        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+        <EmplojdLogo className="w-28 fill-white" />
       </HeaderOtherPages>
       <main className="flex flex-col items-center max-w-4xl mx-auto md:mt-24 ">
         <div className="w-[90%] bg-white text-center text-2xl py-4 rounded-[11px] sm:mt-4 lg:mt-10">

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { HamburgerMenySVG } from "../Icons/MenySvg";
-
+import { FaBars } from "react-icons/fa6";
 import Modal from "../Modal";
 import { Link } from "react-router-dom";
 const Header = ({ children }) => {
@@ -12,12 +11,12 @@ const Header = ({ children }) => {
   return (
     <header className="flex justify-between w-full  h-[65px] py-2 items-center">
       <nav className="flex justify-between w-full items-center">
-        <div className="p-2">
+        <div className="p-4">
           <Link to="/">{children}</Link>
         </div>
         <div className="flex items-center cursor-pointer pr-5">
           <div className="text-white">
-            <HamburgerMenySVG onClick={handleMenu} />
+            <FaBars size={30} onClick={handleMenu} />
           </div>
           {menu && <Modal onClose={setMenu} menu={menu} />}
         </div>

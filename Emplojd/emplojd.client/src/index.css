@@ -83,3 +83,7 @@ a {
   background: linear-gradient(140deg,  #4086C6, #CA81ED);
   cursor: pointer;
 }
+
+html.dark main {
+  background-color: #1f2937;
+}

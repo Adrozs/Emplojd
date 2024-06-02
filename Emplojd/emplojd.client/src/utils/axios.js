@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const customFetch = axios.create({
-  baseURL: "https://localhost:54686",
+  baseURL: "https://emplojdserver20240531231628.azurewebsites.net/",
 });
 
 export default customFetch;

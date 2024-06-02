@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import EmplojdLogo from "./Icons/EmplojdLogoSVG";
 
 export default function Footer({ children }) {
   return (
@@ -22,8 +23,8 @@ export default function Footer({ children }) {
         <div className="z-10">
           <div className="bg-white xxl:pb-42 dark:bg-stone-900">
             <div className="flex justify-center items-center">
-              <h2 className="inline z-20 p-2.5 pl-5 pr-5 font-bold mt-14 mb-10 text-5xl font-Glockenspiel dark:text-white">
-                EMPLOJD
+              <h2 className="mt-14 mb-10 dark:text-white">
+                <EmplojdLogo width="12rem" className="dark:fill-white relative z-10" />
               </h2>
             </div>
             <div className="flex flex-col text-center pb-20">

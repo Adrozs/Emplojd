@@ -4,6 +4,7 @@ import { FaFileSignature, FaChevronRight } from "react-icons/fa";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function NoEarlierCoverLetter() {
   const [coverLetters, setCoverLetters] = useState([]);
@@ -13,12 +14,15 @@ function NoEarlierCoverLetter() {
       const token = localStorage.getItem("authToken");
 
       return axios
-        .get("https://localhost:54686/saved-letter", {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(
+          "https://emplojdserver20240531231628.azurewebsites.net/saved-letter",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
           setCoverLetters(response.data);
@@ -35,7 +39,8 @@ function NoEarlierCoverLetter() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl from-purple-400 to-sky-500 p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
+      
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
         <h6 className=" text-[20px] ml-2 text-white">
           Sparade personliga brev
         </h6>
@@ -43,8 +48,8 @@ function NoEarlierCoverLetter() {
       </div>
 
       <div className="mt-4 pb-80">
-        <div className="bg-sky-100 p-4 w-[90%] mx-auto rounded-[10px]">
-          <p className="text-sm ml-2 text-black">
+        <div className="bg-sky-100 p-4 w-[90%] mx-auto rounded-[10px] dark:bg-gray-900">
+          <p className="text-sm ml-2 text-black dark:text-white">
             Här har du full åtkomst till dina sparade personliga brev.
           </p>
         </div>
@@ -60,13 +65,16 @@ function NoEarlierCoverLetter() {
                 </p>
                 <div>
                   <p>till</p>
-                  <p className="font-semibold">Spotify</p>
+                  <p className="font-semibold">{letter.companyName}</p>
                 </div>
                 <div className="flex justify-between items-center mr-3 text-[14px]">
                   <p>Skapad den 1 juni 2024</p>
-                  <button className="flex items-center gap-2 text-customBlue underline">
+                  <Link
+                    to={`/coverletter/${letter.coverLetterId}`}
+                    className="flex items-center gap-2 text-customBlue underline"
+                  >
                     Visa brev <FaChevronRight size={22} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))

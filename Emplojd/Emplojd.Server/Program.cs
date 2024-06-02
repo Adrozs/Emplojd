@@ -175,7 +175,7 @@ namespace Emplojd
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
+            builder.Services.AddSingleton(sp => new OpenAIAPI(configuration["OPENAI_API_KEY"]));
             builder.Services.AddScoped<UserProfileService>();
 
 
@@ -229,7 +229,7 @@ namespace Emplojd
             app.UseCors(builder =>
             {
                 builder
-                      .WithOrigins("https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173")
+                      .WithOrigins("emplojdserver20240531231628.azurewebsites.net", "https://www.emplojdserver20240531231628.azurewebsites.net", "https://emplojdserver20240531231628.azurewebsites.net", "https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173", "https://www.emplojd.com", "https://emplojd.com")
                       .SetIsOriginAllowedToAllowWildcardSubdomains()
                       .AllowAnyHeader()
                       .AllowCredentials()
@@ -269,7 +269,8 @@ namespace Emplojd
             // .AllowAnonymous() to explicitly say that this doesn't require token auth
             app.MapPost("/login", UserService.LoginAsync).AllowAnonymous();
             app.MapPost("/create-account", UserService.CreateAccountAsync).AllowAnonymous();
-            app.MapGet("/confirm-email", UserService.EmailVerificationAsync).AllowAnonymous();
+            app.MapGet("/confirm-email", UserService.ConfirmEmailAsync).AllowAnonymous();
+            app.MapPost("/resend-confirm-email", UserService.ResendEmailConfirmationAsync).AllowAnonymous();
             app.MapPost("/forgot-password", UserService.GeneratePasswordResetTokenAsync).AllowAnonymous();
             app.MapPost("/reset-password", UserService.ResetPasswordAsync).AllowAnonymous();
             app.MapDelete("/delete-account", UserService.DeleteAccountAsync).RequireAuthorization();

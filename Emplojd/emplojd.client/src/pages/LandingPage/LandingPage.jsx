@@ -8,6 +8,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import { useState, useRef } from "react";
 import { getJobsBackend } from "../../utils/backendserver";
 import { toast } from "react-toastify";
+import EmplojdLogo from "../../components/Icons/EmplojdLogoSVG";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function LandingPage() {
     if (token) {
       navigate("/MyProfile");
     } else {
-      navigate("/signin");
+      navigate("/signin", { state: { isSignUp: true } });
     }
   };
 
@@ -69,9 +70,7 @@ export default function LandingPage() {
           <div className="flex flex-col items-center justify-center mt-44 space-y-12 sm:mt-48  text-white">
             <h1 className="text-3xl">
               Välkommen till <br />
-              <span className="text-7xl font-Glockenspiel uppercase">
-                Emplojd
-              </span>
+              <EmplojdLogo fill="white" className="mt-2 w-80" />
             </h1>
             <p className="max-w-sm text-left md:text-left pl-4 pr-4">
               En tjänst som erbjuder AI-genererade personliga brev som är

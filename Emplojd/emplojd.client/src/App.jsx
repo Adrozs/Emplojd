@@ -20,6 +20,8 @@ import {
   ConfirmAccount,
   ForgotPassword,
   ResetPassword,
+  SavedCV,
+  CoverLetterReadMore,
 } from "./pages/index";
 import JobSearch, { loader as searchLoader } from "./pages/JobSearch/JobSearch";
 import JobInfo, { loader as jobLoader } from "./pages/JobInfo/JobInfo";
@@ -30,7 +32,6 @@ import Error from "./ui/Error";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { DarkModeProvider } from "./components/Icons/DarkModeHook";
-
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
         element: <MyProfile />,
       },
       {
+        path: "/SavedCV",
+        element: <SavedCV />,
+      },
+      {
         path: "/CreateProfile",
         element: <CreateProfile />,
       },
@@ -92,8 +97,12 @@ const router = createBrowserRouter([
         element: <SavedJobsReadMore />,
       },
       {
-        path: "/NoEarlierCoverLetter",
+        path: "/coverletter",
         element: <NoEarlierCoverLetter />,
+      },
+      {
+        path: "/coverletter/:jobId",
+        element: <CoverLetterReadMore />,
       },
       {
         path: "/job/:jobId",
