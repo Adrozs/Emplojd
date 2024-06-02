@@ -53,6 +53,7 @@ function MyProfile() {
 
         if (!response.ok) {
           const errorText = await response.text();
+          setIsLoading(false);
           console.error(
             `HTTP error! status: ${response.status}, message: ${errorText}`
           );
