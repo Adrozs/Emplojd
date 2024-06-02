@@ -1,4 +1,5 @@
-﻿using Emplojd.Data;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Emplojd.Data;
 using Emplojd.Helpers;
 using Emplojd.Models;
 using Emplojd.Server.Models;
@@ -6,6 +7,7 @@ using Emplojd.Server.ResultObjects;
 using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.UserProfile;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace Emplojd.Server.Services
@@ -94,6 +96,7 @@ namespace Emplojd.Server.Services
 
             return user.CvManually.Select(c => new CvManuallyDto
             {
+                CvManuallyId = c.CvManuallyId,
                 PositionEducation = c.PositionEducation,
                 StartDate = c.StartDate,
                 EndDate = c.EndDate,
@@ -102,7 +105,7 @@ namespace Emplojd.Server.Services
             }).ToList();
         }
 
-        public async Task<UserProfileResult> AddUserCvManuallyAsync(ClaimsPrincipal currentUser, CvManuallyDto cvManuallyDtos)
+        public async Task<UserProfileResult> AddUserCvManuallyAsync(ClaimsPrincipal currentUser, SaveCvManuallyRequest request)
         {
             try
             {
@@ -114,18 +117,44 @@ namespace Emplojd.Server.Services
 
                 if (user == null)
                     return UserProfileResult.Failed("No matching user found.");
-               
-                var newCvManually =
-                    new CvManually
+
+                var cvManually = user.CvManually.SingleOrDefault(cm => cm.CvManuallyId == request.CvManuallyId);
+
+
+                // If no id was sent in create a new experience and add it to the list
+                if (cvManually == null)
+                {
+                    cvManually = new CvManually
                     {
-                        PositionEducation = cvManuallyDtos.PositionEducation,
-                        StartDate = cvManuallyDtos.StartDate,
-                        EndDate = cvManuallyDtos.EndDate,
-                        SchoolWorkplace = cvManuallyDtos.SchoolWorkplace,
-                        IsEducation = cvManuallyDtos.IsEducation,
+                        PositionEducation = request.PositionEducation,
+                        StartDate = request.StartDate,
+                        EndDate = request.EndDate,
+                        SchoolWorkplace = request.SchoolWorkplace,
+                        IsEducation = request.IsEducation,
                     };
 
-                user.CvManually.Add(newCvManually);
+                    user.CvManually.Add(cvManually);
+                }
+                // If id was sent in get that letter and update it.
+                else
+                {
+                    if (!string.IsNullOrEmpty(request.PositionEducation))
+                        cvManually.PositionEducation = request.PositionEducation;
+
+                    if (!string.IsNullOrEmpty(request.PositionEducation))
+                        cvManually.StartDate = request.StartDate;
+
+                    if (!string.IsNullOrEmpty(request.EndDate))
+                        cvManually.EndDate = request.EndDate;
+
+                    if (!string.IsNullOrEmpty(request.SchoolWorkplace))
+                        cvManually.SchoolWorkplace = request.SchoolWorkplace;
+
+                    // Defaults to false so can't check if it is sent in or not
+                        cvManually.IsEducation = request.IsEducation;
+
+                    _context.CvManually.Update(cvManually);
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -135,6 +164,34 @@ namespace Emplojd.Server.Services
             {
                 var exResult = ExceptionHandler.HandleException(ex);
                 return UserProfileResult.Failed($"Failed to create or update profile: {exResult}");
+            }
+        }
+
+        public async Task<UserProfileResult> DeleteCvManuallyAsync(ClaimsPrincipal currentUser, int cvManuallyId)
+        {
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+            var user = await _context.Users
+                    .Include(u => u.CvManually)
+                    .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                return UserProfileResult.Failed("No matching user found.");
+
+            try
+            {
+                var cvManually = user.CvManually.FirstOrDefault(c => c.CvManuallyId == cvManuallyId);
+                if (cvManually == null)
+                    return UserProfileResult.Failed("No matching cv found.");
+
+                _context.CvManually.Remove(cvManually);
+                await _context.SaveChangesAsync();
+
+                return UserProfileResult.Successful();
+            }
+            catch (Exception ex)
+            {
+                var exResult = ExceptionHandler.HandleException(ex);
+                return UserProfileResult.Failed($"Failed to remove cv: {exResult}");
             }
         }
 
