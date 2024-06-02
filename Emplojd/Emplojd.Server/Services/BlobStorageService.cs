@@ -12,6 +12,7 @@ namespace Emplojd.Server.Services
         private readonly BlobServiceClient _blobServiceClient;
         private readonly string _containerName;
         private readonly string _connectionString;
+        private const long MaxFileSize = 10 * 1024 * 1024; // 10 mb max limit
 
         public BlobStorageService(string connectionString, string containerName)
         {
@@ -22,6 +23,11 @@ namespace Emplojd.Server.Services
 
         public async Task<string> UploadBlobAsync(IFormFile file)
         {
+            if (file.Length > MaxFileSize)
+            {
+                throw new InvalidOperationException($"Filstorleken överskrider: {MaxFileSize / (1024 * 1024)} MB.");
+            }
+
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
             await containerClient.CreateIfNotExistsAsync();
 
