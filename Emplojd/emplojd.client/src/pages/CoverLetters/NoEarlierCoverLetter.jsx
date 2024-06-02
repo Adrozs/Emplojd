@@ -38,14 +38,14 @@ function NoEarlierCoverLetter() {
 
   return (
     <>
-      <div className="min-h-screen">
-      <HeaderOtherPages />
-        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center text-center my-3 mx-5 rounded-xl">
+      <div className="min-h-screen md:mb-12">
+        <HeaderOtherPages />
+        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center text-center my-3 mx-5 rounded-xl md:mt-20">
           <h6 className=" text-xl ml-2 text-white">Sparade personliga brev</h6>
           <FaFileSignature size={22} className="text-white mr-2" />
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 flex flex-col items-center">
           <div className="bg-sky-100 p-4 w-[90%] mx-auto rounded-[10px] dark:bg-gray-900">
             <p className="text-sm ml-2 text-black dark:text-white">
               Här har du full åtkomst till dina sparade personliga brev.
