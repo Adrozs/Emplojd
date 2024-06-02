@@ -58,13 +58,13 @@ function SavedJobsReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl">
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20 ">
         {" "}
         <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
         <FaHeart size={22} className="text-white mr-2" />
       </div>
       {job ? (
-        <main className="max-w-7xl mx-auto px-2">
+        <main className="max-w-7xl mx-auto px-2 md:mb-40">
           <>
             <div className="bg-white py-3 m-5 px-1 rounded-xl dark:text-white dark:bg-stone-900">
               <div className="w-full flex flex-col justify-center p-4">
