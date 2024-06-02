@@ -12,7 +12,13 @@ import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
-export default function ApplySideThree({ job, page, setPage, temp }) {
+export default function ApplySideThree({
+  job,
+  page,
+  setPage,
+  temp,
+  setCopyText,
+}) {
   const [editable, setEditable] = useState(false);
   const editEl = useRef(null);
   const [copied, setCopied] = useState(false);
@@ -42,7 +48,7 @@ export default function ApplySideThree({ job, page, setPage, temp }) {
       try {
         const profile = await getProfileInfo();
         setProfile(profile);
-        console.log(profile);
+        // console.log(profile);
       } catch (error) {
         console.error("Error fetching profile info:", error);
       }
@@ -64,7 +70,7 @@ export default function ApplySideThree({ job, page, setPage, temp }) {
         temperature: temp,
       };
 
-      console.log("Sending data to backend:", postData);
+      // console.log("Sending data to backend:", postData);
       mutate(postData);
     }
   }, [profil, job, mutate]);
@@ -73,6 +79,7 @@ export default function ApplySideThree({ job, page, setPage, temp }) {
   useEffect(() => {
     if (data) {
       setLetterContent(data);
+      setCopyText(data);
     }
   }, [data]);
 
@@ -91,7 +98,7 @@ export default function ApplySideThree({ job, page, setPage, temp }) {
       temperature: temp,
     };
 
-    console.log("Sending cover letter to backend:", postLetter);
+    // console.log("Sending cover letter to backend:", postLetter);
 
     try {
       const response = await axios.post(
@@ -104,7 +111,7 @@ export default function ApplySideThree({ job, page, setPage, temp }) {
           },
         }
       );
-      console.log("Response from backend:", response.data);
+      // console.log("Response from backend:", response.data);
     } catch (error) {
       console.error("Error:", error);
     }
