@@ -7,7 +7,13 @@ import AddNewButton from "./AddNewButton";
 const CvManager = () => {
   const [fileName, setFileName] = useState("INGEN FIL ÄR VALD");
   const [manualInputEnabled, setManualInputEnabled] = useState(false);
-  const [values, setValues] = useState();
+  const [values, setValues] = useState({
+    educationTitle: "",
+    schoolName: "",
+    jobTitle: "",
+    companyName: "",
+    workDescription: "",
+  });
   const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -38,6 +44,8 @@ const CvManager = () => {
         handleDeleteFile={handleDeleteFile}
         fileInputRef={fileInputRef}
         triggerFileInput={triggerFileInput}
+        disabled={manualInputEnabled}
+        manualInputEnabled={manualInputEnabled}
       />
 
       <div className="flex items-center my-4 pl-2">
@@ -54,8 +62,10 @@ const CvManager = () => {
         </label>
       </div>
       <h2
-        className={`text-xl font-bold ml-2 dark:text-white ${
-          !manualInputEnabled ? "cursor-not-allowed text-gray-300 dark:text-black" : ""
+        className={`text-xl font-bold ml-2 ${
+          manualInputEnabled
+            ? "cursor-pointer text-black dark:text-white"
+            : "cursor-not-allowed text-gray-300 dark:text-gray-600"
         }`}
       >
         Utbildning
@@ -64,6 +74,7 @@ const CvManager = () => {
         <FormRow
           type="text"
           name="Utbildningstitel"
+          value={values.educationTitle}
           placeholder="Ange namn på utbildning"
           handleChange={handleChange}
           disabled={!manualInputEnabled}
@@ -71,6 +82,7 @@ const CvManager = () => {
         <FormRow
           type="text"
           name="Skolans namn"
+          value={values.schoolName}
           placeholder="Ange namn på skolan/lärosäte"
           handleChange={handleChange}
           disabled={!manualInputEnabled}
@@ -82,11 +94,13 @@ const CvManager = () => {
         disabled={!manualInputEnabled}
       />
 
-      <AddNewButton />
+      <AddNewButton disabled={!manualInputEnabled} />
 
       <h2
-        className={`text-xl font-bold ml-2 mt-14 ${
-          !manualInputEnabled ? "cursor-not-allowed text-gray-300 dark:text-black" : ""
+        className={`text-xl font-bold ml-2 mt-6 ${
+          manualInputEnabled
+            ? "cursor-pointer text-black dark:text-white"
+            : "cursor-not-allowed text-gray-300 dark:text-gray-600"
         }`}
       >
         Arbetslivserfarenhet
@@ -95,6 +109,7 @@ const CvManager = () => {
         <FormRow
           type="text"
           name="Jobbtitel"
+          value={values.jobTitle}
           placeholder="Ange jobbtitel"
           handleChange={handleChange}
           disabled={!manualInputEnabled}
@@ -102,6 +117,7 @@ const CvManager = () => {
         <FormRow
           type="text"
           name="Företagsnamn"
+          value={values.companyName}
           placeholder="Ange företagsnamn"
           handleChange={handleChange}
           disabled={!manualInputEnabled}
@@ -109,6 +125,7 @@ const CvManager = () => {
         <FormRow
           type="textarea"
           name="Arbetsuppgifter (max 500 tecken)"
+          value={values.workDescription}
           placeholder="Beskriv dina arbetsuppgifter"
           handleChange={handleChange}
           disabled={!manualInputEnabled}
@@ -123,7 +140,7 @@ const CvManager = () => {
         disabled={!manualInputEnabled}
       />
 
-      <AddNewButton />
+      <AddNewButton disabled={!manualInputEnabled} />
     </div>
   );
 };

@@ -73,7 +73,7 @@ function JobSearchForm() {
     setLatest((latest) => latest.filter((search) => search.id !== id));
   }
   return (
-    <div className="py-6 bg-white dark:bg-slate-800 rounded-[20px] max-w-lg mx-auto md:mb-52">
+    <div className="py-6 px-4 bg-white dark:bg-gray-800 rounded-[20px] max-w-lg mx-auto md:mb-52">
       <h2 className="mt-3 mb-2 text-center text-2xl font-[600] dark:text-white">
         Hitta rätt jobb för dig
       </h2>
@@ -125,11 +125,13 @@ export function SearchForm({
   setCity,
   job,
   city,
-  latest,
+  bgColor
 }) {
   return (
     <form
-      className="mx-6 my-4 p-2 bg-white rounded-2xl dark:bg-slate-800 "
+      className={`my-4 p-6 rounded-2xl ${
+        bgColor ? bgColor : "bg-white dark:bg-gray-800"
+      }`}
       onSubmit={handleSubmit}
     >
       <div className="mb-5">

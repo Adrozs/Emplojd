@@ -127,7 +127,7 @@ export default function LandingPage() {
               Hitta <span className="text-customBlue dark:text-sky-500">rätt</span> jobb för dig
             </h6>
           </div>
-          <div className="max-w-[800px] mx-auto pb-10">
+          <div className="max-w-[750px] mx-6 ls:mx-auto pb-10">
             {" "}
             <SearchForm
               handleSubmit={handleSubmit}
@@ -135,6 +135,7 @@ export default function LandingPage() {
               setJob={setJob}
               job={job}
               city={city}
+              bgColor="bg-white dark:bg-zinc-900"
               // latest={latest}
             />
           </div>

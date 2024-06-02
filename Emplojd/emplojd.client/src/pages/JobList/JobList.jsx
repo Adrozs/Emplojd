@@ -10,7 +10,7 @@ function JobList() {
       <HeaderSearchJob>
         <EmplojdLogo className="w-28 fill-white" />
       </HeaderSearchJob>
-      <div className="px-5 pb-24">
+      <div className="px-5 pb-24 ">
         <JobSearchForm />
       </div>
       <Footer />
