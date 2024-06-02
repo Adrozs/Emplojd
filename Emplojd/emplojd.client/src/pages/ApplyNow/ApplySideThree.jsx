@@ -169,7 +169,7 @@ export default function ApplySideThree({
 
   return (
     <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
-      <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] shadow-md">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -188,7 +188,7 @@ export default function ApplySideThree({
           </h3>
         </div>
       </div>
-      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px]">
+      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px] shadow-lg">
         {isLoading ? (
           <Loader />
         ) : (
@@ -205,7 +205,7 @@ export default function ApplySideThree({
               </Tooltip>
             </div>
             <div
-              className="p-4"
+              className="p-4 "
               contentEditable={editable}
               ref={editEl}
               onInput={handleInput}
@@ -214,7 +214,7 @@ export default function ApplySideThree({
           </>
         )}
       </aside>
-      <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] shadow-md">
         <div>
           <div className="flex justify-between">
             <button

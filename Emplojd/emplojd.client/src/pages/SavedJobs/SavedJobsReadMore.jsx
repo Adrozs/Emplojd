@@ -58,7 +58,7 @@ function SavedJobsReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20 ">
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20 shadow-md">
         {" "}
         <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
         <FaHeart size={22} className="text-white mr-2" />
@@ -66,7 +66,7 @@ function SavedJobsReadMore() {
       {job ? (
         <main className="max-w-7xl mx-auto px-2 md:mb-40">
           <>
-            <div className="bg-white py-3 m-5 px-1 rounded-xl dark:text-white dark:bg-stone-900">
+            <div className="bg-white py-3 m-5 px-1 rounded-xl dark:text-white dark:bg-stone-900 shadow-md">
               <div className="w-full flex flex-col justify-center p-4">
                 <h1 className="text-xl font-semibold text-stone-700 dark:text-white">
                   {job.headline}
@@ -74,14 +74,14 @@ function SavedJobsReadMore() {
                 <div className="self-start px-1 py-2 ">
                   <p className="font-semibold">{job.employer.name}</p>
                 </div>
-                <div className="w-full flex items-center justify-center mx-auto px-2 mt-3 gap-1">
-                  <div className="flex w-full items-center text-m underline ">
+                <div className="w-full flex items-center justify-center mx-auto px-1 mt-3 gap-1">
+                  <div className="flex w-full items-center gap-1 text-m underline ">
                     <FaChevronLeft
                       size={20}
                       className="fill-sky-800 dark:fill-indigo-400"
                     />
                     <a
-                      className="ml-1 text-sm dark:text-indigo-400"
+                      className=" text-sm dark:text-indigo-400 mr-1"
                       onClick={handleBack}
                     >
                       Tillbaka till resultaten
@@ -96,7 +96,7 @@ function SavedJobsReadMore() {
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-2xl mb-24 dark:text-white dark:bg-stone-900 m-5">
+            <div className="bg-white rounded-2xl mb-24 dark:text-white dark:bg-stone-900 m-5 shadow-md">
               {job.description.text_Formatted ? (
                 <div className="px-6 py-10 rounded-2xl">
                   <div

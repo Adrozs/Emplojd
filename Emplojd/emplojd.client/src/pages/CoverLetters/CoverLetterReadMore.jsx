@@ -169,14 +169,14 @@ function CoverLetterReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20">
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20 shadow-md">
         <h6 className=" text-xl ml-2 text-white">Sparade personliga brev</h6>
         <FaFileSignature size={22} className="text-white mr-2" />
       </div>
       {letter ? (
         <main className="max-w-7xl mx-auto px-6">
           <>
-            <div className="bg-white py-3 my-5 px-1 rounded-xl dark:text-white dark:bg-stone-900">
+            <div className="bg-white py-3 my-5 px-1 rounded-xl dark:text-white dark:bg-stone-900 shadow-md">
               <div className="w-full flex flex-col justify-center p-4">
                 <h1 className="text-xl font-semibold text-stone-700 dark:text-white">
                   {letter.coverLetterTitle}
@@ -213,7 +213,7 @@ function CoverLetterReadMore() {
               )}
             </div>
 
-            <div className="bg-white rounded-2xl mb-24 dark:text-white dark:bg-stone-900">
+            <div className="bg-white rounded-2xl mb-24 dark:text-white dark:bg-stone-900 shadow-md">
               <div className="px-3 pt-10 pb-6 max-w-4xl mx-auto mt-3 bg-gradient-to-t from-white to-blue-100 dark:from-stone-900 dark:to-slate-800 rounded-2xl flex items-center justify-center gap-2 text-sm ">
                 {!editable ? (
                   <>

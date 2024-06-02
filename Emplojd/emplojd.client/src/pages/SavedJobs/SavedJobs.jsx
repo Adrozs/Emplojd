@@ -48,7 +48,7 @@ function SavedJobs() {
     <>
       <div className="dark:bg-slate-800 min-h-screen">
         <HeaderOtherPages />
-        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20">
+        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20 shadow-md">
           <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
           <FaHeart size={22} className="text-white mr-2" />
         </div>
@@ -80,7 +80,7 @@ function SavedJobs() {
                 return (
                   <li
                     key={data.platsbankenId}
-                    className="bg-white w-full max-w-[600px] mx-5 mt-4 px-5 py-4 rounded-3xl dark:text-white dark:bg-stone-900"
+                    className="bg-white w-full max-w-[600px] mx-5 mt-4 px-5 py-4 rounded-3xl dark:text-white dark:bg-stone-900 shadow-md"
                   >
                     <div
                       className="grid justify-between w-full grid-flow-col"

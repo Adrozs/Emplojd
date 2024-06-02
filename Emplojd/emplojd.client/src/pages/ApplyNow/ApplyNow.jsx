@@ -121,7 +121,7 @@ function ApplyNow() {
         {page === 1 && (
           <>
             <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
-              <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
+              <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] shadow-lg ">
                 <div>
                   <div className="grid grid-cols-2 w-[70%] items-center ">
                     <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -314,7 +314,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
 
   return (
     <ul className="flex justify-center my-14 max-w-lg mx-auto pb-12">
-      <div className=" w-[90%] bg-white p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] ">
+      <div className=" w-[90%] bg-white p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] shadow-lg">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -441,7 +441,7 @@ function ApplySideFour({ job, page, setPage, copyText }) {
   return (
     <>
       <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
-        <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+        <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] shadow-md">
           <div className="mx-auto">
             <RiCheckboxCircleFill size={46} />
           </div>
@@ -459,7 +459,7 @@ function ApplySideFour({ job, page, setPage, copyText }) {
             )}
             <button
               onClick={copyTextToClipboard}
-              className="text-sm bg-customBlue text-white w-[156px] rounded-[4px] text-[13px] flex items-center justify-center gap-3 py-2 cursor-pointer"
+              className="text-sm bg-customBlue text-white w-[156px] rounded-[4px] text-[13px] flex items-center justify-center gap-3 py-2 cursor-pointer shadow-lg"
             >
               <FaRegCopy size={18} /> Kopiera brev
             </button>
@@ -474,7 +474,7 @@ function ApplySideFour({ job, page, setPage, copyText }) {
             </a>
           </div>
         </div>
-        <div className="mt-6 w-[90%] bg-white p-4 flex gap-4 rounded-[20px] justify-center ">
+        <div className="mt-6 w-[90%] bg-white p-4 flex gap-4 rounded-[20px] justify-center shadow-md ">
           <Link
             to="/joblist"
             className="text-[13px] text-customBlue border border-customBlue rounded-[8px] flex items-center justify-center gap-1  w-[156px] py-1 px-1"

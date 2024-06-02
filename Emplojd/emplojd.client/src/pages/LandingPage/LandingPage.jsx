@@ -125,7 +125,7 @@ export default function LandingPage() {
             />
           </svg>
         </div>
-        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
+        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96 max-w-[750px]mx-auto">
           <div className=" flex justify-center">
             <h2 className="font-semi-bold mb-5 text-center text-3xl font-bold dark:text-white">
               Hitta{" "}
@@ -151,7 +151,7 @@ export default function LandingPage() {
             <Link
               to="/signin"
               aria-label="Logga in"
-              className="w-[290px] flex items-center justify-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
+              className="w-[290px] flex items-center justify-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100 shadow-lg"
             >
               Logga In <FaArrowRight size={14} />
             </Link>

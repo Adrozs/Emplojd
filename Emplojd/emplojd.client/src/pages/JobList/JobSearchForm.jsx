@@ -130,7 +130,7 @@ export function SearchForm({
 }) {
   return (
     <form
-      className={`my-4 p-6 rounded-2xl ${
+      className={`my-4 p-6 rounded-2xl shadow-lg ${
         bgColor ? bgColor : "bg-white dark:bg-gray-800"
       }`}
       onSubmit={handleSubmit}

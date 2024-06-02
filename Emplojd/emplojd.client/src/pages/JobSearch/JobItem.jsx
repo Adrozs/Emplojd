@@ -66,7 +66,7 @@ function JobItem({ job, children }) {
   return (
     <li
       key={job.id}
-      className="min-h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] mb-4"
+      className="min-h-[230px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] mb-4 shadow-lg"
     >
       <div className="flex justify-between">
         <div className="flex items-center rounded-full p-1 "></div>
