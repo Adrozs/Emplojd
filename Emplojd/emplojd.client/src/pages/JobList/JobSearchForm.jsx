@@ -49,6 +49,7 @@ function JobSearchForm() {
           return;
         }
         setJobsData(data);
+        window.scrollTo(0, 0);
         navigate("/jobsearch", {
           state: { jobsData: data, query: { city, job } },
         });
@@ -125,7 +126,7 @@ export function SearchForm({
   setCity,
   job,
   city,
-  bgColor
+  bgColor,
 }) {
   return (
     <form

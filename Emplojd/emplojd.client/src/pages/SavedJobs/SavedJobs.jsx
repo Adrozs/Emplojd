@@ -115,6 +115,7 @@ function SavedJobs() {
                       </div>
                       <div className="row-start-4 col-start-1 col-span-2">
                         <Link
+                          onClick={() => window.scrollTo(0, 0)}
                           className="items-center justify-center flex p-2 h-9 bg-sky-500 rounded-xl text-white text-lg gap-4 dark:bg-indigo-700"
                           to={{
                             pathname: `/saved/${data.platsbankenId}`,

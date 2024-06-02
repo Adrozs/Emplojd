@@ -376,7 +376,7 @@ function ApplySideFour({ job, page, setPage }) {
         <div className="mx-auto">
           <RiCheckboxCircleFill size={36} />
         </div>
-        <div className="px-10">Ditt personliga brev är sparat.</div>
+        <div className="px-10 text-center">Ditt personliga brev är sparat.</div>
         <div className="flex flex-col items-center gap-4">
           <Link
             to="/coverletter"

@@ -36,6 +36,18 @@ function NoEarlierCoverLetter() {
     getCoverLetter();
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const localDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60000
+    );
+    return new Intl.DateTimeFormat("sv-SE", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(localDate);
+  };
+
   return (
     <>
       <div className="min-h-screen md:mb-12">
@@ -66,8 +78,9 @@ function NoEarlierCoverLetter() {
                     <p className="font-semibold">{letter.companyName}</p>
                   </div>
                   <div className="flex justify-between items-center mr-3 text-[14px]">
-                    <p>Skapad den 1 juni 2024</p>
+                    <p>Skapad den {formatDate(letter.date)}</p>
                     <Link
+                      onClick={() => window.scrollTo(0, 0)}
                       to={`/coverletter/${letter.coverLetterId}`}
                       className="flex items-center gap-2 text-customBlue underline dark:text-indigo-400"
                     >
