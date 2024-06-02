@@ -23,12 +23,12 @@ const ConfirmAccount = () => {
             </h1>
             <h2 className="text-2xl mb-4">Bekräfta din e-postadress</h2>
             <p>
-              Vi har skickat ett mejl till den e-postadress du angav. Bekräfta
-              mejlet och återkom.
+              Vi har skickat ett mail till den email du angav. Bekräfta
+              mailet och återkom.
             </p>
             <div className="bg-white rounded-3xl px-6 py-2 text-gray-900">
               <p>
-                Hittar du inget mejl kan du skicka ett nytt via knappen nedan.
+                Hittar du inget mail kan du skicka ett nytt via knappen nedan.
               </p>
             </div>
           </div>

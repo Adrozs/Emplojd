@@ -93,7 +93,7 @@ function JobSearchForm() {
             className="text-[13px] underline dark:text-white"
             to={"/myprofile"}
           >
-            Har du laddat upp ditt cv än?
+            Har du laddat upp ditt CV än?
           </Link>
         </div>
       </div>
@@ -137,7 +137,7 @@ export function SearchForm({
     >
       <div className="mb-5">
         <label className="block mb-2 font-medium text-gray-900 dark:text-white">
-          Ange title, företag, nyckelord
+          Ange titel, företag, nyckelord
         </label>
         <input
           type="text"

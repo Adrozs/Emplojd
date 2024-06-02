@@ -53,9 +53,9 @@ const ConfirmEmail = () => {
               Skapa konto
             </h1>
             <div className="mb-4">
-              <h2 className="text-2xl mb-4">Bekräfta din e-postadress</h2>
+              <h2 className="text-2xl mb-4">Bekräfta din email</h2>
               <p>
-                E-mail registreringen lyckades! <br />
+                Registreringen av din email lyckades! <br />
               </p>
               <p> Logga in för att komma igång.</p>
             </div>

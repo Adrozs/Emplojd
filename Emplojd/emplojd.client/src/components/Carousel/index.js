@@ -22,7 +22,7 @@ export const ServiceData = [
     icon: FaBrain,
     title: "Generera personligt brev",
     content:
-      "Skriv i dina preferenser och få ditt personliga brev inom någar sekunder",
+      "Anpassa din info och få ditt personliga brev inom några sekunder",
     number: "3.",
   },
   {

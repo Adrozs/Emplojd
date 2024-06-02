@@ -73,9 +73,9 @@ export default function LandingPage() {
               <EmplojdLogo fill="white" className="mt-2 w-80" />
             </h1>
             <p className="max-w-sm text-left md:text-left pl-4 pr-4">
-              En tjänst som erbjuder AI-genererade personliga brev som är
-              baserade på ditt CV, dina intressen samt dina preferenser. <br />
-              För att <strong>det ska vara enkelt att söka jobb</strong>
+              En tjänst som använder AI för att enkelt generera personliga 
+              brev baserat på dig, ditt cv och jobbannonsen för jobbet du söker. <br />
+              För att det ska vara <strong> smidigt att söka jobb</strong>
             </p>
             <div className="flex justify-center flex-col">
               <button
@@ -151,7 +151,7 @@ export default function LandingPage() {
               to="/signin"
               className="w-[290px] flex items-center justify-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
             >
-              Logga In <FaArrowRight size={14} />
+              Logga in <FaArrowRight size={14} />
             </Link>
           </div>
         </div>
