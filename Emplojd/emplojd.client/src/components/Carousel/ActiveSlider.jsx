@@ -18,11 +18,13 @@ const ActiveSlider = () => {
           600: {
             slidesPerView: 2,
             spaceBetween: 15,
+            centeredSlides: false,
           },
 
           1100: {
             slidesPerView: 3,
             spaceBetween: 15,
+            centeredSlides: false,
           },
         }}
         freeMode={true}
@@ -30,7 +32,7 @@ const ActiveSlider = () => {
           clickable: true,
         }}
         modules={[FreeMode, Pagination]}
-        className="max-w-[90%] lg:max-w-[80%]"
+        className="max-w-full lg:max-w-[80%]"
       >
         {ServiceData.map((item) => (
           <SwiperSlide key={item.title}>

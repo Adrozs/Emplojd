@@ -169,7 +169,7 @@ function CoverLetterReadMore() {
   return (
     <>
       <HeaderOtherPages />
-      <div className="bg-gradient-to-tl from-purple-400 to-sky-500 p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
+      <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
         <h6 className="text-[20px] ml-2 text-white">Sparade personliga brev</h6>
         <FaFileSignature size={22} className="text-white mr-2" />
       </div>

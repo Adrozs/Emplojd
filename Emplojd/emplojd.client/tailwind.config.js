@@ -31,6 +31,8 @@ export default {
         xxl: "2400px",
       },
       backgroundImage: {
+        "gradient-to-tl-purple-sky":
+          "linear-gradient(to top left, #9D4EDD, #00BFFF)",
         "gradient-to-140-sky-violet":
           "linear-gradient(140deg, #4086C6, #CA81ED)",
         "dark-gradient-to-140-purple-slate":

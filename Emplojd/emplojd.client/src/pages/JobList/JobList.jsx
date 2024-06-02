@@ -6,13 +6,13 @@ import HeaderSearchJob from "../../components/Header/HeaderSearchJob";
 
 function JobList() {
   return (
-    <main className="flex flex-col  h-screen     bg-gradient-to-tl from-purple-400 to-sky-500  bg-cover bg-no-repeat  lg:pb-20">
+    <main className="flex flex-col min-h-full bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate lg:pb-20">
       <HeaderSearchJob>
         <EmplojdLogo className="w-28 fill-white" />
       </HeaderSearchJob>
-      <main className=" px-5 pb-[90px] ">
+      <div className="px-5 pb-24">
         <JobSearchForm />
-      </main>
+      </div>
       <Footer />
     </main>
   );

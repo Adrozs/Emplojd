@@ -196,7 +196,7 @@ function MyProfile() {
     <>
       <HeaderOtherPages />
       <div className="flex flex-col h-screen justify-between dark:bg-gray-800">
-        <div className="px-4 dark:bg-gray-800">
+        <div className="px-5 dark:bg-gray-800">
           <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
             <div className="grid z-10 bg-gradient-to-140-sky-violet dark:bg-dark-gradient-to-140-purple-slate text-white p-4 w-48 rounded-xl">
               <h2 className="font-semibold">Min Profil</h2>

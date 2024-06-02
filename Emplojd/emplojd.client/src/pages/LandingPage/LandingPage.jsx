@@ -53,7 +53,7 @@ export default function LandingPage() {
     if (token) {
       navigate("/MyProfile");
     } else {
-      navigate("/signin");
+      navigate("/signin", { state: { isSignUp: true } });
     }
   };
 

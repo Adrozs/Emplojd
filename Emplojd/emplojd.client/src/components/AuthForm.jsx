@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormRow from "./FormRow";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
 import customFetch from "../utils/axios";
@@ -19,6 +19,14 @@ const AuthForm = () => {
   const [values, setValues] = useState(initialState);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    const state = location.state;
+    if (state && state.isSignUp) {
+      setValues((prev) => ({ ...prev, isMember: false }));
+    }
+  }, [location]);
 
   const createUserMutation = useMutation(
     async (user) => {

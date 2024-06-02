@@ -44,7 +44,7 @@ function SavedJobs() {
     <>
       <div className="dark:bg-slate-800">
         <HeaderOtherPages />
-        <div className="bg-gradient-to-tl from-purple-400 to-sky-500 p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
+        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center my-7 text-center w-[90%] mx-auto rounded-[10px]">
           <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
           <FaHeart size={22} className="text-white mr-2" />
         </div>
