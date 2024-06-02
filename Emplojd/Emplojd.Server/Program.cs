@@ -282,6 +282,7 @@ namespace Emplojd
             // Cover letter
             app.MapPost("/GetCoverLetter", ChatGPTService.GenerateLetterAsync).RequireAuthorization();
             app.MapGet("/saved-letter", ChatGPTService.GetCoverLettersAsync).RequireAuthorization();
+            app.MapGet("/saved-letter/{coverLetterId}", ChatGPTService.GetCoverLetterAsync).RequireAuthorization();
             app.MapPost("/save-letter", ChatGPTService.SaveCoverLetterAsync).RequireAuthorization();
             app.MapDelete("/saved-letter", ChatGPTService.RemoveSavedCoverLettersAsync).RequireAuthorization();
 
