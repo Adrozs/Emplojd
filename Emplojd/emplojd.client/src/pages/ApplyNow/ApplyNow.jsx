@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import html2pdf from "html2pdf.js";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
@@ -11,14 +12,22 @@ import { useDarkMode } from "../../components/Icons/DarkModeHook";
 //Icons
 
 import { RiCheckboxCircleFill } from "react-icons/ri";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-import { getOneBackendJob, getProfileInfo } from "../../utils/backendserver";
+import {
+  FaArrowRight,
+  FaArrowLeft,
+  FaCircleCheck,
+  FaRegCopy,
+  FaDownload,
+} from "react-icons/fa6";
+import { getOneBackendJob } from "../../utils/backendserver";
 
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [page, setPage] = useState(1);
+  const [temp, setTemp] = useState(0.5);
+  const [copyText, setCopyText] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -66,7 +75,16 @@ function ApplyNow() {
         <div className="my-4 md:mt-20">
           {job && (
             <div className="mt-4 text-center font-semibold">
-              <h2 className="text-2xl">Generera ditt personliga brev</h2>
+              {page <= 3 ? (
+                <h2 className="text-2xl dark:text-white">
+                  Generera ditt personliga brev
+                </h2>
+              ) : (
+                <h2 className="text-2xl dark:text-white">
+                  Ditt brev är redo att{" "}
+                  <span className="text-customBlue">kopieras</span>{" "}
+                </h2>
+              )}
               <div className=" m-4 flex items-center justify-center gap-4">
                 <span
                   className={
@@ -159,12 +177,32 @@ function ApplyNow() {
             </ul>
           </>
         )}
-        {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
+        {page === 2 && (
+          <ApplySideTwo
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            setTemp={setTemp}
+          />
+        )}
         {page === 3 && (
-          <ApplySideThree job={job} page={page} setPage={setPage} />
+          <ApplySideThree
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            setCopyText={setCopyText}
+          />
         )}
         {page === 4 && (
-          <ApplySideFour job={job} page={page} setPage={setPage} />
+          <ApplySideFour
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            copyText={copyText}
+          />
         )}
       </main>
       <Footer />
@@ -172,7 +210,7 @@ function ApplyNow() {
   );
 }
 
-function ApplySideTwo({ job, page, setPage }) {
+function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
   const initialState = {
     email: "",
     isMember: true,
@@ -333,6 +371,13 @@ function ApplySideTwo({ job, page, setPage }) {
             <input
               type="range"
               className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer custom-slider"
+              min="0.5"
+              max="1"
+              step="0.1"
+              value={temp}
+              onChange={(e) => {
+                setTemp(e.target.value);
+              }}
             />
             <div className="flex justify-between text-sm">
               <span>Lite självständig</span>
@@ -369,35 +414,82 @@ function ApplySideTwo({ job, page, setPage }) {
   );
 }
 
-function ApplySideFour({ job, page, setPage }) {
+function ApplySideFour({ job, page, setPage, copyText }) {
+  const [copied, setCopied] = useState(false);
+
+  /* Copy text */
+  const copyTextToClipboard = () => {
+    navigator.clipboard
+      .writeText(copyText)
+      .then(() => setCopied(true))
+      .catch((error) => console.error("Could not copy text:", error));
+  };
+
+  const saveAsPdf = () => {
+    const confirmDownload = window.confirm("Vill du ladda ner brevet som PDF?");
+    if (confirmDownload) {
+      const element = document.createElement("div");
+      element.style.whiteSpace = "pre-wrap";
+      element.style.padding = "5px";
+      element.innerText = copyText;
+      html2pdf().from(element).save();
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto pb-12">
-      <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col gap-4 rounded-[20px]">
-        <div className="mx-auto">
-          <RiCheckboxCircleFill size={36} />
+    <>
+      <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
+        <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+          <div className="mx-auto">
+            <RiCheckboxCircleFill size={46} />
+          </div>
+          <div className="px-10 text-center">
+            Ditt personliga brev är sparat.
+          </div>
+          <div className="flex flex-col items-center gap-4">
+            {copied && (
+              <p className="flex items-center gap-2 text-sm">
+                <span className="text-lime-500">
+                  <FaCircleCheck size={18} />
+                </span>{" "}
+                Brevet har kopierats.
+              </p>
+            )}
+            <button
+              onClick={copyTextToClipboard}
+              className="text-sm bg-customBlue text-white w-[156px] rounded-[4px] text-[13px] flex items-center justify-center gap-3 py-2"
+            >
+              <FaRegCopy size={18} /> Kopiera brev
+            </button>
+          </div>
+          <div className="flex flex-col justify-center items-center text-sm">
+            <a
+              onClick={saveAsPdf}
+              className="underline flex items-center gap-1"
+            >
+              <FaDownload />
+              Ladda ner personligt brev
+            </a>
+          </div>
         </div>
-        <div className="px-10 text-center">Ditt personliga brev är sparat.</div>
-        <div className="flex flex-col items-center gap-4">
+        <div className="mt-6 w-[90%] bg-white p-4 flex gap-4 rounded-[20px] justify-center ">
           <Link
-            to="/coverletter"
-            className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
+            to="/joblist"
+            className="text-[13px] text-customBlue border border-customBlue rounded-[8px] flex items-center justify-center gap-1  w-[156px] py-1 px-1"
           >
-            Gå till sparade brev
+            <FaArrowLeft /> Tillbaka till annonser
           </Link>
+
           <a
             href={job.application_Details.url}
             target="_blank"
-            className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3"
+            className=" bg-gradient-to-br to-[#CA81ED] from-[#0EA5E9] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat text-white w-[156px] py-1 rounded-[8px] text-[13px] flex items-center justify-center gap-3"
           >
             Ansök här <FaArrowRight />
           </a>
-
-          <Link className="text-sm underline" to="/joblist">
-            Sök fler jobb
-          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
