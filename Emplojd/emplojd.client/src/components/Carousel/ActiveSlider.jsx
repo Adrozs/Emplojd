@@ -32,10 +32,10 @@ const ActiveSlider = () => {
           clickable: true,
         }}
         modules={[FreeMode, Pagination]}
-        className="max-w-full lg:max-w-[80%]"
+        className="max-w-full lg:max-w-[80%] swiper-container"
       >
         {ServiceData.map((item) => (
-          <SwiperSlide key={item.title}>
+          <SwiperSlide key={item.title} className="swiper-slide">
             <div className="flex flex-col justify-start items-start mb-20 group relative shadow-lg text-stone-800 rounded-xl px-6 py-8 h-[400px] w-[310px] overflow-hidden dark:text-white">
               <div className="absolute inset-0  bg-stone-50 dark:bg-stone-900" />
               <div className="absolute inset-0 " />
