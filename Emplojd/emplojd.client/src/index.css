@@ -29,6 +29,7 @@ a {
   background: var(--c) 0% 50%, var(--c) 50% 50%, var(--c) 100% 50%;
   background-size: 20% 50%;
   animation: loading 1s infinite linear;
+  z-index: 999;
 }
 
 @keyframes loading {
@@ -92,7 +93,7 @@ a {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(140deg, #4086C6, #CA81ED);
+  background: linear-gradient(140deg, #4086c6, #ca81ed);
   cursor: pointer;
 }
 
@@ -100,7 +101,7 @@ a {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(140deg,  #4086C6, #CA81ED);
+  background: linear-gradient(140deg, #4086c6, #ca81ed);
   cursor: pointer;
 }
 

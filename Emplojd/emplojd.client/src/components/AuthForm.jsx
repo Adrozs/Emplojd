@@ -51,6 +51,7 @@ const AuthForm = () => {
         navigate("/confirm-account");
       },
       onError: (error) => {
+        setIsLoading(false);
         if (
           error.response.data.includes("Failed to create account: Username")
         ) {
@@ -93,6 +94,7 @@ const AuthForm = () => {
         navigate("/joblist");
       },
       onError: (error) => {
+        setIsLoading(false);
         if (
           error.response.data.includes(
             "Failed to login: Invalid login attempt."
@@ -173,7 +175,7 @@ const AuthForm = () => {
           value={values.emailConfirmed}
           handleChange={handleChange}
           placeholder="confirm.email@email.com"
-          compareValue={email.value}
+          compareValue={values.email}
         />
       )}
       <FormRow
@@ -192,7 +194,7 @@ const AuthForm = () => {
           value={values.passwordConfirmed}
           handleChange={handleChange}
           placeholder="●●●●●●●●●●●●"
-          compareValue={password.value}
+          compareValue={values.password}
         />
       )}
       <div className="flex justify-end pb-2">

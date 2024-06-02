@@ -6,6 +6,7 @@ import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
 import ListForm from "../../components/ListForm";
 import { FaPlus } from "react-icons/fa";
 import { useDarkMode } from "../../components/Icons/DarkModeHook";
+import Loader from "../../ui/Loader";
 
 function MyProfile() {
   const initialState = {
@@ -26,9 +27,11 @@ function MyProfile() {
   const prevSelectedOption = useRef(selectedOption);
   const fileInputRef = useRef(null);
   const { isDarkMode } = useDarkMode();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
 
       if (!authToken) {
@@ -57,7 +60,7 @@ function MyProfile() {
             `HTTP error! status: ${response.status}, message: ${errorText}`
           );
         }
-
+        setIsLoading(false);
         const data = await response.json();
         setValues({
           firstname: data.firstname || "",
@@ -68,6 +71,7 @@ function MyProfile() {
         setInterests(data.interests || []);
         setDescriptiveWords(data.descriptiveWords || []);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching user profile:", error);
       }
     };
@@ -278,6 +282,8 @@ function MyProfile() {
               />
             </div>
           </div>
+          <>{isLoading && <Loader />} </>
+
           <div>
             <div className="mb-4 dark:text-white">
               <FormRow
