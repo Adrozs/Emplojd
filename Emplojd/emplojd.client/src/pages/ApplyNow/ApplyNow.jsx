@@ -58,111 +58,117 @@ function ApplyNow() {
   }
 
   return (
-    <main className="mb-2">
-      <HeaderOtherPages>
-        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
-      </HeaderOtherPages>
-      <div className="my-4">
-        {job && (
-          <div className="mt-4 text-center font-semibold">
-            <h2 className="text-2xl">Generera ditt personliga brev</h2>
-            <div className=" m-4 flex items-center justify-center gap-4">
-              <span
-                className={
-                  page === 1
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full  bg-slate-300"
-                }
-              ></span>
-              <span
-                className={
-                  page === 2
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full  bg-slate-300"
-                }
-              ></span>
-              <span
-                className={
-                  page === 3
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full bg-slate-300"
-                }
-              ></span>
-              <span
-                className={
-                  page === 4
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full bg-slate-300"
-                }
-              ></span>
+    <>
+      <main className="mb-2 lg:mb-24  md:mb-24">
+        <HeaderOtherPages>
+          <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+        </HeaderOtherPages>
+        <div className="my-4 md:mt-20">
+          {job && (
+            <div className="mt-4 text-center font-semibold">
+              <h2 className="text-2xl">Generera ditt personliga brev</h2>
+              <div className=" m-4 flex items-center justify-center gap-4">
+                <span
+                  className={
+                    page === 1
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full  bg-slate-300"
+                  }
+                ></span>
+                <span
+                  className={
+                    page === 2
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full  bg-slate-300"
+                  }
+                ></span>
+                <span
+                  className={
+                    page === 3
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full bg-slate-300"
+                  }
+                ></span>
+                <span
+                  className={
+                    page === 4
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full bg-slate-300"
+                  }
+                ></span>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      {page === 1 && (
-        <>
-          <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
-            <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
-              <div>
-                <div className="grid grid-cols-2 w-[70%] items-center ">
-                  <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
-                  <div className="flex justify-center">
-                    <p className="text-sm ">Jobb du söker</p>
+          )}
+        </div>
+        {page === 1 && (
+          <>
+            <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
+              <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
+                <div>
+                  <div className="grid grid-cols-2 w-[70%] items-center ">
+                    <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
+                    <div className="flex justify-center">
+                      <p className="text-sm ">Jobb du söker</p>
+                    </div>
+                  </div>
+                  <div className="w-full flex items-center justify-center mt-1">
+                    <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
                   </div>
                 </div>
-                <div className="w-full flex items-center justify-center mt-1">
-                  <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold text-xl text-stone-900">
-                  {job.headline}
-                </h3>
-
-                <p className="text-lg">{job.employer.name}</p>
                 <div>
-                  <p className="text-sm my-2">
-                    {job.workplace_Address.municipality} - {daySincePosted}{" "}
-                    dagar sen
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2 text-[12px]">
-                {job.working_Hours_Type.label ? (
-                  <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
-                    {job.working_Hours_Type.label}
-                  </span>
-                ) : (
-                  <span className="bg-purple-300 px-2 py-1">
-                    {job.employment_type.label}{" "}
-                  </span>
-                )}
+                  <h3 className="font-semibold text-xl text-stone-900">
+                    {job.headline}
+                  </h3>
 
-                <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
-                  {job.occupation.label}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <button onClick={handleBack}>Avbryt</button>
-                <button
-                  className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3"
-                  onClick={() => {
-                    setPage(2);
-                    window.scrollTo(0, 0);
-                  }}
-                >
-                  Nästa <FaArrowRight />
-                </button>
-              </div>
-            </li>
-          </ul>
-        </>
-      )}
-      {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
-      {page === 3 && <ApplySideThree job={job} page={page} setPage={setPage} />}
-      {page === 4 && <ApplySideFour job={job} page={page} setPage={setPage} />}
+                  <p className="text-lg">{job.employer.name}</p>
+                  <div>
+                    <p className="text-sm my-2">
+                      {job.workplace_Address.municipality} - {daySincePosted}{" "}
+                      dagar sen
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 text-[12px]">
+                  {job.working_Hours_Type.label ? (
+                    <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
+                      {job.working_Hours_Type.label}
+                    </span>
+                  ) : (
+                    <span className="bg-purple-300 px-2 py-1">
+                      {job.employment_type.label}{" "}
+                    </span>
+                  )}
+
+                  <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
+                    {job.occupation.label}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <button onClick={handleBack}>Avbryt</button>
+                  <button
+                    className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3"
+                    onClick={() => {
+                      setPage(2);
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    Nästa <FaArrowRight />
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </>
+        )}
+        {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
+        {page === 3 && (
+          <ApplySideThree job={job} page={page} setPage={setPage} />
+        )}
+        {page === 4 && (
+          <ApplySideFour job={job} page={page} setPage={setPage} />
+        )}
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
 
@@ -370,7 +376,7 @@ function ApplySideFour({ job, page, setPage }) {
         <div className="mx-auto">
           <RiCheckboxCircleFill size={36} />
         </div>
-        <div className="px-10">Ditt personliga brev är sparat.</div>
+        <div className="px-10 text-center">Ditt personliga brev är sparat.</div>
         <div className="flex flex-col items-center gap-4">
           <Link
             to="/coverletter"

@@ -44,7 +44,7 @@ function SavedJobs() {
     <>
       <div className="dark:bg-slate-800 min-h-screen">
         <HeaderOtherPages />
-        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl">
+        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20">
           <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
           <FaHeart size={22} className="text-white mr-2" />
         </div>
@@ -115,6 +115,7 @@ function SavedJobs() {
                       </div>
                       <div className="row-start-4 col-start-1 col-span-2">
                         <Link
+                          onClick={() => window.scrollTo(0, 0)}
                           className="items-center justify-center flex p-2 h-9 bg-sky-500 rounded-xl text-white text-lg gap-4 dark:bg-indigo-700"
                           to={{
                             pathname: `/saved/${data.platsbankenId}`,

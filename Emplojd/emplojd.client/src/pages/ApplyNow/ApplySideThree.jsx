@@ -140,6 +140,26 @@ export default function ApplySideThree({ job, page, setPage }) {
     }
   };
 
+  /* Generate letter */
+  const generateLetter = () => {
+    if (profil && job) {
+      const postData = {
+        firstname: profil.firstname || "",
+        lastname: profil.lastname || "",
+        userInterestTags: profil.interests || [],
+        descriptiveWords: profil.descriptiveWords || [],
+        jobId: job.id || 0,
+        jobTitle: job.headline || "",
+        jobDescription: job.description?.text || "",
+        cvText: letterContent,
+        temperature: 0.7,
+      };
+
+      window.scrollTo(0, 0);
+      mutate(postData);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
       <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
@@ -204,7 +224,10 @@ export default function ApplySideThree({ job, page, setPage }) {
           >
             Redigera brev <FaEdit size={15} />
           </button>
-          <button className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px]">
+          <button
+            onClick={generateLetter}
+            className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px]"
+          >
             Generera brev <IoMdRefresh size={18} />
           </button>
         </div>
@@ -213,6 +236,7 @@ export default function ApplySideThree({ job, page, setPage }) {
             className="bg-customBlue rounded-[4px] text-white p-1 w-[100%] h-[40px] flex items-center justify-center gap-3"
             onClick={() => {
               clickToSave();
+              window.scrollTo(0, 0);
               setPage(4);
             }}
           >
