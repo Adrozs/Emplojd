@@ -6,15 +6,19 @@ namespace Emplojd.Server.ViewModels___DTOs
     {
         [JsonPropertyName("firstname")]
         public string? FirstName { get; set; }
-      
+
         [JsonPropertyName("lastname")]
         public string? LastName { get; set; }
-      
+
         [JsonPropertyName("interests")]
         public List<string>? UserInterestTags { get; set; }
 
         [JsonPropertyName("descriptiveWords")]
         public List<string>? DescriptiveWords { get; set; }
-        public string? CvContentText { get; set; }
+
+        [JsonPropertyName("image")]
+        public IFormFile ImageFile { get; set; }
+        [JsonPropertyName("imageFilePath")]
+        public string? ImageFilePath { get; set; }
     }
 }
