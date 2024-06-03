@@ -92,7 +92,7 @@ export default function ApplySideThree({
         // console.log("Sending data to backend:", postData);
         mutate(postData);
       }
-    }, 500);
+    }, 1000);
   }, [profil, job, mutate]);
 
   /* Update text */
