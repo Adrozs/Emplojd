@@ -1,4 +1,3 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,65 +6,65 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Emplojd.Server.Controllers;
 using Emplojd.Models;
-using System.Threading.Tasks;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using AspNet.Security.OAuth.LinkedIn;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
+using Emplojd.Controller;
 using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Emplojd.Tests
 {
     [TestClass]
-    public class LinkedInControllerTests
+    public class GoogleControllerTests
     {
         private Mock<IConfiguration> _mockConfiguration;
         private Mock<UserManager<User>> _mockUserManager;
-        private Mock<ILogger<LinkedInController>> _mockLogger;
-        private LinkedInController _controller;
+        private Mock<ILogger<GoogleController>> _mockLogger;
+        private GoogleController _controller;
 
         [TestInitialize]
         public void Setup()
         {
             _mockConfiguration = new Mock<IConfiguration>();
             _mockUserManager = MockUserManager<User>();
-            _mockLogger = new Mock<ILogger<LinkedInController>>();
+            _mockLogger = new Mock<ILogger<GoogleController>>();
+
+            _controller = new GoogleController(_mockConfiguration.Object, _mockUserManager.Object, _mockLogger.Object);
 
             // Mock the IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>();
             mockUrlHelper
                 .Setup(u => u.Action(It.IsAny<UrlActionContext>()))
-                .Returns("https://localhost:54686/linkedinresponse");
+                .Returns("https://localhost:54686/googleresponse");
 
-            _controller = new LinkedInController(_mockConfiguration.Object, _mockUserManager.Object, _mockLogger.Object)
+            _controller = new GoogleController(_mockConfiguration.Object, _mockUserManager.Object, _mockLogger.Object)
             {
-                Url = mockUrlHelper.Object 
+                Url = mockUrlHelper.Object
             };
         }
 
         [TestMethod]
-        public void LinkedInLogin_ReturnsChallenge()
+        public void GoogleLogin_ReturnsChallenge()
         {
+
             // Act
-            var result = _controller.LinkedInLogin();
+            var result = _controller.GoogleLogin();
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(ChallengeResult));
             var challengeResult = result as ChallengeResult;
             Assert.IsNotNull(challengeResult);
-            Assert.AreEqual("LinkedIn", challengeResult.AuthenticationSchemes[0]);
-            Assert.AreEqual("https://localhost:54686/linkedinresponse", challengeResult.Properties.RedirectUri); 
+            Assert.AreEqual("https://localhost:54686/googleresponse", challengeResult.Properties.RedirectUri);
         }
 
         [TestMethod]
-        public async Task LinkedInResponse_NoClaimsPrincipal_ReturnsBadRequest()
+        public async Task GoogleResponse_NoClaimsPrincipal_ReturnsBadRequest()
         {
             // Arrange
             var mockHttpContext = new Mock<HttpContext>();
             var mockAuthService = new Mock<IAuthenticationService>();
-            mockAuthService.Setup(s => s.AuthenticateAsync(It.IsAny<HttpContext>(), "LinkedIn"))
+            mockAuthService.Setup(s => s.AuthenticateAsync(It.IsAny<HttpContext>(), GoogleDefaults.AuthenticationScheme))
                            .ReturnsAsync(AuthenticateResult.NoResult());
             mockHttpContext.Setup(c => c.RequestServices.GetService(typeof(IAuthenticationService)))
                            .Returns(mockAuthService.Object);
@@ -75,14 +74,14 @@ namespace Emplojd.Tests
             };
 
             // Act
-            var result = await _controller.LinkedInResponse();
+            var result = await _controller.GoogleResponse();
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             var badRequestResult = result as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
-            Assert.AreEqual("Failed to login with LinkedIn", badRequestResult.Value);
+            Assert.AreEqual("Failed to login with Google", badRequestResult.Value);
         }
 
         private static Mock<UserManager<TUser>> MockUserManager<TUser>() where TUser : class
@@ -101,4 +100,3 @@ namespace Emplojd.Tests
         }
     }
 }
-

@@ -54,7 +54,8 @@ namespace Emplojd
             }
             builder.Services.AddAuthentication(options =>
             {
-                //options.DefaultChallengeScheme = LinkedInAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "LinkedIn";
             })
                     .AddCookie()
                     .AddGoogle(options =>
