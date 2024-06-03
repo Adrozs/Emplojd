@@ -75,22 +75,24 @@ export default function ApplySideThree({
   }, []);
 
   useEffect(() => {
-    if (profil && job && cvInfoFetched) {
-      const postData = {
-        firstname: profil.firstname || "",
-        lastname: profil.lastname || "",
-        userInterestTags: profil.interests || [],
-        descriptiveWords: profil.descriptiveWords || [],
-        jobId: job.id || 0,
-        jobTitle: job.headline || "",
-        jobDescription: job.description?.text || "",
-        cvText: JSON.stringify(cv) || "",
-        temperature: temp,
-      };
+    setTimeout(() => {
+      if (profil && job && cvInfoFetched) {
+        const postData = {
+          firstname: profil.firstname || "",
+          lastname: profil.lastname || "",
+          userInterestTags: profil.interests || [],
+          descriptiveWords: profil.descriptiveWords || [],
+          jobId: job.id || 0,
+          jobTitle: job.headline || "",
+          jobDescription: job.description?.text || "",
+          cvText: JSON.stringify(cv) || "",
+          temperature: temp,
+        };
 
-      console.log("Sending data to backend:", postData);
-      mutate(postData);
-    }
+        console.log("Sending data to backend:", postData);
+        mutate(postData);
+      }
+    }, 500);
   }, [profil, job, mutate]);
 
   /* Update text */
