@@ -17,7 +17,7 @@ namespace Emplojd.Server.ViewModels___DTOs
         public List<string>? DescriptiveWords { get; set; }
 
         [JsonPropertyName("image")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
         [JsonPropertyName("imageFilePath")]
         public string? ImageFilePath { get; set; }
     }
