@@ -184,7 +184,7 @@ export default function ApplySideThree({
 
       window.scrollTo(0, 0);
       mutate(postData);
-    }
+    }a
   };
 
   return (
