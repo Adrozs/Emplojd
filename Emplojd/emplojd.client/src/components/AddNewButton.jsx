@@ -13,7 +13,7 @@ const AddNewButton = ({ disabled }) => {
       disabled={disabled}
     >
       <div className="flex justify-between w-full">
-        <h2>Lägg till ny</h2>
+        <h2>Spara och lägg till ny</h2>
         <FaPlus className="font-bold text-2xl" />
       </div>
     </button>

@@ -91,7 +91,7 @@ function JobSearchForm() {
           <FaBullhorn className="mt-1 dark:fill-white" />
           <Link
             className="text-[13px] underline dark:text-white"
-            to={"/myprofile"}
+            to={"/SavedCV"}
           >
             Har du laddat upp ditt CV än?
           </Link>

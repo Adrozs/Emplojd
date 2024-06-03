@@ -154,7 +154,7 @@ const CvManager = () => {
   };
 
   return (
-    <div className="mx-4 mb-20 mt-10 dark:bg-slate-800">
+    <div className="mx-4 mb-20 mt-10 dark:bg-slate-800 md:mb-40">
       <CvFileSelecter
         fileName={fileName}
         handleFileChange={handleFileChange}
