@@ -311,6 +311,16 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
   const wordBgColorDescriptiveWords = isDarkMode
     ? "bg-indigo-500"
     : "bg-purple-100";
+  const handleNameChange = (e) => {
+    const fullName = e.target.value.split(" ");
+    const firstName = fullName.slice(0, -1).join(" ");
+    const lastName = fullName.slice(-1).join(" ");
+    setValues((prev) => ({
+      ...prev,
+      firstname: firstName,
+      lastname: lastName,
+    }));
+  };
 
   return (
     <ul className="flex justify-center my-14 max-w-lg mx-auto pb-12">
@@ -345,7 +355,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
               labelText="Fullständigt namn"
               name="firstname"
               value={`${values.firstname} ${values.lastname}`}
-              handleChange={handleChange}
+              handleChange={handleNameChange}
             />
           </div>
           <div className="dark:text-white">
