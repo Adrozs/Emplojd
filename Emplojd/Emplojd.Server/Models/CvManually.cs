@@ -11,7 +11,7 @@ namespace Emplojd.Server.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string SchoolWorkplace { get; set; }
-        Added migrations for CvText field in CvManually public string CvText { get; set; }
+        public string CvText { get; set; }
         public bool IsEducation { get; set; }
 
         public string UserId { get; set; }
