@@ -334,7 +334,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
           </div>
         </div>
         <div>
-          <p>Arbetstitle</p>
+          <p>Arbetstitel</p>
           <p className="text-lg font-semibold">{job.headline}</p>
         </div>
 
