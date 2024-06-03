@@ -25,6 +25,7 @@ using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Azure.Security.KeyVault.Secrets;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Extensions.Configuration;
+using Emplojd.Server.Controllers;
 
 namespace Emplojd
 {
@@ -34,6 +35,7 @@ namespace Emplojd
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
+            builder.Services.AddScoped<ResumeService>();
             builder.Services.AddScoped<BlobStorageService>(provider =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("AzureBlobStorageConnection");
