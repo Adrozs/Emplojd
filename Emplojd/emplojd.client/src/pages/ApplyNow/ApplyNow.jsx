@@ -259,11 +259,9 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
         }
       );
 
-      toast.success("Ändringar sparade");
       setPage(3);
       window.scrollTo(0, 0);
     } catch (error) {
-      toast.error("Gick inte spara ändringar, vänligen försök igen senare");
       if (error.response) {
         console.error(
           `HTTP error! status: ${error.response.status}, message: ${error.response.data}`
