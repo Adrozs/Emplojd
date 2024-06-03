@@ -7,6 +7,7 @@ import { useMutation } from "react-query";
 import customFetch from "../utils/axios";
 import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
 import ThirdPartyLogin from "./ThirdPartyLogin";
+import Loader from "../ui/Loader";
 
 const initialState = {
   email: "",
@@ -17,6 +18,7 @@ const initialState = {
 };
 const AuthForm = () => {
   const [values, setValues] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
   const location = useLocation();
@@ -30,12 +32,14 @@ const AuthForm = () => {
 
   const createUserMutation = useMutation(
     async (user) => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
       const response = await customFetch.post("/create-account", user, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
+      setIsLoading(false);
       return response.data;
     },
     {
@@ -47,7 +51,23 @@ const AuthForm = () => {
         navigate("/confirm-account");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail);
+        setIsLoading(false);
+        if (
+          error.response.data.includes("Failed to create account: Username")
+        ) {
+          toast.error("Epostadressen är upptagen");
+        } else if (
+          error.response.data.includes(
+            "Failed to create account: Passwords must be at least 8 characters., Passwords must have at least one non alphanumeric character."
+          )
+        ) {
+          toast.error(
+            "Lösenordet måste vara minst 8 tecken långt och inkludera en icke bokstav"
+          );
+        } else {
+          toast.error("Något gick fel vid skapandet av konto");
+        }
+
         console.error("Error creating user:", error);
       },
     }
@@ -55,12 +75,14 @@ const AuthForm = () => {
 
   const signInUserMutation = useMutation(
     async (user) => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
       const response = await customFetch.post("/login", user, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
+      setIsLoading(false);
       return response.data;
     },
     {
@@ -72,7 +94,20 @@ const AuthForm = () => {
         navigate("/joblist");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail);
+        setIsLoading(false);
+        if (
+          error.response.data.includes(
+            "Failed to login: Invalid login attempt."
+          )
+        ) {
+          toast.error("Felaktigt lösenord");
+        } else if (
+          error.response.data.includes("Failed to login: No user found.")
+        ) {
+          toast.error("Ingen användare hittades på epostadressen");
+        } else {
+          toast.error("Något gick fel vid inloggningen");
+        }
         console.error("Error signing in:", error);
       },
     }
@@ -140,7 +175,7 @@ const AuthForm = () => {
           value={values.emailConfirmed}
           handleChange={handleChange}
           placeholder="confirm.email@email.com"
-          compareValue={email.value}
+          compareValue={values.email}
         />
       )}
       <FormRow
@@ -159,7 +194,7 @@ const AuthForm = () => {
           value={values.passwordConfirmed}
           handleChange={handleChange}
           placeholder="●●●●●●●●●●●●"
-          compareValue={password.value}
+          compareValue={values.password}
         />
       )}
       <div className="flex justify-end pb-2">
@@ -170,7 +205,7 @@ const AuthForm = () => {
           Glömt ditt konto?
         </Link>
       </div>
-
+      <>{isLoading && <Loader />}</>
       <div className="flex flex-col gap-2">
         <button
           className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 flex px-8 justify-between items-center"

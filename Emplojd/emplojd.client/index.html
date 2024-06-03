@@ -2,8 +2,60 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/LogoEmplojd.png" />
+    <link rel="icon" type="image/svg+xml" href="/Favicon.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/App-icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/App-icon-192x192.png"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="keywords" content="jobbsökande, AI, personliga brev" />
+    <meta
+      name="description"
+      content="En tjänst som använder AI för att enkelt generera personliga brev baserat på dig, ditt cv och jobbannonsen för jobbet du söker."
+    />
+    <meta property="og:title" content="Emplojd - Gör jobbsökandet smidigare" />
+    <meta
+      property="og:description"
+      content="En tjänst som använder AI för att enkelt generera personliga brev baserat på dig, ditt cv och jobbannonsen för jobbet du söker."
+    />
+    <meta property="og:image" content="https://ibb.co/qBGnyRw" />
+    <meta property="og:url" content="https://www.emplojd.com/" />
+    <meta name="theme-color" content="#333" />
+    <link
+      rel="preconnect"
+      href="https://emplojdserver20240531231628.azurewebsites.net/"
+    />
+    <link rel="preconnect" href="http://www.w3.org/" />
+    <link rel="preconnect" href="https://ibb.co/" />
+    <link rel="canonical" href="https://www.emplojd.com/" />
+    <link rel="manifest" href="/manifest.json" />
+    <script type="text/javascript">
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      })(window.location);
+    </script>
     <title>Emplojd</title>
   </head>
   <body>

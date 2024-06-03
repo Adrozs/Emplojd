@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaBars } from "react-icons/fa6";
+import { FaBars } from "react-icons/fa";
 import Modal from "../Modal";
 import { Link } from "react-router-dom";
 const Header = ({ children }) => {

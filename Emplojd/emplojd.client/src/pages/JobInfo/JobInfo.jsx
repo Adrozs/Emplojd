@@ -76,7 +76,7 @@ function JobInfo() {
       <main className="m-2 max-w-7xl mx-auto px-2 md:mt-24">
         {job && (
           <>
-            <div className="bg-white  py-3 mt-8 px-1 rounded-[10px]">
+            <div className="bg-white  py-3 mt-8 px-1 rounded-[10px] shadow-md">
               <div className="flex w-full justify-between items-center text-sm">
                 <a className="mb-5 ml-1" onClick={handleBack}>
                   Tillbaka till resultaten
@@ -127,7 +127,7 @@ function JobInfo() {
             <div className="w-full my-3 text-center ">
               <div className="w-[95%] flex items-center justify-center mx-auto">
                 <Link
-                  className="flex items-center justify-center gap-3 mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg max-w-lg"
+                  className="flex items-center justify-center gap-3 mt-3 w-full bg-customBlue rounded-[4px] text-white py-2 text-lg max-w-lg shadow-lg"
                   to={`/job/${job.id}/apply`}
                 >
                   Ansök nu <FaArrowRight />

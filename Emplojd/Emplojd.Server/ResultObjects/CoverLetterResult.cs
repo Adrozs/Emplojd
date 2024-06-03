@@ -1,4 +1,4 @@
-﻿namespace Emplojd
+﻿namespace Emplojd.Server.ResultObjects
 {
     public class CoverLetterResult
     {

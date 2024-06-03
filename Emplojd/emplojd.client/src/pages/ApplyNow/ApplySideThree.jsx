@@ -12,7 +12,13 @@ import { FaEdit } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
-export default function ApplySideThree({ job, page, setPage }) {
+export default function ApplySideThree({
+  job,
+  page,
+  setPage,
+  temp,
+  setCopyText,
+}) {
   const [editable, setEditable] = useState(false);
   const editEl = useRef(null);
   const [copied, setCopied] = useState(false);
@@ -42,7 +48,7 @@ export default function ApplySideThree({ job, page, setPage }) {
       try {
         const profile = await getProfileInfo();
         setProfile(profile);
-        console.log(profile);
+        // console.log(profile);
       } catch (error) {
         console.error("Error fetching profile info:", error);
       }
@@ -61,10 +67,10 @@ export default function ApplySideThree({ job, page, setPage }) {
         jobTitle: job.headline || "",
         jobDescription: job.description?.text || "",
         cvText: letterContent,
-        temperature: 0.7,
+        temperature: temp,
       };
 
-      console.log("Sending data to backend:", postData);
+      // console.log("Sending data to backend:", postData);
       mutate(postData);
     }
   }, [profil, job, mutate]);
@@ -73,6 +79,7 @@ export default function ApplySideThree({ job, page, setPage }) {
   useEffect(() => {
     if (data) {
       setLetterContent(data);
+      setCopyText(data);
     }
   }, [data]);
 
@@ -88,10 +95,10 @@ export default function ApplySideThree({ job, page, setPage }) {
       coverLetterContent: letterContent,
       companyName: job.employer.name,
       date: todaysDate,
-      temperature: 0.7,
+      temperature: temp,
     };
 
-    console.log("Sending cover letter to backend:", postLetter);
+    // console.log("Sending cover letter to backend:", postLetter);
 
     try {
       const response = await axios.post(
@@ -104,7 +111,7 @@ export default function ApplySideThree({ job, page, setPage }) {
           },
         }
       );
-      console.log("Response from backend:", response.data);
+      // console.log("Response from backend:", response.data);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -140,9 +147,29 @@ export default function ApplySideThree({ job, page, setPage }) {
     }
   };
 
+  /* Generate letter */
+  const generateLetter = () => {
+    if (profil && job) {
+      const postData = {
+        firstname: profil.firstname || "",
+        lastname: profil.lastname || "",
+        userInterestTags: profil.interests || [],
+        descriptiveWords: profil.descriptiveWords || [],
+        jobId: job.id || 0,
+        jobTitle: job.headline || "",
+        jobDescription: job.description?.text || "",
+        cvText: letterContent,
+        temperature: 0.7,
+      };
+
+      window.scrollTo(0, 0);
+      mutate(postData);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
-      <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[150px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] shadow-md">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -161,20 +188,24 @@ export default function ApplySideThree({ job, page, setPage }) {
           </h3>
         </div>
       </div>
-      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px]">
+      <aside className="my-6 w-[90%] bg-white p-4 flex flex-col rounded-[20px] shadow-lg">
         {isLoading ? (
           <Loader />
         ) : (
           <>
             <div className="self-end">
               <Tooltip tooltip={copied ? "✅ Kopierad" : "Kopiera"}>
-                <button onClick={copyTextToClipboard}>
+                <button
+                  aria-label="Kopiera text"
+                  className="cursor-pointer"
+                  onClick={copyTextToClipboard}
+                >
                   <FiCopy size={22} />
                 </button>
               </Tooltip>
             </div>
             <div
-              className="p-4"
+              className="p-4 "
               contentEditable={editable}
               ref={editEl}
               onInput={handleInput}
@@ -183,10 +214,11 @@ export default function ApplySideThree({ job, page, setPage }) {
           </>
         )}
       </aside>
-      <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px]">
+      <div className="h-[190px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] shadow-md">
         <div>
           <div className="flex justify-between">
             <button
+              aria-label="Tillbaka knapp"
               className="underline text-sm ml-3 flex items-center gap-1"
               onClick={() => {
                 setPage(2);
@@ -204,7 +236,10 @@ export default function ApplySideThree({ job, page, setPage }) {
           >
             Redigera brev <FaEdit size={15} />
           </button>
-          <button className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px]">
+          <button
+            onClick={generateLetter}
+            className="w-[45%] bg-white text-customBlue p-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px]"
+          >
             Generera brev <IoMdRefresh size={18} />
           </button>
         </div>
@@ -213,6 +248,7 @@ export default function ApplySideThree({ job, page, setPage }) {
             className="bg-customBlue rounded-[4px] text-white p-1 w-[100%] h-[40px] flex items-center justify-center gap-3"
             onClick={() => {
               clickToSave();
+              window.scrollTo(0, 0);
               setPage(4);
             }}
           >

@@ -8,13 +8,17 @@ import {
   getLikeDataBackend,
   deleteLikeDataBackend,
 } from "../../utils/savedAds";
+import Loader from "../../ui/Loader";
 
 function SavedJobs() {
   const [likes, setLikes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [daySincePosted, setDaySincePosted] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     getLikeDataBackend().then((data) => {
+      setIsLoading(false);
       setLikes(data);
       const todaysDate = new Date();
       const updatedLikes = data.map((job) => {
@@ -44,7 +48,7 @@ function SavedJobs() {
     <>
       <div className="dark:bg-slate-800 min-h-screen">
         <HeaderOtherPages />
-        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl">
+        <div className="bg-gradient-to-tl-purple-sky dark:bg-dark-gradient-to-140-purple-slate p-4 flex justify-between items-center mx-5 my-3 text-center rounded-xl md:mt-20 shadow-md">
           <h6 className=" text-[20px] ml-2 text-white">Sparade jobb</h6>
           <FaHeart size={22} className="text-white mr-2" />
         </div>
@@ -54,6 +58,7 @@ function SavedJobs() {
               Här har du åtkomst till alla jobbannonser du har valt att spara.
             </p>
           </div>
+          <>{isLoading && <Loader />}</>
           <ul className="flex flex-col items-center my-10 mx-4">
             {likes <= 0 ? (
               <>
@@ -75,7 +80,7 @@ function SavedJobs() {
                 return (
                   <li
                     key={data.platsbankenId}
-                    className="bg-white w-full max-w-[600px] mx-5 mt-4 px-5 py-4 rounded-3xl dark:text-white dark:bg-stone-900"
+                    className="bg-white w-full max-w-[600px] mx-5 mt-4 px-5 py-4 rounded-3xl dark:text-white dark:bg-stone-900 shadow-md"
                   >
                     <div
                       className="grid justify-between w-full grid-flow-col"
@@ -105,9 +110,7 @@ function SavedJobs() {
                           <span className="bg-[#CFEBD4] dark:bg-fuchsia-600 px-2 py-1 rounded-[2px]">
                             {data.working_Hours_Type.label}
                           </span>
-                          {/* <span className="bg-purple-300 px-2 py-1">
-                          {data.employment_Type.label}
-                        </span> */}
+
                           <span className="bg-[#C3E7F3] dark:bg-teal-600 px-2 py-1 rounded-[2px]">
                             {data.occupation.label}
                           </span>
@@ -115,6 +118,7 @@ function SavedJobs() {
                       </div>
                       <div className="row-start-4 col-start-1 col-span-2">
                         <Link
+                          onClick={() => window.scrollTo(0, 0)}
                           className="items-center justify-center flex p-2 h-9 bg-sky-500 rounded-xl text-white text-lg gap-4 dark:bg-indigo-700"
                           to={{
                             pathname: `/saved/${data.platsbankenId}`,
