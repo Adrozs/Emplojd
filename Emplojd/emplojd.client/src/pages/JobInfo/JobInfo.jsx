@@ -125,7 +125,7 @@ function JobInfo() {
             )}
             {isHTML(job.description.text_Formatted) ? (
               <div
-                className=" p-2 max-w-4xl mx-auto mt-3"
+                className=" p-2 max-w-4xl mx-auto mt-3 dark:text-white"
                 dangerouslySetInnerHTML={{
                   __html: job.description.text_Formatted,
                 }}

@@ -64,7 +64,7 @@ export default function ApplySideThree({
       try {
         const cvInfo = await getManuallyCv();
         setCv(cvInfo);
-        console.log(cvInfo);
+        // console.log(cvInfo);
         setCvInfoFetched(true);
       } catch (error) {
         setCvInfoFetched(true);
@@ -89,7 +89,7 @@ export default function ApplySideThree({
           temperature: temp,
         };
 
-        console.log("Sending data to backend:", postData);
+        // console.log("Sending data to backend:", postData);
         mutate(postData);
       }
     }, 500);
@@ -118,7 +118,7 @@ export default function ApplySideThree({
       temperature: temp,
     };
 
-    console.log("Sending cover letter to backend:", postLetter);
+    // console.log("Sending cover letter to backend:", postLetter);
 
     try {
       const response = await axios.post(
