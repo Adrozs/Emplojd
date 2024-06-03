@@ -45,8 +45,6 @@ namespace Emplojd.Server.Controllers
 
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-                if (user == null)
-                    return (IActionResult)Results.BadRequest("No matching user found.");
 
                 if (resumeDto.ResumeFile != null && resumeDto.ResumeFile.Length > 0)
                 {
@@ -54,6 +52,7 @@ namespace Emplojd.Server.Controllers
                     resumeDto.ResumeFilePath = cvUrl;
 
                     user.ResumeFilePath = cvUrl;
+                    await _context.SaveChangesAsync();
 
                     return Ok(new { FilePath = cvUrl });
 
