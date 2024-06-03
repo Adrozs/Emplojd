@@ -39,33 +39,57 @@ const router = createBrowserRouter([
       { path: "/", element: <LandingPage /> },
       {
         path: "/jobsearch",
-        element: <JobSearch />,
+        element: (
+          <ProtectedRoute>
+            <JobSearch />
+          </ProtectedRoute>
+        ),
         loader: searchLoader,
         errorElement: <Error />,
       },
       {
         path: "/confirm-email",
-        element: <ConfirmEmail />,
+        element: (
+          <ProtectedRoute>
+            <ConfirmEmail />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
       {
         path: "/confirm-account",
-        element: <ConfirmAccount />,
+        element: (
+          <ProtectedRoute>
+            <ConfirmAccount />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
       {
         path: "/forgot-password",
-        element: <ForgotPassword />,
+        element: (
+          <ProtectedRoute>
+            <ForgotPassword />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
       {
         path: "/reset-password",
-        element: <ResetPassword />,
+        element: (
+          <ProtectedRoute>
+            <ResetPassword />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
       {
         path: "/joblist",
-        element: <JobList />,
+        element: (
+          <ProtectedRoute>
+            <JobList />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
 
@@ -73,41 +97,77 @@ const router = createBrowserRouter([
 
       {
         path: "/MyProfile",
-        element: <MyProfile />,
+        element: (
+          <ProtectedRoute>
+            <MyProfile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/SavedCV",
-        element: <SavedCV />,
+        element: (
+          <ProtectedRoute>
+            <SavedCV />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/createprofile",
-        element: <CreateProfile />,
+        element: (
+          <ProtectedRoute>
+            <CreateProfile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/saved",
-        element: <SavedJobs />,
+        element: (
+          <ProtectedRoute>
+            <SavedJobs />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/saved/:jobId",
-        element: <SavedJobsReadMore />,
+        element: (
+          <ProtectedRoute>
+            <SavedJobsReadMore />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/coverletter",
-        element: <NoEarlierCoverLetter />,
+        element: (
+          <ProtectedRoute>
+            <NoEarlierCoverLetter />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/coverletter/:jobId",
-        element: <CoverLetterReadMore />,
+        element: (
+          <ProtectedRoute>
+            <CoverLetterReadMore />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/job/:jobId",
-        element: <JobInfo />,
+        element: (
+          <ProtectedRoute>
+            <JobInfo />
+          </ProtectedRoute>
+        ),
         loader: jobLoader,
         errorElement: <Error />,
       },
       {
         path: "/job/:jobId/apply",
-        element: <ApplyNow />,
+        element: (
+          <ProtectedRoute>
+            <ApplyNow />
+          </ProtectedRoute>
+        ),
         errorElement: <Error />,
       },
     ],
