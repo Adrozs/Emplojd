@@ -9,6 +9,8 @@ import ApplySideThree from "./ApplySideThree";
 import FormRow from "../../components/FormRow";
 import ListForm from "../../components/ListForm";
 import { useDarkMode } from "../../components/Icons/DarkModeHook";
+import { toast } from "react-toastify";
+import axios from "axios";
 //Icons
 
 import { RiCheckboxCircleFill } from "react-icons/ri";
@@ -229,6 +231,49 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
   const prevValues = useRef(values);
   const prevSelectedOption = useRef(selectedOption);
 
+  const handleSaveAndContinue = async () => {
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+      console.error("No auth token found");
+      return;
+    }
+
+    const data = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      isMember: values.isMember,
+      interests: interests,
+      descriptiveWords: descriptiveWords,
+    };
+
+    try {
+      const response = await axios.post(
+        "https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/CreateUserProfile",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      toast.success("Ändringar sparade");
+      setPage(3);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      toast.error("Gick inte spara ändringar, vänligen försök igen senare");
+      if (error.response) {
+        console.error(
+          `HTTP error! status: ${error.response.status}, message: ${error.response.data}`
+        );
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -413,10 +458,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
           </button>
           <button
             className="bg-customBlue rounded-[4px] text-white py-1 w-[45%] flex items-center justify-center gap-3"
-            onClick={() => {
-              setPage(3);
-              window.scrollTo(0, 0);
-            }}
+            onClick={handleSaveAndContinue}
           >
             Fortsätt <FaArrowRight />
           </button>
