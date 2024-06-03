@@ -1,5 +1,7 @@
+import React from 'react';
+
 const WaveSVG = () => (
-    <svg
+  <svg
     viewBox="20.02 16 337 79.16"
     xmlns="http://www.w3.org/2000/svg"
     className="absolute z-0 -top-12 w-full md:-top-20 ls:-top-32 lg:-top-42 xl:-top-56 xxl:-top-80"
@@ -14,7 +16,6 @@ const WaveSVG = () => (
       />
     </g>
   </svg>
-  );
-  
-  export default WaveSVG;
-  
+);
+
+export default WaveSVG;
