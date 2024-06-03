@@ -16,7 +16,7 @@ function SavedJobsReadMore() {
       const token = localStorage.getItem("authToken");
 
       const url = `https://emplojdserver20240531231628.azurewebsites.net/ad/${id}?adId=${id}`;
-      console.log("Fetching URL:", url);
+      // console.log("Fetching URL:", url);
 
       const res = await fetch(url, {
         headers: {
@@ -27,7 +27,7 @@ function SavedJobsReadMore() {
       if (!res.ok) throw new Error(`Couldn't find job #${id}`);
 
       const jobData = await res.json();
-      console.log(jobData);
+      // console.log(jobData);
       setJob(jobData);
     } catch (error) {
       console.error("Error fetching job data:", error);

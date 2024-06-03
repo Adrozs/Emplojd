@@ -14,7 +14,7 @@ const ConfirmEmail = () => {
     const code = searchParams.get("code");
 
     if (userId && code) {
-      console.log("Kod till backend", { userId, code });
+      // console.log("Kod till backend", { userId, code });
       axios
         .get(
           "https://emplojdserver20240531231628.azurewebsites.net/confirm-email",
@@ -23,13 +23,13 @@ const ConfirmEmail = () => {
           }
         )
         .then((response) => {
-          console.log("Response:", response);
+          // console.log("Response:", response);
           setStatus(
             `Email registreringen lyckades. Logga in för att komma igång!`
           );
         })
         .catch((error) => {
-          console.error("Error:", error);
+          // console.error("Error:", error);
           setStatus("Misslyckades med att bekräftandet av email.");
         });
     } else {
@@ -70,7 +70,10 @@ const ConfirmEmail = () => {
               Logga in <LoginRightArrow />
             </Link>
             <div className="flex justify-center gap-4">
-              <button className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center">
+              <button
+                disabled
+                className="w-full border-[2px] border-customBlue h-16 rounded-xl text-customBlue text-xl font-semibold  mb-2 flex px-8 justify-between items-center"
+              >
                 Skicka igen <FaEnvelope size={22} />
               </button>
             </div>

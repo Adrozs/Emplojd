@@ -45,7 +45,7 @@ const AuthForm = () => {
     {
       onSuccess: (data) => {
         toast.success("Registrering lyckades!");
-        console.log("Skapad användare:", data);
+        // console.log("Skapad användare:", data);
         const { token } = data;
         login(token, { ...values, isMember: false });
         navigate("/confirm-account");
@@ -88,7 +88,7 @@ const AuthForm = () => {
     {
       onSuccess: (data) => {
         toast.success("Välkommen in!");
-        console.log("Inloggning lyckades:", data);
+        // console.log("Inloggning lyckades:", data);
         const { token } = data;
         login(token, { ...values, isMember: true });
         navigate("/joblist");

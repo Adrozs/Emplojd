@@ -41,7 +41,7 @@ const HandleGoogleResponse = () => {
           const { token, email } = data;
 
           if (token && email) {
-            console.log("Fetched Data:", { token, email });
+            // console.log("Fetched Data:", { token, email });
 
             localStorage.setItem("authToken", token);
             login(token, { email, isMember: true });

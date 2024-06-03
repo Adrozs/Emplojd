@@ -44,7 +44,7 @@ export default function CvFileSelecter({
         );
 
         if (response.ok) {
-          console.log("File uploaded successfully");
+          // console.log("File uploaded successfully");
           toast.success("CV uppladdat");
           setIsLoading(false);
         } else {

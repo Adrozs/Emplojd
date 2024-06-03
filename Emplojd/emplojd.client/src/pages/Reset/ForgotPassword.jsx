@@ -25,7 +25,7 @@ function ForgotPassword() {
     {
       onSuccess: (data) => {
         toast.success("E-post har skickats!");
-        console.log("Visa data:", data);
+        // console.log("Visa data:", data);
       },
       onError: (error) => {
         toast.error(error.response.data.detail);

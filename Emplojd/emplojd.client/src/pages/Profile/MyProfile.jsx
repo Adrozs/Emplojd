@@ -132,7 +132,7 @@ function MyProfile() {
       descriptiveWords: descriptiveWordsArray,
     };
 
-    console.log("Data being sent:", data);
+    // console.log("Data being sent:", data);
 
     try {
       const response = await axios.post(
@@ -146,7 +146,7 @@ function MyProfile() {
         }
       );
 
-      console.log("Success:", response.data);
+      // console.log("Success:", response.data);
       toast.success("Ändringar sparade");
     } catch (error) {
       toast.error("Gick inte spara ändringar, vänligen försök igen senare");

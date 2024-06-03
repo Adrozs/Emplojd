@@ -37,7 +37,7 @@ function CoverLetterReadMore() {
       }
 
       const jobData = await res.json();
-      console.log(jobData);
+      // console.log(jobData);
       setLetter(jobData);
     } catch (error) {
       console.error("Error fetching letter data:", error);
@@ -82,7 +82,7 @@ function CoverLetterReadMore() {
       coverLetterId: id,
     };
 
-    console.log("Sending cover letter to backend:", postLetter);
+    // console.log("Sending cover letter to backend:", postLetter);
 
     try {
       const response = await axios.delete(
@@ -95,7 +95,7 @@ function CoverLetterReadMore() {
           data: postLetter,
         }
       );
-      console.log("Successfully deleted:", response.data);
+      // console.log("Successfully deleted:", response.data);
       toast("Personligt brev har raderats.");
       navigate("/coverletter");
     } catch (error) {
@@ -117,7 +117,7 @@ function CoverLetterReadMore() {
   const handleTextChange = (e) => {
     const newText = e.currentTarget.innerText;
     setText(newText);
-    console.log(newText);
+    // console.log(newText);
   };
 
   const copyTextToClipboard = () => {
@@ -140,7 +140,7 @@ function CoverLetterReadMore() {
       temperature: 0.7,
     };
 
-    console.log("Sending new letter to backend:", postLetter);
+    // console.log("Sending new letter to backend:", postLetter);
 
     try {
       const response = await axios.post(
@@ -153,7 +153,7 @@ function CoverLetterReadMore() {
           },
         }
       );
-      console.log("Response from backend:", response.data);
+      // console.log("Response from backend:", response.data);
       setEditable(false);
       setSavedTest(true);
       toast("Det nya brevet har sparats");
