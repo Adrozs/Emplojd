@@ -7,6 +7,7 @@ import ListForm from "../../components/ListForm";
 import { FaPlus } from "react-icons/fa";
 import { useDarkMode } from "../../components/Icons/DarkModeHook";
 import Loader from "../../ui/Loader";
+import axios from "axios";
 
 function MyProfile() {
   const initialState = {
@@ -133,36 +134,26 @@ function MyProfile() {
     console.log("Data being sent:", data);
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         "https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/CreateUserProfile",
+        data,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify(data),
         }
       );
 
-      if (!response.ok) {
-        const responseText = await response.text();
-        throw new Error(
-          `HTTP error! status: ${response.status}, message: ${responseText}`
-        );
-      }
-
-      let result;
-      try {
-        const responseText = await response.text();
-        result = responseText ? JSON.parse(responseText) : {};
-      } catch (error) {
-        throw new Error("Invalid JSON response");
-      }
-
-      console.log("Success:", result);
+      console.log("Success:", response.data);
     } catch (error) {
-      console.error("Error:", error);
+      if (error.response) {
+        console.error(
+          `HTTP error! status: ${error.response.status}, message: ${error.response.data}`
+        );
+      } else {
+        console.error("Error:", error.message);
+      }
     }
   };
 

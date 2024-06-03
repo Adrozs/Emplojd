@@ -49,38 +49,22 @@ const router = createBrowserRouter([
       },
       {
         path: "/confirm-email",
-        element: (
-          <ProtectedRoute>
-            <ConfirmEmail />
-          </ProtectedRoute>
-        ),
+        element: <ConfirmEmail />,
         errorElement: <Error />,
       },
       {
         path: "/confirm-account",
-        element: (
-          <ProtectedRoute>
-            <ConfirmAccount />
-          </ProtectedRoute>
-        ),
+        element: <ConfirmAccount />,
         errorElement: <Error />,
       },
       {
         path: "/forgot-password",
-        element: (
-          <ProtectedRoute>
-            <ForgotPassword />
-          </ProtectedRoute>
-        ),
+        element: <ForgotPassword />,
         errorElement: <Error />,
       },
       {
         path: "/reset-password",
-        element: (
-          <ProtectedRoute>
-            <ResetPassword />
-          </ProtectedRoute>
-        ),
+        element: <ResetPassword />,
         errorElement: <Error />,
       },
       {
@@ -113,11 +97,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/createprofile",
-        element: (
-          <ProtectedRoute>
-            <CreateProfile />
-          </ProtectedRoute>
-        ),
+        element: <CreateProfile />,
       },
       {
         path: "/saved",

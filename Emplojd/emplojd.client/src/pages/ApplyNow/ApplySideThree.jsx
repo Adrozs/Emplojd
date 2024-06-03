@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import html2pdf from "html2pdf.js";
 import Loader from "../../ui/Loader";
 import Tooltip from "../../components/Tooltip";
-import { getProfileInfo } from "../../utils/backendserver";
+import { getManuallyCv, getProfileInfo } from "../../utils/backendserver";
 
 // Icons
 import { FiCopy } from "react-icons/fi";
@@ -24,6 +24,7 @@ export default function ApplySideThree({
   const [copied, setCopied] = useState(false);
   const [letterContent, setLetterContent] = useState("");
   const [profil, setProfile] = useState("");
+  const [cv, setCv] = useState("");
 
   /* Fetch cover letter */
   const { mutate, isLoading, error, data } = useMutation(async (postData) => {
@@ -57,6 +58,18 @@ export default function ApplySideThree({
   }, []);
 
   useEffect(() => {
+    const fetchCvInfo = async () => {
+      try {
+        const cvInfo = await getManuallyCv();
+        setCv(cvInfo);
+      } catch (error) {
+        console.error("Error fetching cv info:", error);
+      }
+    };
+    fetchCvInfo();
+  }, []);
+
+  useEffect(() => {
     if (profil && job) {
       const postData = {
         firstname: profil.firstname || "",
@@ -66,11 +79,11 @@ export default function ApplySideThree({
         jobId: job.id || 0,
         jobTitle: job.headline || "",
         jobDescription: job.description?.text || "",
-        cvText: letterContent,
+        cvText: JSON.stringify(cv) || "",
         temperature: temp,
       };
 
-      // console.log("Sending data to backend:", postData);
+      console.log("Sending data to backend:", postData);
       mutate(postData);
     }
   }, [profil, job, mutate]);
@@ -98,7 +111,7 @@ export default function ApplySideThree({
       temperature: temp,
     };
 
-    // console.log("Sending cover letter to backend:", postLetter);
+    console.log("Sending cover letter to backend:", postLetter);
 
     try {
       const response = await axios.post(
