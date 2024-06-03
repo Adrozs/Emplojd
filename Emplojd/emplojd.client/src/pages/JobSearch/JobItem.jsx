@@ -14,16 +14,25 @@ function JobItem({ job, children }) {
     const fetchLikedJobs = async () => {
       try {
         const likedJobs = await getLikeDataBackend();
-        const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
-        if (liked.includes(parseInt(job.id))) {
-          setIsLiked(true);
-        } else {
-          setIsLiked(false);
+
+        if (likedJobs) {
+          const liked = likedJobs.map((likedJob) => likedJob.platsbankenId);
+
+          if (liked.includes(parseInt(job.id))) {
+            setIsLiked(true);
+          } else {
+            setIsLiked(false);
+          }
         }
       } catch (error) {
-        console.error("Error fetching liked jobs:", error);
+        if (error.response && error.response.status === 404) {
+          console.log("No liked jobs found.");
+        } else {
+          console.error("Error fetching liked jobs:", error);
+        }
       }
     };
+
     fetchLikedJobs();
   }, [job]);
 

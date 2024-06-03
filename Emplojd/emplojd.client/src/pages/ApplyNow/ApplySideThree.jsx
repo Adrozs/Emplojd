@@ -25,6 +25,7 @@ export default function ApplySideThree({
   const [letterContent, setLetterContent] = useState("");
   const [profil, setProfile] = useState("");
   const [cv, setCv] = useState("");
+  const [cvInfoFetched, setCvInfoFetched] = useState(false);
 
   /* Fetch cover letter */
   const { mutate, isLoading, error, data } = useMutation(async (postData) => {
@@ -59,10 +60,14 @@ export default function ApplySideThree({
 
   useEffect(() => {
     const fetchCvInfo = async () => {
+      setCvInfoFetched(false);
       try {
         const cvInfo = await getManuallyCv();
         setCv(cvInfo);
+        console.log(cvInfo);
+        setCvInfoFetched(true);
       } catch (error) {
+        setCvInfoFetched(true);
         console.error("Error fetching cv info:", error);
       }
     };
@@ -70,7 +75,7 @@ export default function ApplySideThree({
   }, []);
 
   useEffect(() => {
-    if (profil && job) {
+    if (profil && job && cvInfoFetched) {
       const postData = {
         firstname: profil.firstname || "",
         lastname: profil.lastname || "",

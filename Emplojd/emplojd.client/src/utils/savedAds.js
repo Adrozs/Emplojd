@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function getLikeDataBackend() {
+async function getLikeDataBackend() {
   const token = localStorage.getItem("authToken");
 
   return axios
@@ -11,9 +11,14 @@ function getLikeDataBackend() {
       },
     })
     .then((response) => {
-      return response.data;
+      if (response.data && response.data.length > 0) {
+        return response.data;
+      } else {
+        return null;
+      }
     })
     .catch((error) => {
+      console.error("Error fetching liked jobs:", error);
       return null;
     });
 }
@@ -91,25 +96,5 @@ function deleteLikeDataBackend(platsbankenJobAdId) {
       return null;
     });
 }
-
-/* Saved coverletters */
-// function getCoverLetter() {
-//   const token = localStorage.getItem("authToken");
-
-//   return axios
-//     .get("https://localhost:54686/saved-letters", {
-//       headers: {
-//         Accept: "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     })
-//     .then((response) => {
-//       console.log(response.data);
-//       return response;
-//     })
-//     .catch((error) => {
-//       return null;
-//     });
-// }
 
 export { sendLikeDataBackend, getLikeDataBackend, deleteLikeDataBackend };

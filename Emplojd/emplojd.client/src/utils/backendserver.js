@@ -16,14 +16,14 @@ export async function getJobsBackend(query) {
       }
     );
 
-    console.log("Response:", res);
+    // console.log("Response:", res);
 
     if (!res.ok) {
       throw new Error(`Failed to get job. 😢 Status code: ${res.status}`);
     }
 
     const data = await res.json();
-    console.log("Response data:", data);
+    // console.log("Response data:", data);
 
     if (data) {
       return data;
@@ -51,7 +51,7 @@ export async function getOneBackendJob(id) {
   if (!res.ok) throw Error(`Couldn't find job #${id}`);
 
   const jobs = await res.json();
-  console.log(jobs);
+  // console.log(jobs);
 
   return jobs;
 }
@@ -71,7 +71,7 @@ export async function getProfileInfo() {
   if (!res.ok) throw Error(`Couldn't find job #${id}`);
 
   const profile = await res.json();
-  console.log(profile);
+  // console.log(profile);
 
   return profile;
 }
@@ -91,7 +91,7 @@ export async function getManuallyCv() {
   if (!res.ok) throw Error(`Couldn't find manually cv #${id}`);
 
   const cvInfo = await res.json();
-  console.log(cvInfo);
+  // console.log(cvInfo);
 
   return cvInfo;
 }
