@@ -367,8 +367,8 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
 
   return (
     <ul className="flex justify-center my-14 max-w-lg mx-auto pb-12">
-      <div className=" w-[90%] bg-white p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] shadow-lg">
-        <div>
+      <div className=" w-[90%] bg-white dark:bg-stone-900 p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] shadow-lg">
+        <div className="dark:text-white">
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
             <div className="flex justify-center">
@@ -380,25 +380,26 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
           </div>
         </div>
         <div className="flex flex-col items-center text-center">
-          <div className="flex gap-3 my-10">
+          <div className="flex gap-3 my-10 dark:text-white">
             <p>Jobb</p>
             <Switch />
             <p>Praktik</p>
           </div>
         </div>
-        <div>
+        <div className="dark:text-white">
           <p>Arbetstitel</p>
           <p className="text-lg font-semibold">{job.headline}</p>
         </div>
 
         <div className="my-8">
-          <div className="dark:text-white">
+          <div className="dark:bg-transparent">
             <FormRow
               type="firstname"
               labelText="Fullständigt namn"
               name="firstname"
               value={`${values.firstname} ${values.lastname}`}
               handleChange={handleNameChange}
+              disabled={true}
             />
           </div>
           <div className="dark:text-white">
@@ -421,7 +422,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
           </div>
         </div>
         <label className='text-sm"'>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 dark:text-white">
             <span>Hur självständig ska AI:n vara?</span>
             <input
               type="range"
@@ -434,7 +435,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
                 setTemp(e.target.value);
               }}
             />
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm dark:text-white">
               <span>Lite självständig</span>
               <span>Mycket självständig</span>
             </div>
@@ -442,7 +443,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
         </label>
 
         <div className="flex justify-between items-center mt-4">
-          <Link to="/joblist" className="text-sm">
+          <Link to="/joblist" className="text-sm dark:text-white">
             Avbryt
           </Link>
           <button
