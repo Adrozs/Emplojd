@@ -10,7 +10,9 @@ const HandleGoogleResponse = () => {
   useEffect(() => {
     const handleGoogleAuth = async () => {
       try {
-        const response = await fetch("/api/google/login-google");
+        const response = await fetch(
+          "https://emplojdserver20240531231628.azurewebsites.net/login-google"
+        );
         const data = await response.json();
         if (data.url) {
           window.location.href = data.url;
@@ -20,7 +22,7 @@ const HandleGoogleResponse = () => {
       } catch (error) {
         console.error("Authentication error:", error);
         toast.error(error.message);
-        navigate("/login"); 
+        navigate("/login");
       }
     };
 
@@ -30,10 +32,9 @@ const HandleGoogleResponse = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("/api/google/googleresponse", {
-          method: "GET",
-          credentials: "include",
-        });
+        const response = await fetch(
+          "https://emplojdserver20240531231628.azurewebsites.net//api/google/googleresponse"
+        );
 
         if (response.ok) {
           const data = await response.json();

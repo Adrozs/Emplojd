@@ -69,11 +69,11 @@ const CvManager = () => {
     const authToken = localStorage.getItem("authToken");
 
     const data = {
-      cvManuallyId: Math.floor(Math.random() * 1000000),
       positionEducation: values.educationTitle,
       schoolWorkplace: values.schoolName,
       startDate: values.startDate,
       endDate: values.endDate,
+      cvText: "",
       isEducation: true,
     };
 
@@ -98,7 +98,9 @@ const CvManager = () => {
       setIsLoading(false);
       if (error.response) {
         console.error(
-          `HTTP error! status: ${error.response.status}, message: ${error.response.data}`
+          `HTTP error! status: ${
+            error.response.status
+          }, message: ${JSON.stringify(error.response.data)}`
         );
 
         toast.error("Något gick fel, vänligen försök igen");
@@ -114,12 +116,12 @@ const CvManager = () => {
     const authToken = localStorage.getItem("authToken");
 
     const data = {
-      cvManuallyId: Math.floor(Math.random() * 1000000),
       positionEducation: values.jobTitle,
       schoolWorkplace: values.companyName,
       startDate: values.startDate,
       endDate: values.endDate,
-      isEducation: false, // Ändrat till false för arbetslivserfarenhet
+      cvText: values.workDescription,
+      isEducation: false,
     };
 
     console.log("Data being sent:", data);

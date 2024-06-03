@@ -4,8 +4,9 @@ import customFetch from "../utils/axios";
 const ThirdPartyLogin = () => {
   const handleGoogleLogin = async () => {
     try {
-      const response = await customFetch.post("/login-google");
+      const response = await customFetch.get("/login-google");
       window.location.href = response.data.url;
+      console.log(response);
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }
