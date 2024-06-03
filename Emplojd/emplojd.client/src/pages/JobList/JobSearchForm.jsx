@@ -93,7 +93,7 @@ function JobSearchForm() {
             className="text-[13px] underline dark:text-white"
             to={"/myprofile"}
           >
-            Har du laddat upp ditt cv än?
+            Har du laddat upp ditt CV än?
           </Link>
         </div>
       </div>
@@ -130,14 +130,14 @@ export function SearchForm({
 }) {
   return (
     <form
-      className={`my-4 p-6 rounded-2xl ${
+      className={`my-4 p-6 rounded-2xl shadow-lg ${
         bgColor ? bgColor : "bg-white dark:bg-gray-800"
       }`}
       onSubmit={handleSubmit}
     >
       <div className="mb-5">
         <label className="block mb-2 font-medium text-gray-900 dark:text-white">
-          Ange title, företag, nyckelord
+          Ange titel, företag, nyckelord
         </label>
         <input
           type="text"
@@ -148,10 +148,14 @@ export function SearchForm({
         />
       </div>
       <div className="mb-5">
-        <label className="block mb-2  font-medium text-gray-900 dark:text-white">
+        <label
+          htmlFor="citySelect"
+          className="block mb-2  font-medium text-gray-900 dark:text-white"
+        >
           Ange stad
         </label>
         <select
+          id="citySelect"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"

@@ -73,14 +73,15 @@ export default function LandingPage() {
               <EmplojdLogo fill="white" className="mt-2 w-80" />
             </h1>
             <p className="max-w-sm text-left md:text-left pl-4 pr-4">
-              En tjänst som erbjuder AI-genererade personliga brev som är
-              baserade på ditt CV, dina intressen samt dina preferenser. <br />
-              För att <strong>det ska vara enkelt att söka jobb</strong>
+              En tjänst som använder AI för att enkelt generera personliga brev
+              baserat på dig, ditt cv och jobbannonsen för jobbet du söker.{" "}
+              <br />
+              För att det ska vara <strong> smidigt att söka jobb</strong>
             </p>
             <div className="flex justify-center flex-col">
               <button
                 onClick={handleGetStarted}
-                className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl gap-4"
+                className="flex items-center p-3 px-10 mb-20 bg-[#045199] text-stone-100 rounded-xl font-semibold shadow-xl gap-4 cursor-pointer"
               >
                 Kom igång helt kostnadsfritt
                 <FaArrowRight size={16} />
@@ -89,7 +90,8 @@ export default function LandingPage() {
                 <p>Hitta din nya tjänst</p>
                 <div className="flex justify-center md:justify-center">
                   <button
-                    className="px-6 pt-2"
+                    className="px-6 pt-2 cursor-pointer"
+                    aria-label="Scrolla nedåt knapp"
                     onClick={() => {
                       learnMoreRef.current?.scrollIntoView({
                         behavior: "smooth",
@@ -124,13 +126,13 @@ export default function LandingPage() {
             />
           </svg>
         </div>
-        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96">
+        <div className="relative -top-1 md:-top-20 ls:-top-32 lg:-top-48 xl:-top-96 max-w-[750px]mx-auto">
           <div className=" flex justify-center">
-            <h6 className="font-semi-bold mb-5 text-center text-2xl font-bold dark:text-white">
+            <h2 className="font-semi-bold mb-5 text-center text-3xl font-bold dark:text-white">
               Hitta{" "}
               <span className="text-customBlue dark:text-sky-500">rätt</span>{" "}
               jobb för dig
-            </h6>
+            </h2>
           </div>
           <div className="max-w-[750px] mx-6 ls:mx-auto pb-10">
             {" "}
@@ -149,9 +151,10 @@ export default function LandingPage() {
           <div className="flex justify-center sm:mt-8">
             <Link
               to="/signin"
-              className="w-[290px] flex items-center justify-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100"
+              aria-label="Logga in"
+              className="w-[290px] flex items-center justify-center gap-3 rounded-[12px] p-3 px-12 mb-20 sm:mt-8 bg-customBlue text-stone-100 shadow-lg"
             >
-              Logga In <FaArrowRight size={14} />
+              Logga in <FaArrowRight size={14} />
             </Link>
           </div>
         </div>
