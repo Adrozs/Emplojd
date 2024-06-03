@@ -41,7 +41,7 @@ export default function Footer({ children }) {
                   className="inline z-10"
                   to="/myProfile"
                 >
-                  <span>Min sida</span>
+                  <span>Min profil</span>
                 </Link>
                 <Link
                   onClick={() => window.scrollTo(0, 0)}

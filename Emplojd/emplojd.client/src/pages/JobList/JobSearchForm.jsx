@@ -93,7 +93,7 @@ function JobSearchForm() {
             className="text-[13px] underline dark:text-white"
             to={"/myprofile"}
           >
-            Har du laddat upp ditt cv än?
+            Har du laddat upp ditt CV än?
           </Link>
         </div>
       </div>
