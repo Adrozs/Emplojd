@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 // Pages
 import {
   SignIn,
-  Profile,
   JobList,
   LandingPage,
   ApplyNow,
@@ -71,10 +70,7 @@ const router = createBrowserRouter([
       },
 
       { path: "/signin", element: <SignIn /> },
-      {
-        path: "/profile",
-        element: <Profile />,
-      },
+
       {
         path: "/MyProfile",
         element: <MyProfile />,
@@ -84,7 +80,7 @@ const router = createBrowserRouter([
         element: <SavedCV />,
       },
       {
-        path: "/CreateProfile",
+        path: "/createprofile",
         element: <CreateProfile />,
       },
       {
