@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
+using System.Net.Http;
 
 namespace Emplojd.Server.Controllers
 {
@@ -31,20 +36,9 @@ namespace Emplojd.Server.Controllers
             try
             {
                 ClaimsPrincipal currentUser = User;
-                //string? filePath = await _resumeService.StoreResumeAsync(resumeDto, currentUser);
-                //if (filePath != null)
-                //{
-                //    return Ok(new { FilePath = filePath });
-                //}
-                //else
-                //{
-                //    return BadRequest("Failed to upload resume.");
-                //}
-
                 string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
 
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
 
                 if (resumeDto.ResumeFile != null && resumeDto.ResumeFile.Length > 0)
                 {
@@ -55,7 +49,6 @@ namespace Emplojd.Server.Controllers
                     await _context.SaveChangesAsync();
 
                     return Ok(new { FilePath = cvUrl });
-
                 }
                 else
                 {
@@ -67,16 +60,58 @@ namespace Emplojd.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-            [HttpGet("GetResume")]
-            public async Task<IActionResult> GetResume()
+
+        [HttpGet("GetResume")]
+        public async Task<IActionResult> GetResume()
+        {
+            ClaimsPrincipal currentUser = User;
+            var userProfile = await _resumeService.GetUserResumeAsync(currentUser);
+
+            if (userProfile == null)
+                return NotFound("No matching user found.");
+
+            var resumeFilePath = userProfile.ResumeFilePath;
+
+            if (string.IsNullOrEmpty(resumeFilePath))
+                return NotFound("No resume file found for the user.");
+
+            string resumeText = await GetTextFromCvPdf(resumeFilePath);
+
+            return Ok(new { UserProfile = userProfile, ResumeText = resumeText });
+        }
+
+        private async Task<string> GetTextFromCvPdf(string pdfUrl)
+        {
+            try
             {
-                ClaimsPrincipal currentUser = User;
+                using (HttpClient client = new HttpClient())
+                {
+                    var response = await client.GetAsync(pdfUrl);
+                    response.EnsureSuccessStatusCode();
 
-                var userProfile = await _resumeService.GetUserResumeAsync(currentUser);
-                if (userProfile == null)
-                    return NotFound("No matching user found.");
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await response.Content.CopyToAsync(memoryStream);
+                        memoryStream.Position = 0;
 
-                return Ok(userProfile);
+                        PdfDocument pdfDoc = new PdfDocument(new PdfReader(memoryStream));
+                        var text = new StringBuilder();
+
+                        for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+                        {
+                            var page = pdfDoc.GetPage(i);
+                            text.Append(PdfTextExtractor.GetTextFromPage(page, new SimpleTextExtractionStrategy()));
+                        }
+
+                        pdfDoc.Close();
+                        return text.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error extracting text from PDF: {ex.Message}";
             }
         }
     }
+}
