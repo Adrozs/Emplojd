@@ -3,6 +3,11 @@ import axios from "axios";
 async function getLikeDataBackend() {
   const token = localStorage.getItem("authToken");
 
+  const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  if (favorites.length === 0) {
+    return null;
+  }
+
   return axios
     .get("https://emplojdserver20240531231628.azurewebsites.net/saved-ads", {
       headers: {
@@ -65,6 +70,9 @@ function sendLikeDataBackend(
     )
     .then((response) => {
       console.log("Gillad annons", response.data);
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      favorites.push(headline);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
     })
     .catch((error) => {
       if (error.response) {
@@ -89,6 +97,11 @@ function deleteLikeDataBackend(platsbankenJobAdId) {
     })
     .then((response) => {
       console.log("Annonsen har tagits bort", response.data);
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      const updatedFavorites = favorites.filter(
+        (headline) => headline !== response.data.headline
+      );
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return response.data;
     })
     .catch((error) => {
