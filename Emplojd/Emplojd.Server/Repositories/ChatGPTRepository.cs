@@ -72,7 +72,6 @@ namespace Emplojd.Repositories
             string prompt = $"Jag söker jobbet som {generateCoverLetterDto.JobTitle}. " +
             $"Du ska skriva ett personligt brev åt mig, använd inte allt för formella ord utan mer avslappnat, dock fortfarande i arbetssammanhang. " +
             $"Du behöver inte använda all information utan det som är relevant att ta med för jobbet." +
-            $"Du MÅSTE returnera brevet i html format." +
             $"Här är lite info om mig. " +
             $"Mitt namn är: {firstName}" +
             $"Mitt CV:\n{cvContentText}\n" +
