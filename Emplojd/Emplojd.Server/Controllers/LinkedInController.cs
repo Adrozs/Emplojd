@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Emplojd.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.OAuth;
 
 
 namespace Emplojd.Server.Controllers
@@ -36,14 +37,13 @@ namespace Emplojd.Server.Controllers
                 RedirectUri = Url.Action("LinkedInResponse", new { redirectUri })
             };
 
-            return Challenge(property, LinkedInAuthenticationDefaults.AuthenticationScheme);
+            return Challenge(property, "LinkedIn");
         }
 
         [HttpGet("/linkedinresponse")]
         public async Task<IActionResult> LinkedInResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(LinkedInAuthenticationDefaults.AuthenticationScheme);
-            _logger.LogInformation($"LinkedInAuthentica: {LinkedInAuthenticationDefaults.AuthenticationScheme}");
+            var result = await HttpContext.AuthenticateAsync("LinkedIn");
 
             var claimsPrincipal = result.Principal;
             if (claimsPrincipal == null)
@@ -90,7 +90,7 @@ namespace Emplojd.Server.Controllers
                 }
             }
 
-            var loginInfo = new UserLoginInfo(LinkedInAuthenticationDefaults.AuthenticationScheme, claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier), LinkedInAuthenticationDefaults.AuthenticationScheme);
+            var loginInfo = new UserLoginInfo("LinkedIn", claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier), "LinkedIn");
 
             var userLogins = await _userManager.GetLoginsAsync(user);
             if (!userLogins.Any(l => l.LoginProvider == loginInfo.LoginProvider && l.ProviderKey == loginInfo.ProviderKey))
