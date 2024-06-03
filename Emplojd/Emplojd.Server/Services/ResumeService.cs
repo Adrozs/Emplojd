@@ -1,5 +1,7 @@
 ﻿using Emplojd.Data;
+using Emplojd.Server.ViewModels___DTOs;
 using Emplojd.Server.ViewModels___DTOs.UserProfile;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Emplojd.Server.Services
@@ -55,6 +57,21 @@ namespace Emplojd.Server.Services
             user.ResumeFilePath = filePath;
             await _context.SaveChangesAsync();
             return filePath;
+        }
+
+        public async Task<GetResumeDto> GetUserResumeAsync(ClaimsPrincipal currentUser)
+        {
+            string? email = currentUser.FindFirst(ClaimTypes.Email)?.Value;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                return null;
+
+            return new GetResumeDto
+            {
+                ResumeFilePath = user.ResumeFilePath
+            };
         }
     }
 }
