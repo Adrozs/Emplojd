@@ -51,6 +51,18 @@ const CvManager = () => {
     fileInputRef.current.click();
   };
 
+  const resetFormValues = () => {
+    setValues({
+      educationTitle: "",
+      schoolName: "",
+      startDate: "",
+      endDate: "",
+      jobTitle: "",
+      companyName: "",
+      workDescription: "",
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -80,6 +92,7 @@ const CvManager = () => {
       );
       setIsLoading(false);
       console.log("Success:", response.data);
+      resetFormValues();
       toast.success("Utbildning sparad");
     } catch (error) {
       setIsLoading(false);
@@ -124,6 +137,7 @@ const CvManager = () => {
       );
       setIsLoading(false);
       console.log("Success:", response.data);
+      resetFormValues();
       toast.success("Arbetslivserfarenhet sparad");
     } catch (error) {
       setIsLoading(false);

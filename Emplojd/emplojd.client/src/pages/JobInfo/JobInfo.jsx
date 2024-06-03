@@ -61,7 +61,18 @@ function JobInfo() {
   const handleLike = () => {
     setIsLiked((like) => !like);
     if (!isLiked) {
-      sendLikeDataBackend(job.id, job.headline, job.employer.name);
+      sendLikeDataBackend(
+        job.id,
+        job.headline,
+        job.employer.name,
+        job.description,
+        job.employment_Type,
+        job.working_Hours_Type,
+        job.occupation,
+        job.workplace_Address,
+        job.publication_Date,
+        job.logo_Url
+      );
     } else if (isLiked) {
       deleteLikeDataBackend(job.id);
     }
