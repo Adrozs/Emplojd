@@ -28,7 +28,7 @@ namespace Emplojd.Server.Controllers
             _logger = logger;
         }
         [HttpGet("/login-linkedin")]
-        public IActionResult Login()
+        public IActionResult LinkedInLogin()
         {
             var redirectUri = "https://localhost:54686/linkedinresponse";
             var property = new AuthenticationProperties

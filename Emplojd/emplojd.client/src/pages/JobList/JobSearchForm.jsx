@@ -49,6 +49,7 @@ function JobSearchForm() {
           return;
         }
         setJobsData(data);
+        window.scrollTo(0, 0);
         navigate("/jobsearch", {
           state: { jobsData: data, query: { city, job } },
         });
@@ -73,8 +74,8 @@ function JobSearchForm() {
     setLatest((latest) => latest.filter((search) => search.id !== id));
   }
   return (
-    <div className="p-3 bg-white pb-12 rounded-[20px] max-w-lg mx-auto md:mb-52">
-      <h2 className="mt-3 mb-2 text-center text-2xl font-[600]">
+    <div className="py-6 px-4 bg-white dark:bg-gray-800 rounded-[20px] max-w-lg mx-auto md:mb-52">
+      <h2 className="mt-3 mb-2 text-center text-2xl font-[600] dark:text-white">
         Hitta rätt jobb för dig
       </h2>
       <SearchForm
@@ -87,25 +88,31 @@ function JobSearchForm() {
       />
       <div className="mt-3 max-w-sm mx-auto text-sm text-center border-0 mb-6">
         <div className="flex items-center justify-center gap-2">
-          <FaBullhorn className="mt-1" />
-          <Link className="text-[13px] underline " to={"/myprofile"}>
-            Har du laddat upp ditt cv än?
+          <FaBullhorn className="mt-1 dark:fill-white" />
+          <Link
+            className="text-[13px] underline dark:text-white"
+            to={"/myprofile"}
+          >
+            Har du laddat upp ditt CV än?
           </Link>
         </div>
       </div>
       {latest.length !== 0 && (
         <div className="mt-4 max-w-sm mx-auto text-sm">
-          <p className="mx-6">Dina senaste sökningar:</p>
+          <p className="mx-6 dark:text-white">Dina senaste sökningar:</p>
           <ul className="mt-2">
-            {latest.reverse().map((search, index) => (
-              <Items
-                search={search}
-                key={index}
-                onDelete={handleDeleteHistory}
-                setCity={setCity}
-                setJob={setJob}
-              />
-            ))}
+            {latest
+              .slice(-5)
+              .reverse()
+              .map((search, index) => (
+                <Items
+                  search={search}
+                  key={index}
+                  onDelete={handleDeleteHistory}
+                  setCity={setCity}
+                  setJob={setJob}
+                />
+              ))}
           </ul>
         </div>
       )}
@@ -119,16 +126,18 @@ export function SearchForm({
   setCity,
   job,
   city,
-  latest,
+  bgColor,
 }) {
   return (
     <form
-      className="mx-6 bg-white p-3 rounded-[10px] dark:bg-stone-900 "
+      className={`my-4 p-6 rounded-2xl shadow-lg ${
+        bgColor ? bgColor : "bg-white dark:bg-gray-800"
+      }`}
       onSubmit={handleSubmit}
     >
       <div className="mb-5">
         <label className="block mb-2 font-medium text-gray-900 dark:text-white">
-          Ange title, företag, nyckelord
+          Ange titel, företag, nyckelord
         </label>
         <input
           type="text"
@@ -139,10 +148,14 @@ export function SearchForm({
         />
       </div>
       <div className="mb-5">
-        <label className="block mb-2  font-medium text-gray-900 dark:text-white">
+        <label
+          htmlFor="citySelect"
+          className="block mb-2  font-medium text-gray-900 dark:text-white"
+        >
           Ange stad
         </label>
         <select
+          id="citySelect"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="shadow-sm bg-gray-50 border border-gray-300 text-stone-800 text-sm rounded-lg  block w-full p-2.5 dark:text-white dark:bg-neutral-800 dark:border-neutral-700"
@@ -187,14 +200,15 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
   };
 
   return (
-    <div className="flex gap-2 justify-between items-center bg-white mb-3 border-2 mx-6 p-2.5 rounded-xl">
-      <div className="flex gap-5 ">
+    <div className="flex gap-2 justify-between items-center bg-white dark:text-white dark:bg-slate-700 dark:border-slate-800 mb-3 border-2 mx-6 px-3 h-12 rounded-xl">
+      <div className="flex gap-5">
         <Tooltip tooltip="Sök igen">
           <button onClick={handleClickForSearchAgain}>
             {" "}
             <PiClockCounterClockwiseBold
-              size={20}
-              className="text-customBlue"
+              size={16}
+              viewBox="20 28 208 200"
+              className="text-customBlue relative top-0.5"
             />
           </button>
         </Tooltip>
@@ -212,7 +226,11 @@ export function DisplaySearchHistory({ search, onDelete, setCity, setJob }) {
       </div>
       <Tooltip tooltip="Ta bort">
         <button onClick={onDelete}>
-          <img src="/trash.png" alt="papperskorg" className="h-[16px]" />
+          <img
+            src="/trash.png"
+            alt="papperskorg"
+            className="h-[16px] relative top-0.5"
+          />
         </button>
       </Tooltip>
     </div>

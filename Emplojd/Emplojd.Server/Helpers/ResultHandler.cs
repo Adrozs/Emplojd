@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Emplojd.Server.ResultObjects;
+using Microsoft.AspNetCore.Identity;
 
 namespace Emplojd.Helpers
 {

@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import html2pdf from "html2pdf.js";
 import Loader from "../../ui/Loader";
 import Footer from "../../components/Footer";
 import Switch from "../../components/Switch";
@@ -11,14 +12,22 @@ import { useDarkMode } from "../../components/Icons/DarkModeHook";
 //Icons
 
 import { RiCheckboxCircleFill } from "react-icons/ri";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-import { getOneBackendJob, getProfileInfo } from "../../utils/backendserver";
+import {
+  FaArrowRight,
+  FaArrowLeft,
+  FaCircleCheck,
+  FaRegCopy,
+  FaDownload,
+} from "react-icons/fa6";
+import { getOneBackendJob } from "../../utils/backendserver";
 
 function ApplyNow() {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [daySincePosted, setDaySincePosted] = useState(null);
   const [page, setPage] = useState(1);
+  const [temp, setTemp] = useState(0.5);
+  const [copyText, setCopyText] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -58,115 +67,152 @@ function ApplyNow() {
   }
 
   return (
-    <main className="mb-2">
-      <HeaderOtherPages>
-        <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
-      </HeaderOtherPages>
-      <div className="my-4">
-        {job && (
-          <div className="mt-4 text-center font-semibold">
-            <h2 className="text-2xl">Generera ditt personliga brev</h2>
-            <div className=" m-4 flex items-center justify-center gap-4">
-              <span
-                className={
-                  page === 1
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full  bg-slate-300"
-                }
-              ></span>
-              <span
-                className={
-                  page === 2
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full  bg-slate-300"
-                }
-              ></span>
-              <span
-                className={
-                  page === 3
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full bg-slate-300"
-                }
-              ></span>
-              <span
-                className={
-                  page === 4
-                    ? "h-4 w-4 bg-customBlue rounded-full"
-                    : "h-4 w-4 rounded-full bg-slate-300"
-                }
-              ></span>
+    <>
+      <main className="mb-2 lg:mb-24  md:mb-24">
+        <HeaderOtherPages>
+          <img src="/LogoEmplojd.png" alt="" className="w-[45px]" />
+        </HeaderOtherPages>
+        <div className="my-4 md:mt-20">
+          {job && (
+            <div className="mt-4 text-center font-semibold">
+              {page <= 3 ? (
+                <h2 className="text-2xl dark:text-white">
+                  Generera ditt personliga brev
+                </h2>
+              ) : (
+                <h2 className="text-2xl dark:text-white">
+                  Ditt brev är redo att{" "}
+                  <span className="text-customBlue">kopieras</span>{" "}
+                </h2>
+              )}
+              <div className=" m-4 flex items-center justify-center gap-4">
+                <span
+                  className={
+                    page === 1
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full  bg-slate-300"
+                  }
+                ></span>
+                <span
+                  className={
+                    page === 2
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full  bg-slate-300"
+                  }
+                ></span>
+                <span
+                  className={
+                    page === 3
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full bg-slate-300"
+                  }
+                ></span>
+                <span
+                  className={
+                    page === 4
+                      ? "h-4 w-4 bg-customBlue rounded-full"
+                      : "h-4 w-4 rounded-full bg-slate-300"
+                  }
+                ></span>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      {page === 1 && (
-        <>
-          <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
-            <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] ">
-              <div>
-                <div className="grid grid-cols-2 w-[70%] items-center ">
-                  <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
-                  <div className="flex justify-center">
-                    <p className="text-sm ">Jobb du söker</p>
+          )}
+        </div>
+        {page === 1 && (
+          <>
+            <ul className="flex justify-center my-14  max-w-lg mx-auto pb-12">
+              <li className="h-[260px] w-[90%] bg-white p-4 flex flex-col justify-between  rounded-[20px] shadow-lg ">
+                <div>
+                  <div className="grid grid-cols-2 w-[70%] items-center ">
+                    <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
+                    <div className="flex justify-center">
+                      <p className="text-sm ">Jobb du söker</p>
+                    </div>
+                  </div>
+                  <div className="w-full flex items-center justify-center mt-1">
+                    <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
                   </div>
                 </div>
-                <div className="w-full flex items-center justify-center mt-1">
-                  <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold text-xl text-stone-900">
-                  {job.headline}
-                </h3>
-
-                <p className="text-lg">{job.employer.name}</p>
                 <div>
-                  <p className="text-sm my-2">
-                    {job.workplace_Address.municipality} - {daySincePosted}{" "}
-                    dagar sen
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2 text-[12px]">
-                {job.working_Hours_Type.label ? (
-                  <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
-                    {job.working_Hours_Type.label}
-                  </span>
-                ) : (
-                  <span className="bg-purple-300 px-2 py-1">
-                    {job.employment_type.label}{" "}
-                  </span>
-                )}
+                  <h3 className="font-semibold text-xl text-stone-900">
+                    {job.headline}
+                  </h3>
 
-                <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
-                  {job.occupation.label}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <button onClick={handleBack}>Avbryt</button>
-                <button
-                  className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3"
-                  onClick={() => {
-                    setPage(2);
-                    window.scrollTo(0, 0);
-                  }}
-                >
-                  Nästa <FaArrowRight />
-                </button>
-              </div>
-            </li>
-          </ul>
-        </>
-      )}
-      {page === 2 && <ApplySideTwo job={job} page={page} setPage={setPage} />}
-      {page === 3 && <ApplySideThree job={job} page={page} setPage={setPage} />}
-      {page === 4 && <ApplySideFour job={job} page={page} setPage={setPage} />}
+                  <p className="text-lg">{job.employer.name}</p>
+                  <div>
+                    <p className="text-sm my-2">
+                      {job.workplace_Address.municipality} - {daySincePosted}{" "}
+                      dagar sen
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 text-[12px]">
+                  {job.working_Hours_Type.label ? (
+                    <span className="bg-[#CFEBD4] px-2 py-1 rounded-[2px]">
+                      {job.working_Hours_Type.label}
+                    </span>
+                  ) : (
+                    <span className="bg-purple-300 px-2 py-1">
+                      {job.employment_type.label}{" "}
+                    </span>
+                  )}
+
+                  <span className="bg-[#C3E7F3] px-2 py-1 rounded-[2px]">
+                    {job.occupation.label}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <button className="cursor-pointer" onClick={handleBack}>
+                    Avbryt
+                  </button>
+                  <button
+                    className="bg-customBlue rounded-[4px] text-white p-1 w-[70%] flex items-center justify-center gap-3 cursor-pointer"
+                    onClick={() => {
+                      setPage(2);
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    Nästa <FaArrowRight />
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </>
+        )}
+        {page === 2 && (
+          <ApplySideTwo
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            setTemp={setTemp}
+          />
+        )}
+        {page === 3 && (
+          <ApplySideThree
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            setCopyText={setCopyText}
+          />
+        )}
+        {page === 4 && (
+          <ApplySideFour
+            job={job}
+            page={page}
+            setPage={setPage}
+            temp={temp}
+            copyText={copyText}
+          />
+        )}
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
 
-function ApplySideTwo({ job, page, setPage }) {
+function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
   const initialState = {
     email: "",
     isMember: true,
@@ -208,7 +254,7 @@ function ApplySideTwo({ job, page, setPage }) {
 
       try {
         const response = await fetch(
-          `https://localhost:54686/api/UserProfile/GetUserProfile`,
+          `https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/GetUserProfile`,
           {
             method: "GET",
             headers: {
@@ -268,7 +314,7 @@ function ApplySideTwo({ job, page, setPage }) {
 
   return (
     <ul className="flex justify-center my-14 max-w-lg mx-auto pb-12">
-      <div className=" w-[90%] bg-white p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] ">
+      <div className=" w-[90%] bg-white p-4 px-8 pb-10 flex flex-col text-stone-800 rounded-[20px] shadow-lg">
         <div>
           <div className="grid grid-cols-2 w-[70%] items-center">
             <h2 className="ml-10 text-2xl font-semibold">{page}.</h2>
@@ -327,6 +373,13 @@ function ApplySideTwo({ job, page, setPage }) {
             <input
               type="range"
               className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer custom-slider"
+              min="0.5"
+              max="1"
+              step="0.1"
+              value={temp}
+              onChange={(e) => {
+                setTemp(e.target.value);
+              }}
             />
             <div className="flex justify-between text-sm">
               <span>Lite självständig</span>
@@ -340,7 +393,7 @@ function ApplySideTwo({ job, page, setPage }) {
             Avbryt
           </Link>
           <button
-            className=" w-[35%] text-customBlue py-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 "
+            className=" w-[35%] text-customBlue py-1 border border-customBlue rounded-[4px] flex items-center justify-center gap-2 cursor-pointer"
             onClick={() => {
               setPage(1);
               window.scrollTo(0, 0);
@@ -363,35 +416,82 @@ function ApplySideTwo({ job, page, setPage }) {
   );
 }
 
-function ApplySideFour({ job, page, setPage }) {
+function ApplySideFour({ job, page, setPage, copyText }) {
+  const [copied, setCopied] = useState(false);
+
+  /* Copy text */
+  const copyTextToClipboard = () => {
+    navigator.clipboard
+      .writeText(copyText)
+      .then(() => setCopied(true))
+      .catch((error) => console.error("Could not copy text:", error));
+  };
+
+  const saveAsPdf = () => {
+    const confirmDownload = window.confirm("Vill du ladda ner brevet som PDF?");
+    if (confirmDownload) {
+      const element = document.createElement("div");
+      element.style.whiteSpace = "pre-wrap";
+      element.style.padding = "5px";
+      element.innerText = copyText;
+      html2pdf().from(element).save();
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center my-14  max-w-lg mx-auto pb-12">
-      <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col gap-4 rounded-[20px]">
-        <div className="mx-auto">
-          <RiCheckboxCircleFill size={36} />
+    <>
+      <div className="flex flex-col items-center justify-center my-14 max-w-lg mx-auto pb-12">
+        <div className="h-[250px] w-[90%] bg-white p-4 flex flex-col justify-between rounded-[20px] shadow-md">
+          <div className="mx-auto">
+            <RiCheckboxCircleFill size={46} />
+          </div>
+          <div className="px-10 text-center">
+            Ditt personliga brev är sparat.
+          </div>
+          <div className="flex flex-col items-center gap-4">
+            {copied && (
+              <p className="flex items-center gap-2 text-sm">
+                <span className="text-lime-500">
+                  <FaCircleCheck size={18} />
+                </span>{" "}
+                Brevet har kopierats.
+              </p>
+            )}
+            <button
+              onClick={copyTextToClipboard}
+              className="text-sm bg-customBlue text-white w-[156px] rounded-[4px] text-[13px] flex items-center justify-center gap-3 py-2 cursor-pointer shadow-lg"
+            >
+              <FaRegCopy size={18} /> Kopiera brev
+            </button>
+          </div>
+          <div className="flex flex-col justify-center items-center text-sm">
+            <a
+              onClick={saveAsPdf}
+              className="underline flex items-center gap-1"
+            >
+              <FaDownload />
+              Ladda ner personligt brev
+            </a>
+          </div>
         </div>
-        <div className="px-10">Ditt personliga brev är sparat.</div>
-        <div className="flex flex-col items-center gap-4">
+        <div className="mt-6 w-[90%] bg-white p-4 flex gap-4 rounded-[20px] justify-center shadow-md ">
           <Link
-            to="/NoEarlierCoverLetter"
-            className="text-sm text-customBlue border border-customBlue rounded-[4px] flex items-center justify-center gap-1 text-[13px] w-[156px] py-1"
+            to="/joblist"
+            className="text-[13px] text-customBlue border border-customBlue rounded-[8px] flex items-center justify-center gap-1  w-[156px] py-1 px-1"
           >
-            Gå till sparade brev
+            <FaArrowLeft /> Tillbaka till annonser
           </Link>
+
           <a
             href={job.application_Details.url}
             target="_blank"
-            className="text-sm bg-customBlue text-white w-[156px] py-1 rounded-[4px] text-[13px] flex items-center justify-center gap-3"
+            className=" bg-gradient-to-br to-[#CA81ED] from-[#0EA5E9] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat text-white w-[156px] py-1 rounded-[8px] text-[13px] flex items-center justify-center gap-3"
           >
             Ansök här <FaArrowRight />
           </a>
-
-          <Link className="text-sm underline" to="/joblist">
-            Sök fler jobb
-          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

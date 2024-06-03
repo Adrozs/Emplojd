@@ -1,13 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import HeaderOtherPages from '../../components/Header/HeaderOtherPages';
-import CvFileSelecter from '../../components/CvFileSelecter';
 import Footer from '../../components/Footer';
 import FormRow from '../../components/FormRow';
 import ListForm from '../../components/ListForm';
 import 'react-datepicker/dist/react-datepicker.css';
-import DatePick from '../../components/DatePick';
-
-import AddNewButton from '../../components/AddNewButton';
+import CvManager from '../../components/CvManager';
+import { useDarkMode } from '../../components/Icons/DarkModeHook';
 
 function CreateProfile() {
 	const initialState = {
@@ -21,23 +19,19 @@ function CreateProfile() {
 	};
 
 	const [currentStep, setCurrentStep] = useState(1);
-	const [fileName, setFileName] = useState('INGEN FIL ÄR VALD');
-	const [manualInputEnabled, setManualInputEnabled] = useState(false);
-	const fileInputRef = useRef(null);
 	const [values, setValues] = useState(initialState);
 	const [interests, setInterests] = useState([]);
 	const [descriptiveWords, setDescriptiveWords] = useState([]);
+	const { isDarkMode } = useDarkMode();
 
-	const [focusedInput, setFocusedInput] = useState(null);
-
-	const messages = [
-		'Börja hitta jobb direkt efter du har skapat din jobbprofil!',
-		<>
-			<span className="font-semibold">Snyggt {values.firstname}!</span> <br />{' '}
-			Nu behöver vi bara fråga några saker till!
-		</>,
-		'Nu är du nästan färdig med din jobbprofil! Använd dig av ditt CV för att få ännu bättre personliga brev!',
-	];
+  const messages = [
+    "Börja hitta jobb direkt efter du har skapat din jobbprofil!",
+    <>
+      <span className="font-semibold">{`Snyggt ${values.firstname}!`}</span> <br />{" "}
+      Nu behöver vi bara fråga några saker till!
+    </>,
+    "Nu är du nästan färdig med din jobbprofil! Använd dig av ditt CV för att få ännu bättre personliga brev!",
+  ];
 
 	const nextStep = () => {
 		if (currentStep < 3) {
@@ -54,23 +48,6 @@ function CreateProfile() {
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setValues((prev) => ({ ...prev, [name]: value }));
-	};
-
-	const handleFileChange = (event) => {
-		const file = event.target.files[0];
-		if (file) {
-			setFileName(file.name);
-		}
-	};
-
-	const handleDeleteFile = () => {
-		setFileName('INGEN FIL ÄR VALD');
-		fileInputRef.current.value = null;
-	};
-
-	const triggerFileInput = (event) => {
-		event.stopPropagation();
-		fileInputRef.current.click();
 	};
 
 	const handleListFormChange = (type, value) => {
@@ -99,7 +76,7 @@ function CreateProfile() {
 
 		try {
 			const response = await fetch(
-				'https://localhost:54686/api/UserProfile/CreateUserProfile',
+				'https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/CreateUserProfile',
 				{
 					method: 'POST',
 					headers: {
@@ -131,13 +108,20 @@ function CreateProfile() {
 		}
 	};
 
+	const wordBgColorInterests = isDarkMode ? 'bg-indigo-500' : 'bg-sky-100';
+	const wordBgColorDescriptiveWords = isDarkMode
+		? 'bg-indigo-500'
+		: 'bg-purple-100';
+
 	return (
 		<>
 			<HeaderOtherPages />
 			<div className="flex justify-center">
 				<div className="w-full">
-					<h2 className="p-4 text-2xl font-bold mb-4">Skapa jobbprofil</h2>
-					<p className="bg-blue-100 p-4 rounded-lg mb-4 mx-8">
+					<h2 className="p-4 text-2xl font-bold mb-4 dark:text-white">
+						Skapa jobbprofil
+					</h2>
+					<p className="bg-blue-100 dark:bg-gray-900 dark:text-white p-4 rounded-lg mb-4 mx-8">
 						{messages[currentStep - 1]}
 					</p>
 
@@ -175,15 +159,16 @@ function CreateProfile() {
 						)}
 
 						{currentStep === 2 && (
-							<div className="mx-4">
+							<div className="mx-4 dark:text-white">
 								<ListForm
-									wordBgColor="bg-sky-100"
+									wordBgColor={wordBgColorInterests}
 									name="Vad är dina intressen?"
 									labelBgColor="none"
 									onChange={(value) => handleListFormChange('interests', value)}
 									value={interests}
 								/>
 								<ListForm
+									wordBgColor={wordBgColorInterests}
 									name="Beskriv dig själv med några ord"
 									labelBgColor="none"
 									onChange={(value) =>
@@ -194,97 +179,12 @@ function CreateProfile() {
 							</div>
 						)}
 
-						{currentStep === 3 && (
-							<div className="mx-4">
-								<CvFileSelecter
-									fileName={fileName}
-									handleFileChange={handleFileChange}
-									handleDeleteFile={handleDeleteFile}
-									fileInputRef={fileInputRef}
-									triggerFileInput={triggerFileInput}
-								/>
-
-								<div className="flex items-center my-4 pl-2">
-									<input
-										type="checkbox"
-										id="manualInput"
-										name="manualInput"
-										className="mr-2"
-										checked={manualInputEnabled}
-										onChange={() => setManualInputEnabled((prev) => !prev)}
-									/>
-									<label htmlFor="manualInput" className="text-gray-700">
-										Ange information manuellt
-									</label>
-								</div>
-								<h2 className="text-xl font-bold ml-2">Utbildning</h2>
-								<div className="mb-6">
-									<FormRow
-										type="text"
-										name="Utbildningstitel"
-										placeholder="Ange namn på utbildning"
-										handleChange={handleChange}
-										disabled={!manualInputEnabled}
-									/>
-									<FormRow
-										type="text"
-										name="Skolans namn"
-										placeholder="Ange namn på skolan/lärosäte"
-										handleChange={handleChange}
-										disabled={!manualInputEnabled}
-									/>
-								</div>
-								<DatePick
-									name="Studieperiod"
-									labelText="Studieperiod (från - till)"
-									disabled={!manualInputEnabled}
-								/>
-
-								<AddNewButton />
-
-								<h2 className="text-xl font-bold ml-2 mt-14">
-									Arbetslivserfarenhet
-								</h2>
-								<div className="mb-6 mt-2">
-									<FormRow
-										type="text"
-										name="Jobbtitel"
-										placeholder="Ange jobbtitel"
-										handleChange={handleChange}
-										disabled={!manualInputEnabled}
-									/>
-									<FormRow
-										type="text"
-										name="Företagsnamn"
-										placeholder="Ange företagsnamn"
-										handleChange={handleChange}
-										disabled={!manualInputEnabled}
-									/>
-									<FormRow
-										type="textarea"
-										name="Arbetsuppgifter (max 500 tecken)"
-										placeholder="Beskriv dina arbetsuppgifter"
-										handleChange={handleChange}
-										disabled={!manualInputEnabled}
-										maxLength={500}
-										rows={5}
-									/>
-								</div>
-
-								<DatePick
-									name="Anställningsperiod"
-									labelText="Anställningsperiod (från - till)"
-									disabled={!manualInputEnabled}
-								/>
-
-								<AddNewButton />
-							</div>
-						)}
+						{currentStep === 3 && <CvManager />}
 					</div>
 
-					<div className="flex justify-around items-center shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.3)] bg-gray-100 h-52">
+					<div className="flex justify-around items-center shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.3)] bg-gray-100 dark:bg-slate-800 h-52">
 						<button
-							className="border-2 border-sky-500 p-6 rounded-xl text-white text-xl  mb-2 flex justify-between items-center"
+							className="border-2 border-sky-500 dark:border-indigo-700 p-6 rounded-xl text-white text-xl  mb-2 flex justify-between items-center"
 							onClick={prevStep}
 							disabled={currentStep === 1}
 						>
@@ -294,16 +194,13 @@ function CreateProfile() {
 								viewBox="0 0 24 24"
 								fill="none"
 								xmlns="http://www.w3.org/2000/svg"
-								className="flex items-center"
+								className="flex items-center fill-sky-500 dark:fill-indigo-700"
 							>
-								<path
-									d="M24 12C24 8.8174 22.7357 5.76516 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0C8.8174 0 5.76516 1.26428 3.51472 3.51472C1.26428 5.76516 0 8.8174 0 12C0 15.1826 1.26428 18.2348 3.51472 20.4853C5.76516 22.7357 8.8174 24 12 24C15.1826 24 18.2348 22.7357 20.4853 20.4853C22.7357 18.2348 24 15.1826 24 12ZM12.7031 6.32812C13.1438 5.8875 13.8562 5.8875 14.2922 6.32812C14.7281 6.76875 14.7328 7.48125 14.2922 7.91719L10.2141 11.9953L14.2922 16.0734C14.7328 16.5141 14.7328 17.2266 14.2922 17.6625C13.8516 18.0984 13.1391 18.1031 12.7031 17.6625L7.82812 12.7969C7.3875 12.3563 7.3875 11.6438 7.82812 11.2078L12.7031 6.32812Z"
-									fill="#0EA5E9"
-								/>
+								<path d="M24 12C24 8.8174 22.7357 5.76516 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0C8.8174 0 5.76516 1.26428 3.51472 3.51472C1.26428 5.76516 0 8.8174 0 12C0 15.1826 1.26428 18.2348 3.51472 20.4853C5.76516 22.7357 8.8174 24 12 24C15.1826 24 18.2348 22.7357 20.4853 20.4853C22.7357 18.2348 24 15.1826 24 12ZM12.7031 6.32812C13.1438 5.8875 13.8562 5.8875 14.2922 6.32812C14.7281 6.76875 14.7328 7.48125 14.2922 7.91719L10.2141 11.9953L14.2922 16.0734C14.7328 16.5141 14.7328 17.2266 14.2922 17.6625C13.8516 18.0984 13.1391 18.1031 12.7031 17.6625L7.82812 12.7969C7.3875 12.3563 7.3875 11.6438 7.82812 11.2078L12.7031 6.32812Z" />
 							</svg>
 						</button>
 						<button
-							className="bg-sky-500 h-16 rounded-xl text-white text-lg hover:bg-[#045199] active:bg-[#066DCC] mb-2 flex px-8 items-center"
+							className="bg-sky-500 h-16 rounded-xl text-white text-lg hover:bg-[#045199] active:bg-[#066DCC] dark:bg-indigo-700 mb-2 flex px-8 items-center"
 							onClick={currentStep === 3 ? handleSubmit : nextStep}
 							disabled={
 								currentStep === 3 && (!values.firstname || !values.lastname)

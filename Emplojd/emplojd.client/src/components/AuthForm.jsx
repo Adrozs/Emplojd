@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormRow from "./FormRow";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useMutation } from "react-query";
 import customFetch from "../utils/axios";
 import { LoginRightArrow, SignUpCirclePlus } from "./Icons/AuthFormSvg";
 import ThirdPartyLogin from "./ThirdPartyLogin";
+import Loader from "../ui/Loader";
 
 const initialState = {
   email: "",
@@ -17,17 +18,28 @@ const initialState = {
 };
 const AuthForm = () => {
   const [values, setValues] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    const state = location.state;
+    if (state && state.isSignUp) {
+      setValues((prev) => ({ ...prev, isMember: false }));
+    }
+  }, [location]);
 
   const createUserMutation = useMutation(
     async (user) => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
       const response = await customFetch.post("/create-account", user, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
+      setIsLoading(false);
       return response.data;
     },
     {
@@ -39,7 +51,23 @@ const AuthForm = () => {
         navigate("/confirm-account");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail);
+        setIsLoading(false);
+        if (
+          error.response.data.includes("Failed to create account: Username")
+        ) {
+          toast.error("Epostadressen är upptagen");
+        } else if (
+          error.response.data.includes(
+            "Failed to create account: Passwords must be at least 8 characters., Passwords must have at least one non alphanumeric character."
+          )
+        ) {
+          toast.error(
+            "Lösenordet måste vara minst 8 tecken långt och inkludera en icke bokstav"
+          );
+        } else {
+          toast.error("Något gick fel vid skapandet av konto");
+        }
+
         console.error("Error creating user:", error);
       },
     }
@@ -47,12 +75,14 @@ const AuthForm = () => {
 
   const signInUserMutation = useMutation(
     async (user) => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
       const response = await customFetch.post("/login", user, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
+      setIsLoading(false);
       return response.data;
     },
     {
@@ -64,7 +94,20 @@ const AuthForm = () => {
         navigate("/joblist");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail);
+        setIsLoading(false);
+        if (
+          error.response.data.includes(
+            "Failed to login: Invalid login attempt."
+          )
+        ) {
+          toast.error("Felaktigt lösenord");
+        } else if (
+          error.response.data.includes("Failed to login: No user found.")
+        ) {
+          toast.error("Ingen användare hittades på epostadressen");
+        } else {
+          toast.error("Något gick fel vid inloggningen");
+        }
         console.error("Error signing in:", error);
       },
     }
@@ -113,7 +156,7 @@ const AuthForm = () => {
 
   return (
     <form
-      className="m-5 my-12 dark:bg-gray-800 dark:text-white"
+      className="flex flex-col gap-2 m-5 dark:bg-gray-800 dark:text-white"
       onSubmit={onSubmit}
     >
       <FormRow
@@ -128,11 +171,11 @@ const AuthForm = () => {
         <FormRow
           type="email"
           name="emailConfirmed"
-          labelText="Bekräfta Email"
+          labelText="Bekräfta email"
           value={values.emailConfirmed}
           handleChange={handleChange}
           placeholder="confirm.email@email.com"
-          compareValue={email.value}
+          compareValue={values.email}
         />
       )}
       <FormRow
@@ -147,14 +190,14 @@ const AuthForm = () => {
         <FormRow
           type="password"
           name="passwordConfirmed"
-          labelText="Bekräfta Lösenord"
+          labelText="Bekräfta lösenord"
           value={values.passwordConfirmed}
           handleChange={handleChange}
           placeholder="●●●●●●●●●●●●"
-          compareValue={password.value}
+          compareValue={values.password}
         />
       )}
-      <div className="flex justify-end pb-6">
+      <div className="flex justify-end pb-2">
         <Link
           to="/forgot-password"
           className="underline underline-offset-2 text-[#045199] dark:text-sky-600"
@@ -162,10 +205,10 @@ const AuthForm = () => {
           Glömt ditt konto?
         </Link>
       </div>
-      
-      <div className="flex flex-col gap-4">
+      <>{isLoading && <Loader />}</>
+      <div className="flex flex-col gap-2">
         <button
-          className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 mb-2 flex px-8 justify-between items-center"
+          className="w-full bg-[#0783F6] h-16 rounded-xl text-white text-xl hover:bg-[#045199] active:bg-[#066DCC] dark:bg-sky-800 dark:hover:bg-sky-700 dark:active:bg-sky-600 flex px-8 justify-between items-center"
           type="submit"
         >
           {values.isMember ? (
@@ -179,21 +222,19 @@ const AuthForm = () => {
           )}
         </button>
       </div>
-      <div className="my-8">{values.isMember && <ThirdPartyLogin />}</div>
+      <div className="my-3">{values.isMember && <ThirdPartyLogin />}</div>
       <div className="flex justify-center gap-4">
-          <div>
-            {!values.isMember
-              ? "Har du redan ett konto?"
-              : "Har du inget konto?"}
-          </div>
-          <button
-            className="text-[#066DCC] dark:text-sky-600 underline underline-offset-2"
-            type="button"
-            onClick={toggleForm}
-          >
-            {!values.isMember ? "Logga In" : "Skapa konto"}
-          </button>
+        <div>
+          {!values.isMember ? "Har du redan ett konto?" : "Har du inget konto?"}
         </div>
+        <button
+          className="text-[#066DCC] dark:text-sky-600 underline underline-offset-2 mb-2"
+          type="button"
+          onClick={toggleForm}
+        >
+          {!values.isMember ? "Logga In" : "Skapa konto"}
+        </button>
+      </div>
     </form>
   );
 };

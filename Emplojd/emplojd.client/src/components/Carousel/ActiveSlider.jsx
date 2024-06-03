@@ -7,21 +7,24 @@ import { ServiceData } from "./index";
 
 const ActiveSlider = () => {
   return (
-    <div className="flex items-center justify-center h-[450px] flex-col mt-12 mb-12 sm:h-full">
+    <div className="flex items-center justify-center min-h-[450px] flex-col mt-12 mb-12 sm:h-full px-4">
       <Swiper
         breakpoints={{
           340: {
             slidesPerView: 1,
             spaceBetween: 15,
+            centeredSlides: true,
           },
           600: {
             slidesPerView: 2,
             spaceBetween: 15,
+            centeredSlides: false,
           },
 
           1100: {
             slidesPerView: 3,
             spaceBetween: 15,
+            centeredSlides: false,
           },
         }}
         freeMode={true}
@@ -29,10 +32,10 @@ const ActiveSlider = () => {
           clickable: true,
         }}
         modules={[FreeMode, Pagination]}
-        className="max-w-[90%] lg:max-w-[80%]"
+        className="max-w-[90%] lg:max-w-[80%] swiper-container"
       >
         {ServiceData.map((item) => (
-          <SwiperSlide key={item.title}>
+          <SwiperSlide key={item.title} className="swiper-slide">
             <div className="flex flex-col justify-start items-start mb-20 group relative shadow-lg text-stone-800 rounded-xl px-6 py-8 h-[400px] w-[310px] overflow-hidden dark:text-white">
               <div className="absolute inset-0  bg-stone-50 dark:bg-stone-900" />
               <div className="absolute inset-0 " />

@@ -13,6 +13,7 @@ import {
 } from "./Icons/MenySvg";
 import { removeUserFromLocalStorage } from "../utils/localStorage";
 import DarkModeToggleSwitch from "./DarkModeToggleSwitch";
+import EmplojdLogo from "./Icons/EmplojdLogoSVG";
 
 function Modal({ onClose, menu }) {
   const { isLoggedIn, logout } = useAuth();
@@ -28,7 +29,7 @@ function Modal({ onClose, menu }) {
   };
 
   const handleToggle = () => {
-      setIsDarkMode(!isDarkMode);
+    setIsDarkMode(!isDarkMode);
   };
 
   useEffect(() => {
@@ -66,87 +67,119 @@ function Modal({ onClose, menu }) {
                     className="flex items-end gap-4 text-gray-700 dark:text-white"
                   >
                     {" "}
-                    <LogOutSVG isDarkMode={isDarkMode}/>
+                    <LogOutSVG isDarkMode={isDarkMode} />
                     <span> Logga ut</span>
                   </button>
                 ) : (
                   <button className="flex items-center gap-4 text-gray-700 dark:text-white">
                     {" "}
-                    <LogInSVG isDarkMode={isDarkMode}/>
+                    <LogInSVG isDarkMode={isDarkMode} />
                     <Link to="/signin">
                       <span> Logga in</span>
                     </Link>
                   </button>
                 )}
                 <button onClick={() => onClose(!menu)} className="self-end">
-                  <CancelSVG className="bg-white bg-clip-border" isDarkMode={isDarkMode}/>
+                  <CancelSVG
+                    className="bg-white bg-clip-border"
+                    isDarkMode={isDarkMode}
+                  />
                 </button>
               </div>
               <div className="flex flex-col  mx-auto">
-                <NavItem>
-                  <SearchSVG isDarkMode={isDarkMode}/>{" "}
-                  <Link to="/joblist">
-                    <span className="text-gray-700 font-medium dark:text-white">
-                      Sök Jobb
+                <NavItem isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}>
+                  <SearchSVG isDarkMode={isDarkMode} />
+                  <Link
+                    to={isLoggedIn ? "/joblist" : "#"}
+                    className={isLoggedIn ? "" : "pointer-events-none"}
+                  >
+                    <span
+                      className={`font-medium ${
+                        isLoggedIn
+                          ? "text-gray-700 dark:text-white"
+                          : "text-gray-400 cursor-none"
+                      }`}
+                    >
+                      Sök jobb
                     </span>
                   </Link>
                 </NavItem>
-                <NavItem>
-                  <ProfileSVG isDarkMode={isDarkMode}/>
-                  <Link to="/MyProfile">
-                    <span className="text-gray-700 font-medium dark:text-white">
-                      Min Profil
+                <NavItem isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}>
+                  <ProfileSVG isDarkMode={isDarkMode} />
+                  <Link
+                    to={isLoggedIn ? "/MyProfile" : "#"}
+                    className={isLoggedIn ? "" : "pointer-events-none"}
+                  >
+                    <span
+                      className={`font-medium ${
+                        isLoggedIn
+                          ? "text-gray-700 dark:text-white"
+                          : "text-gray-400 cursor-none"
+                      }`}
+                    >
+                      Min profil
                     </span>
                   </Link>
                 </NavItem>
                 <div className="flex flex-col">
-                  <NavItem>
-                    <HeartSVG isDarkMode={isDarkMode}/>
-                    {isLoggedIn ? (
-                      <Link to="/saved">
-                        <span className="text-gray-700 font-medium dark:text-white">
-                          Sparade jobb
-                        </span>
-                      </Link>
-                    ) : (
-                      <span className="text-gray-400 font-medium ">
+                  <NavItem isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}>
+                    <HeartSVG isDarkMode={isDarkMode} />
+                    <Link
+                      to={isLoggedIn ? "/saved" : "#"}
+                      className={isLoggedIn ? "" : "pointer-events-none"}
+                    >
+                      <span
+                        className={`font-medium ${
+                          isLoggedIn
+                            ? "text-gray-700 dark:text-white"
+                            : "text-gray-400 cursor-none"
+                        }`}
+                      >
                         Sparade jobb
                       </span>
-                    )}
+                    </Link>
                   </NavItem>
-                  <NavItem>
-                    <LetterSVG isDarkMode={isDarkMode}/>
-                    {isLoggedIn ? (
-                      <Link to="/NoEarlierCoverLetter">
-                        <span className="text-gray-700 font-medium dark:text-white">
-                          Sparade brev
-                        </span>
-                      </Link>
-                    ) : (
-                      <span className="text-gray-400 font-medium">
+                  <NavItem isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}>
+                    <LetterSVG isDarkMode={isDarkMode} />
+                    <Link
+                      to={isLoggedIn ? "/coverletter" : "#"}
+                      className={isLoggedIn ? "" : "pointer-events-none"}
+                    >
+                      <span
+                        className={`font-medium ${
+                          isLoggedIn
+                            ? "text-gray-700 dark:text-white"
+                            : "text-gray-400 cursor-none"
+                        }`}
+                      >
                         Sparade brev
                       </span>
-                    )}
+                    </Link>
                   </NavItem>
-                  <NavItem>
-                    <MyCvSVG isDarkMode={isDarkMode}/>
-                    {isLoggedIn ? (
-                      <Link to="/NoEarlierCoverLetter">
-                        <span className="text-gray-700 font-medium dark:text-white">
-                          Mitt CV
-                        </span>
-                      </Link>
-                    ) : (
-                      <span className="text-gray-400 font-medium">Mitt CV</span>
-                    )}
+                  <NavItem isDarkMode={isDarkMode} isLoggedIn={isLoggedIn}>
+                    <MyCvSVG isDarkMode={isDarkMode} />
+                    <Link
+                      to={isLoggedIn ? "/SavedCV" : "#"}
+                      className={isLoggedIn ? "" : "pointer-events-none"}
+                    >
+                      <span
+                        className={`font-medium ${
+                          isLoggedIn
+                            ? "text-gray-700 dark:text-white"
+                            : "text-gray-400 cursor-none"
+                        }`}
+                      >
+                        Mitt CV
+                      </span>
+                    </Link>
                   </NavItem>
                 </div>
               </div>
               <div className="flex flex-col gap-6">
-                <div className="font-Glockenspiel text-gray-700 text-2xl text-center dark:text-white">
-                  EMPLOJD
+                <div className="flex justify-center">
+                  <EmplojdLogo className="w-28 dark:fill-white" />
                 </div>
-                <DarkModeToggleSwitch onToggle={handleToggle}/>
+                <DarkModeToggleSwitch onToggle={handleToggle} />
               </div>
             </div>
           </div>

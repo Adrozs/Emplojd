@@ -1,6 +1,8 @@
-﻿using Emplojd.Data;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Emplojd.Data;
 using Emplojd.Helpers;
 using Emplojd.Models;
+using Emplojd.Server.ResultObjects;
 using Emplojd.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ namespace Emplojd.Repository
         public Task<LoginResult> LoginAsync(string email, string password);
         //public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string newPasswordConfirm, ClaimsPrincipal currentUser);
         public Task<IdentityResult> EmailVerificationAsync(string userId, string code);
+        public Task<IdentityResult> ResendEmailVerificationAsync(string email);
         public Task<IdentityResult> GeneratePasswordResetCodeAsync(string email);
         public Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm);
         public Task<IdentityResult> DeleteAccountAsync(string password, ClaimsPrincipal currentUser);
@@ -23,13 +26,14 @@ namespace Emplojd.Repository
 
     public class UserRepository : IUserRepository
     {
+        private readonly string _baseEmplojdUrl = "https://emplojd.com";
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly AuthenticationService _authService;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationContext _context;
 
-        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, AuthenticationService authService, 
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, AuthenticationService authService,
             IEmailSender emailSender, ApplicationContext context)
         {
             _userManager = userManager;
@@ -44,52 +48,41 @@ namespace Emplojd.Repository
         {
             // Check so emails and passwords match
             if (email != emailConfirm)
-                return IdentityResult.Failed(new IdentityError { Description = "Emails do not match."});
+                return IdentityResult.Failed(new IdentityError { Description = "Emails do not match." });
 
             if (password != passwordConfirm)
                 return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match." });
-                
+
             User user = new User
             {
-                UserName = email, 
+                UserName = email,
                 Email = email
             };
-
-            await Console.Out.WriteLineAsync("Created user");
 
             // Creates and hashes password for user in db - All MS Identity methods have build it validation and error handling
             IdentityResult createUserResult = await _userManager.CreateAsync(user, password);
 
-            await Console.Out.WriteLineAsync("user manager created user");
-
             if (!createUserResult.Succeeded)
                 return IdentityResult.Failed(new IdentityError { Description = string.Join(", ", createUserResult.Errors.Select(e => e.Description)) });
-
-            await Console.Out.WriteLineAsync("generating email token");
 
             string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
 
             // Create the redirect url to send in the email
-            string websiteUrl = "https://localhost:5173/confirm-email";
+            string websiteUrl = $"{_baseEmplojdUrl}/confirm-email";
             string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(emailConfirmationToken)}";
 
-            string emailSubject = "Emplojd - Just one more step!";
-            string emailBody = 
-                $"<h2>Welcome to Emplojd!</h2>" +
-                $"<p>We're so excited to have you on board and will be happy to help you set everything up.<br>" +
-                $"Please click the link below to verify your email address.<br>" +
-                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click here to verify your email.</a>.<br><br>" +
-                $"If you're having trouble clicking the link, copy and paste the URL below into your browser: <br>" +
+            string emailSubject = "Emplojd - Bara ett steg kvar!";
+            string emailBody =
+                $"<h2>Välkommen till Emplojd!</h2>" +
+                $"<p>Tack för att du använder Emplojd! Det är bara ett steg kvar innan du kan börja använda appen.<br>" +
+                $"Klicka på länken nedan för att verifiera din email.<br>" +
+                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Klicka här för att verifiera din email</a>.<br><br>" +
+                $"Om du har problem med att klicka på länken, kopiera och klistra in URL:en nedan i din webbläsare: <br>" +
                 $"{callbackUrl}<br><br><br>" +
-                $"Please let us know if you have any questions or general feedback simply by replying to this email.<br><br>" +
-                $"All the best,<br>" +
-                $"Emplojd</p>" +
-                // Remove this when not testing anymore
-                $"<p><br>TEMP REMOVE LATER <br> CODE: {Uri.EscapeDataString(emailConfirmationToken)} <br> USERID: {user.Id} </p>";
-
-
-            await Console.Out.WriteLineAsync("trying to send email");
+                $"Hör av dig om du har några frågor eller feedback genom att svara på detta mail.<br><br>" +
+                $"Allt gott,<br>" +
+                $"Emplojd</p>";
 
 
             // Send email to users email with message and confirmaton link
@@ -145,7 +138,7 @@ namespace Emplojd.Repository
 
         //    if (user == null)
         //        throw new InvalidOperationException("No matching user found.");
-           
+
 
         //    // Check if current password is correct and if yes change to the new password
         //    IdentityResult result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
@@ -162,6 +155,7 @@ namespace Emplojd.Repository
 
         public async Task<IdentityResult> EmailVerificationAsync(string userId, string code)
         {
+            // Check and validate input and user
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
                 return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or verification code." });
 
@@ -169,17 +163,50 @@ namespace Emplojd.Repository
             if (user == null)
                 return IdentityResult.Failed(new IdentityError { Description = "No user found." });
 
-
+            // Attempt to confirm email
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, Uri.UnescapeDataString(code));
-            
-            // If the result wasn't successful throw exception with details as to why
+
             if (!result.Succeeded)
                 return IdentityResult.Failed(new IdentityError { Description = "Failed to confirm email: " + string.Join(", ", result.Errors.Select(e => e.Description)) });
 
-            // Set the users email confirmation status
+            // Set email confirmation
             user.EmailConfirmed = true;
 
             return result;
+        }
+
+        public async Task<IdentityResult> ResendEmailVerificationAsync(string email)
+        {
+            User? user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "Could not find matching user." });
+
+            string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            // Create the redirect url to send in the email
+            string websiteUrl = $"{_baseEmplojdUrl}/confirm-email";
+            string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(emailConfirmationToken)}";
+
+            string emailSubject = "Emplojd - Bara ett steg kvar!";
+            string emailBody =
+                $"<h2>Välkommen till Emplojd!</h2>" +
+                $"<p>Tack för att du använder Emplojd! Det är bara ett steg kvar innan du kan börja använda appen.<br>" +
+                $"Klicka på länken nedan för att verifiera din email.<br>" +
+                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Klicka här för att verifiera din email</a>.<br><br>" +
+                $"Om du har problem med att klicka på länken, kopiera och klistra in URL:en nedan i din webbläsare: <br>" +
+                $"{callbackUrl}<br><br><br>" +
+                $"Hör av dig om du har några frågor eller feedback genom att svara på detta mail.<br><br>" +
+                $"Allt gott,<br>" +
+                $"Emplojd</p>";
+
+
+            // Send email to users email with message and confirmaton link
+            var sendEmailResult = await _emailSender.SendEmailAsync(email, emailSubject, emailBody);
+
+            if (!sendEmailResult.Success)
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to send email: " + string.Join(", ", sendEmailResult.ErrorMessage) });
+
+            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> GeneratePasswordResetCodeAsync(string email)
@@ -191,24 +218,31 @@ namespace Emplojd.Repository
             string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             // Create the redirect url to send in the email
-            string websiteUrl = "https://localhost:5173/reset-password";
+            string websiteUrl = $"{_baseEmplojdUrl}/reset-password";
             string callbackUrl = $"{websiteUrl}?userId={user.Id}&code={Uri.EscapeDataString(passwordResetToken)}";
 
-            string emailSubject = "Password reset request";
-            string emailBody = $"Please reset your password by clicking <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>here</a>. If you did not request a password reset, please ignore this email.";
+            string emailSubject = "Emplojd - Återställ lösenord";
+            string emailBody = $"Återställ ditt lösenord genom att klicka på länken: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Klicka här för att återställa ditt lösenord.</a>. <br>" +
+                $"Kom förfrågan inte från dig? Då kan du bortse från detta mail.<br><br>" +
+                $"Om du har problem med att klicka på länken, kopiera och klistra in URL:en nedan i din webbläsare: <br>" +
+                $"{callbackUrl}<br><br><br>" +
+                $"Hör av dig om du har några frågor eller feedback genom att svara på detta maill.<br><br>" +
+                $"Allt gott,<br>" +
+                $"Emplojd</p>";
+
 
             // Attempt to send email
             EmailResult sendEmailResult = await _emailSender.SendEmailAsync(user.Email, emailSubject, emailBody);
 
             if (!sendEmailResult.Success)
                 return IdentityResult.Failed(new IdentityError { Description = "Failed to send email:" + string.Join(", ", sendEmailResult.ErrorMessage) });
-            
+
             return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> ResetPasswordAsync(string userId, string code, string newPassword, string newPasswordConfirm)
         {
-            // Check input 
+            // Check and validate input 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
                 return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or verification code." });
 
@@ -220,7 +254,7 @@ namespace Emplojd.Repository
 
             User? user = await _userManager.FindByIdAsync(userId);
             if (user == null)
-                return IdentityResult.Failed(new IdentityError { Description = "No user found with specified id."});
+                return IdentityResult.Failed(new IdentityError { Description = "No user found with specified id." });
 
             // Attempt to reset password in the db and catch eventual exceptions
             try
@@ -229,9 +263,9 @@ namespace Emplojd.Repository
                 return result;
 
             }
-            catch (Exception) 
+            catch (Exception)
             {
-                // Rethrow the unexpected exception to be handled further up
+                // Rethrow the unexpected exception to be handled further up the chain
                 throw;
             }
         }
@@ -269,10 +303,10 @@ namespace Emplojd.Repository
                 _context.CoverLetters.RemoveRange(user.SavedCoverLetters);
                 _context.CvManually.RemoveRange(user.CvManually);
 
-                // Remove job ads from this user but not from other users
-                var jobAdsToCheck = user.SavedJobAds;
+                // Save users job ads to a new list to ensure we have a separate independent copy when we clear the user job ad relation 
+                var jobAdsToCheck = new List<SavedJobAd>(user.SavedJobAds);
 
-                // Clear the users saved job ads
+                // Clear the users saved job ad relations
                 user.SavedJobAds.Clear();
 
                 // Save before proceeding

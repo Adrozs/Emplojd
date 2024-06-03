@@ -4,6 +4,7 @@ import { CheckBoxSVG, ErrorBox, TypingSVG } from './Icons/FormRowSvg';
 function FormRow({
 	type,
 	name,
+	id,
 	value,
 	handleChange,
 	labelText,
@@ -19,10 +20,12 @@ function FormRow({
 	const [isTyping, setIsTyping] = useState(false);
 	const [matchError, setMatchError] = useState('');
 	const [validationError, setValidationError] = useState('');
-
 	const [isFocused, setIsFocused] = useState(false);
 
 	const validateInput = (value) => {
+		if (value === '') {
+			return '';
+		}
 		if (type === 'email') {
 			const valid = /\S+@\S+\.\S+/.test(value);
 			return valid ? '' : 'Ogiltig e-postadress.';
@@ -40,23 +43,17 @@ function FormRow({
 
 	const handleInputChange = (e) => {
 		const newValue = e.target.value;
-		setIsValid(validateInput(newValue) === '');
 		handleChange(e);
-		if (!isTyping) {
-			setIsTyping(true);
-		}
-		if (isTouched && !newValue) {
-			setIsTouched(false);
-		}
+		setIsTyping(true);
 	};
 
 	const handleBlur = () => {
-		setIsTouched(true);
 		setIsTyping(false);
 		setIsFocused(false);
+		setIsTouched(true);
 		const errorMessage = validateInput(value);
 		setValidationError(errorMessage);
-		const currentIsValid = errorMessage === '';
+		const currentIsValid = errorMessage === '' && value !== '';
 		setIsValid(currentIsValid);
 
 		if (
@@ -77,9 +74,15 @@ function FormRow({
 
 	const inputClassName = () => {
 		let baseClass =
-			'px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800 dark:bg-slate-700 dark:text-white';
+			'px-4 py-2 text-black rounded-xl border-2 flex-grow outline-sky-800 dark:bg-slate-700 dark:text-white flex-grow pr-10';
 		if (disabled) {
-			return baseClass + ' border-gray-300 bg-gray-100 cursor-not-allowed';
+			return (
+				baseClass +
+				' border-gray-300 bg-transparent dark:bg-transparent dark:border-gray-600 cursor-not-allowed'
+			);
+		}
+		if (value === '') {
+			return baseClass + ' border-gray-300';
 		}
 		if (!isTouched) {
 			return baseClass + ' hover:border-gray-400 dark:border-slate-500';
@@ -89,23 +92,26 @@ function FormRow({
 			return baseClass + ' border-red-400 dark:border-red-600';
 		}
 	};
-
 	const textAreaClassName = (rows) => {
 		return `${inputClassName()} ${isFocused ? `rows-${rows}` : ''}`;
 	};
 
 	return (
-		<div className="pb-6">
+		<div>
 			<label
 				htmlFor={name}
-				className={`text-lg mb-2 font-semibold px-2 inline-block py-1 rounded-lg ${labelBgColor}`}
+				className={`text-lg mb-2 font-semibold px-2 inline-block py-1 rounded-lg ${labelBgColor} ${
+					disabled
+						? 'text-gray-300 dark:text-gray-600'
+						: 'text-black dark:text-white'
+				}`}
 			>
 				{labelText || name}
 			</label>
 			<div className="relative flex items-center text-gray-400 dark:text-white">
 				{type === 'textarea' ? (
 					<textarea
-						id={name}
+						id={id}
 						name={name}
 						value={value}
 						onChange={handleInputChange}
@@ -122,33 +128,35 @@ function FormRow({
 						maxLength={maxLength}
 					/>
 				) : (
-					<input
-						type={type}
-						id={name}
-						name={name}
-						value={value}
-						onChange={handleInputChange}
-						onBlur={handleBlur}
-						onClick={() => {
-							setIsTyping(true);
-							setIsTouched(false);
-						}}
-						placeholder={placeholder}
-						className={inputClassName()}
-						disabled={disabled}
-					/>
-				)}
-				{disabled ? (
-					<TypingSVG isTyping={false} />
-				) : isTouched && !isValid ? (
-					<ErrorBox />
-				) : isTouched && isValid ? (
-					<CheckBoxSVG />
-				) : (
-					<TypingSVG isTyping={isTyping} />
+					<div className="flex relative w-full items-center">
+						<input
+							type={type}
+							id={id}
+							name={name}
+							value={value}
+							onChange={handleInputChange}
+							onBlur={handleBlur}
+							onFocus={() => setIsFocused(true)}
+							placeholder={placeholder}
+							className={inputClassName()}
+							disabled={disabled}
+							style={{ paddingRight: '3rem' }}
+						/>
+						{disabled ? (
+							<TypingSVG isTyping={false} />
+						) : value === '' ? (
+							<TypingSVG isTyping={false} />
+						) : !isFocused && isTouched && !isValid ? (
+							<ErrorBox />
+						) : isTouched && isValid ? (
+							<CheckBoxSVG />
+						) : (
+							<TypingSVG isTyping={isTyping} />
+						)}
+					</div>
 				)}
 			</div>
-			{(matchError || validationError) && (
+			{(matchError || validationError) && !isFocused && (
 				<div className="text-red-400 dark:text-red-500 text-sm mt-1 pl-2">
 					&bull; {matchError || validationError}
 				</div>

@@ -1,13 +1,15 @@
 import { FaArrowUpFromBracket, FaRegTrashCan } from "react-icons/fa6";
 import { useState, useRef } from "react";
 
-export default function CvFileSelecter() {
+export default function CvFileSelecter({ manualInputEnabled, disabled=false }) {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const fileInput = useRef(null);
 
   const handleFileButtonClick = () => {
-    fileInput.current.click();
+    if (!manualInputEnabled) {
+      fileInput.current.click();
+    }
   };
 
   const handleFileChange = (event) => {
@@ -15,22 +17,35 @@ export default function CvFileSelecter() {
   };
 
   const handleTrashClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setSelectedFile(null);
   };
 
   return (
     <>
       <div className="mb-2">
-        <label className="font-semibold pl-1">
+        <label
+          className={`font-semibold pl-1 dark:text-white ${
+            disabled ? "text-gray-300 dark:text-gray-600" : "text-black dark:text-white"
+          }`}
+        >
           Ladda upp ditt CV (pdf, docx)
         </label>
       </div>
       <div
-        className={`flex-col border-2 rounded-2xl justify-center items-center bg-gradient-to-r-custom h-22 w-auto`}
+        className={`flex-col border-2 rounded-2xl justify-center items-center bg-gradient-to-r-custom h-22 w-auto ${
+          manualInputEnabled ? "cursor-not-allowed bg-transparent dark:border-gray-600" : ""
+        }`}
         onClick={handleFileButtonClick}
       >
-        <div className="flex text-gray-400 pl-3 bg-gray-100 p-3 rounded-xl m-[2px] cursor-pointer relative">
+        <div
+          className={`flex text-gray-400 pl-3 p-3 rounded-xl m-[2px] relative ${
+            manualInputEnabled
+              ? "cursor-not-allowed bg-transparent "
+              : "cursor-pointer bg-white dark:bg-slate-700"
+          }`}
+        >
+          {" "}
           {selectedFile ? (
             <>
               <span>{selectedFile}</span>

@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 const ConfirmAccount = () => {
   return (
     <>
-      <div className="flex flex-col h-screen pb-12">
+      <div className="flex flex-col h-screen pb-12 md:mb-40">
         <div className="flex-grow inner-shadow-bottom bg-gradient-to-br to-[#CA81ED] from-[#4086C6] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat">
           <Header>
             {" "}
@@ -17,18 +17,18 @@ const ConfirmAccount = () => {
               EMPLOJD
             </h1>
           </Header>
-          <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 mt-10">
+          <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 ">
             <h1 className="text-4xl font-semibold text-center mb-8">
               Skapa konto
             </h1>
             <h2 className="text-2xl mb-4">Bekräfta din e-postadress</h2>
             <p>
-              Vi har skickat ett mejl till den e-postadress du angav. Bekräfta
-              mejlet och återkom.
+              Vi har skickat ett mail till den email du angav. Bekräfta mailet
+              och återkom.
             </p>
             <div className="bg-white rounded-3xl px-6 py-2 text-gray-900">
               <p>
-                Hittar du inget mejl kan du skicka ett nytt via knappen nedan.
+                Hittar du inget mail kan du skicka ett nytt via knappen nedan.
               </p>
             </div>
           </div>

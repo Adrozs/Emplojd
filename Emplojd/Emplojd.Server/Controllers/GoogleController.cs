@@ -85,6 +85,7 @@ namespace Emplojd.Controller
                 }
             }
 
+            // Associate google login credentials with the user to connect the two
             var loginInfo = new UserLoginInfo(GoogleDefaults.AuthenticationScheme, result.Principal.FindFirstValue(ClaimTypes.NameIdentifier), GoogleDefaults.AuthenticationScheme);
 
             var userLogins = await _userManager.GetLoginsAsync(user);

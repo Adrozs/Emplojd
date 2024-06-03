@@ -6,6 +6,7 @@ import { LoginRightArrow } from "../../components/Icons/AuthFormSvg";
 import ListForm from "../../components/ListForm";
 import { FaPlus } from "react-icons/fa";
 import { useDarkMode } from "../../components/Icons/DarkModeHook";
+import Loader from "../../ui/Loader";
 
 function MyProfile() {
   const initialState = {
@@ -26,9 +27,11 @@ function MyProfile() {
   const prevSelectedOption = useRef(selectedOption);
   const fileInputRef = useRef(null);
   const { isDarkMode } = useDarkMode();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("authToken");
 
       if (!authToken) {
@@ -38,7 +41,7 @@ function MyProfile() {
 
       try {
         const response = await fetch(
-          `https://localhost:54686/api/UserProfile/GetUserProfile`,
+          `https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/GetUserProfile`,
           {
             method: "GET",
             headers: {
@@ -50,6 +53,7 @@ function MyProfile() {
 
         if (!response.ok) {
           const errorText = await response.text();
+          setIsLoading(false);
           console.error(
             `HTTP error! status: ${response.status}, message: ${errorText}`
           );
@@ -57,7 +61,7 @@ function MyProfile() {
             `HTTP error! status: ${response.status}, message: ${errorText}`
           );
         }
-
+        setIsLoading(false);
         const data = await response.json();
         setValues({
           firstname: data.firstname || "",
@@ -68,6 +72,7 @@ function MyProfile() {
         setInterests(data.interests || []);
         setDescriptiveWords(data.descriptiveWords || []);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching user profile:", error);
       }
     };
@@ -129,7 +134,7 @@ function MyProfile() {
 
     try {
       const response = await fetch(
-        "https://localhost:54686/api/UserProfile/CreateUserProfile",
+        "https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/CreateUserProfile",
         {
           method: "POST",
           headers: {
@@ -196,7 +201,7 @@ function MyProfile() {
     <>
       <HeaderOtherPages />
       <div className="flex flex-col h-screen justify-between dark:bg-gray-800">
-        <div className="px-4 dark:bg-gray-800">
+        <div className="px-5 dark:bg-gray-800">
           <div className="grid grid-cols-[auto_1fr] mt-6 justify-items-center md:mt-12 ls:mt-28 lg:mt-44 xl:mt-48 xxl:mt-64">
             <div className="grid z-10 bg-gradient-to-140-sky-violet dark:bg-dark-gradient-to-140-purple-slate text-white p-4 w-48 rounded-xl">
               <h2 className="font-semibold">Min Profil</h2>
@@ -278,6 +283,8 @@ function MyProfile() {
               />
             </div>
           </div>
+          <>{isLoading && <Loader />} </>
+
           <div>
             <div className="mb-4 dark:text-white">
               <FormRow

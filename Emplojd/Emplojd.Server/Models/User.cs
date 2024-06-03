@@ -11,6 +11,11 @@ namespace Emplojd.Models
         public List<string>? UserInterestTags { get; set; }
         public List<string>? DescriptiveWords { get; set; }
         public string? CvContentText { get; set; }
+        public string? UserImage { get; set; }
+        public string? ImageFilePath { get; set; }
+
+        public string? UserResume { get; set; }
+        public string? ResumeFilePath { get; set; }
 
 
         public virtual ICollection<CvManually> CvManually { get; set; }

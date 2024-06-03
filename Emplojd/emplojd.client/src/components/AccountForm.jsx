@@ -16,14 +16,12 @@ function AccountForm({
   handleRemoveWord,
   wordTextColor = "text-gray-800",
   wordBgColor = "bg-purple-100",
-  errorTextColor = "text-red-800",
   errorBgColor = "bg-red-200",
   labelBgColor = "bg-purple-100",
 }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [validationError, setValidationError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const { isDarkMode } = useDarkMode();
 
@@ -155,10 +153,10 @@ function AccountForm({
                     viewBox="8 8 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="fill-black dark:fill-white"
                   >
                     <path
                       d="M16 9.5C17.7239 9.5 19.3772 10.1848 20.5962 11.4038C21.8152 12.6228 22.5 14.2761 22.5 16C22.5 17.7239 21.8152 19.3772 20.5962 20.5962C19.3772 21.8152 17.7239 22.5 16 22.5C14.2761 22.5 12.6228 21.8152 11.4038 20.5962C10.1848 19.3772 9.5 17.7239 9.5 16C9.5 14.2761 10.1848 12.6228 11.4038 11.4038C12.6228 10.1848 14.2761 9.5 16 9.5ZM16 24C18.1217 24 20.1566 23.1571 21.6569 21.6569C23.1571 20.1566 24 18.1217 24 16C24 13.8783 23.1571 11.8434 21.6569 10.3431C20.1566 8.84285 18.1217 8 16 8C13.8783 8 11.8434 8.84285 10.3431 10.3431C8.84285 11.8434 8 13.8783 8 16C8 18.1217 8.84285 20.1566 10.3431 21.6569C11.8434 23.1571 13.8783 24 16 24ZM13.4688 13.4688C13.175 13.7625 13.175 14.2375 13.4688 14.5281L14.9375 15.9969L13.4688 17.4656C13.175 17.7594 13.175 18.2344 13.4688 18.525C13.7625 18.8156 14.2375 18.8187 14.5281 18.525L15.9969 17.0562L17.4656 18.525C17.7594 18.8187 18.2344 18.8187 18.525 18.525C18.8156 18.2312 18.8187 17.7562 18.525 17.4656L17.0562 15.9969L18.525 14.5281C18.8187 14.2344 18.8187 13.7594 18.525 13.4688C18.2312 13.1781 17.7562 13.175 17.4656 13.4688L15.9969 14.9375L14.5281 13.4688C14.2344 13.175 13.7594 13.175 13.4688 13.4688Z"
-                      fill="#374151"
                     />
                   </svg>
                 </button>
@@ -168,11 +166,6 @@ function AccountForm({
           </div>
         </div>
       </div>
-      {(validationError || error) && (
-        <div className={`text-sm mt-1 pl-2 ${errorTextColor}`}>
-          &bull; {validationError || error}
-        </div>
-      )}
     </div>
   );
 }

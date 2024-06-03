@@ -7,6 +7,7 @@ import FormRow from "../../components/FormRow";
 import { useMutation } from "react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import EmplojdLogo from "../../components/Icons/EmplojdLogoSVG";
 
 function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -24,7 +25,7 @@ function ResetPassword() {
       }
 
       const response = await axios.post(
-        "https://localhost:54686/reset-password",
+        "https://emplojdserver20240531231628.azurewebsites.net/reset-password",
         {
           newPassword: password,
           newPasswordConfirm: passwordConfirm,
@@ -67,9 +68,7 @@ function ResetPassword() {
       <div className="flex flex-col h-screen pb-12 md:pb-52">
         <div className="flex-grow inner-shadow-bottom bg-gradient-to-br to-[#CA81ED] from-[#4086C6] dark:bg-gradient-to-t dark:from-purple-800 dark:to-slate-500 bg-cover bg-no-repeat">
           <Header>
-            <h1 className="font-Glockenspiel text-2xl cursor-pointer text-white">
-              EMPLOJD
-            </h1>
+            <EmplojdLogo className="w-28 fill-white" />
           </Header>
           <div className="p-6 max-w-lg mx-auto  text-white h-full flex item-center justify-center flex-col gap-3 mt-14">
             <h1 className="text-4xl font-semibold text-center mb-10">
