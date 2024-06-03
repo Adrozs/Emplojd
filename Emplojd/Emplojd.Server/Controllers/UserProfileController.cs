@@ -28,8 +28,8 @@ namespace Emplojd.Server.Controllers
 
             if (result.Success)
                 return Ok("Profile successfully updated.");
-            
-             return BadRequest($"Failed to update profile: {result.ErrorMessage}");
+
+            return BadRequest($"Failed to update profile: {result.ErrorMessage}");
         }
 
         [HttpPost("AddCvManually")]
