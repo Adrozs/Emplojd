@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Emplojd.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df7f0ee88272f589173d63d721f9f9bdb5fb7b1e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1355818f8f5bbb84ee073bc9714e1ac5c6b9c7ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("Emplojd.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Emplojd.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

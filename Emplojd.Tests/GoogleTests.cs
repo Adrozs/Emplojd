@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 namespace Emplojd.Tests
 {
     [TestClass]
-    public class GoogleTests
+    public class GoogleControllerTests
     {
         private Mock<IConfiguration> _mockConfiguration;
         private Mock<UserManager<User>> _mockUserManager;
