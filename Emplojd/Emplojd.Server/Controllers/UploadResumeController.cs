@@ -67,5 +67,16 @@ namespace Emplojd.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
+            [HttpGet("GetResume")]
+            public async Task<IActionResult> GetResume()
+            {
+                ClaimsPrincipal currentUser = User;
+
+                var userProfile = await _resumeService.GetUserResumeAsync(currentUser);
+                if (userProfile == null)
+                    return NotFound("No matching user found.");
+
+                return Ok(userProfile);
+            }
+        }
     }
-}

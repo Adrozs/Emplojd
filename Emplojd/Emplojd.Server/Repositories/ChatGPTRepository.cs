@@ -72,14 +72,15 @@ namespace Emplojd.Repositories
             string prompt = $"Jag söker jobbet som {generateCoverLetterDto.JobTitle}. " +
             $"Du ska skriva ett personligt brev åt mig, använd inte allt för formella ord utan mer avslappnat, dock fortfarande i arbetssammanhang. " +
             $"Du behöver inte använda all information utan det som är relevant att ta med för jobbet." +
-            $"Här är lite info om mig. Mitt CV:\n{cvContentText}\n" +
+            $"Du MÅSTE returnera brevet i html format." +
+            $"Här är lite info om mig. " +
+            $"Mitt namn är: {firstName}" +
+            $"Mitt CV:\n{cvContentText}\n" +
             $"Några av mina intressen: {userInterests}\n" +
             $"Ord jag tycker beskriver mig: {userDescriptiveWords}\n" +
             $"Ta in den informationen ovan om mig och läs av denna jobbannons och skriv ett personligt brev enligt instruktionerna du har fått." +
             $"Med önskad längd på brevet:{desiredLength}\noch temperatur: {temperature}\n." +
-            $"Jobbanonsen: {jobAd}" +
-            $"Jag vill inte ha en" +
-            $" signatur eller hälsning i slutet av brevet";
+            $"Jobbanonsen: {jobAd}";
 
             // Make the API call to stream completion results
             chat.AppendUserInput(prompt);
