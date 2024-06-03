@@ -61,6 +61,11 @@ namespace Emplojd
                     {
                         options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                         options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+
+                        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
                     })
                     .AddOAuth("LinkedIn", options =>
                     {
@@ -76,10 +81,11 @@ namespace Emplojd
                         options.Scope.Add("profile");
                         options.Scope.Add("email");
 
-                        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
-                        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "localizedLastName");
-                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "emailAddress");
+
+                        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "given_name");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
 
                         options.Events = new OAuthEvents
                         {
