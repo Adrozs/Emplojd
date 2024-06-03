@@ -11,6 +11,7 @@ namespace Emplojd.Server.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string SchoolWorkplace { get; set; }
+        public string CvText { get; set; }
         public bool IsEducation { get; set; }
 
         public string UserId { get; set; }
