@@ -24,14 +24,14 @@ function CreateProfile() {
 	const [descriptiveWords, setDescriptiveWords] = useState([]);
 	const { isDarkMode } = useDarkMode();
 
-	const messages = [
-		'Börja hitta jobb direkt efter du har skapat din jobbprofil!',
-		<>
-			<span className="font-semibold">Snyggt{values.firstname}!</span> <br /> Nu
-			behöver vi bara fråga några saker till!
-		</>,
-		'Nu är du nästan färdig med din jobbprofil! Använd dig av ditt CV för att få ännu bättre personliga brev!',
-	];
+  const messages = [
+    "Börja hitta jobb direkt efter du har skapat din jobbprofil!",
+    <>
+      <span className="font-semibold">{`Snyggt ${values.firstname}!`}</span> <br />{" "}
+      Nu behöver vi bara fråga några saker till!
+    </>,
+    "Nu är du nästan färdig med din jobbprofil! Använd dig av ditt CV för att få ännu bättre personliga brev!",
+  ];
 
 	const nextStep = () => {
 		if (currentStep < 3) {
