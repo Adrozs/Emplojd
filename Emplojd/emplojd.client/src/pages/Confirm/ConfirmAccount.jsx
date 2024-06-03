@@ -18,7 +18,7 @@ const ConfirmAccount = () => {
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
-    console.log(userEmail);
+    // console.log(userEmail);
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -29,7 +29,7 @@ const ConfirmAccount = () => {
       );
 
       if (response.status === 200) {
-        console.log("Email successfully sent");
+        // console.log("Email successfully sent");
         toast.success("Email har skickats igen");
         setSentMsg(true);
         setIsLoading(false);

@@ -78,7 +78,7 @@ function CreateProfile() {
       descriptiveWords: descriptiveWordsArray,
     };
 
-    console.log("Data being sent:", data);
+    // console.log("Data being sent:", data);
 
     try {
       const response = await axios.post(
@@ -92,7 +92,7 @@ function CreateProfile() {
         }
       );
       setIsLoading(false);
-      console.log("Success:", response.data);
+      // console.log("Success:", response.data);
       navigate("/joblist");
     } catch (error) {
       setIsLoading(false);

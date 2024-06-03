@@ -41,7 +41,7 @@ function ResetPassword() {
       onSuccess: (data) => {
         toast.success("Lösenordet har återställts!");
         navigate("/signin");
-        console.log("Response:", data);
+        // console.log("Response:", data);
       },
       onError: (error) => {
         toast.error(error.response.data.detail);

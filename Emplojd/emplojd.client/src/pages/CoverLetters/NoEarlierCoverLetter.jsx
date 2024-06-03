@@ -26,7 +26,7 @@ function NoEarlierCoverLetter() {
           }
         )
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setIsLoading(false);
           setCoverLetters(response.data);
           return response;

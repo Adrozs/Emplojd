@@ -26,7 +26,7 @@ function JobItem({ job, children }) {
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          console.log("No liked jobs found.");
+          // console.log("No liked jobs found.");
         } else {
           console.error("Error fetching liked jobs:", error);
         }

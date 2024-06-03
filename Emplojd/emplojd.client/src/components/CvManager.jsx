@@ -77,7 +77,7 @@ const CvManager = () => {
       isEducation: true,
     };
 
-    console.log("Data being sent:", data);
+    // console.log("Data being sent:", data);
 
     try {
       const response = await axios.post(
@@ -91,7 +91,7 @@ const CvManager = () => {
         }
       );
       setIsLoading(false);
-      console.log("Success:", response.data);
+      // console.log("Success:", response.data);
       resetFormValues();
       toast.success("Utbildning sparad");
     } catch (error) {
