@@ -230,10 +230,11 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
   const [selectedOption, setSelectedOption] = useState("none");
   const prevValues = useRef(values);
   const prevSelectedOption = useRef(selectedOption);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSaveAndContinue = async () => {
     const authToken = localStorage.getItem("authToken");
-
+    setIsLoading(true);
     if (!authToken) {
       console.error("No auth token found");
       return;
@@ -258,10 +259,13 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
           },
         }
       );
-
-      setPage(3);
-      window.scrollTo(0, 0);
+      setTimeout(() => {
+        setIsLoading(false);
+        setPage(3);
+        window.scrollTo(0, 0);
+      }, [300]);
     } catch (error) {
+      setIsLoading(false);
       if (error.response) {
         console.error(
           `HTTP error! status: ${error.response.status}, message: ${error.response.data}`
@@ -375,6 +379,7 @@ function ApplySideTwo({ job, page, setPage, temp, setTemp }) {
               <p className="text-sm ">Fyll i ansökan</p>
             </div>
           </div>
+          {isLoading && <Loader />}
           <div className="w-full flex items-center justify-center mt-1">
             <span className="bg-gray-300 h-[1px] w-[85%] rounded"></span>
           </div>
