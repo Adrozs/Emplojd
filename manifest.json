@@ -1,0 +1,22 @@
+{
+  "name": "Emplojd",
+  "short_name": "Emplojd - Gör jobbsökandet smidigare",
+  "description": "En tjänst som använder AI för att enkelt generera personliga brev baserat på dig, ditt cv och jobbannonsen för jobbet du söker.",
+  "start_url": "https://emplojd.com/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#333333",
+  "icons": [
+    {
+      "src": "/App-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/App-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
