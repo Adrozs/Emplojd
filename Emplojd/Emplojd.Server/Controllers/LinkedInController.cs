@@ -30,7 +30,7 @@ namespace Emplojd.Server.Controllers
         [HttpGet("/login-linkedin")]
         public IActionResult LinkedInLogin()
         {
-            var redirectUri = "https://localhost:54686/linkedinresponse";
+            var redirectUri = "https://www.emplojd.com/linkedinresponse";
             var property = new AuthenticationProperties
             {
                 RedirectUri = Url.Action("LinkedInResponse", new { redirectUri })
@@ -106,7 +106,7 @@ namespace Emplojd.Server.Controllers
 
             var token = LinkedInJwtToken(claims);
 
-            return Ok(new { token, email, claims = claims.Select(c => new { c.Type, c.Value }) });
+            return Ok(new { token });
         }
 
         private string LinkedInJwtToken(IEnumerable<Claim> claims)
