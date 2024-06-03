@@ -100,6 +100,7 @@ namespace Emplojd.Server.Services
                 PositionEducation = c.PositionEducation,
                 StartDate = c.StartDate,
                 EndDate = c.EndDate,
+                CvText = c.CvText,
                 SchoolWorkplace = c.SchoolWorkplace,
                 IsEducation = c.IsEducation
             }).ToList();
@@ -129,6 +130,7 @@ namespace Emplojd.Server.Services
                         PositionEducation = request.PositionEducation,
                         StartDate = request.StartDate,
                         EndDate = request.EndDate,
+                        CvText = request.CvText,
                         SchoolWorkplace = request.SchoolWorkplace,
                         IsEducation = request.IsEducation,
                     };
@@ -150,8 +152,11 @@ namespace Emplojd.Server.Services
                     if (!string.IsNullOrEmpty(request.SchoolWorkplace))
                         cvManually.SchoolWorkplace = request.SchoolWorkplace;
 
+                    if (!string.IsNullOrEmpty(request.CvText))
+                        cvManually.CvText = request.CvText;
+
                     // Defaults to false so can't check if it is sent in or not
-                        cvManually.IsEducation = request.IsEducation;
+                    cvManually.IsEducation = request.IsEducation;
 
                     _context.CvManually.Update(cvManually);
                 }
