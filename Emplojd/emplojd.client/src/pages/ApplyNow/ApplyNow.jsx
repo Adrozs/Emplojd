@@ -153,7 +153,7 @@ function ApplyNow() {
                     </span>
                   ) : (
                     <span className="bg-purple-300 px-2 py-1">
-                      {job.employment_type.label}{" "}
+                      {job.employment_Type.label}{" "}
                     </span>
                   )}
 

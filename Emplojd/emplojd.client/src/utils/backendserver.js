@@ -75,3 +75,23 @@ export async function getProfileInfo() {
 
   return profile;
 }
+
+export async function getManuallyCv() {
+  const token = localStorage.getItem("authToken");
+
+  const res = await fetch(
+    `https://emplojdserver20240531231628.azurewebsites.net/api/UserProfile/GetCvManually`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!res.ok) throw Error(`Couldn't find manually cv #${id}`);
+
+  const cvInfo = await res.json();
+  console.log(cvInfo);
+
+  return cvInfo;
+}

@@ -113,11 +113,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/createprofile",
-        element: (
-          <ProtectedRoute>
-            <CreateProfile />
-          </ProtectedRoute>
-        ),
+        element: <CreateProfile />,
       },
       {
         path: "/saved",
