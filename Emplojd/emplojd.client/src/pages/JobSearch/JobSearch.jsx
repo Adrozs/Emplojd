@@ -99,7 +99,7 @@ function JobSearch() {
             <select
               value={sortBy}
               onChange={handleSortChange}
-              className="outline-none"
+              className="outline-none bg-white"
             >
               <option value="date">Senaste först</option>
               <option value="dateold">Äldsta först</option>
