@@ -237,7 +237,7 @@ namespace Emplojd
             app.UseCors(builder =>
             {
                 builder
-                      .WithOrigins("emplojdserver20240531231628.azurewebsites.net", "https://www.emplojdserver20240531231628.azurewebsites.net", "https://emplojdserver20240531231628.azurewebsites.net", "https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173", "https://www.emplojd.com", "https://emplojd.com", "https://account.google.com")
+                      .WithOrigins("emplojdserver20240531231628.azurewebsites.net", "https://www.emplojdserver20240531231628.azurewebsites.net", "https://emplojdserver20240531231628.azurewebsites.net", "https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173", "https://www.emplojd.com", "https://emplojd.com", "https://accounts.google.com", "https://accounts.google.com", "https://accounts.google.com/o/oauth2/v2/auth?client_id=613316498870-2cgo926gqmcqocdkiik4k0ht0vm60un1.apps.googleusercontent.com&scope=openid%20profile%20email&response_type=code&redirect_uri=https%3A%2F%2Femplojdserver20240531231628.azurewebsites.net%2Fsignin-google")
                       .SetIsOriginAllowedToAllowWildcardSubdomains()
                       .AllowAnyHeader()
                       .AllowCredentials()
