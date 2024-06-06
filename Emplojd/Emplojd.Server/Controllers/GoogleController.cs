@@ -99,7 +99,7 @@ namespace Emplojd.Controller
                 }
             }
 
-            return Ok(new { token });
+            return Redirect($"https://emplojd.com/oauth-callback?token={token}");
         }
 
         private string GenerateJwtToken(IEnumerable<Claim> claims)
