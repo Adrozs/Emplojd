@@ -87,7 +87,7 @@ namespace Emplojd
                         //options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
                         //options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
                         options.ClientId = Environment.GetEnvironmentVariable("LINKEDIN_CLIENT_ID");
-                        options.ClientSecret = Environment.GetEnvironmentVariable("LINKEDIN_CLIENT_SECRET   ");
+                        options.ClientSecret = Environment.GetEnvironmentVariable("LINKEDIN_CLIENT_SECRET");
 
 
                         options.CallbackPath = new PathString("/signin-linkedin");
