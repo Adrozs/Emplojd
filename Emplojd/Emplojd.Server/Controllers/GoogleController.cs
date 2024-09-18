@@ -104,12 +104,15 @@ namespace Emplojd.Controller
 
         private string GenerateJwtToken(IEnumerable<Claim> claims)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+            //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_ISSUER")));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                //issuer: _configuration["Jwt:Issuer"],
+                //audience: _configuration["Jwt:Audience"],
+                issuer: Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                audience: Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
                 claims: claims,
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: signingCredentials
