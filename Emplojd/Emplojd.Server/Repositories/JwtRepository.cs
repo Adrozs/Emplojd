@@ -27,13 +27,13 @@ namespace Emplojd.Repositories
                 };
 
                 // Configure token settings
-                SymmetricSecurityKey secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+                SymmetricSecurityKey secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_ISSUER")));
                 SigningCredentials credentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
 
                 // Create JWT
                 JwtSecurityToken jwt = new JwtSecurityToken(
-                    issuer: _configuration["Jwt:Issuer"],
-                    audience: _configuration["Jwt:Audience"],
+                    issuer: Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                    audience: Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
                     claims: claims,
                     expires: DateTime.Now.AddHours(3),
                     signingCredentials: credentials
