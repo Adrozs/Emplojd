@@ -121,8 +121,7 @@ namespace Emplojd
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add CORS services
-            builder.Services.AddCors();
-
+            builder.Services.AddCors(options => { options.AddPolicy("AllowEmplojdDomain", policy => { policy.WithOrigins("https://emplojd.com").AllowAnyHeader().AllowAnyMethod(); }); });
 
             // Adding Microsoft identity with config settings
             builder.Services.AddIdentity<User, IdentityRole>(options =>
@@ -234,15 +233,15 @@ namespace Emplojd
             app.UseRouting();
 
             // Add CORS (CHANGE BEFORE PRODUCTION - ONLY FOR TESTING!) Right now it allows access to any and all
-            app.UseCors(builder =>
-            {
-                builder
-                      .WithOrigins("emplojdserver20240531231628.azurewebsites.net", "https://www.emplojdserver20240531231628.azurewebsites.net", "https://emplojdserver20240531231628.azurewebsites.net", "https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173", "https://www.emplojd.com", "https://emplojd.com", "https://accounts.google.com", "https://accounts.google.com", "https://accounts.google.com/o/oauth2/v2/auth?client_id=613316498870-2cgo926gqmcqocdkiik4k0ht0vm60un1.apps.googleusercontent.com&scope=openid%20profile%20email&response_type=code&redirect_uri=https%3A%2F%2Femplojdserver20240531231628.azurewebsites.net%2Fsignin-google")
-                      .SetIsOriginAllowedToAllowWildcardSubdomains()
-                      .AllowAnyHeader()
-                      .AllowCredentials()
-                      .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS");
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder
+            //          .WithOrigins("emplojdserver20240531231628.azurewebsites.net", "https://www.emplojdserver20240531231628.azurewebsites.net", "https://emplojdserver20240531231628.azurewebsites.net", "https://localhost:54686", "http://localhost:54687", "http://localhost:5173", "https://localhost:5173", "https://localhost:4173", "https://www.emplojd.com", "https://emplojd.com", "https://accounts.google.com", "https://accounts.google.com", "https://accounts.google.com/o/oauth2/v2/auth?client_id=613316498870-2cgo926gqmcqocdkiik4k0ht0vm60un1.apps.googleusercontent.com&scope=openid%20profile%20email&response_type=code&redirect_uri=https%3A%2F%2Femplojdserver20240531231628.azurewebsites.net%2Fsignin-google")
+            //          .SetIsOriginAllowedToAllowWildcardSubdomains()
+            //          .AllowAnyHeader()
+            //          .AllowCredentials()
+            //          .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS");
+            //});
 
 
             // Configure the HTTP request pipeline.
@@ -259,7 +258,7 @@ namespace Emplojd
 
 
             // Apply the CORS policy
-            app.UseCors("OpenCorsPolicy");
+            app.UseCors("AllowEmplojdDomain");
 
 
             // Forces all api calls to use the JWT (token) to be authorized. (Unless specified).
