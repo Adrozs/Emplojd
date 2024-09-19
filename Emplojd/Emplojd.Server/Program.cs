@@ -26,6 +26,8 @@ using Azure.Security.KeyVault.Secrets;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.Extensions.Configuration;
 using Emplojd.Server.Controllers;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 
 namespace Emplojd
 {
@@ -34,22 +36,31 @@ namespace Emplojd
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            DotNetEnv.Env.Load();
+
             builder.Services.AddControllers();
             builder.Services.AddScoped<ResumeService>();
             builder.Services.AddScoped<BlobStorageService>(provider =>
             {
-                var connectionString = builder.Configuration.GetConnectionString("AzureBlobStorageConnection");
-                var containerName = builder.Configuration.GetConnectionString("AzureBlobStorageContainerName");
+
+                var connectionString = Environment.GetEnvironmentVariable("AZUREBLOBSTORAGECONNECTION");
+                var containerName = Environment.GetEnvironmentVariable("AZUREBLOBSTORAGECONTAINERNAME");
+                //var connectionString = builder.Configuration.GetConnectionString("AzureBlobStorageConnection");
+                //var containerName = builder.Configuration.GetConnectionString("AzureBlobStorageContainerName");
                 return new BlobStorageService(connectionString, containerName);
             });
             builder.Services.AddScoped<UserProfileService>();
+
+
 
             if (builder.Environment.IsDevelopment())
             {
                 // Setup database context and connection string here
                 builder.Services.AddDbContext<ApplicationContext>(options =>
                 {
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                    options.UseSqlServer(Environment.GetEnvironmentVariable("DEFAULTCONNECTION"));
                 });
             }
             builder.Services.AddAuthentication(options =>
@@ -60,8 +71,11 @@ namespace Emplojd
                     .AddCookie()
                     .AddGoogle(options =>
                     {
-                        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-                        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                        //options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                        //options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                        options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+                        options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+
 
                         options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
                         options.ClaimActions.MapJsonKey(ClaimTypes.Name, "localizedFirstName");
@@ -70,8 +84,12 @@ namespace Emplojd
                     })
                     .AddOAuth("LinkedIn", options =>
                     {
-                        options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
-                        options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                        //options.ClientId = builder.Configuration.GetSection("LinkedInKeys:ClientId").Value;
+                        //options.ClientSecret = builder.Configuration.GetSection("LinkedInKeys:ClientSecret").Value;
+                        options.ClientId = Environment.GetEnvironmentVariable("LINKEDIN_CLIENT_ID");
+                        options.ClientSecret = Environment.GetEnvironmentVariable("LINKEDIN_CLIENT_SECRET");
+
+
                         options.CallbackPath = new PathString("/signin-linkedin");
 
                         options.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
@@ -118,7 +136,8 @@ namespace Emplojd
 
             // Setup database context and connection string here
             builder.Services.AddDbContext<ApplicationContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection
+                options.UseSqlServer(Environment.GetEnvironmentVariable("DEFAULTCONNECTION")));
 
             // Add CORS services
             builder.Services.AddCors(options => { options.AddPolicy("AllowEmplojdDomain", policy => { policy.WithOrigins("https://emplojd.com").AllowAnyHeader().AllowAnyMethod(); }); });
@@ -144,7 +163,16 @@ namespace Emplojd
             .AddDefaultTokenProviders();
 
             // Add Mailkit email config
-            builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
+            //builder.Services.Configure<MailKitSettings>(configuration.GetSection("MailKitSettings"));
+            builder.Services.Configure<MailKitSettings>(settings =>
+            {
+                settings.MailPort = int.Parse(Environment.GetEnvironmentVariable("MAILKIT_MAILPORT"));
+                settings.MailServer = Environment.GetEnvironmentVariable("MAILKIT_MAILSERVER");
+                settings.SenderName = Environment.GetEnvironmentVariable("MAILKIT_SENDERNAME");
+                settings.Sender = Environment.GetEnvironmentVariable("MAILKIT_SENDER");
+                settings.Password = Environment.GetEnvironmentVariable("MAILKIT_PASSWORD");
+            });
+
 
             // Adding authentication
             builder.Services.AddAuthentication(options =>
@@ -164,9 +192,12 @@ namespace Emplojd
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        ValidIssuer = configuration["Jwt:Issuer"],
-                        ValidAudience = configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Secret"])) // Symetric key lets the system know the same secret is used for both signing and verifying the JWT. Then encodes it into bytes
+                        //ValidIssuer = configuration["Jwt:Issuer"],
+                        //ValidAudience = configuration["Jwt:Audience"],
+                        //IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Secret"])) // Symetric key lets the system know the same secret is used for both signing and verifying the JWT. Then encodes it into bytes
+                        ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                        ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")))
                     };
                 });
 
@@ -182,7 +213,8 @@ namespace Emplojd
                 new JwtRepository(provider.GetRequiredService<IConfiguration>()));
             builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddSingleton(sp => new OpenAIAPI(configuration["OPENAI_API_KEY"]));
+            //builder.Services.AddSingleton(sp => new OpenAIAPI(configuration["OPENAI_API_KEY"]));
+            builder.Services.AddSingleton(sp => new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY")));
             builder.Services.AddScoped<UserProfileService>();
 
 
